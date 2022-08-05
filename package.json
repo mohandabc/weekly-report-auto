@@ -3,12 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@amcharts/amcharts4": "^4.10.26",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "flowbite": "^1.5.1",
+    "flowbite-datepicker": "^1.2.2",
+    "flowbite-react": "^0.1.5",
+    "jspdf": "^2.5.1",
+    "pdfmake": "^0.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "recoil": "^0.7.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -37,6 +44,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.7",
+    "eslint-plugin-jest-dom": "^4.0.2",
     "postcss": "^8.4.14",
     "tailwindcss": "^3.1.6"
   }
