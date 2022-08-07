@@ -5,11 +5,23 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { RecoilRoot } from 'recoil';
 
+import { BrowserRouter, Routes, Route,} from "react-router-dom";
+
+import {MainPage, WeeklyPage} from './components';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <RecoilRoot>
-      <App />
+      <BrowserRouter>
+      <Routes>
+        <Route index element={<MainPage />} />
+        <Route path="weekly" element={<WeeklyPage />}/>
+          
+        {/* Add other rouetes for other pages */}
+      </Routes>
+    </BrowserRouter>
+      
     </RecoilRoot>
   </React.StrictMode>
 );
