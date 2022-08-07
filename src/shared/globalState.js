@@ -5,11 +5,7 @@ export const chartsToPrintState = atom({
     default : []
 });
 
-export const dateStartState = atom({
-    key: 'dateStart',
-    default : ''
-});
-export const dateEndState = atom({
-    key: 'dateEnd',
-    default : ''
+export const dateStartEndState = atom({
+    key: 'dateStartEnd',
+    default : '1/1/2022 - 1/1/2022'
 });
