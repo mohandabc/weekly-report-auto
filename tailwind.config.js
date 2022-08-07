@@ -7,6 +7,9 @@ module.exports = {
     'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
     './node_modules/flowbite-datepicker/**/*.js'],
   theme: {
+    colors:{
+      header : '#282c34',
+    },
     fontFamily: {
       sans: ['Graphik', 'sans-serif'],
       serif: ['Merriweather', 'serif'],
