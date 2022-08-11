@@ -5,7 +5,17 @@ export const chartsToPrintState = atom({
     default : []
 });
 
+export const tablesToPrintState = atom({
+    key : 'tablesToPrint', 
+    default : []
+});
+
 export const dateStartEndState = atom({
     key: 'dateStartEnd',
     default : '1/1/2022 - 1/1/2022'
+});
+
+export const weeklyDataState = atom({
+    key : 'weeklyData',
+    default : {}
 });
