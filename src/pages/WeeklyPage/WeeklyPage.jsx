@@ -7,7 +7,7 @@ import {chartsToPrintState, tablesToPrintState, weeklyDataState} from '../../sha
 import { ActionButton, Chart, ConfigBar, Table} from '../../components';
 
 import home from '../../assets/home.svg';
-import {generatePDF} from '../../utils';
+import {generateWeeklyReport} from '../../utils';
 import { getData } from '../../services/Services';
 
 
@@ -63,7 +63,7 @@ export const WeeklyPage = () => {
             <div className={`${Object.keys(weeklyData).length === 0? "hidden":""}`}>
                 <ActionButton className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base py-2 px-4 mx-auto float-right sticky top-5 rounded" 
                                 text="PDF" 
-                                action={generatePDF} 
+                                action={generateWeeklyReport} 
                                 args={[chartsToPrint, tablesToPrint]}>
                 </ActionButton>
                 <section className={`grid grid-cols-2 gap-4 place-items-center bg-slate-500 `} >
