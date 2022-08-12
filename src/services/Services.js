@@ -1,8 +1,6 @@
-import React from "react";
-import {weeklyDataState} from '../shared/globalState';
-import { useRecoilState } from "recoil";
+import { API_URL, AUTH_URL } from "../constants/URI";
 
-const API_URL = 'http://10.171.59.82:8069/';
+
 
 export const getData = async (route, params)=>{
    //@@@@ IMPORTANT :  dbfilter setting needs to be set to a database for the REST interface to work.
@@ -17,23 +15,24 @@ export const getData = async (route, params)=>{
   .catch(error => console.error('Error:', error))
 }
 
-// export const getData = async (route, params)=>{
 
-   
-//     fetch(`${API_URL}${route}`, {
-//       method: 'POST',
-//       body: JSON.stringify({"jsonrpc":"2.0","params":params}),
-//       // mode: 'no-cors',
-//       headers: {
-//             // 'Accept': 'application/json',
-//             'Content-Type': 'application/json',
-//             // 'Access-Control-Allow-Origin':'*'
-//         }
-  
-//     })
-//     .then(response => response.json())
-//     .catch(error => console.error('Error:', error))
-//     .then(response => console.log('Success:', response));
-//   }
+const authenticate = async () =>{
+    const body = {
+                "jsonrpc":"2.0",
+                "method": "call",
+                "params":{
+                    "db": "15_09_2021",
+                    "login": "admin",
+                    "password":"Ext3ns1on"
+                }}
 
+    const requestOptions = {
+      method: "POST",
+      headers: {"Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    };
+
+    const response = await fetch(AUTH_URL, requestOptions)
+        // .then(response => response.json())
+}
 
