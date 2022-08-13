@@ -61,13 +61,15 @@ export const WeeklyPage = () => {
                     <ConfigBar configBarAction={getWeeklyData}></ConfigBar>
                 </div>
             </header>
-            <div className={`${Object.keys(weeklyData).length === 0? "hidden":""}`}>
-                <ActionButton className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base py-2 px-4 mx-auto float-right sticky top-5 rounded" 
-                                text="PDF" 
-                                action={generateWeeklyReport} 
-                                args={[chartsToPrint, tablesToPrint, range]}>
-                </ActionButton>
-                <section className={`grid grid-cols-2 gap-4 place-items-center bg-slate-500 `} >
+            <div className={`bg-slate-200 ${Object.keys(weeklyData).length === 0? "hidden":""}`}>
+                <div className='flex flex-row-reverse bg-slate-200 sticky top-0 px-10 py-3'>
+                    <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
+                                    text="PDF" 
+                                    action={generateWeeklyReport} 
+                                    args={[chartsToPrint, tablesToPrint, range]}>
+                    </ActionButton>
+                </div>
+                <section className={`grid grid-cols-2 gap-4 place-items-center`} >
                     <Chart title = "Rig Box Maintenance"  id = {getDivId('chart')} chartData = {weeklyData['rigbox_maintenance']} chartType="Bar"/>
                     <Chart title = "NDJ Jobs"  id = {getDivId('chart')} chartData = {weeklyData['ndj']} chartType="ClusterBar"/>
                     <Chart title = "Global Recovery"  id = {getDivId('chart')} chartData = {weeklyData['global_recovery']} chartType="Bar"/>

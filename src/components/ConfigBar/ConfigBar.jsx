@@ -17,7 +17,11 @@ export const ConfigBar = ({configBarAction})=>{
         <div className='flex-initial w-64'>
             <DateSelector></DateSelector>
         </div>
-        <ActionButton text="Submit" action={configBarAction} args={[params]}></ActionButton>
+        <ActionButton className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base py-2 px-4 mx-auto  sticky top-5 rounded" 
+                    text="Submit" 
+                    action={configBarAction} 
+                    args={[params]}>
+        </ActionButton>
     </div>
     );
 }
