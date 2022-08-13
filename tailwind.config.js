@@ -4,14 +4,15 @@ module.exports = {
   content: [
     './src/**/*.{js,jsx,ts,tsx}',],
   theme: {
-    colors:{
-      header : '#282c34',
-    },
+    
     fontFamily: {
       sans: ['Graphik', 'sans-serif'],
       serif: ['Merriweather', 'serif'],
     },
     extend: {
+      colors:{
+        header : '#282c34',
+      },
       height:{
         100 : '30rem',
       }
