@@ -70,14 +70,23 @@ export const WeeklyPage = () => {
                     </ActionButton>
                 </div>
                 <section className={`grid grid-cols-2 gap-4 place-items-center`} >
-                    <Chart title = "Rig Box Maintenance"  id = {getDivId('chart')} chartData = {weeklyData['rigbox_maintenance']} chartType="Bar"/>
-                    <Chart title = "NDJ Jobs"  id = {getDivId('chart')} chartData = {weeklyData['ndj']} chartType="ClusterBar"/>
-                    <Chart title = "Global Recovery"  id = {getDivId('chart')} chartData = {weeklyData['global_recovery']} chartType="Bar"/>
-                    <Chart title = "Weekly Recovery"  id = {getDivId('chart')} chartData = {weeklyData['weekly_recovery']} chartType="Bar"/>
-                    <Table title = "Cementing Jobs Transmission"  id = {getDivId('table')} tableData = {weeklyData['cementing_jobs']}/>
-                    <Table title = "MWD Transmission"  id = {getDivId('table')} tableData = {weeklyData['mwd_jobs']}/>
-                    <Chart title = "resolved Quality MLU"  id = {getDivId('chart')} chartData = {weeklyData['resolved_quality_company']} chartType="ClusterBar"/>
-                    <Chart title = "resolved Quality Rootcase"  id = {getDivId('chart')} chartData = {weeklyData['resolved_quality_rootcause']} chartType="ClusterBar"/>
+                    <Chart title = "Rig Box Maintenance" id = {getDivId('chart')} chartData = {weeklyData['rigbox_maintenance']} chartType="Bar"/>
+                    <Chart title = "NDJ Jobs" id = {getDivId('chart')} chartData = {weeklyData['ndj']} chartType="ClusterBar"/>
+                    <Chart title = "Global Recovery" id = {getDivId('chart')} chartData = {weeklyData['global_recovery']} chartType="Bar"/>
+                    <Chart title = "Weekly Recovery" id = {getDivId('chart')} chartData = {weeklyData['weekly_recovery']} chartType="Bar"/>
+                    <Table title = "Cementing Jobs Transmission" id = {getDivId('table')} tableData = {weeklyData['cementing_jobs']}/>
+                    <Table title = "MWD Transmission" id = {getDivId('table')} tableData = {weeklyData['mwd_jobs']}/>
+
+                    <Chart title = "resolved Quality" id = {getDivId('chart')} chartData = {weeklyData['resolved_quality']} chartType="ClusterBar"/>
+
+                    <Chart title = "Pending Quality" id = {getDivId('chart')} chartData = {weeklyData['pending_quality']} chartType="ClusterBar"/>
+
+                    <Chart title = "resolved Channels" id = {getDivId('chart')} chartData = {weeklyData['resolved_channels']} chartType="ClusterBar"/>
+
+                    <Chart title = "Pending Channels" id = {getDivId('chart')} chartData = {weeklyData['pending_channels']} chartType="ClusterBar"/>
+
+                    <Chart title = "Resolved channels by user" id = {getDivId('chart')} chartData = {weeklyData['resolved_channels_by_user']} chartType="Bar"/>
+
                     <Chart title = "Rig Box Maintenance" id = {getDivId('chart')} chartData = {weeklyData['rigbox_maintenance']}  chartType="Pie"/>
                 </section>
             </div>
