@@ -4,7 +4,6 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 
 
 import * as am4core from "@amcharts/amcharts4/core";
-import * as am4charts from "@amcharts/amcharts4/charts";
 
 import html2canvas from 'html2canvas';
 
@@ -29,7 +28,7 @@ const exportCharts = async (charts, tablesToPrint) => {
     .then((res) => [res.slice(0, nbr_charts), res.slice(nbr_charts) ]);
 }
 
-const createHeaderPage = (doc, title, range) =>{
+const setupNewPage = (doc, title = '', pageBreak = true) => {
   doc.content.push({
     columns: [{
         image: SMARTEST_LOGO,
@@ -40,11 +39,29 @@ const createHeaderPage = (doc, title, range) =>{
         image: SONATRACH_LOGO,
         margin: [330,40,0,0],
         width: 40
-    }]
-  })
+    }], 
+    pageBreak:pageBreak===true ? 'before':''
+  });
+
+  if(title !== ''){
+    doc.content.push({
+      text : title,
+      fontSize : 22,
+      margin:[20,50,0,20],
+      alignment:'left',
+      color:'#880000',
+      
+    });
+  }
+  
+} 
+
+const createHeaderPage = (doc, range) =>{
+ 
+  setupNewPage(doc, '', false);
 
   doc.content.push({
-    text : title,
+    text : "BO Weekly Report",
     fontSize : 48,
     margin:[0,100,0,20],
     alignment:'center',
@@ -57,22 +74,27 @@ const createHeaderPage = (doc, title, range) =>{
     margin:[0,0,0,100],
     alignment:'center',
     color:'#444',
-    pageBreak:'after'
   });
 
 }
 
+
+
 const addChartToPDF = (doc, title, chart) =>{
+  if (chart === undefined){
+    console.log("chart isn't defined");
+    return
+  }
   doc.content.push({
     text : title,
-    fontSize:16,
-    color:'#CC5555', 
+    fontSize:14,
+    color:'#555', 
     alignment:'center',
   });
   doc.content.push({
     image:chart,
     margin : [5,5,0,0],
-    width : 250,
+    width : 400,
     alignment:'center',
 
   });
@@ -89,9 +111,10 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
       return;
     }
 
+    
     exportCharts(charts, tablesToPrint)
     .then(response => {
-        const [exportedCharts, exportedTables] = response;    
+        const [exportedCharts, exportedTables] = response; 
     
         pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -102,29 +125,34 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           content: [],  
           };
 
-          createHeaderPage(doc, "BO Weekly Report", range);
-          addChartToPDF(doc, "Rig Box, Maintenance", exportedCharts[0]);
+          createHeaderPage(doc, range);
+
+          setupNewPage(doc, "Rig Box, Maintenance");
+          addChartToPDF(doc, "Rig Box Maintenance", exportedCharts[0]);
+
+          setupNewPage(doc, "NDJ Jobs");
           addChartToPDF(doc, "NDJ Jobs", exportedCharts[1]);
+
+          setupNewPage(doc,  "Extra Jobs");
           addChartToPDF(doc, "Cementing Job Transmission", exportedTables[0]?.toDataURL("image/png"));
+
+          setupNewPage(doc,  "Extra Jobs");
           addChartToPDF(doc, "MWD Transmission", exportedTables[1]?.toDataURL("image/png"));
+
+          setupNewPage(doc,  "Data Recovery");
+          addChartToPDF(doc, "Global Recovery", exportedCharts[2])
+          addChartToPDF(doc, "Weekly Recovery", exportedCharts[3])
           
-
-
-        //   exportedCharts.forEach((chart)=>{
-        //   doc.content.push({
-        //     image:chart,
-        //     margin : [5,5,0,0],
-        //     width : 400,
-        //   })
-        // });
-
-        // exportedTables.forEach((table)=>{
-        //   doc.content.push({
-        //     image:table.toDataURL("image/png"),
-        //     margin : [5,5,0,0],
-        //     width : 250,
-        //   })
-        // });
+          setupNewPage(doc,  "Data Quality");
+          addChartToPDF(doc, "Resolved Data Quality Tickets", exportedCharts[4])
+          addChartToPDF(doc, "Pending Data Quality Tickets", exportedCharts[5])
+                    
+          setupNewPage(doc,  "Data Quality");
+          addChartToPDF(doc, "Resolved Data Quality channels", exportedCharts[6])
+          addChartToPDF(doc, "Pending Data Quality Channels", exportedCharts[7])
+          
+          setupNewPage(doc,  "Data Quality");
+          addChartToPDF(doc, "Resolved Channels by User", exportedCharts[8])
         
         pdfMake.createPdf(doc).download("daily.pdf");
       });
