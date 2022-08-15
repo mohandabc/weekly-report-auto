@@ -8,19 +8,19 @@ export const Chart = ({title, id, chartData, chartType}) => {
     let chart = null;
 
     if(chartType === "Pie"){ 
-      chart = new PieChart(chartData, div).chart; 
+      chart = new PieChart(chartData, div, title).chart; 
     }
     if(chartType === "Bar"){
-      chart = new BarChart(chartData, div).chart; 
+      chart = new BarChart(chartData, div, title).chart; 
     }
     if(chartType === "ClusterBar"){
-      chart = new ClusteredBarChart(chartData, div).chart; 
+      // eslint-disable-next-line
+      chart = new ClusteredBarChart(chartData, div, title).chart; 
     }
   });
 
   return (
-        <div className='w-full'>
-          <h2 className='text-center'>{title}</h2>
+        <div className="border bg-white border-4 border-red-600 rounded-lg shadow w-full">
           <div 
             className='inline-block mx-auto h-96 w-full'
             id={div}>

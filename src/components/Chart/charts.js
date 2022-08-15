@@ -1,6 +1,5 @@
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
-import * as d3 from 'd3';
 import { nest } from 'd3-collection';
 
 class Chart 
@@ -10,13 +9,13 @@ class Chart
      * @param {*} data : Data to display in he chart
      * @param {*} container HTML div where to render the chart
      */
-    constructor(data, container){
+    constructor(data, container, title = ''){
         if(this.constructor === Chart){
             throw new Error("FYI: Abstract class 'Chart' cannot be instantiated");
         }
 
         am4core.options.autoDispose = true;
-        this.chart = this.buildChart(data, container);
+        this.chart = this.buildChart(data, container, title);
     }
 
     /**
@@ -24,7 +23,7 @@ class Chart
      * @param {*} data Chart data
      * @param {*} container html container to render the chart in
      */
-    buildChart(data, container){
+    buildChart(data, container, title){
         /*override this function to define a chart */
     }
 
@@ -98,7 +97,7 @@ class Chart
 
 export class PieChart extends Chart
 {   
-    buildChart(data, container){
+    buildChart(data, container, title){
         
         let params = {}
         if (data?.length > 0){
@@ -117,17 +116,21 @@ export class PieChart extends Chart
         let series = chart.series.push(new am4charts.PieSeries());
         series.dataFields.value = params?.value;
         series.dataFields.category = params?.category;
-    
+
+        var chartTitle = chart.titles.create();
+        chartTitle.text = title;
+        chartTitle.fontSize = 25;
+        chartTitle.marginBottom = 30;
+        
         // Add data
         chart.data = data;
-
         return chart;
       }
 }
 
 export class BarChart extends Chart
 {
-    buildChart(data, container){
+    buildChart(data, container, title){
         let params = {}
         if (data?.length > 0){
             params = {
@@ -156,6 +159,7 @@ export class BarChart extends Chart
         return dy;
         });
 
+        // eslint-disable-next-line
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 
         // Create series
@@ -177,6 +181,11 @@ export class BarChart extends Chart
         columnTemplate.strokeWidth = 2;
         columnTemplate.strokeOpacity = 1;
     
+        var chartTitle = chart.titles.create();
+        chartTitle.text = title;
+        chartTitle.fontSize = 25;
+        chartTitle.marginBottom = 30;
+
         // Add data
         chart.data = data;
         return chart;
@@ -185,7 +194,7 @@ export class BarChart extends Chart
 
 export class ClusteredBarChart extends Chart
 {
-    buildChart(data, container){
+    buildChart(data, container, title){
         if (data === undefined){
             return
         }
@@ -276,6 +285,11 @@ export class ClusteredBarChart extends Chart
                 }
             }
         }
+
+        var chartTitle = chart.titles.create();
+        chartTitle.text = title;
+        chartTitle.fontSize = 25;
+        chartTitle.marginBottom = 30;
 
 
     }
