@@ -9,7 +9,7 @@ export const ConfigBar = ({configBarAction})=>{
     const dateRange = useRecoilValue(dateStartEndState);
 
     const params = {
-        dates : '2021-09-01 - 2021-09-30',
+        dates : dateRange,//'2021-09-01 - 2021-09-30',
     }
 
     return (
