@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import {useRecoilState, useRecoilValue} from 'recoil';
-import {chartsToPrintState, dateStartEndState, tablesToPrintState, weeklyDataState} from '../../shared/globalState';
+import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
+import {chartsToPrintState, dateStartEndState, tablesToPrintState, weeklyDataState ,loaderIsHidden} from '../../shared/globalState';
 
-import { ActionButton, Chart, ConfigBar, Table} from '../../components';
+import { ActionButton, Chart, ConfigBar, Table, Loader} from '../../components';
 
 import home from '../../assets/home.svg';
 import {generateWeeklyReport} from '../../utils';
 import { getData } from '../../services/Services';
-import { useRef } from 'react';
+
 
 
 export const WeeklyPage = () => {
@@ -17,6 +17,7 @@ export const WeeklyPage = () => {
     const [tablesToPrint, setTablesToPrint] = useRecoilState(tablesToPrintState);
     const [weeklyData, setWeeklyData] = useRecoilState(weeklyDataState);
     const range = useRecoilValue(dateStartEndState);
+    const setIsHidden = useSetRecoilState(loaderIsHidden);
 
     let chartsIds = [];
     let tablesIds = [];
@@ -38,15 +39,15 @@ export const WeeklyPage = () => {
     
         const path = 'reports/weekly_report';
     
+        setIsHidden(false);
         getData(path, params)
         .then(res=> {
           let data = res.result;
-          
-          setWeeklyData(data);
-          
+          setWeeklyData(data || {});
         });
       }
     useEffect(()=>{
+        setIsHidden(true);
         window.scrollTo(0,400);
     });
 
@@ -59,6 +60,7 @@ export const WeeklyPage = () => {
     return (
         <div className="App">
             <header className={`flex flex-col bg-header min-h-screen text-white text-3xl align-middle justify-center items-center`}>
+                <Loader></Loader>
                 <Link className="" to='/'>
                     <img src={home}  className="fixed top-5 left-10 w-12 z-50" alt='home'></img>
                 </Link>
@@ -91,6 +93,10 @@ export const WeeklyPage = () => {
                     <Chart title = "Pending Channels" id = {getDivId('chart')} chartData = {weeklyData['pending_channels']} chartType="ClusterBar"/>
 
                     <Chart title = "Resolved channels by user" id = {getDivId('chart')} chartData = {weeklyData['resolved_channels_by_user']} chartType="Bar"/>
+
+                    <Chart title = "Helpdesk Tickets" id = {getDivId('chart')} chartData = {weeklyData['helpdesk_tickets']} chartType="ClusterBar"/>
+
+                    <Table title = "Teamspace Projects" id = {getDivId('table')} tableData = {weeklyData['teamspace_projects']}/>
 
                     <Chart title = "Rig Box Maintenance" id = {getDivId('chart')} chartData = {weeklyData['rigbox_maintenance']}  chartType="Pie"/>
                 </section>

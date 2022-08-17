@@ -19,3 +19,8 @@ export const weeklyDataState = atom({
     key : 'weeklyData',
     default : {}
 });
+
+export const loaderIsHidden = atom({
+    key : "loaderIsHidden",
+    default : true
+});
