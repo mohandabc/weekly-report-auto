@@ -12,6 +12,8 @@ module.exports = {
     extend: {
       colors:{
         header : '#282c34',
+        smartestred : '#C11823',
+        smartestgray : '#565458'
       },
       height:{
         100 : '30rem',
