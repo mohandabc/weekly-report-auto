@@ -19,7 +19,7 @@ const getChartByContainerId = (id) => {
 }
 
 const exportCharts = async (charts, tablesToPrint) => {
-    let promises_list = charts.map((chart) => chart.exporting.getImage("png"));
+    let promises_list = charts.map((chart) => chart?.exporting.getImage("png"));
     const nbr_charts = promises_list.length;
     let tables_promesses = tablesToPrint.map(table => html2canvas(document.getElementById(table)));
     promises_list = [...promises_list, ...tables_promesses];
@@ -80,21 +80,21 @@ const createHeaderPage = (doc, range) =>{
 
 
 
-const addChartToPDF = (doc, title, chart) =>{
+const addChartToPDF = (doc, chart) =>{
   if (chart === undefined){
     console.log("chart isn't defined");
     return
   }
-  doc.content.push({
-    text : title,
-    fontSize:14,
-    color:'#555', 
-    alignment:'center',
-  });
+  // doc.content.push({
+  //   text : title,
+  //   fontSize:14,
+  //   color:'#555', 
+  //   alignment:'center',
+  // });
   doc.content.push({
     image:chart,
     margin : [5,5,0,0],
-    width : 400,
+    width : 500,
     alignment:'center',
 
   });
@@ -128,32 +128,38 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           createHeaderPage(doc, range);
 
           setupNewPage(doc, "Rig Box, Maintenance");
-          addChartToPDF(doc, "Rig Box Maintenance", exportedCharts[0]);
+          addChartToPDF(doc, exportedCharts[0]);
 
           setupNewPage(doc, "NDJ Jobs");
-          addChartToPDF(doc, "NDJ Jobs", exportedCharts[1]);
+          addChartToPDF(doc, exportedCharts[1]);
 
           setupNewPage(doc,  "Extra Jobs");
-          addChartToPDF(doc, "Cementing Job Transmission", exportedTables[0]?.toDataURL("image/png"));
+          addChartToPDF(doc,  exportedTables[0]?.toDataURL("image/png"));
 
           setupNewPage(doc,  "Extra Jobs");
-          addChartToPDF(doc, "MWD Transmission", exportedTables[1]?.toDataURL("image/png"));
+          addChartToPDF(doc, exportedTables[1]?.toDataURL("image/png"));
 
           setupNewPage(doc,  "Data Recovery");
-          addChartToPDF(doc, "Global Recovery", exportedCharts[2])
-          addChartToPDF(doc, "Weekly Recovery", exportedCharts[3])
+          addChartToPDF(doc, exportedCharts[2])
+          addChartToPDF(doc, exportedCharts[3])
           
           setupNewPage(doc,  "Data Quality");
-          addChartToPDF(doc, "Resolved Data Quality Tickets", exportedCharts[4])
-          addChartToPDF(doc, "Pending Data Quality Tickets", exportedCharts[5])
+          addChartToPDF(doc, exportedCharts[4])
+          addChartToPDF(doc, exportedCharts[5])
                     
           setupNewPage(doc,  "Data Quality");
-          addChartToPDF(doc, "Resolved Data Quality channels", exportedCharts[6])
-          addChartToPDF(doc, "Pending Data Quality Channels", exportedCharts[7])
+          addChartToPDF(doc, exportedCharts[6])
+          addChartToPDF(doc, exportedCharts[7])
           
           setupNewPage(doc,  "Data Quality");
-          addChartToPDF(doc, "Resolved Channels by User", exportedCharts[8])
+          addChartToPDF(doc, exportedCharts[8])
         
+          setupNewPage(doc,  "Helpdesk Tickets");
+          addChartToPDF(doc, exportedCharts[9])
+
+          setupNewPage(doc,  "Mini Project Progress");
+          addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"));
+
         pdfMake.createPdf(doc).download("daily.pdf");
       });
        
