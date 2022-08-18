@@ -166,4 +166,4 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
     // });
   }
 
-  
+  export const generateDailyReport = (chartsToPrint, tablesToPrint, range) =>{}
