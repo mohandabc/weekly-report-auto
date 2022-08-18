@@ -19,6 +19,10 @@ export const weeklyDataState = atom({
     key : 'weeklyData',
     default : {}
 });
+export const dailyDataState = atom({
+    key : 'dailyData',
+    default : {}
+});
 
 export const loaderIsHidden = atom({
     key : "loaderIsHidden",
