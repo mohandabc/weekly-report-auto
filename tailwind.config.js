@@ -16,7 +16,10 @@ module.exports = {
         smartestgray : '#565458'
       },
       height:{
-        100 : '30rem',
+        120 : '30rem',
+      },
+      minHeight:{
+        120 : '30rem'
       }
     },
   },
