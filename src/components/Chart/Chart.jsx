@@ -1,31 +1,45 @@
 import React, { useLayoutEffect} from 'react';
+import { useState } from 'react';
 import { BarChart, PieChart, ClusteredBarChart } from './charts';
+import gear from '../../assets/gear.svg';
 
 export const Chart = ({title, id, chartData, chartType}) => {
   const div = id.toString();
+  const [type, setType] = useState(chartType);
 
+  const changeType = () =>{
+    const newType = type==='Pie' ? 'Bar' : 'Pie';
+    setType(newType);
+  }
   useLayoutEffect(()=>{
     let chart = null;
     if (chartData === undefined || chartData.length === 0){
       return
     }
 
-    if(chartType === "Pie"){ 
+    if(type === "Pie"){ 
       chart = new PieChart(chartData, div, title).chart; 
     }
-    if(chartType === "Bar"){
+    if(type === "Bar"){
       chart = new BarChart(chartData, div, title).chart; 
     }
-    if(chartType === "ClusterBar"){
+    if(type === "ClusterBar"){
       // eslint-disable-next-line
       chart = new ClusteredBarChart(chartData, div, title).chart; 
     }
   });
 
   return (
-        <div className="border bg-white border-4 border-red-600 pt-2 rounded-lg shadow w-full">
+        <div className="h-120  pb-5 bg-white rounded-lg shadow w-full">
+          {
+            type==='Pie' || type === 'Bar' ? 
+            <div>
+              <img src={gear} onClick={changeType} className="px-2 py-2 w-10 hover:cursor-pointer hover:animate-spin" alt="..."></img>
+            </div>
+            : <></>
+          }
           <div 
-            className='inline-block mx-auto h-96 w-full'
+            className='inline-block mx-auto h-full w-full'
             id={div}>
               {(chartData === undefined || chartData.length === 0) ? 
                 <h3 className='text-center mt-36'>No Data To Display for <span className='italic font-normal'>{title}</span></h3> 

@@ -3,7 +3,7 @@ import React from "react";
 
 export const Table = ({title, id, tableData})=>{
     return (
-        <div  className="border border-4 rounded-lg  py-3 px-2 bg-white shadow w-full">
+        <div  className="min-h-120 rounded-lg py-3 px-2 bg-white shadow w-full">
             {
                 tableData === undefined ? 
                 <></>
