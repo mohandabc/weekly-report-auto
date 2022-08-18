@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 
 import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import {chartsToPrintState, dateStartEndState, tablesToPrintState, weeklyDataState ,loaderIsHidden} from '../../shared/globalState';
 
-import { ActionButton, Chart, ConfigBar, Table, Loader} from '../../components';
+import { ActionButton, Chart, ConfigBar, Table} from '../../components';
 
-import home from '../../assets/home.svg';
 import {generateWeeklyReport} from '../../utils';
 import { getData } from '../../services/Services';
+import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 
 
 
@@ -59,15 +58,10 @@ export const WeeklyPage = () => {
      
     return (
         <div className="App">
-            <header className={`flex flex-col bg-header min-h-screen text-white text-3xl align-middle justify-center items-center`}>
-                <Loader></Loader>
-                <Link className="" to='/'>
-                    <img src={home}  className="fixed top-5 left-10 w-12 z-50" alt='home'></img>
-                </Link>
-                <div className= "sticky top-5">
-                    <ConfigBar configBarAction={getWeeklyData}></ConfigBar>
-                </div>
-            </header>
+            <ConfigBar 
+                configBarAction={getWeeklyData}
+                options={DEFAULT_CONFIG_BAR_OPTIONS}>
+            </ConfigBar>
             <div className={`bg-slate-200 ${Object.keys(weeklyData).length === 0? "hidden":""}`}>
                 <div className='flex flex-row-reverse bg-slate-200 sticky top-0 px-10 py-4  z-40'>
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
@@ -76,7 +70,7 @@ export const WeeklyPage = () => {
                                     args={[chartsToPrint, tablesToPrint, range]}>
                     </ActionButton>
                 </div>
-                <section id="main" className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-center`} >
+                <section id="main" className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2  pb-4`} >
                     <Chart title = "Rig Box Maintenance" id = {getDivId('chart')} chartData = {weeklyData['rigbox_maintenance']} chartType="Bar"/>
                     <Chart title = "NDJ Jobs" id = {getDivId('chart')} chartData = {weeklyData['ndj']} chartType="ClusterBar"/>
                     <Chart title = "Global Recovery" id = {getDivId('chart')} chartData = {weeklyData['global_recovery']} chartType="Bar"/>
@@ -97,8 +91,6 @@ export const WeeklyPage = () => {
                     <Chart title = "Helpdesk Tickets" id = {getDivId('chart')} chartData = {weeklyData['helpdesk_tickets']} chartType="ClusterBar"/>
 
                     <Table title = "Teamspace Projects" id = {getDivId('table')} tableData = {weeklyData['teamspace_projects']}/>
-
-                    <Chart title = "Rig Box Maintenance" id = {getDivId('chart')} chartData = {weeklyData['rigbox_maintenance']}  chartType="Pie"/>
                 </section>
             </div>
             
