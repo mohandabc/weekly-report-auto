@@ -43,6 +43,7 @@ export const WeeklyPage = () => {
         .then(res=> {
           let data = res.result;
           setWeeklyData(data || {});
+          console.log(data);
         });
       }
     useEffect(()=>{
@@ -71,6 +72,9 @@ export const WeeklyPage = () => {
                     </ActionButton>
                 </div>
                 <section id="main" className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2  pb-4`} >
+                    <Table title = "Remote Relacation" id = {getDivId('table')} tableData = {weeklyData['remote_relocation']}/>
+                    <Table title = "Deployment & Relocation" id = {getDivId('table')} tableData = {weeklyData['deployements_and_interventions']}/>
+                    <Table title = "Spud" id = {getDivId('table')} tableData = {weeklyData['wells_spudded']}/>
                     <Chart title = "Rig Box Maintenance" id = {getDivId('chart')} chartData = {weeklyData['rigbox_maintenance']} chartType="Bar"/>
                     <Chart title = "NDJ Jobs" id = {getDivId('chart')} chartData = {weeklyData['ndj']} chartType="ClusterBar"/>
                     <Chart title = "Global Recovery" id = {getDivId('chart')} chartData = {weeklyData['global_recovery']} chartType="Bar"/>
