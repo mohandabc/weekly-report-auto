@@ -28,3 +28,8 @@ export const loaderIsHidden = atom({
     key : "loaderIsHidden",
     default : true
 });
+
+export const darkMode = atom({
+    key : 'darkMode', 
+    default : false
+});
