@@ -6,6 +6,6 @@ export const Loader = () => {
     const isHidden= useRecoilValue(loaderIsHidden);
 
     return (
-        <div className={`absolute mt-36 z-50 text-3xl ${isHidden ? "hidden" : ""}`}><img src={spinner} className="animate-spin w-20" alt="spinner"/></div>
+        <div className={`z-50 text-3xl ${isHidden ? "hidden" : ""}`}><img src={spinner} className="animate-spin w-20" alt="spinner"/></div>
     );
 }
