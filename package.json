@@ -21,9 +21,11 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "recoil": "^0.7.4",
+    "source-map-explorer": "^2.5.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
