@@ -5,8 +5,8 @@ import {chartsToPrintState, dateStartEndState, tablesToPrintState, dailyDataStat
 
 import { ActionButton, Chart, ConfigBar, Table} from '../../components';
 
-import {generateDailyReport} from '../../utils';
-import { getData } from '../../services/Services';
+import {generateDailyReport} from '../../services/utils';
+import { getData } from '../../services/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 
 export const DailyPage = () => {
@@ -57,11 +57,12 @@ export const DailyPage = () => {
     return (
         <div className="App">
             <ConfigBar 
+                    title="Back Office Daily Report"
                     configBarAction = {getDailyData} 
                     options = {DEFAULT_CONFIG_BAR_OPTIONS}>
             </ConfigBar>
-            <div className={`bg-slate-200 ${Object.keys(dailyData).length === 0? "hidden":""}`}>
-                <div className='flex flex-row-reverse bg-slate-200 sticky top-0 px-10 py-4  z-40'>
+            <div className={`bg-slate-300 ${Object.keys(dailyData).length === 0? "hidden":""}`}>
+                <div className='flex flex-row-reverse bg-slate-300 sticky top-0 px-10 py-4  z-40'>
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
                                     action={generateDailyReport} 
@@ -69,8 +70,18 @@ export const DailyPage = () => {
                     </ActionButton>
                 </div>
                 <section id="main" className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-                    <Chart title = "Rig Box Maintenance" id = {getDivId('chart')} chartData = {dailyData['rigbox_maintenance']} chartType="Bar"/>
+                    <Table title = "Spud" id = {getDivId('table')} tableData = {dailyData['wells_spudded']}/>
+                    <Table title = "Cementing Jobs Transmission" id = {getDivId('table')} tableData = {dailyData['cementing_jobs']}/>
+                    <Table title = "MWD Transmission" id = {getDivId('table')} tableData = {dailyData['mwd_jobs']}/>
                     <Chart title = "NDJ Jobs" id = {getDivId('chart')} chartData = {dailyData['ndj']} chartType="ClusterBar"/>
+                    <Chart title = "resolved Quality" id = {getDivId('chart')} chartData = {dailyData['resolved_quality']} chartType="ClusterBar"/>
+                    <Chart title = "resolved Channels" id = {getDivId('chart')} chartData = {dailyData['resolved_channels']} chartType="ClusterBar"/>
+
+                    <Chart title = "Global Recovery" id = {getDivId('chart')} chartData = {dailyData['global_recovery']} chartType="Bar"/>
+                    <Chart title = "Weekly Recovery" id = {getDivId('chart')} chartData = {dailyData['weekly_recovery']} chartType="Bar"/>
+
+                    <Table title = "Remote Relacation" id = {getDivId('table')} tableData = {dailyData['remote_relocation']}/>
+                    <Table title = "Deployment & Intervention" id = {getDivId('table')} tableData = {dailyData['deployements_and_interventions']}/>
                 </section>
             </div>
         </div>
