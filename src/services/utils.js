@@ -7,7 +7,7 @@ import * as am4core from "@amcharts/amcharts4/core";
 
 import html2canvas from 'html2canvas';
 
-import {SMARTEST_LOGO, SONATRACH_LOGO} from './constants/logos'
+import {SMARTEST_LOGO, SONATRACH_LOGO} from '../constants/logos'
 
 const getChartByContainerId = (id) => {
   var charts = am4core.registry.baseSprites;
@@ -80,26 +80,43 @@ const createHeaderPage = (doc, range) =>{
 
 
 
-const addChartToPDF = (doc, chart) =>{
+const addChartToPDF = (doc, chart, width = 515) =>{
   if (chart === undefined){
     console.log("chart isn't defined");
     return
   }
-  // doc.content.push({
-  //   text : title,
-  //   fontSize:14,
-  //   color:'#555', 
-  //   alignment:'center',
-  // });
+
   doc.content.push({
     image:chart,
-    margin : [5,5,0,0],
-    width : 500,
+    margin : [0,10,0,0],
+    width : width,
     alignment:'center',
 
   });
-
 }
+
+const add2ChartsInline = (doc, chart1, chart2, width) =>{
+  doc.content.push({
+    columns :[
+      {
+        image:chart1,
+        margin : [0,10,0,0],
+        width : width,
+        alignment:'center',
+    
+      },
+      {
+        image:chart2,
+        margin : [0,10,0,0], 
+        width : width,
+        alignment:'center',
+    
+      }
+    ], columnGap: 10,
+    margin : [40, 10, 0, 0],
+    alignment : 'center'
+  });
+} 
 
 export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
     if(chartsToPrint.length === 0){
@@ -127,6 +144,10 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
 
           createHeaderPage(doc, range);
 
+          setupNewPage(doc, "Deployment and Relocation");
+          add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 245);
+          addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 500);
+          
           setupNewPage(doc, "Rig Box, Maintenance");
           addChartToPDF(doc, exportedCharts[0]);
 
@@ -134,10 +155,10 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           addChartToPDF(doc, exportedCharts[1]);
 
           setupNewPage(doc,  "Extra Jobs");
-          addChartToPDF(doc,  exportedTables[0]?.toDataURL("image/png"));
+          addChartToPDF(doc,  exportedTables[3]?.toDataURL("image/png"));
 
           setupNewPage(doc,  "Extra Jobs");
-          addChartToPDF(doc, exportedTables[1]?.toDataURL("image/png"));
+          addChartToPDF(doc, exportedTables[4]?.toDataURL("image/png"));
 
           setupNewPage(doc,  "Data Recovery");
           addChartToPDF(doc, exportedCharts[2])
@@ -158,12 +179,10 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           addChartToPDF(doc, exportedCharts[9])
 
           setupNewPage(doc,  "Mini Project Progress");
-          addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"));
+          addChartToPDF(doc, exportedTables[5]?.toDataURL("image/png"));
 
-        pdfMake.createPdf(doc).download("daily.pdf");
+        pdfMake.createPdf(doc).download(`Weekly_report_${range}.pdf`);
       });
-       
-    // });
   }
 
   export const generateDailyReport = (chartsToPrint, tablesToPrint, range) =>{}
