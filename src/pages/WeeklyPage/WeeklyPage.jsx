@@ -5,8 +5,8 @@ import {chartsToPrintState, dateStartEndState, tablesToPrintState, weeklyDataSta
 
 import { ActionButton, Chart, ConfigBar, Table} from '../../components';
 
-import {generateWeeklyReport} from '../../utils';
-import { getData } from '../../services/Services';
+import {generateWeeklyReport} from '../../services/utils';
+import { getData } from '../../services/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 
 
@@ -59,12 +59,13 @@ export const WeeklyPage = () => {
      
     return (
         <div className="App">
-            <ConfigBar 
+            <ConfigBar
+                title = "Back Office Weekly Report" 
                 configBarAction={getWeeklyData}
                 options={DEFAULT_CONFIG_BAR_OPTIONS}>
             </ConfigBar>
-            <div className={`bg-slate-200 ${Object.keys(weeklyData).length === 0? "hidden":""}`}>
-                <div className='flex flex-row-reverse bg-slate-200 sticky top-0 px-10 py-4  z-40'>
+            <div className={`bg-slate-300 ${Object.keys(weeklyData).length === 0? "hidden":""}`}>
+                <div className='flex flex-row-reverse bg-slate-300 sticky top-0 px-10 py-4  z-40'>
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
                                     action={generateWeeklyReport} 
@@ -73,7 +74,7 @@ export const WeeklyPage = () => {
                 </div>
                 <section id="main" className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2  pb-4`} >
                     <Table title = "Remote Relacation" id = {getDivId('table')} tableData = {weeklyData['remote_relocation']}/>
-                    <Table title = "Deployment & Relocation" id = {getDivId('table')} tableData = {weeklyData['deployements_and_interventions']}/>
+                    <Table title = "Deployment & Intervention" id = {getDivId('table')} tableData = {weeklyData['deployements_and_interventions']}/>
                     <Table title = "Spud" id = {getDivId('table')} tableData = {weeklyData['wells_spudded']}/>
                     <Chart title = "Rig Box Maintenance" id = {getDivId('chart')} chartData = {weeklyData['rigbox_maintenance']} chartType="Bar"/>
                     <Chart title = "NDJ Jobs" id = {getDivId('chart')} chartData = {weeklyData['ndj']} chartType="ClusterBar"/>
