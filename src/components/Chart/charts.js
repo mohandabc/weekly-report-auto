@@ -83,14 +83,19 @@ class Chart
                 }, init))
         });
 
-        
+        let i = 0;
+        let arr = []
+        while (i < adaptedData?.length) {
+            arr = arr.concat(Object.entries(adaptedData[i]).map(c =>c[0]).slice(1))
+            i++;
+        }
+        arr = arr.filter((item, pos) => arr.indexOf(item) === pos)
         if (adaptedData?.length > 0){
         params = {
             category : Object.keys(adaptedData[0])[0],
-            series : Object.entries(adaptedData[0]).map(c =>c[0]).slice(1),
+            series : arr,
             }
         }
-
         return [adaptedData, params];
     }
 }
