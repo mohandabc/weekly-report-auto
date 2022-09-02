@@ -9,8 +9,6 @@ import {generateWeeklyReport} from '../../services/utils';
 import { getData } from '../../services/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 
-
-
 export const WeeklyPage = () => {
     const [chartsToPrint, setChartsToPrint] = useRecoilState(chartsToPrintState);
     const [tablesToPrint, setTablesToPrint] = useRecoilState(tablesToPrintState);

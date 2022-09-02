@@ -34,13 +34,14 @@ export const DailyPage = () => {
     }
     const getDailyData =  (params) =>{
     
-        const path = 'reports/weekly_report';
+        const path = 'reports/daily_report';
     
         setIsHidden(false);
         getData(path, params)
         .then(res=> {
           let data = res.result;
           setDailyData(data || {});
+          console.log(data);
         });
     }
     useEffect(()=>{
@@ -69,20 +70,36 @@ export const DailyPage = () => {
                                     args={[chartsToPrint, tablesToPrint, range]}>
                     </ActionButton>
                 </div>
-                <section id="main" className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-                    <Table title = "Spud" id = {getDivId('table')} tableData = {dailyData['wells_spudded']}/>
-                    <Table title = "Cementing Jobs Transmission" id = {getDivId('table')} tableData = {dailyData['cementing_jobs']}/>
-                    <Table title = "MWD Transmission" id = {getDivId('table')} tableData = {dailyData['mwd_jobs']}/>
-                    <Chart title = "NDJ Jobs" id = {getDivId('chart')} chartData = {dailyData['ndj']} chartType="ClusterBar"/>
-                    <Chart title = "resolved Quality" id = {getDivId('chart')} chartData = {dailyData['resolved_quality']} chartType="ClusterBar"/>
-                    <Chart title = "resolved Channels" id = {getDivId('chart')} chartData = {dailyData['resolved_channels']} chartType="ClusterBar"/>
 
+                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
+
+                    <section id="main" className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2`} >
+                    <Table title = "Wells Spud" id = {getDivId('table')} tableData = {dailyData['wells_spud']}/>
+                    <Table title = "Extra Jobs status" id = {getDivId('table')} tableData = {dailyData['extra_jobs_n']}/>
+                    </section>
+
+                    <Table title = "Extra Jobs" id = {getDivId('table')} tableData = {dailyData['extra_jobs']}/>
+                    <Table title = "Reservoir Tickets" id = {getDivId('table')} tableData = {dailyData['reservoir_tickets']}/>
+                    <Table title = "Data Quality" id = {getDivId('table')} tableData = {dailyData['data_quality']}/>
+                </section>
+
+                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-3 gap-4 place-items-top px-2 pb-4`} >
+                    <Chart title = "Pending Tickets By MLU" id = {getDivId('chart')} chartData = {dailyData['pending_tickets_byMLU']} chartType="ClusterBar"/>
+                    <Chart title = "Pending Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['pending_tickets_byRootCause']} chartType="ClusterBar"/>
+                    <Chart title = "Pending Tickets By DM" id = {getDivId('chart')} chartData = {dailyData['pending_tickets_byDM']} chartType="ClusterBar"/>
+                    <Chart title = "Resolved Tickets By MLU" id = {getDivId('chart')} chartData = {dailyData['resolved_tickets_byMLU']} chartType="ClusterBar"/>
+                    <Chart title = "Resolved Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['resolved_tickets_byRootCause']} chartType="ClusterBar"/>
+                    <Chart title = "Resolved Tickets By DM" id = {getDivId('chart')} chartData = {dailyData['resolved_tickets_byDM']} chartType="ClusterBar"/>
+                </section>
+
+                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
+                    <Table title = "Data Loss" id = {getDivId('table')} tableData = {dailyData['data_loss']}/>
+                    <Chart title = "Resolved Loss Tickets By DM" id = {getDivId('chart')} chartData = {dailyData['data_loss_byDM']} chartType="ClusterBar"/>
                     <Chart title = "Global Recovery" id = {getDivId('chart')} chartData = {dailyData['global_recovery']} chartType="Bar"/>
                     <Chart title = "Weekly Recovery" id = {getDivId('chart')} chartData = {dailyData['weekly_recovery']} chartType="Bar"/>
-
-                    <Table title = "Remote Relacation" id = {getDivId('table')} tableData = {dailyData['remote_relocation']}/>
                     <Table title = "Deployment & Intervention" id = {getDivId('table')} tableData = {dailyData['deployements_and_interventions']}/>
                 </section>
+
             </div>
         </div>
     );
