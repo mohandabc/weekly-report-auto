@@ -84,20 +84,25 @@ export const DailyPage = () => {
                 </section>
 
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-3 gap-4 place-items-top px-2 pb-4`} >
-                    <Chart title = "Pending Tickets By MLU" id = {getDivId('chart')} chartData = {dailyData['pending_tickets_byMLU']} chartType="ClusterBar"/>
-                    <Chart title = "Pending Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['pending_tickets_byRootCause']} chartType="ClusterBar"/>
-                    <Chart title = "Pending Tickets By DM" id = {getDivId('chart')} chartData = {dailyData['pending_tickets_byDM']} chartType="ClusterBar"/>
-                    <Chart title = "Resolved Tickets By MLU" id = {getDivId('chart')} chartData = {dailyData['resolved_tickets_byMLU']} chartType="ClusterBar"/>
-                    <Chart title = "Resolved Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['resolved_tickets_byRootCause']} chartType="ClusterBar"/>
-                    <Chart title = "Resolved Tickets By DM" id = {getDivId('chart')} chartData = {dailyData['resolved_tickets_byDM']} chartType="ClusterBar"/>
+                    <Chart title = "Pending Quality Tickets By MLU" id = {getDivId('chart')} chartData = {dailyData['pending_tickets_byMLU']} chartType="ClusterBar"/>
+                    <Chart title = "Pending Quality Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['pending_tickets_byRootCause']} chartType="ClusterBar"/>
+                    <Chart title = "Pending Quality Tickets By User" id = {getDivId('chart')} chartData = {dailyData['pending_tickets_byDM']} chartType="ClusterBar"/>
+                    <Chart title = "Resolved Quality Tickets By MLU" id = {getDivId('chart')} chartData = {dailyData['resolved_tickets_byMLU']} chartType="ClusterBar"/>
+                    <Chart title = "Resolved Quality Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['resolved_tickets_byRootCause']} chartType="ClusterBar"/>
+                    <Chart title = "Resolved Quality Tickets By DM" id = {getDivId('chart')} chartData = {dailyData['resolved_tickets_byDM']} chartType="ClusterBar"/>
                 </section>
 
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
                     <Table title = "Data Loss" id = {getDivId('table')} tableData = {dailyData['data_loss']}/>
-                    <Chart title = "Resolved Loss Tickets By DM" id = {getDivId('chart')} chartData = {dailyData['data_loss_byDM']} chartType="ClusterBar"/>
-                    <Chart title = "Global Recovery" id = {getDivId('chart')} chartData = {dailyData['global_recovery']} chartType="Bar"/>
+                    <Chart title = "Resolved Loss Tickets By User" id = {getDivId('chart')} chartData = {dailyData['data_loss_ticket_byUser']} chartType="ClusterBar"/>
+                    <Chart title = "Resolved Loss Gaps By User" id = {getDivId('chart')} chartData = {dailyData['data_loss_gap_byUser']} chartType="ClusterBar"/>
+                    <Chart title = "Resolved Loss Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['data_loss_ticket_byRootCause']} chartType="ClusterBar"/>
+                    <Table title = "Data Recovery" id = {getDivId('table')} tableData = {dailyData['data_recovery']}/>
+                    <Chart title = "Resolved Recovery Tickets By User" id = {getDivId('chart')} chartData = {dailyData['data_recovery_ticket_byUser']} chartType="ClusterBar"/>
+                    <Chart title = "Resolved Recovery Gaps By User" id = {getDivId('chart')} chartData = {dailyData['data_recovery_gap_byUser']} chartType="ClusterBar"/>
+                    <Chart title = "Resolved Recovery Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['data_recovery_ticket_byRootCause']} chartType="ClusterBar"/>
                     <Chart title = "Weekly Recovery" id = {getDivId('chart')} chartData = {dailyData['weekly_recovery']} chartType="Bar"/>
-                    <Table title = "Deployment & Intervention" id = {getDivId('table')} tableData = {dailyData['deployements_and_interventions']}/>
+
                 </section>
 
             </div>
