@@ -7,7 +7,7 @@ import * as am4core from "@amcharts/amcharts4/core";
 
 import html2canvas from 'html2canvas';
 
-import {SMARTEST_LOGO, SONATRACH_LOGO} from '../constants/logos'
+import {SMARTEST_LOGO,BACKGROUND} from '../constants/logos'
 
 const getChartByContainerId = (id) => {
   var charts = am4core.registry.baseSprites;
@@ -32,13 +32,8 @@ const setupNewPage = (doc, title = '', pageBreak = true) => {
   doc.content.push({
     columns: [{
         image: SMARTEST_LOGO,
-        margin: [0,50,0,0],
-        width: 160
-    },{
-
-        image: SONATRACH_LOGO,
-        margin: [330,40,0,0],
-        width: 40
+        margin: [612,0,0,0],
+        width: 200
     }], 
     pageBreak:pageBreak===true ? 'before':''
   });
@@ -49,8 +44,9 @@ const setupNewPage = (doc, title = '', pageBreak = true) => {
       fontSize : 22,
       margin:[20,50,0,20],
       alignment:'left',
-      color:'#880000',
-      
+      color:'#c00000',
+      bold: true,
+      decoration: 'underline',
     });
   }
   
@@ -58,22 +54,37 @@ const setupNewPage = (doc, title = '', pageBreak = true) => {
 
 const createHeaderPage = (doc, range) =>{
  
-  setupNewPage(doc, '', false);
+  doc.content.push({
+        image: BACKGROUND,
+        margin:[-15,-20,0,-10],
+        width: 842
+  });
+
+  doc.content.push({
+    columns: [{
+        image: SMARTEST_LOGO,
+        width: 150,
+        absolutePosition: {x: 20,y: 540},
+        alignment: 'left',
+    }], 
+  });
 
   doc.content.push({
     text : "BO Weekly Report",
-    fontSize : 48,
-    margin:[0,100,0,20],
+    fontSize : 36,
+    absolutePosition: {y: 236},
     alignment:'center',
-    color:'#444',
+    color:'#c00000',
+    bold: true,
     
   });
   doc.content.push({
     text : `From ${range.split(" - ")[0]} To ${range.split(" - ")[1]}`,
-    fontSize : 36,
-    margin:[0,0,0,100],
+    fontSize : 28,
+    absolutePosition: {y: 280},
     alignment:'center',
-    color:'#444',
+    color:'#00000',
+    bold: true,
   });
 
 }
@@ -113,7 +124,7 @@ const add2ChartsInline = (doc, chart1, chart2, width) =>{
     
       }
     ], columnGap: 10,
-    margin : [40, 10, 0, 0],
+    margin : [156, 10, 0, 0],
     alignment : 'center'
   });
 } 
@@ -137,48 +148,51 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
 
         var doc={
           pageSize: "A4",
-          pageOrientation: "portrait",
+          pageOrientation: "landscape",
           pageMargins: [15,20,0,10],
           content: [],  
           };
 
           createHeaderPage(doc, range);
 
-          setupNewPage(doc, "Deployment and Relocation");
+          setupNewPage(doc, "- Deployment and Relocation :");
           add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 245);
           addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 500);
           
-          setupNewPage(doc, "Rig Box, Maintenance");
+          setupNewPage(doc, "- Rig Box, Maintenance :");
           addChartToPDF(doc, exportedCharts[0]);
 
-          setupNewPage(doc, "NDJ Jobs");
+          setupNewPage(doc, "- NDJ Jobs :");
           addChartToPDF(doc, exportedCharts[1]);
 
-          setupNewPage(doc,  "Extra Jobs");
+          setupNewPage(doc,  "- Extra Jobs :");
           addChartToPDF(doc,  exportedTables[3]?.toDataURL("image/png"));
 
-          setupNewPage(doc,  "Extra Jobs");
+          setupNewPage(doc,  "- Extra Jobs :");
           addChartToPDF(doc, exportedTables[4]?.toDataURL("image/png"));
 
-          setupNewPage(doc,  "Data Recovery");
+          setupNewPage(doc,  "- Data Recovery :");
           addChartToPDF(doc, exportedCharts[2])
+          setupNewPage(doc,  "- Data Recovery :");
           addChartToPDF(doc, exportedCharts[3])
           
-          setupNewPage(doc,  "Data Quality");
+          setupNewPage(doc,  "- Data Quality :");
           addChartToPDF(doc, exportedCharts[4])
+          setupNewPage(doc,  "- Data Quality :");
           addChartToPDF(doc, exportedCharts[5])
                     
-          setupNewPage(doc,  "Data Quality");
+          setupNewPage(doc,  "- Data Quality :");
           addChartToPDF(doc, exportedCharts[6])
+          setupNewPage(doc,  "- Data Quality :");
           addChartToPDF(doc, exportedCharts[7])
           
-          setupNewPage(doc,  "Data Quality");
+          setupNewPage(doc,  "- Data Quality :");
           addChartToPDF(doc, exportedCharts[8])
         
-          setupNewPage(doc,  "Helpdesk Tickets");
+          setupNewPage(doc,  "- Helpdesk Tickets :");
           addChartToPDF(doc, exportedCharts[9])
 
-          setupNewPage(doc,  "Mini Project Progress");
+          setupNewPage(doc,  "- Mini Project Progress :");
           addChartToPDF(doc, exportedTables[5]?.toDataURL("image/png"));
 
         pdfMake.createPdf(doc).download(`Weekly_report_${range}.pdf`);

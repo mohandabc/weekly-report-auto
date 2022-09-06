@@ -101,7 +101,8 @@ export const DailyPage = () => {
                     <Chart title = "Resolved Recovery Tickets By User" id = {getDivId('chart')} chartData = {dailyData['data_recovery_ticket_byUser']} chartType="ClusterBar"/>
                     <Chart title = "Resolved Recovery Gaps By User" id = {getDivId('chart')} chartData = {dailyData['data_recovery_gap_byUser']} chartType="ClusterBar"/>
                     <Chart title = "Resolved Recovery Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['data_recovery_ticket_byRootCause']} chartType="ClusterBar"/>
-                    <Chart title = "Weekly Recovery" id = {getDivId('chart')} chartData = {dailyData['weekly_recovery']} chartType="Bar"/>
+                    <Table title = "Deployements And Interventions" id = {getDivId('table')} tableData = {dailyData['deployements_and_interventions']}/>
+                    <Chart title = "Deployements And Interventions" id = {getDivId('chart')} chartData = {dailyData['obs_int_chart']} chartType="ClusterBar"/>
 
                 </section>
 
