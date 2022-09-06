@@ -42,7 +42,7 @@ const setupNewPage = (doc, title = '', pageBreak = true) => {
     doc.content.push({
       text : title,
       fontSize : 22,
-      margin:[20,50,0,20],
+      margin:[20,0,0,20],
       alignment:'left',
       color:'#c00000',
       bold: true,
@@ -91,7 +91,7 @@ const createHeaderPage = (doc, range) =>{
 
 
 
-const addChartToPDF = (doc, chart, width = 515) =>{
+const addChartToPDF = (doc, chart, width = 650) =>{
   if (chart === undefined){
     console.log("chart isn't defined");
     return
@@ -166,10 +166,10 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           addChartToPDF(doc, exportedCharts[1]);
 
           setupNewPage(doc,  "- Extra Jobs :");
-          addChartToPDF(doc,  exportedTables[3]?.toDataURL("image/png"));
+          addChartToPDF(doc,  exportedTables[3]?.toDataURL("image/png"),550);
 
           setupNewPage(doc,  "- Extra Jobs :");
-          addChartToPDF(doc, exportedTables[4]?.toDataURL("image/png"));
+          addChartToPDF(doc, exportedTables[4]?.toDataURL("image/png"),500);
 
           setupNewPage(doc,  "- Data Recovery :");
           addChartToPDF(doc, exportedCharts[2])
