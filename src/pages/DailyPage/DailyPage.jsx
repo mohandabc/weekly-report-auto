@@ -83,16 +83,9 @@ export const DailyPage = () => {
                     <Table title = "Data Quality" id = {getDivId('table')} tableData = {dailyData['data_quality']}/>
                 </section>
 
-                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-3 gap-4 place-items-top px-2 pb-4`} >
-                    <Chart title = "Pending Quality Tickets By MLU" id = {getDivId('chart')} chartData = {dailyData['pending_tickets_byMLU']} chartType="ClusterBar"/>
-                    <Chart title = "Pending Quality Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['pending_tickets_byRootCause']} chartType="ClusterBar"/>
-                    <Chart title = "Pending Quality Tickets By User" id = {getDivId('chart')} chartData = {dailyData['pending_tickets_byDM']} chartType="ClusterBar"/>
-                    <Chart title = "Resolved Quality Tickets By MLU" id = {getDivId('chart')} chartData = {dailyData['resolved_tickets_byMLU']} chartType="ClusterBar"/>
-                    <Chart title = "Resolved Quality Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['resolved_tickets_byRootCause']} chartType="ClusterBar"/>
-                    <Chart title = "Resolved Quality Tickets By DM" id = {getDivId('chart')} chartData = {dailyData['resolved_tickets_byDM']} chartType="ClusterBar"/>
-                </section>
-
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
+                    <Chart title = "Pending Quality Tickets" id = {getDivId('chart')} chartData = {dailyData['pending_Q_tickets']} chartType="ClusterBar"/>
+                    <Chart title = "Resolved Quality Tickets" id = {getDivId('chart')} chartData = {dailyData['resolved_Q_tickets']} chartType="ClusterBar"/>
                     <Table title = "Data Loss" id = {getDivId('table')} tableData = {dailyData['data_loss']}/>
                     <Chart title = "Resolved Loss Tickets By User" id = {getDivId('chart')} chartData = {dailyData['data_loss_ticket_byUser']} chartType="ClusterBar"/>
                     <Chart title = "Resolved Loss Gaps By User" id = {getDivId('chart')} chartData = {dailyData['data_loss_gap_byUser']} chartType="ClusterBar"/>

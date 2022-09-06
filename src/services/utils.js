@@ -52,7 +52,7 @@ const setupNewPage = (doc, title = '', pageBreak = true) => {
   
 } 
 
-const createHeaderPage = (doc, range) =>{
+const createHeaderPage = (doc, range, title) =>{
  
   doc.content.push({
         image: BACKGROUND,
@@ -70,7 +70,7 @@ const createHeaderPage = (doc, range) =>{
   });
 
   doc.content.push({
-    text : "BO Weekly Report",
+    text : title,
     fontSize : 36,
     absolutePosition: {y: 236},
     alignment:'center',
@@ -153,7 +153,7 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           content: [],  
           };
 
-          createHeaderPage(doc, range);
+          createHeaderPage(doc, range, "BO Weekly Report");
 
           setupNewPage(doc, "- Deployment and Relocation :");
           add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 245);
@@ -199,4 +199,77 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
       });
   }
 
-  export const generateDailyReport = (chartsToPrint, tablesToPrint, range) =>{}
+  export const generateDailyReport = (chartsToPrint, tablesToPrint, range) =>{
+    if(chartsToPrint.length === 0){
+      return;
+    }
+
+    let charts = chartsToPrint.map((chartDivId)=>getChartByContainerId(chartDivId));
+    if(charts.length === 0){
+      return;
+    }
+
+    console.log(charts)
+    console.log(tablesToPrint)
+    exportCharts(charts, tablesToPrint)
+    .then(response => {
+
+        const [exportedCharts, exportedTables] = response; 
+
+        pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+        var doc={
+          pageSize: "A4",
+          pageOrientation: "landscape",
+          pageMargins: [15,20,0,10],
+          content: [],  
+          };
+
+          createHeaderPage(doc, range, "BO Daily Report");
+
+          setupNewPage(doc, "- Well Spud and Extra jobs status :");
+          add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 245);
+          addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 500);
+
+          setupNewPage(doc, "- Reservoire Tickets :");
+          addChartToPDF(doc, exportedTables[3]?.toDataURL("image/png"), 500);
+
+          setupNewPage(doc, "- Data Quality :");
+          addChartToPDF(doc, exportedTables[4]?.toDataURL("image/png"), 450);
+
+          setupNewPage(doc, "- Data Quality :");
+          addChartToPDF(doc, exportedCharts[0]);
+
+          setupNewPage(doc, "- Data Quality :");
+          addChartToPDF(doc, exportedCharts[1]);
+
+
+          setupNewPage(doc, "- Data Loss :");
+          addChartToPDF(doc, exportedTables[5]?.toDataURL("image/png"), 450);
+
+          setupNewPage(doc, "- Data Loss :");
+          addChartToPDF(doc, exportedCharts[2]);
+
+          setupNewPage(doc, "- Data Loss :");
+          addChartToPDF(doc, exportedCharts[3]);
+
+          setupNewPage(doc, "- Data Loss :");
+          addChartToPDF(doc, exportedCharts[4]);
+
+          setupNewPage(doc, "- Data Recovery :");
+          addChartToPDF(doc, exportedTables[6]?.toDataURL("image/png"), 450);
+
+          setupNewPage(doc, "- Data Recovery :");
+          addChartToPDF(doc, exportedCharts[5]);
+
+          setupNewPage(doc, "- Data Recovery :");
+          addChartToPDF(doc, exportedCharts[6]);
+
+          setupNewPage(doc, "- Data Recovery :");
+          addChartToPDF(doc, exportedCharts[7]);
+
+
+        pdfMake.createPdf(doc).download(`Daily_report_${range}.pdf`);
+
+      });
+  }
