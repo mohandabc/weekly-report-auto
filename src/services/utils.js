@@ -106,24 +106,22 @@ const addChartToPDF = (doc, chart, width = 650) =>{
   });
 }
 
-const add2ChartsInline = (doc, chart1, chart2, width) =>{
+const add2ChartsInline = (doc, chart1, chart2, width, width2) =>{
   doc.content.push({
     columns :[
       {
         image:chart1,
-        margin : [0,10,0,0],
         width : width,
         alignment:'center',
     
       },
       {
-        image:chart2,
-        margin : [0,10,0,0], 
-        width : width,
+        image:chart2, 
+        width : width2,
         alignment:'center',
     
       }
-    ], columnGap: 10,
+    ], columnGap: 130,
     margin : [156, 10, 0, 0],
     alignment : 'center'
   });
@@ -156,7 +154,7 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           createHeaderPage(doc, range, "BO Weekly Report");
 
           setupNewPage(doc, "- Deployment and Relocation :");
-          add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 245);
+          add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 200,245);
           addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 500);
           
           setupNewPage(doc, "- Rig Box, Maintenance :");
@@ -228,7 +226,7 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           createHeaderPage(doc, range, "BO Daily Report");
 
           setupNewPage(doc, "- Well Spud and Extra jobs status :");
-          add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 245);
+          add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png", 0.5), exportedTables[1]?.toDataURL("image/png", 0.5), 120,260);
           addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 500);
 
           setupNewPage(doc, "- Reservoire Tickets :");
@@ -268,6 +266,11 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           setupNewPage(doc, "- Data Recovery :");
           addChartToPDF(doc, exportedCharts[7]);
 
+          setupNewPage(doc, "- D/I :");
+          addChartToPDF(doc, exportedTables[7]?.toDataURL("image/png"), 200);
+
+          setupNewPage(doc, "- D/I :");
+          addChartToPDF(doc, exportedCharts[8]);
 
         pdfMake.createPdf(doc).download(`Daily_report_${range}.pdf`);
 
