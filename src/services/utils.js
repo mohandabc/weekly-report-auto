@@ -64,10 +64,9 @@ const setupNewPage = (doc, title = '', pageBreak = true) => {
       decoration: 'underline',
     });
   }
-  
 } 
 
-const createHeaderPage = (doc, range, title, pageBreak=true) =>{
+const createHeaderPage = (doc, range, title) =>{
  
   doc.content.push({
     columns: [{image: BACKGROUND,
@@ -128,8 +127,8 @@ const add2ChartsInline = (doc, chart1, chart2, width, width2) =>{
         alignment:'center',
     
       }
-    ], columnGap: 130,
-    margin : [156, 10, 0, 0],
+    ], columnGap: 10,
+    margin : [125,10,0,0],
     alignment : 'center'
   });
 } 
@@ -161,8 +160,8 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           createHeaderPage(doc, range, "BO Weekly Report");
 
           setupNewPage(doc, "- Deployment and Relocation :");
-          add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 200,245);
-          addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 500);
+          add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 295,295);
+          addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 600);
           
           setupNewPage(doc, "- Rig Box, Maintenance :");
           addChartToPDF(doc, exportedCharts[0]);
@@ -171,10 +170,10 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           addChartToPDF(doc, exportedCharts[1]);
 
           setupNewPage(doc,  "- Extra Jobs :");
-          addChartToPDF(doc,  exportedTables[3]?.toDataURL("image/png"),550);
+          addChartToPDF(doc,  exportedTables[3]?.toDataURL("image/png"),600);
 
           setupNewPage(doc,  "- Extra Jobs :");
-          addChartToPDF(doc, exportedTables[4]?.toDataURL("image/png"),500);
+          addChartToPDF(doc, exportedTables[4]?.toDataURL("image/png"),600);
 
           setupNewPage(doc,  "- Data Recovery :");
           addChartToPDF(doc, exportedCharts[2])
@@ -232,7 +231,7 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           createHeaderPage(doc, range, "BO Daily Report");
 
           setupNewPage(doc, "- Well Spud and Extra jobs status :");
-          add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png", 0.5), exportedTables[1]?.toDataURL("image/png", 0.5), 120,260);
+          add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 300,300);
           addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 500);
 
           setupNewPage(doc, "- Reservoire Tickets :");
