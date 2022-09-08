@@ -29,15 +29,26 @@ export const Table = ({title, id, tableData})=>{
                 {/* {tableData?.map(row => <tr>{Object.entries(row).map(cell) => <td>{cell}</td>}</tr>} */}
                 {
                     tableData.map((row, index) => 
+                    title == "Data Quality" || title == "Data Loss" || title == "Data Recovery" ?
                     <tr className={`${index%2===0?"":"bg-slate-200"}`} key={index}>
                         {
                             Object.entries(row).map((item, index) => 
-                            <td key={index} className="px-auto py-2.5 text-center">
-                                {
+                            <td key={index} className="px-20 py-20 text-center">
+                                <h3>{
                                     item[1]
-                                }
+                                }</h3>
                             </td>)
                         }
+                    </tr> :
+                    <tr className={`${index%2===0?"":"bg-slate-200"}`} key={index}>
+                    {
+                        Object.entries(row).map((item, index) => 
+                        <td key={index} className="px-auto py-2.5 text-center">
+                            {
+                                item[1]
+                            }
+                        </td>)
+                    }
                     </tr>
                     )
                 }

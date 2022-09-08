@@ -83,14 +83,19 @@ class Chart
                 }, init))
         });
 
-        
+        let i = 0;
+        let arr = []
+        while (i < adaptedData?.length) {
+            arr = arr.concat(Object.entries(adaptedData[i]).map(c =>c[0]).slice(1))
+            i++;
+        }
+        arr = arr.filter((item, pos) => arr.indexOf(item) === pos)
         if (adaptedData?.length > 0){
         params = {
             category : Object.keys(adaptedData[0])[0],
-            series : Object.entries(adaptedData[0]).map(c =>c[0]).slice(1),
+            series : arr,
             }
         }
-
         return [adaptedData, params];
     }
 }
@@ -172,9 +177,9 @@ export class BarChart extends Chart
 
         var bullet = series.bullets.push(new am4charts.LabelBullet())
             bullet.interactionsEnabled = false
-            bullet.dy = -10;
+            bullet.dy = 15;
             bullet.label.text = '[bold]{valueY}'
-            bullet.label.fill = am4core.color('#555')
+            bullet.label.fill = am4core.color('#fff')
         
 
         var columnTemplate = series.columns.template;
@@ -230,12 +235,12 @@ export class ClusteredBarChart extends Chart
         
             series.events.on("hidden", arrangeColumns);
             series.events.on("shown", arrangeColumns);
-        
+            
             var bullet = series.bullets.push(new am4charts.LabelBullet())
             bullet.interactionsEnabled = false
-            bullet.dy = -10;
+            bullet.label.dy = 15;
             bullet.label.text = '[bold]{valueY}'
-            bullet.label.fill = am4core.color('#555')
+            bullet.label.fill = am4core.color('#fff')
         
             return series;
         }
