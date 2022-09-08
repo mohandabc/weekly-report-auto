@@ -1,4 +1,5 @@
 const {atom} = require('recoil');
+const date = new Date();
 
 export const chartsToPrintState = atom({
     key : 'chartsToPrint', 
@@ -12,7 +13,7 @@ export const tablesToPrintState = atom({
 
 export const dateStartEndState = atom({
     key: 'dateStartEnd',
-    default : '1/1/2022 - 1/1/2022'
+    default : `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} - ${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
 });
 
 export const weeklyDataState = atom({
