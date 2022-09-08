@@ -161,6 +161,8 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
 
           setupNewPage(doc, "- Deployment and Relocation :");
           add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 295,295);
+
+          setupNewPage(doc, "- Wells Spud :");
           addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 600);
           
           setupNewPage(doc, "- Rig Box, Maintenance :");
@@ -231,14 +233,14 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           createHeaderPage(doc, range, "BO Daily Report");
 
           setupNewPage(doc, "- Well Spud and Extra jobs status :");
-          add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 300,300);
-          addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 500);
+          add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 195,395);
+          addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 600);
 
           setupNewPage(doc, "- Reservoire Tickets :");
-          addChartToPDF(doc, exportedTables[3]?.toDataURL("image/png"), 500);
+          addChartToPDF(doc, exportedTables[3]?.toDataURL("image/png"), 600);
 
           setupNewPage(doc, "- Data Quality :");
-          addChartToPDF(doc, exportedTables[4]?.toDataURL("image/png"), 450);
+          addChartToPDF(doc, exportedTables[4]?.toDataURL("image/png"), 600);
 
           setupNewPage(doc, "- Data Quality :");
           addChartToPDF(doc, exportedCharts[0]);
@@ -247,7 +249,7 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           addChartToPDF(doc, exportedCharts[1]);
 
           setupNewPage(doc, "- Data Loss :");
-          addChartToPDF(doc, exportedTables[5]?.toDataURL("image/png"), 450);
+          addChartToPDF(doc, exportedTables[5]?.toDataURL("image/png"), 600);
 
           setupNewPage(doc, "- Data Loss :");
           addChartToPDF(doc, exportedCharts[2]);
@@ -259,7 +261,7 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           addChartToPDF(doc, exportedCharts[4]);
 
           setupNewPage(doc, "- Data Recovery :");
-          addChartToPDF(doc, exportedTables[6]?.toDataURL("image/png"), 450);
+          addChartToPDF(doc, exportedTables[6]?.toDataURL("image/png"), 600);
 
           setupNewPage(doc, "- Data Recovery :");
           addChartToPDF(doc, exportedCharts[5]);
@@ -271,7 +273,7 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           addChartToPDF(doc, exportedCharts[7]);
 
           setupNewPage(doc, "- D/I :");
-          addChartToPDF(doc, exportedTables[7]?.toDataURL("image/png"), 200);
+          addChartToPDF(doc, exportedTables[7]?.toDataURL("image/png"), 600);
 
           setupNewPage(doc, "- D/I :");
           addChartToPDF(doc, exportedCharts[8]);

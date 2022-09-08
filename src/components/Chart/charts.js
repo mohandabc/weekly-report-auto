@@ -177,9 +177,9 @@ export class BarChart extends Chart
 
         var bullet = series.bullets.push(new am4charts.LabelBullet())
             bullet.interactionsEnabled = false
-            bullet.dy = -10;
+            bullet.dy = 15;
             bullet.label.text = '[bold]{valueY}'
-            bullet.label.fill = am4core.color('#555')
+            bullet.label.fill = am4core.color('#fff')
         
 
         var columnTemplate = series.columns.template;
@@ -235,12 +235,12 @@ export class ClusteredBarChart extends Chart
         
             series.events.on("hidden", arrangeColumns);
             series.events.on("shown", arrangeColumns);
-        
+            
             var bullet = series.bullets.push(new am4charts.LabelBullet())
             bullet.interactionsEnabled = false
-            bullet.dy = -10;
+            bullet.label.dy = 15;
             bullet.label.text = '[bold]{valueY}'
-            bullet.label.fill = am4core.color('#555')
+            bullet.label.fill = am4core.color('#fff')
         
             return series;
         }
