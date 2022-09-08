@@ -7,7 +7,8 @@ import * as am4core from "@amcharts/amcharts4/core";
 
 import html2canvas from 'html2canvas';
 
-import {SMARTEST_LOGO,BACKGROUND} from '../constants/logos'
+import {SMARTEST_LOGO,SONATRACH_LOGO} from '../constants/logos'
+import {BACKGROUND,LASTPAGE,TOPLEFT} from '../constants/backgrounds'
 
 const getChartByContainerId = (id) => {
   var charts = am4core.registry.baseSprites;
@@ -29,20 +30,34 @@ const exportCharts = async (charts, tablesToPrint) => {
 }
 
 const setupNewPage = (doc, title = '', pageBreak = true) => {
+
+  doc.content.push({
+    columns: [{
+        image: TOPLEFT,
+        absolutePosition: {x:0 ,y: 0},
+        width: 50
+    },{
+      image: SONATRACH_LOGO,
+      absolutePosition: {x:750 ,y: 10},
+      width: 40
+  }], 
+  pageBreak:pageBreak===true ? 'before':''
+  });
+
   doc.content.push({
     columns: [{
         image: SMARTEST_LOGO,
-        margin: [612,0,0,0],
-        width: 200
-    }], 
-    pageBreak:pageBreak===true ? 'before':''
+        margin: [80,0,0,20],
+        width: 210
+    },
+    ], 
   });
 
   if(title !== ''){
     doc.content.push({
       text : title,
       fontSize : 22,
-      margin:[20,0,0,20],
+      margin:[25,0,0,20],
       alignment:'left',
       color:'#c00000',
       bold: true,
@@ -52,44 +67,36 @@ const setupNewPage = (doc, title = '', pageBreak = true) => {
   
 } 
 
-const createHeaderPage = (doc, range, title) =>{
+const createHeaderPage = (doc, range, title, pageBreak=true) =>{
  
   doc.content.push({
-        image: BACKGROUND,
-        margin:[-15,-20,0,-10],
-        width: 842
+    columns: [{image: BACKGROUND,
+      margin:[-15,-20,0,-10],
+      width: 842},
+    {text : title,
+      fontSize : 36,
+      absolutePosition: {y: 236},
+      alignment:'center',
+      color:'#c00000',
+      bold: true,},
+      {text : `From ${range.split(" - ")[0]} To ${range.split(" - ")[1]}`,
+      fontSize : 28,
+      absolutePosition: {y: 280},
+      alignment:'center',
+      color:'#00000',
+      bold: true,}
+    ],
   });
-
-  doc.content.push({
-    columns: [{
-        image: SMARTEST_LOGO,
-        width: 150,
-        absolutePosition: {x: 20,y: 540},
-        alignment: 'left',
-    }], 
-  });
-
-  doc.content.push({
-    text : title,
-    fontSize : 36,
-    absolutePosition: {y: 236},
-    alignment:'center',
-    color:'#c00000',
-    bold: true,
-    
-  });
-  doc.content.push({
-    text : `From ${range.split(" - ")[0]} To ${range.split(" - ")[1]}`,
-    fontSize : 28,
-    absolutePosition: {y: 280},
-    alignment:'center',
-    color:'#00000',
-    bold: true,
-  });
-
 }
 
-
+const createLastPage = (doc) =>{
+ 
+  doc.content.push({
+        image: LASTPAGE,
+        absolutePosition: {x:0, y: 0},
+        width: 842
+  });
+}
 
 const addChartToPDF = (doc, chart, width = 650) =>{
   if (chart === undefined){
@@ -190,8 +197,7 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           setupNewPage(doc,  "- Helpdesk Tickets :");
           addChartToPDF(doc, exportedCharts[9])
 
-          setupNewPage(doc,  "- Mini Project Progress :");
-          addChartToPDF(doc, exportedTables[5]?.toDataURL("image/png"));
+          createLastPage(doc);
 
         pdfMake.createPdf(doc).download(`Weekly_report_${range}.pdf`);
       });
@@ -241,7 +247,6 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
           setupNewPage(doc, "- Data Quality :");
           addChartToPDF(doc, exportedCharts[1]);
 
-
           setupNewPage(doc, "- Data Loss :");
           addChartToPDF(doc, exportedTables[5]?.toDataURL("image/png"), 450);
 
@@ -271,6 +276,8 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
 
           setupNewPage(doc, "- D/I :");
           addChartToPDF(doc, exportedCharts[8]);
+
+          createLastPage(doc);
 
         pdfMake.createPdf(doc).download(`Daily_report_${range}.pdf`);
 
