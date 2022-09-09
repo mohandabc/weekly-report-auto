@@ -17,25 +17,43 @@ const buildTableBody = (data, columns) => {
 
   data.forEach(function(row) {
       var dataRow = [];
-      console.log("hadou", columns)
       columns.forEach(function(column) {
-        console.log("hadosdfsu", column)
           dataRow.push(row[column['text']].toString());
       })
 
       body.push(dataRow);
   });
-
+  console.log("boooodyyy",body)
   return body;
 }
 
 const table = (data, columns, widths) => {
-  columns = columns.map(column => {return {text: column, alignment: 'center', fillColor: '#FFA500', fontSize: 15,}})
+  columns = columns.map(column => {return {text: column, color: 'white', width:60 ,alignment: 'center', fillColor: '#C00000', fontSize: 15, style: 'tableHeader',}})
       return {
         table: {
+            style: 'tableExample',
             widths: widths,
             headerRows: 1,
             body: buildTableBody(data, columns)
+        },
+        layout: {
+          hLineWidth: function (i, node) {
+            return (i === 0 || i === node.table.body.length) ? 2 : 1;
+          },
+          vLineWidth: function (i, node) {
+            return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+          },
+          hLineColor: function (i, node) {
+            return (i === 0 || i === node.table.body.length) ? 'white' : 'white';
+          },
+          vLineColor: function (i, node) {
+            return (i === 0 || i === node.table.widths.length) ? 'white' : 'white';
+          },
+          fillColor: function (rowIndex) {
+            return (rowIndex>0) ? '#e6e6e6' : null;
+          },
+          paddingTop: function(i, node) { return 8; },
+          paddingBottom: function(i, node) { return 8; },
         }
     };
 
@@ -53,11 +71,10 @@ const getChartByContainerId = (id) => {
 const exportCharts = async (charts, tablesToPrint) => {
     let promises_list = charts.map((chart) => chart?.exporting.getImage("png"));
     const nbr_charts = promises_list.length;
-    let tables_promesses = [];
-    promises_list = [...promises_list, ...tables_promesses];
+    promises_list = [...promises_list];
 
     return Promise.all(promises_list)
-    .then((res) => [res.slice(0, nbr_charts), res.slice(nbr_charts) ]);
+    .then((res) => [res.slice(0, nbr_charts)]);
 }
 
 const setupNewPage = (doc, title = '', data, column, data1, column1, pageBreak = true) => {
@@ -99,7 +116,7 @@ const setupNewPage = (doc, title = '', data, column, data1, column1, pageBreak =
         columns: [
           table(data, column,[202, 202, 202])
         ], 
-        margin: [90,20,0,40],
+        margin: [90,20,0,0],
         alignment : 'center'
       });
 
@@ -107,7 +124,8 @@ const setupNewPage = (doc, title = '', data, column, data1, column1, pageBreak =
         columns: [
           table(data1, column1,[308, 308])
         ], 
-        margin: [90,0,0,0],
+        margin: [90,20,0,0],
+        alignment : 'center'
       });  
 
       break;
@@ -116,30 +134,35 @@ const setupNewPage = (doc, title = '', data, column, data1, column1, pageBreak =
         columns: [
           table(data, column,[202, 202, 202])
         ], 
-        margin: [90,20,0,40],
+        margin: [90,20,0,0],
         alignment : 'center'
       });
       break;
-    case "- Extra Jobs :":
+    case "- Extra Jobs Cementing :":
       doc.content.push({
         columns: [
-          table(data, column,['auto','auto','auto','auto','auto','auto','auto','auto'])
+          table(data, column,[40,50,72,80,50,150,61,105])
         ], 
-        margin: [90,20,0,40],
+        margin: [67,20,0,0],
         alignment : 'center'
       });
       break;
-    case "+ Extra Jobs :":
+    case "- Extra Jobs MWD :":
       doc.content.push({
         columns: [
-          table(data, column,['auto','auto','auto','auto','auto','auto','auto'])
+          table(data, column,[40,50,72,80,150,61,105])
         ], 
-        margin: [90,20,0,40],
+        margin: [90,20,0,0],
         alignment : 'center'
       });
       break;
     default:
-      console.log("default from switch case")
+      doc.content.push({
+        columns: [
+        ], 
+        margin: [90,20,0,0],
+        alignment : 'center'
+      });
   } 
 }
 
@@ -184,32 +207,12 @@ const addChartToPDF = (doc, chart, width = 650) =>{
 
   doc.content.push({
     image:chart,
-    margin : [-30,10,0,0],
+    margin : [-40,10,0,0],
     width : width,
     alignment:'center',
 
   });
 }
-
-const add2ChartsInline = (doc, chart1, chart2, width, width2) =>{
-  doc.content.push({
-    columns :[
-      {
-        image:chart1,
-        width : width,
-        alignment:'center',
-    
-      },
-      {
-        image:chart2, 
-        width : width2,
-        alignment:'center',
-    
-      }
-    ], columnGap: 10,
-    alignment : 'center'
-  });
-} 
 
 export const generateWeeklyReport = (chartsToPrint, tablesToPrint, weeklyData, range) =>{
     if(chartsToPrint.length === 0){
@@ -220,8 +223,6 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, weeklyData, r
     if(charts.length === 0){
       return;
     }
-
-    console.log("tableeees",weeklyData);
     
     exportCharts(charts, tablesToPrint)
     .then(response => {
@@ -248,34 +249,32 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, weeklyData, r
           setupNewPage(doc, "- NDJ Jobs :");
           addChartToPDF(doc, exportedCharts[1]);
 
-          setupNewPage(doc,  "- Extra Jobs :", weeklyData['cementing_jobs'], ['Rig','Well','Result','Casing','Company','Unit', 'Start Date', 'NDJ Root Cause']);
-          // addChartToPDF(doc,  exportedTables[3]?.toDataURL("image/png"),600);
+          setupNewPage(doc,  "- Extra Jobs Cementing :", weeklyData['cementing_jobs'], ['Rig','Well','Result','Casing','Company','Unit', 'Start Date', 'NDJ Root Cause']);
 
-          setupNewPage(doc,  "+ Extra Jobs :", weeklyData['mwd_jobs'], ['Rig','Well','Result','Company','Unit', 'Start Date', 'NDJ Root Cause']);
-          // addChartToPDF(doc,  exportedTables[3]?.toDataURL("image/png"),600);
+          setupNewPage(doc,  "- Extra Jobs MWD :", weeklyData['mwd_jobs'], ['Rig','Well','Result','Company','Unit', 'Start Date', 'NDJ Root Cause']);
 
-          // setupNewPage(doc,  "- Data Recovery :");
-          // addChartToPDF(doc, exportedCharts[2])
-          // setupNewPage(doc,  "- Data Recovery :");
-          // addChartToPDF(doc, exportedCharts[3])
+          setupNewPage(doc,  "- Data Recovery :");
+          addChartToPDF(doc, exportedCharts[2])
+          setupNewPage(doc,  "- Data Recovery :");
+          addChartToPDF(doc, exportedCharts[3])
           
-          // setupNewPage(doc,  "- Data Quality :");
-          // addChartToPDF(doc, exportedCharts[4])
-          // setupNewPage(doc,  "- Data Quality :");
-          // addChartToPDF(doc, exportedCharts[5])
+          setupNewPage(doc,  "- Data Quality :");
+          addChartToPDF(doc, exportedCharts[4])
+          setupNewPage(doc,  "- Data Quality :");
+          addChartToPDF(doc, exportedCharts[5])
                     
-          // setupNewPage(doc,  "- Data Quality :");
-          // addChartToPDF(doc, exportedCharts[6])
-          // setupNewPage(doc,  "- Data Quality :");
-          // addChartToPDF(doc, exportedCharts[7])
+          setupNewPage(doc,  "- Data Quality :");
+          addChartToPDF(doc, exportedCharts[6])
+          setupNewPage(doc,  "- Data Quality :");
+          addChartToPDF(doc, exportedCharts[7])
           
-          // setupNewPage(doc,  "- Data Quality :");
-          // addChartToPDF(doc, exportedCharts[8])
+          setupNewPage(doc,  "- Data Quality :");
+          addChartToPDF(doc, exportedCharts[8])
         
-          // setupNewPage(doc,  "- Helpdesk Tickets :");
-          // addChartToPDF(doc, exportedCharts[9])
+          setupNewPage(doc,  "- Helpdesk Tickets :");
+          addChartToPDF(doc, exportedCharts[9])
 
-          // createLastPage(doc);
+          createLastPage(doc);
 
         pdfMake.createPdf(doc).download(`Weekly_report_${range}.pdf`);
       });
@@ -291,8 +290,6 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, weeklyData, r
       return;
     }
 
-    console.log(charts)
-    console.log(tablesToPrint)
     exportCharts(charts, tablesToPrint)
     .then(response => {
 
@@ -310,7 +307,7 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, weeklyData, r
           createHeaderPage(doc, range, "BO Daily Report");
 
           setupNewPage(doc, "- Well Spud and Extra jobs status :");
-          add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 195,395);
+          // add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 195,395);
           addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 600);
 
           setupNewPage(doc, "- Reservoire Tickets :");
