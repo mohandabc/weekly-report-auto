@@ -88,12 +88,13 @@ const createHeaderPage = (doc, range, title) =>{
   });
 }
 
-const createLastPage = (doc) =>{
+const createLastPage = (doc, pageBreak=true) =>{
  
   doc.content.push({
-        image: LASTPAGE,
-        absolutePosition: {x:0, y: 0},
-        width: 842
+    columns: [{image: LASTPAGE,
+        margin: [-15,-20,0,-10],
+        width: 842},],
+        pageBreak:pageBreak===true ? 'before':''
   });
 }
 
