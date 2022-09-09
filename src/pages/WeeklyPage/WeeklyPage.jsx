@@ -67,7 +67,7 @@ export const WeeklyPage = () => {
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
                                     action={generateWeeklyReport} 
-                                    args={[chartsToPrint, tablesToPrint, range]}>
+                                    args={[chartsToPrint, tablesToPrint, weeklyData, range]}>
                     </ActionButton>
                 </div>
                 <section id="main" className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2  pb-4`} >
