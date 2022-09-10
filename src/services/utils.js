@@ -24,7 +24,6 @@ const buildTableBody = (data, columns) => {
       if (dataRow.includes('incomplete')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#e8bc90'}});
       body.push(dataRow);
   });
-  console.log("boooodyyy",body)
   return body;
 }
 
@@ -69,7 +68,7 @@ const getChartByContainerId = (id) => {
   }
 }
 
-const exportCharts = async (charts, tablesToPrint) => {
+const exportCharts = async (charts) => {
     let promises_list = charts.map((chart) => chart?.exporting.getImage("png"));
     const nbr_charts = promises_list.length;
     promises_list = [...promises_list];
@@ -215,7 +214,7 @@ const addChartToPDF = (doc, chart, width = 650) =>{
   });
 }
 
-export const generateWeeklyReport = (chartsToPrint, tablesToPrint, weeklyData, range) =>{
+export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
     if(chartsToPrint.length === 0){
       return;
     }
@@ -225,9 +224,9 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, weeklyData, r
       return;
     }
     
-    exportCharts(charts, tablesToPrint)
+    exportCharts(charts)
     .then(response => {
-        const [exportedCharts, exportedTables] = response; 
+        const [exportedCharts] = response; 
     
         pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -308,50 +307,50 @@ export const generateWeeklyReport = (chartsToPrint, tablesToPrint, weeklyData, r
           createHeaderPage(doc, range, "BO Daily Report");
 
           setupNewPage(doc, "- Well Spud and Extra jobs status :");
-          // add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 195,395);
-          addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 600);
+          // // add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 195,395);
+          // addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 600);
 
-          setupNewPage(doc, "- Reservoire Tickets :");
-          addChartToPDF(doc, exportedTables[3]?.toDataURL("image/png"), 600);
+          // setupNewPage(doc, "- Reservoire Tickets :");
+          // addChartToPDF(doc, exportedTables[3]?.toDataURL("image/png"), 600);
 
-          setupNewPage(doc, "- Data Quality :");
-          addChartToPDF(doc, exportedTables[4]?.toDataURL("image/png"), 600);
+          // setupNewPage(doc, "- Data Quality :");
+          // addChartToPDF(doc, exportedTables[4]?.toDataURL("image/png"), 600);
 
-          setupNewPage(doc, "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[0]);
+          // setupNewPage(doc, "- Data Quality :");
+          // addChartToPDF(doc, exportedCharts[0]);
 
-          setupNewPage(doc, "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[1]);
+          // setupNewPage(doc, "- Data Quality :");
+          // addChartToPDF(doc, exportedCharts[1]);
 
-          setupNewPage(doc, "- Data Loss :");
-          addChartToPDF(doc, exportedTables[5]?.toDataURL("image/png"), 600);
+          // setupNewPage(doc, "- Data Loss :");
+          // addChartToPDF(doc, exportedTables[5]?.toDataURL("image/png"), 600);
 
-          setupNewPage(doc, "- Data Loss :");
-          addChartToPDF(doc, exportedCharts[2]);
+          // setupNewPage(doc, "- Data Loss :");
+          // addChartToPDF(doc, exportedCharts[2]);
 
-          setupNewPage(doc, "- Data Loss :");
-          addChartToPDF(doc, exportedCharts[3]);
+          // setupNewPage(doc, "- Data Loss :");
+          // addChartToPDF(doc, exportedCharts[3]);
 
-          setupNewPage(doc, "- Data Loss :");
-          addChartToPDF(doc, exportedCharts[4]);
+          // setupNewPage(doc, "- Data Loss :");
+          // addChartToPDF(doc, exportedCharts[4]);
 
-          setupNewPage(doc, "- Data Recovery :");
-          addChartToPDF(doc, exportedTables[6]?.toDataURL("image/png"), 600);
+          // setupNewPage(doc, "- Data Recovery :");
+          // addChartToPDF(doc, exportedTables[6]?.toDataURL("image/png"), 600);
 
-          setupNewPage(doc, "- Data Recovery :");
-          addChartToPDF(doc, exportedCharts[5]);
+          // setupNewPage(doc, "- Data Recovery :");
+          // addChartToPDF(doc, exportedCharts[5]);
 
-          setupNewPage(doc, "- Data Recovery :");
-          addChartToPDF(doc, exportedCharts[6]);
+          // setupNewPage(doc, "- Data Recovery :");
+          // addChartToPDF(doc, exportedCharts[6]);
 
-          setupNewPage(doc, "- Data Recovery :");
-          addChartToPDF(doc, exportedCharts[7]);
+          // setupNewPage(doc, "- Data Recovery :");
+          // addChartToPDF(doc, exportedCharts[7]);
 
-          setupNewPage(doc, "- D/I :");
-          addChartToPDF(doc, exportedTables[7]?.toDataURL("image/png"), 600);
+          // setupNewPage(doc, "- D/I :");
+          // addChartToPDF(doc, exportedTables[7]?.toDataURL("image/png"), 600);
 
-          setupNewPage(doc, "- D/I :");
-          addChartToPDF(doc, exportedCharts[8]);
+          // setupNewPage(doc, "- D/I :");
+          // addChartToPDF(doc, exportedCharts[8]);
 
           createLastPage(doc);
 

@@ -11,13 +11,11 @@ import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 
 export const WeeklyPage = () => {
     const [chartsToPrint, setChartsToPrint] = useRecoilState(chartsToPrintState);
-    const [tablesToPrint, setTablesToPrint] = useRecoilState(tablesToPrintState);
     const [weeklyData, setWeeklyData] = useRecoilState(weeklyDataState);
     const range = useRecoilValue(dateStartEndState);
     const setIsHidden = useSetRecoilState(loaderIsHidden);
 
     let chartsIds = [];
-    let tablesIds = [];
 
     let divNumber = 0;
     const getDivId = (type) => {
@@ -25,9 +23,6 @@ export const WeeklyPage = () => {
         let divId = `${type}-div-${divNumber}`;
         if (type === 'chart'){
             chartsIds = [...chartsIds, divId];
-        }
-        if (type === 'table'){
-            tablesIds = [...tablesIds, divId];
         }
         return divId;
 
@@ -52,7 +47,6 @@ export const WeeklyPage = () => {
     useEffect(()=>{
         // When all charts are created, update the array of divs containing them
         setChartsToPrint(chartsIds);
-        setTablesToPrint(tablesIds);
     }, []);
      
     return (
@@ -67,7 +61,7 @@ export const WeeklyPage = () => {
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
                                     action={generateWeeklyReport} 
-                                    args={[chartsToPrint, tablesToPrint, weeklyData, range]}>
+                                    args={[chartsToPrint, weeklyData, range]}>
                     </ActionButton>
                 </div>
                 <section id="main" className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2  pb-4`} >
