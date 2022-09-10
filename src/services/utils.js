@@ -17,6 +17,9 @@ const buildTableBody = (data, columns) => {
       columns.forEach(function(column) {
           dataRow.push(row[column['text']].toString());
       })
+      if (dataRow.includes('1900-01-01')) {
+        dataRow = dataRow.map(function(x){return x.replace('1900-01-01', 'N/A');});
+      } 
       if (dataRow.includes('succesful')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#91eb9d'}});
       if (dataRow.includes('In Progress')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#8cc0e6'}});
       if (dataRow.includes('unsuccessful')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#eb9791'}});
@@ -77,7 +80,7 @@ const exportCharts = async (charts) => {
     .then((res) => [res.slice(0, nbr_charts)]);
 }
 
-const setupNewPage = (doc, title = '', data, column, data1, column1, pageBreak = true) => {
+const setupNewPage = (doc, title = '', data, column, data1, column1, pageBreak = true, noData = false, string) => {
   doc.content.push({
     columns: [{
         image: TOPLEFT,
@@ -110,6 +113,15 @@ const setupNewPage = (doc, title = '', data, column, data1, column1, pageBreak =
     decoration: 'underline',
   });
 
+  if (noData) {
+    doc.content.push({
+      text : string,
+      fontSize : 22,
+      margin:[0,150,0,20],
+      alignment:'center',
+      color:'black',
+    });
+  }
   switch(title) {
     case "- Deployment and Relocation :":
       doc.content.push({
@@ -260,16 +272,24 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
           
           setupNewPage(doc,  "- Data Quality :");
           addChartToPDF(doc, exportedCharts[4])
-          setupNewPage(doc,  "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[5])
-                    
+
+          if (!weeklyData['resolved_quality'].length) setupNewPage(doc, "- Data Quality :", ...[,,,,,], true, "No Resolved Quality Tickets this week."); else {
+            setupNewPage(doc,  "- Data Quality :");
+            addChartToPDF(doc, exportedCharts[5])
+          }
+
           setupNewPage(doc,  "- Data Quality :");
           addChartToPDF(doc, exportedCharts[6])
-          setupNewPage(doc,  "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[7])
+
+          if (weeklyData['resolved_channels'].length) {
+            setupNewPage(doc,  "- Data Quality :");
+            addChartToPDF(doc, exportedCharts[7])
+          }
           
-          setupNewPage(doc,  "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[8])
+          if (weeklyData['resolved_channels_by_user'].length) {
+            setupNewPage(doc,  "- Data Quality :");
+            addChartToPDF(doc, exportedCharts[8])
+          }
         
           setupNewPage(doc,  "- Helpdesk Tickets :");
           addChartToPDF(doc, exportedCharts[9])
