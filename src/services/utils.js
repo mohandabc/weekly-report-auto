@@ -2,10 +2,7 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 
-
 import * as am4core from "@amcharts/amcharts4/core";
-
-import html2canvas from 'html2canvas';
 
 import {SMARTEST_LOGO,SONATRACH_LOGO} from '../constants/logos'
 import {BACKGROUND,LASTPAGE,TOPLEFT} from '../constants/backgrounds'
@@ -20,7 +17,11 @@ const buildTableBody = (data, columns) => {
       columns.forEach(function(column) {
           dataRow.push(row[column['text']].toString());
       })
-
+      if (dataRow.includes('succesful')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#91eb9d'}});
+      if (dataRow.includes('In Progress')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#8cc0e6'}});
+      if (dataRow.includes('unsuccessful')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#eb9791'}});
+      if (dataRow.includes('canceled')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#eb9791'}});
+      if (dataRow.includes('incomplete')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#e8bc90'}});
       body.push(dataRow);
   });
   console.log("boooodyyy",body)
