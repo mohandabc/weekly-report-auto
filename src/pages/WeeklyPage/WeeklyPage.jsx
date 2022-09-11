@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 
 import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
-import {chartsToPrintState, dateStartEndState, tablesToPrintState, weeklyDataState ,loaderIsHidden} from '../../shared/globalState';
+import {chartsToPrintState, dateStartEndState, weeklyDataState ,loaderIsHidden} from '../../shared/globalState';
 
 import { ActionButton, Chart, ConfigBar, Table} from '../../components';
 
-import {generateWeeklyReport} from '../../services/utils';
+import {generateWeeklyReport} from '../../services/weeklyPdfGenBO';
 import { getData } from '../../services/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 

@@ -5,7 +5,7 @@ import {chartsToPrintState, dateStartEndState, tablesToPrintState, dailyDataStat
 
 import { ActionButton, Chart, ConfigBar, Table} from '../../components';
 
-import {generateDailyReport} from '../../services/utils';
+import {generateDailyReport} from '../../services/dailyPdfGenBO';
 import { getData } from '../../services/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 

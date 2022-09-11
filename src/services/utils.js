@@ -1,13 +1,9 @@
-
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
-
 import * as am4core from "@amcharts/amcharts4/core";
 
 import {SMARTEST_LOGO,SONATRACH_LOGO} from '../constants/logos'
 import {BACKGROUND,LASTPAGE,TOPLEFT} from '../constants/backgrounds'
 
-const pushTabToDoc = (doc, data, columns, widths) => {
+export const pushTabToDoc = (doc, data, columns, widths) => {
   return doc.content.push({
     columns: [
       table(data, columns, widths)
@@ -17,7 +13,7 @@ const pushTabToDoc = (doc, data, columns, widths) => {
   });
 }
 
-const buildTableBody = (data, columns) => {
+export const buildTableBody = (data, columns) => {
   var body = [];
 
   body.push(columns);
@@ -40,7 +36,7 @@ const buildTableBody = (data, columns) => {
   return body;
 }
 
-const table = (data, columns, widths) => {
+export const table = (data, columns, widths) => {
   columns = columns.map(column => {return {text: column, color: 'white', width:60 ,alignment: 'center', fillColor: '#C00000', fontSize: 15, style: 'tableHeader',}})
       return {
         table: {
@@ -72,7 +68,7 @@ const table = (data, columns, widths) => {
 
 }
 
-const getChartByContainerId = (id) => {
+export const getChartByContainerId = (id) => {
   var charts = am4core.registry.baseSprites;
   for(var i = 0; i < charts.length; i++) {
     if (charts[i].svgContainer.htmlElement.id === id) {
@@ -81,7 +77,7 @@ const getChartByContainerId = (id) => {
   }
 }
 
-const exportCharts = async (charts) => {
+export const exportCharts = async (charts) => {
     let promises_list = charts.map((chart) => chart?.exporting.getImage("png"));
     const nbr_charts = promises_list.length;
     promises_list = [...promises_list];
@@ -90,7 +86,7 @@ const exportCharts = async (charts) => {
     .then((res) => [res.slice(0, nbr_charts)]);
 }
 
-const setupNewPage = (doc, title = '', data, column, data1, column1, pageBreak = true, noData = false, string) => {
+export const setupNewPage = (doc, title = '', data, column, data1, column1, pageBreak = true, noData = false, string) => {
   doc.content.push({
     columns: [{
         image: TOPLEFT,
@@ -170,8 +166,13 @@ const setupNewPage = (doc, title = '', data, column, data1, column1, pageBreak =
 }
 
 
-const createHeaderPage = (doc, range, title) =>{
- 
+export const createHeaderPage = (doc, range, title, reportType) =>{
+  let reportDate;
+  reportType=='weekly'?reportDate=`From ${range.split(" - ")[0]} To ${range.split(" - ")[1]}`:
+  reportDate=new Date(range.split(" - ")[0]);
+  reportDate.setDate(reportDate.getDate()+1);
+  reportDate=reportDate.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"});
+  
   doc.content.push({
     columns: [{image: BACKGROUND,
       margin:[-15,-20,0,-10],
@@ -182,7 +183,7 @@ const createHeaderPage = (doc, range, title) =>{
       alignment:'center',
       color:'#c00000',
       bold: true,},
-      {text : `From ${range.split(" - ")[0]} To ${range.split(" - ")[1]}`,
+      {text : reportDate,
       fontSize : 28,
       absolutePosition: {y: 280},
       alignment:'center',
@@ -192,7 +193,7 @@ const createHeaderPage = (doc, range, title) =>{
   });
 }
 
-const createPlainTextPage = (doc, data1, data2, text1, text2) =>{
+export const createPlainTextPage = (doc, data1, data2, text1, text2) =>{
  doc.content.push(
   {
     style: 'tableExample',
@@ -228,7 +229,7 @@ const createPlainTextPage = (doc, data1, data2, text1, text2) =>{
   });
 }
 
-const createLastPage = (doc, pageBreak=true) =>{
+export const createLastPage = (doc, pageBreak=true) =>{
  
   doc.content.push({
     columns: [{image: LASTPAGE,
@@ -238,7 +239,7 @@ const createLastPage = (doc, pageBreak=true) =>{
   });
 }
 
-const addChartToPDF = (doc, chart, width = 650) =>{
+export const addChartToPDF = (doc, chart, width = 650) =>{
   if (chart === undefined){
     console.log("chart isn't defined");
     return
@@ -253,155 +254,6 @@ const addChartToPDF = (doc, chart, width = 650) =>{
   });
 }
 
-export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
-    if(chartsToPrint.length === 0){
-      return;
-    }
 
-    let charts = chartsToPrint.map((chartDivId)=>getChartByContainerId(chartDivId));
-    if(charts.length === 0){
-      return;
-    }
-    
-    exportCharts(charts)
-    .then(response => {
-        const [exportedCharts] = response; 
-    
-        pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-        var doc={
-          pageSize: "A4",
-          pageOrientation: "landscape",
-          pageMargins: [15,20,0,10],
-          content: [],  
-          };
-
-          createHeaderPage(doc, range, "BO Weekly Report");
-
-          setupNewPage(doc, "- Deployment and Relocation :", weeklyData['deployements_and_interventions'], ['Deployement','Interventions','Distance'],weeklyData['remote_relocation'], ["N of Remote Relocations","Cost/Distance Saved"]);
-
-          setupNewPage(doc, "- Wells Spud :", weeklyData['wells_spudded'], ['Rigs Spudded and Monitored','Rigs Spudded and Not Monitored','Duration (Days)']);
-          
-          setupNewPage(doc, "- Rig Box, Maintenance :");
-          addChartToPDF(doc, exportedCharts[0]);
-
-          setupNewPage(doc, "- NDJ Jobs :");
-          addChartToPDF(doc, exportedCharts[1]);
-
-          setupNewPage(doc,  "- Extra Jobs Cementing :", weeklyData['cementing_jobs'], ['Rig','Well','Result','Casing','Company','Unit', 'Start Date', 'NDJ Root Cause']);
-
-          setupNewPage(doc,  "- Extra Jobs MWD :", weeklyData['mwd_jobs'], ['Rig','Well','Result','Company','Unit', 'Start Date', 'NDJ Root Cause']);
-
-          setupNewPage(doc,  "- Data Recovery :");
-          addChartToPDF(doc, exportedCharts[2])
-          setupNewPage(doc,  "- Data Recovery :");
-          addChartToPDF(doc, exportedCharts[3])
-          
-          setupNewPage(doc,  "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[4])
-
-          if (!weeklyData['resolved_quality'].length) setupNewPage(doc, "- Data Quality :", ...[,,,,,], true, "No Resolved Quality Tickets this week."); else {
-            setupNewPage(doc,  "- Data Quality :");
-            addChartToPDF(doc, exportedCharts[5])
-          }
-
-          setupNewPage(doc,  "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[6])
-
-          if (weeklyData['resolved_channels'].length) {
-            setupNewPage(doc,  "- Data Quality :");
-            addChartToPDF(doc, exportedCharts[7])
-          }
-          
-          if (weeklyData['resolved_channels_by_user'].length) {
-            setupNewPage(doc,  "- Data Quality :");
-            addChartToPDF(doc, exportedCharts[8])
-          }
-        
-          setupNewPage(doc,  "- Helpdesk Tickets :");
-          addChartToPDF(doc, exportedCharts[9])
-
-          createLastPage(doc);
-
-        pdfMake.createPdf(doc).download(`Weekly_report_${range}.pdf`);
-      });
-  }
-
-  export const generateDailyReport = (chartsToPrint, dailyData, range) =>{
-    if(chartsToPrint.length === 0){
-      return;
-    }
-
-    let charts = chartsToPrint.map((chartDivId)=>getChartByContainerId(chartDivId));
-    if(charts.length === 0){
-      return;
-    }
-
-    exportCharts(charts)
-    .then(response => {
-
-        const [exportedCharts] = response; 
-
-        pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
-        var doc={
-          pageSize: "A4",
-          pageOrientation: "landscape",
-          pageMargins: [15,20,0,10],
-          content: [],  
-          };
-          createHeaderPage(doc, range, "BO Daily Report");
-
-          
-          setupNewPage(doc, "- Extra jobs status :", dailyData['extra_jobs_n'], ['Extra Job Transmitted','Extra Job  Not Transmitted','Extra Job Not Completed'],dailyData['extra_jobs'], ['NDJ Name','Well','Rig','NDJ Result','RootCause']);
-          setupNewPage(doc, "- Wells spud :", dailyData['wells_spud'], ["Spudded Wells"]);
-
-          
-          if (dailyData['data_quality'][0]['Tickets Resolved'][0]==0 && dailyData['data_quality'][0]['Channels Resolved'][0]==0 ) {
-            setupNewPage(doc, "- Data Quality  :", ...[,,,,,], true, "No Resolved Quality Tickets Today.");
-            setupNewPage(doc, "- Data Quality :");
-            addChartToPDF(doc, exportedCharts[0]);
-            setupNewPage(doc, "- Reservoir Tickets :", dailyData['reservoir_tickets'], ['Rig', 'Well', 'Phase', 'Stage', 'Channels']);
-          } else {
-          setupNewPage(doc, "- Data Quality Stats :");
-          createPlainTextPage(doc, dailyData['data_quality'][0]['Tickets Resolved'], dailyData['data_quality'][0]['Channels Resolved'], 'Total tickets resolved Today', 'Total channels resolved Today')
-          if (!dailyData['resolved_Q_tickets_channels'].length) setupNewPage(doc, "- Data Quality  :", ...[,,,,,], true, "No Resolved Quality Tickets Today."); else {
-          setupNewPage(doc, "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[0]);
-          setupNewPage(doc, "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[1]);
-          setupNewPage(doc, "- Reservoir Tickets :", dailyData['reservoir_tickets'], ['Rig', 'Well', 'Phase', 'Stage', 'Channels']);}}
-
-          
-          if (dailyData['data_loss'][0]['Total Tickets Resolved'][0]==0 && dailyData['data_loss'][0]['Gap to Total Ratio'][0]==0 ) {
-            setupNewPage(doc, "- Data Loss  :", ...[,,,,,], true, "No Resolved Loss Tickets Today.");
-          } else {setupNewPage(doc, "- Data Loss Stats :");
-          createPlainTextPage(doc, dailyData['data_loss'][0]['Total Tickets Resolved'], dailyData['data_loss'][0]['Gap to Total Ratio'], 'Total tickets resolved Today', 'Gap/TotalGap ratio for Today')
-          setupNewPage(doc, "- Data Loss :");
-          addChartToPDF(doc, exportedCharts[2]);
-          setupNewPage(doc, "- Data Loss :");
-          addChartToPDF(doc, exportedCharts[3]);}
-
-          
-          if (dailyData['data_recovery'][0]['Total Tickets Resolved'][0]==0 && dailyData['data_recovery'][0]['Gap to Total Ratio'][0]==0 ) {
-            setupNewPage(doc, "- Data Recovery  :", ...[,,,,,], true, "No Resolved Recovery Tickets Today.");
-          } else {setupNewPage(doc, "- Data Recovery Stats :");
-          createPlainTextPage(doc, dailyData['data_recovery'][0]['Total Tickets Resolved'], dailyData['data_recovery'][0]['Gap to Total Ratio'], 'Total tickets resolved Today', 'Gap/TotalGap ratio for Today')
-          setupNewPage(doc, "- Data Recovery :");
-          addChartToPDF(doc, exportedCharts[4]);
-          setupNewPage(doc, "- Data Recovery :");
-          addChartToPDF(doc, exportedCharts[5]);}
-
-          
-          if (!dailyData['deployements_and_interventions'].length) setupNewPage(doc, "- Deployments and Interventions  :", ...[,,,,,], true, "No Deployments/Intervations Today."); else {
-            setupNewPage(doc, "- Deployments and Interventions :", dailyData['deployements_and_interventions'], ['rig','well','activity','status','distance']);
-            setupNewPage(doc, "- D/I :");
-            addChartToPDF(doc, exportedCharts[6]);
-          }
-
-          createLastPage(doc);
-
-        pdfMake.createPdf(doc).download(`Daily_report_${range}.pdf`);
-
-      });
-  }
+  
