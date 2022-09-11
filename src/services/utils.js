@@ -224,7 +224,7 @@ const createPlainTextPage = (doc, data1, data2, text1, text2) =>{
       paddingLeft: function(i, node) { return 40; },
       paddingRight: function(i, node) { return 40; },
     },
-    margin:[160,70,0,0]
+    margin:[155,70,0,0]
   });
 }
 
@@ -367,7 +367,10 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
           createPlainTextPage(doc, dailyData['data_quality'][0]['Tickets Resolved'], dailyData['data_quality'][0]['Channels Resolved'], 'Total tickets resolved Today', 'Total channels resolved Today')
           if (!dailyData['resolved_Q_tickets_channels'].length) setupNewPage(doc, "- Data Quality  :", ...[,,,,,], true, "No Resolved Quality Tickets Today."); else {
           setupNewPage(doc, "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[1]);}}
+          addChartToPDF(doc, exportedCharts[0]);
+          setupNewPage(doc, "- Data Quality :");
+          addChartToPDF(doc, exportedCharts[1]);
+          setupNewPage(doc, "- Reservoir Tickets :", dailyData['reservoir_tickets'], ['Rig', 'Well', 'Phase', 'Stage', 'Channels']);}}
 
           
           if (dailyData['data_loss'][0]['Total Tickets Resolved'][0]==0 && dailyData['data_loss'][0]['Gap to Total Ratio'][0]==0 ) {
@@ -375,7 +378,9 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
           } else {setupNewPage(doc, "- Data Loss Stats :");
           createPlainTextPage(doc, dailyData['data_loss'][0]['Total Tickets Resolved'], dailyData['data_loss'][0]['Gap to Total Ratio'], 'Total tickets resolved Today', 'Gap/TotalGap ratio for Today')
           setupNewPage(doc, "- Data Loss :");
-          addChartToPDF(doc, exportedCharts[2]);}
+          addChartToPDF(doc, exportedCharts[2]);
+          setupNewPage(doc, "- Data Loss :");
+          addChartToPDF(doc, exportedCharts[3]);}
 
           
           if (dailyData['data_recovery'][0]['Total Tickets Resolved'][0]==0 && dailyData['data_recovery'][0]['Gap to Total Ratio'][0]==0 ) {
@@ -383,13 +388,15 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
           } else {setupNewPage(doc, "- Data Recovery Stats :");
           createPlainTextPage(doc, dailyData['data_recovery'][0]['Total Tickets Resolved'], dailyData['data_recovery'][0]['Gap to Total Ratio'], 'Total tickets resolved Today', 'Gap/TotalGap ratio for Today')
           setupNewPage(doc, "- Data Recovery :");
+          addChartToPDF(doc, exportedCharts[4]);
+          setupNewPage(doc, "- Data Recovery :");
           addChartToPDF(doc, exportedCharts[5]);}
 
           
           if (!dailyData['deployements_and_interventions'].length) setupNewPage(doc, "- Deployments and Interventions  :", ...[,,,,,], true, "No Deployments/Intervations Today."); else {
             setupNewPage(doc, "- Deployments and Interventions :", dailyData['deployements_and_interventions'], ['rig','well','activity','status','distance']);
             setupNewPage(doc, "- D/I :");
-            addChartToPDF(doc, exportedCharts[8]);
+            addChartToPDF(doc, exportedCharts[6]);
           }
 
           createLastPage(doc);
