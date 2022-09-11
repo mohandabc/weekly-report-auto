@@ -168,10 +168,13 @@ export const setupNewPage = (doc, title = '', data, column, data1, column1, page
 
 export const createHeaderPage = (doc, range, title, reportType) =>{
   let reportDate;
-  reportType=='weekly'?reportDate=`From ${range.split(" - ")[0]} To ${range.split(" - ")[1]}`:
-  reportDate=new Date(range.split(" - ")[0]);
+  if (reportType=='weekly') {
+    reportDate=`From ${range.split(" - ")[0]} To ${range.split(" - ")[1]}`
+  } else {
+    reportDate=new Date(range.split(" - ")[0]);
   reportDate.setDate(reportDate.getDate()+1);
   reportDate=reportDate.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"});
+  }
   
   doc.content.push({
     columns: [{image: BACKGROUND,
