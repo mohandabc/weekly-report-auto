@@ -52,7 +52,6 @@ export const DailyPage = () => {
     useEffect(()=>{
         // When all charts are created, update the array of divs containing them
         setChartsToPrint(chartsIds);
-        setTablesToPrint(tablesIds);
     }, []);
 
     return (
@@ -67,7 +66,7 @@ export const DailyPage = () => {
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
                                     action={generateDailyReport} 
-                                    args={[chartsToPrint, tablesToPrint, range]}>
+                                    args={[chartsToPrint, dailyData, range]}>
                     </ActionButton>
                 </div>
 

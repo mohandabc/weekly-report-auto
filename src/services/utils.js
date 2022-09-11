@@ -7,6 +7,16 @@ import * as am4core from "@amcharts/amcharts4/core";
 import {SMARTEST_LOGO,SONATRACH_LOGO} from '../constants/logos'
 import {BACKGROUND,LASTPAGE,TOPLEFT} from '../constants/backgrounds'
 
+const pushTabToDoc = (doc, data, columns, widths) => {
+  return doc.content.push({
+    columns: [
+      table(data, columns, widths)
+    ], 
+    margin: [90,20,0,0],
+    alignment : 'center'
+  });
+}
+
 const buildTableBody = (data, columns) => {
   var body = [];
 
@@ -124,49 +134,30 @@ const setupNewPage = (doc, title = '', data, column, data1, column1, pageBreak =
   }
   switch(title) {
     case "- Deployment and Relocation :":
-      doc.content.push({
-        columns: [
-          table(data, column,[202, 202, 202])
-        ], 
-        margin: [90,20,0,0],
-        alignment : 'center'
-      });
-
-      doc.content.push({
-        columns: [
-          table(data1, column1,[308, 308])
-        ], 
-        margin: [90,20,0,0],
-        alignment : 'center'
-      });  
-
+      pushTabToDoc(doc, data, column, [202, 202, 202]);
+      pushTabToDoc(doc, data1, column1, [308, 308]);
       break;
     case "- Wells Spud :":
-      doc.content.push({
-        columns: [
-          table(data, column,[202, 202, 202])
-        ], 
-        margin: [90,20,0,0],
-        alignment : 'center'
-      });
+      pushTabToDoc(doc, data, column, [202, 202, 202]);
       break;
     case "- Extra Jobs Cementing :":
-      doc.content.push({
-        columns: [
-          table(data, column,[40,50,72,80,50,150,61,105])
-        ], 
-        margin: [67,20,0,0],
-        alignment : 'center'
-      });
+      pushTabToDoc(doc, data, column, [40,50,72,80,50,150,61,105]);
       break;
     case "- Extra Jobs MWD :":
-      doc.content.push({
-        columns: [
-          table(data, column,[40,50,72,80,150,61,105])
-        ], 
-        margin: [90,20,0,0],
-        alignment : 'center'
-      });
+      pushTabToDoc(doc, data, column, [40,50,72,80,150,61,105]);
+      break;
+    case "- Extra jobs status :":
+      pushTabToDoc(doc, data, column, [202, 202, 202]);
+      pushTabToDoc(doc, data1, column1, [200,60,60,100,170]);
+      break;
+    case "- Wells spud :":
+      pushTabToDoc(doc, data, column, [623]);
+      break;
+    case "- Deployments and Interventions :":
+      pushTabToDoc(doc, data, column, [70,70,120,100,170]);
+      break;
+    case "- Reservoir Tickets :":
+      pushTabToDoc(doc, data, column, [70,70,70,100,280]);
       break;
     default:
       doc.content.push({
@@ -198,6 +189,37 @@ const createHeaderPage = (doc, range, title) =>{
       color:'#00000',
       bold: true,}
     ],
+  });
+}
+
+const createPlainTextPage = (doc, data1, data2, text1, text2) =>{
+ doc.content.push({
+    text : text1,
+    fontSize : 22,
+    margin:[80,20,0,0],
+    alignment:'left',
+    color:'black',
+  },
+  {
+    text : data1,
+    fontSize : 22,
+    margin:[0,20,0,0],
+    alignment:'center',
+    color:'black',
+  },
+  {
+    text : text2,
+    fontSize : 22,
+    margin:[80,20,0,0],
+    alignment:'left',
+    color:'black',
+  },
+  {
+    text : data2,
+    fontSize : 22,
+    margin:[0,20,0,0],
+    alignment:'center',
+    color:'black',
   });
 }
 
@@ -300,7 +322,7 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
       });
   }
 
-  export const generateDailyReport = (chartsToPrint, tablesToPrint, range) =>{
+  export const generateDailyReport = (chartsToPrint, dailyData, range) =>{
     if(chartsToPrint.length === 0){
       return;
     }
@@ -310,10 +332,10 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
       return;
     }
 
-    exportCharts(charts, tablesToPrint)
+    exportCharts(charts)
     .then(response => {
 
-        const [exportedCharts, exportedTables] = response; 
+        const [exportedCharts] = response; 
 
         pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -323,54 +345,50 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
           pageMargins: [15,20,0,10],
           content: [],  
           };
-
           createHeaderPage(doc, range, "BO Daily Report");
 
-          setupNewPage(doc, "- Well Spud and Extra jobs status :");
-          // // add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 195,395);
-          // addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 600);
+          setupNewPage(doc, "- Extra jobs status :", dailyData['extra_jobs_n'], ['Extra Job Transmitted','Extra Job  Not Transmitted','Extra Job Not Completed'],dailyData['extra_jobs'], ['NDJ Name','Well','Rig','NDJ Result','RootCause']);
+          setupNewPage(doc, "- Wells spud :", dailyData['wells_spud'], ["Spudded Wells"]);
 
-          // setupNewPage(doc, "- Reservoire Tickets :");
-          // addChartToPDF(doc, exportedTables[3]?.toDataURL("image/png"), 600);
+          if (dailyData['data_quality'][0]['Tickets Resolved'][0]==0 && dailyData['data_quality'][0]['Channels Resolved'][0]==0 ) {
+            setupNewPage(doc, "- Data Quality  :", ...[,,,,,], true, "No Resolved Quality Tickets Today.");
+            setupNewPage(doc, "- Data Quality :");
+            addChartToPDF(doc, exportedCharts[0]);
+            setupNewPage(doc, "- Reservoir Tickets :", dailyData['reservoir_tickets'], ['Rig', 'Well', 'Phase', 'Stage', 'Channels']);
+          } else {
+          setupNewPage(doc, "- Data Quality Stats :");
+          createPlainTextPage(doc, dailyData['data_quality'][0]['Tickets Resolved'], dailyData['data_quality'][0]['Channels Resolved'], 'Total tickets resolved Today : ', 'Total channels resolved Today : ')
+          if (!dailyData['resolved_Q_tickets'].length) setupNewPage(doc, "- Data Quality  :", ...[,,,,,], true, "No Resolved Quality Tickets Today."); else {
+          setupNewPage(doc, "- Data Quality :");
+          addChartToPDF(doc, exportedCharts[1]);}}
 
-          // setupNewPage(doc, "- Data Quality :");
-          // addChartToPDF(doc, exportedTables[4]?.toDataURL("image/png"), 600);
+          if (dailyData['data_loss'][0]['Total Tickets Resolved'][0]==0 && dailyData['data_loss'][0]['Gap to Total Ratio'][0]==0 ) {
+            setupNewPage(doc, "- Data Loss  :", ...[,,,,,], true, "No Resolved Loss Tickets Today.");
+          } else {setupNewPage(doc, "- Data Loss Stats :");
+          createPlainTextPage(doc, dailyData['data_loss'][0]['Total Tickets Resolved'], dailyData['data_loss'][0]['Gap to Total Ratio'], 'Total tickets resolved Today : ', 'Gap/TotalGap ratio for Today :')
+          setupNewPage(doc, "- Data Loss :");
+          addChartToPDF(doc, exportedCharts[2]);
+          setupNewPage(doc, "- Data Loss :");
+          addChartToPDF(doc, exportedCharts[3]);
+          setupNewPage(doc, "- Data Loss :");
+          addChartToPDF(doc, exportedCharts[4]);}
 
-          // setupNewPage(doc, "- Data Quality :");
-          // addChartToPDF(doc, exportedCharts[0]);
+          if (dailyData['data_recovery'][0]['Total Tickets Resolved'][0]==0 && dailyData['data_recovery'][0]['Gap to Total Ratio'][0]==0 ) {
+            setupNewPage(doc, "- Data Recovery  :", ...[,,,,,], true, "No Resolved Recovery Tickets Today.");
+          } else {setupNewPage(doc, "- Data Recovery Stats :");
+          createPlainTextPage(doc, dailyData['data_recovery'][0]['Total Tickets Resolved'], dailyData['data_recovery'][0]['Gap to Total Ratio'], 'Total tickets resolved Today : ', 'Gap/TotalGap ratio for Today :')
+          setupNewPage(doc, "- Data Recovery :");
+          addChartToPDF(doc, exportedCharts[5]);
+          setupNewPage(doc, "- Data Recovery :");
+          addChartToPDF(doc, exportedCharts[6]);
+          setupNewPage(doc, "- Data Recovery :");
+          addChartToPDF(doc, exportedCharts[7]);}
 
-          // setupNewPage(doc, "- Data Quality :");
-          // addChartToPDF(doc, exportedCharts[1]);
-
-          // setupNewPage(doc, "- Data Loss :");
-          // addChartToPDF(doc, exportedTables[5]?.toDataURL("image/png"), 600);
-
-          // setupNewPage(doc, "- Data Loss :");
-          // addChartToPDF(doc, exportedCharts[2]);
-
-          // setupNewPage(doc, "- Data Loss :");
-          // addChartToPDF(doc, exportedCharts[3]);
-
-          // setupNewPage(doc, "- Data Loss :");
-          // addChartToPDF(doc, exportedCharts[4]);
-
-          // setupNewPage(doc, "- Data Recovery :");
-          // addChartToPDF(doc, exportedTables[6]?.toDataURL("image/png"), 600);
-
-          // setupNewPage(doc, "- Data Recovery :");
-          // addChartToPDF(doc, exportedCharts[5]);
-
-          // setupNewPage(doc, "- Data Recovery :");
-          // addChartToPDF(doc, exportedCharts[6]);
-
-          // setupNewPage(doc, "- Data Recovery :");
-          // addChartToPDF(doc, exportedCharts[7]);
-
-          // setupNewPage(doc, "- D/I :");
-          // addChartToPDF(doc, exportedTables[7]?.toDataURL("image/png"), 600);
-
-          // setupNewPage(doc, "- D/I :");
-          // addChartToPDF(doc, exportedCharts[8]);
+          if (!dailyData['deployements_and_interventions'].length) setupNewPage(doc, "- Deployments and Interventions  :", ...[,,,,,], true, "No Deployments/Intervations Today."); else {
+            setupNewPage(doc, "- Deployments and Interventions :", dailyData['deployements_and_interventions'], ['rig','well','activity','status','distance']);
+            setupNewPage(doc, "- D/I :");
+            addChartToPDF(doc, exportedCharts[8]);
+          }
 
           createLastPage(doc);
 
