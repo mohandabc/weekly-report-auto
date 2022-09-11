@@ -193,33 +193,38 @@ const createHeaderPage = (doc, range, title) =>{
 }
 
 const createPlainTextPage = (doc, data1, data2, text1, text2) =>{
- doc.content.push({
-    text : text1,
-    fontSize : 22,
-    margin:[80,20,0,0],
-    alignment:'left',
-    color:'black',
-  },
+ doc.content.push(
   {
-    text : data1,
-    fontSize : 22,
-    margin:[0,20,0,0],
-    alignment:'center',
-    color:'black',
-  },
-  {
-    text : text2,
-    fontSize : 22,
-    margin:[80,20,0,0],
-    alignment:'left',
-    color:'black',
-  },
-  {
-    text : data2,
-    fontSize : 22,
-    margin:[0,20,0,0],
-    alignment:'center',
-    color:'black',
+    style: 'tableExample',
+    table: {
+      headerRows: 1,
+      
+      body: [
+        [{text: text1, color: 'black', width:60 ,alignment: 'center', fillColor: '#e6e6e6', fontSize: 16, style: 'tableHeader', bold: true,},
+        {text: data1, color: 'black', width:60 ,alignment: 'center', fillColor: '#e6e6e6', fontSize: 16, style: 'tableHeader'}],
+        [{text: text2, color: 'black', width:60 ,alignment: 'center', fillColor: '#e6e6e6', fontSize: 16, style: 'tableHeader', bold: true,},
+        {text: data2, color: 'black', width:60 ,alignment: 'center', fillColor: '#e6e6e6', fontSize: 16, style: 'tableHeader'}],
+      ],
+    },
+    layout: {
+      hLineWidth: function (i, node) {
+        return (i === 0 || i === node.table.body.length) ? 2 : 1;
+      },
+      vLineWidth: function (i, node) {
+        return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+      },
+      hLineColor: function (i, node) {
+        return (i === 0 || i === node.table.body.length) ? 'white' : 'white';
+      },
+      vLineColor: function (i, node) {
+        return (i === 0 || i === node.table.widths.length) ? 'white' : 'white';
+      },
+      paddingTop: function(i, node) { return 40; },
+      paddingBottom: function(i, node) { return 40; },
+      paddingLeft: function(i, node) { return 40; },
+      paddingRight: function(i, node) { return 40; },
+    },
+    margin:[160,70,0,0]
   });
 }
 
@@ -347,9 +352,11 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
           };
           createHeaderPage(doc, range, "BO Daily Report");
 
+          
           setupNewPage(doc, "- Extra jobs status :", dailyData['extra_jobs_n'], ['Extra Job Transmitted','Extra Job  Not Transmitted','Extra Job Not Completed'],dailyData['extra_jobs'], ['NDJ Name','Well','Rig','NDJ Result','RootCause']);
           setupNewPage(doc, "- Wells spud :", dailyData['wells_spud'], ["Spudded Wells"]);
 
+          
           if (dailyData['data_quality'][0]['Tickets Resolved'][0]==0 && dailyData['data_quality'][0]['Channels Resolved'][0]==0 ) {
             setupNewPage(doc, "- Data Quality  :", ...[,,,,,], true, "No Resolved Quality Tickets Today.");
             setupNewPage(doc, "- Data Quality :");
@@ -357,33 +364,28 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
             setupNewPage(doc, "- Reservoir Tickets :", dailyData['reservoir_tickets'], ['Rig', 'Well', 'Phase', 'Stage', 'Channels']);
           } else {
           setupNewPage(doc, "- Data Quality Stats :");
-          createPlainTextPage(doc, dailyData['data_quality'][0]['Tickets Resolved'], dailyData['data_quality'][0]['Channels Resolved'], 'Total tickets resolved Today : ', 'Total channels resolved Today : ')
-          if (!dailyData['resolved_Q_tickets'].length) setupNewPage(doc, "- Data Quality  :", ...[,,,,,], true, "No Resolved Quality Tickets Today."); else {
+          createPlainTextPage(doc, dailyData['data_quality'][0]['Tickets Resolved'], dailyData['data_quality'][0]['Channels Resolved'], 'Total tickets resolved Today', 'Total channels resolved Today')
+          if (!dailyData['resolved_Q_tickets_channels'].length) setupNewPage(doc, "- Data Quality  :", ...[,,,,,], true, "No Resolved Quality Tickets Today."); else {
           setupNewPage(doc, "- Data Quality :");
           addChartToPDF(doc, exportedCharts[1]);}}
 
+          
           if (dailyData['data_loss'][0]['Total Tickets Resolved'][0]==0 && dailyData['data_loss'][0]['Gap to Total Ratio'][0]==0 ) {
             setupNewPage(doc, "- Data Loss  :", ...[,,,,,], true, "No Resolved Loss Tickets Today.");
           } else {setupNewPage(doc, "- Data Loss Stats :");
-          createPlainTextPage(doc, dailyData['data_loss'][0]['Total Tickets Resolved'], dailyData['data_loss'][0]['Gap to Total Ratio'], 'Total tickets resolved Today : ', 'Gap/TotalGap ratio for Today :')
+          createPlainTextPage(doc, dailyData['data_loss'][0]['Total Tickets Resolved'], dailyData['data_loss'][0]['Gap to Total Ratio'], 'Total tickets resolved Today', 'Gap/TotalGap ratio for Today')
           setupNewPage(doc, "- Data Loss :");
-          addChartToPDF(doc, exportedCharts[2]);
-          setupNewPage(doc, "- Data Loss :");
-          addChartToPDF(doc, exportedCharts[3]);
-          setupNewPage(doc, "- Data Loss :");
-          addChartToPDF(doc, exportedCharts[4]);}
+          addChartToPDF(doc, exportedCharts[2]);}
 
+          
           if (dailyData['data_recovery'][0]['Total Tickets Resolved'][0]==0 && dailyData['data_recovery'][0]['Gap to Total Ratio'][0]==0 ) {
             setupNewPage(doc, "- Data Recovery  :", ...[,,,,,], true, "No Resolved Recovery Tickets Today.");
           } else {setupNewPage(doc, "- Data Recovery Stats :");
-          createPlainTextPage(doc, dailyData['data_recovery'][0]['Total Tickets Resolved'], dailyData['data_recovery'][0]['Gap to Total Ratio'], 'Total tickets resolved Today : ', 'Gap/TotalGap ratio for Today :')
+          createPlainTextPage(doc, dailyData['data_recovery'][0]['Total Tickets Resolved'], dailyData['data_recovery'][0]['Gap to Total Ratio'], 'Total tickets resolved Today', 'Gap/TotalGap ratio for Today')
           setupNewPage(doc, "- Data Recovery :");
-          addChartToPDF(doc, exportedCharts[5]);
-          setupNewPage(doc, "- Data Recovery :");
-          addChartToPDF(doc, exportedCharts[6]);
-          setupNewPage(doc, "- Data Recovery :");
-          addChartToPDF(doc, exportedCharts[7]);}
+          addChartToPDF(doc, exportedCharts[5]);}
 
+          
           if (!dailyData['deployements_and_interventions'].length) setupNewPage(doc, "- Deployments and Interventions  :", ...[,,,,,], true, "No Deployments/Intervations Today."); else {
             setupNewPage(doc, "- Deployments and Interventions :", dailyData['deployements_and_interventions'], ['rig','well','activity','status','distance']);
             setupNewPage(doc, "- D/I :");
