@@ -5,7 +5,7 @@ import {chartsToPrintState, dateStartEndState, tablesToPrintState, dailyDataStat
 
 import { ActionButton, Chart, ConfigBar, Table} from '../../components';
 
-import {generateDailyReport} from '../../services/utils';
+import {generateDailyReport} from '../../services/dailyPdfGenBO';
 import { getData } from '../../services/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 
@@ -52,7 +52,6 @@ export const DailyPage = () => {
     useEffect(()=>{
         // When all charts are created, update the array of divs containing them
         setChartsToPrint(chartsIds);
-        setTablesToPrint(tablesIds);
     }, []);
 
     return (
@@ -67,7 +66,7 @@ export const DailyPage = () => {
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
                                     action={generateDailyReport} 
-                                    args={[chartsToPrint, tablesToPrint, range]}>
+                                    args={[chartsToPrint, dailyData, range]}>
                     </ActionButton>
                 </div>
 
@@ -85,14 +84,12 @@ export const DailyPage = () => {
 
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
                     <Chart title = "Pending Quality Tickets" id = {getDivId('chart')} chartData = {dailyData['pending_Q_tickets']} chartType="ClusterBar"/>
-                    <Chart title = "Resolved Quality Tickets" id = {getDivId('chart')} chartData = {dailyData['resolved_Q_tickets']} chartType="ClusterBar"/>
+                    <Chart title = "Resolved Quality Tickets-Channels" id = {getDivId('chart')} chartData = {dailyData['resolved_Q_tickets_channels']} chartType="ClusterBar"/>
                     <Table title = "Data Loss" id = {getDivId('table')} tableData = {dailyData['data_loss']}/>
-                    <Chart title = "Resolved Loss Tickets By User" id = {getDivId('chart')} chartData = {dailyData['data_loss_ticket_byUser']} chartType="ClusterBar"/>
-                    <Chart title = "Resolved Loss Gaps By User" id = {getDivId('chart')} chartData = {dailyData['data_loss_gap_byUser']} chartType="ClusterBar"/>
+                    <Chart title = "Resolved Loss Tickets-Gap" id = {getDivId('chart')} chartData = {dailyData['data_loss_ticket_gap']} chartType="ClusterBar"/>
                     <Chart title = "Resolved Loss Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['data_loss_ticket_byRootCause']} chartType="ClusterBar"/>
                     <Table title = "Data Recovery" id = {getDivId('table')} tableData = {dailyData['data_recovery']}/>
-                    <Chart title = "Resolved Recovery Tickets By User" id = {getDivId('chart')} chartData = {dailyData['data_recovery_ticket_byUser']} chartType="ClusterBar"/>
-                    <Chart title = "Resolved Recovery Gaps By User" id = {getDivId('chart')} chartData = {dailyData['data_recovery_gap_byUser']} chartType="ClusterBar"/>
+                    <Chart title = "Resolved Recovery Tickets-Gap" id = {getDivId('chart')} chartData = {dailyData['data_recovery_ticket_gap']} chartType="ClusterBar"/>
                     <Chart title = "Resolved Recovery Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['data_recovery_ticket_byRootCause']} chartType="ClusterBar"/>
                     <Table title = "Deployements And Interventions" id = {getDivId('table')} tableData = {dailyData['deployements_and_interventions']}/>
                     <Chart title = "Deployements And Interventions" id = {getDivId('chart')} chartData = {dailyData['obs_int_chart']} chartType="ClusterBar"/>
