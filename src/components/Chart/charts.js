@@ -166,6 +166,7 @@ export class BarChart extends Chart
 
         // eslint-disable-next-line
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.extraMax = 0.1;
 
         // Create series
         var series = chart.series.push(new am4charts.ColumnSeries());
@@ -177,9 +178,9 @@ export class BarChart extends Chart
 
         var bullet = series.bullets.push(new am4charts.LabelBullet())
             bullet.interactionsEnabled = false
-            bullet.dy = 15;
+            bullet.dy = -10;
             bullet.label.text = '[bold]{valueY}'
-            bullet.label.fill = am4core.color('#fff')
+            bullet.label.fill = am4core.color('#555')
         
 
         var columnTemplate = series.columns.template;
@@ -218,6 +219,8 @@ export class ClusteredBarChart extends Chart
         chart.legend.paddingBottom = 20
         chart.legend.labels.template.maxWidth = 95
 
+        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.extraMax = 0.2;
         var xAxis = chart.xAxes.push(new am4charts.CategoryAxis())
         xAxis.dataFields.category = params.category
         xAxis.renderer.cellStartLocation = 0.1
@@ -238,10 +241,9 @@ export class ClusteredBarChart extends Chart
             
             var bullet = series.bullets.push(new am4charts.LabelBullet())
             bullet.interactionsEnabled = false
-            bullet.label.dy = 15;
+            bullet.label.dy = -10;
             bullet.label.text = '[bold]{valueY}'
-            bullet.label.fill = am4core.color('#fff')
-        
+            bullet.label.fill = am4core.color('#555')
             return series;
         }
 

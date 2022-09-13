@@ -1,16 +1,74 @@
-
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
-
-
 import * as am4core from "@amcharts/amcharts4/core";
-
-import html2canvas from 'html2canvas';
 
 import {SMARTEST_LOGO,SONATRACH_LOGO} from '../constants/logos'
 import {BACKGROUND,LASTPAGE,TOPLEFT} from '../constants/backgrounds'
 
-const getChartByContainerId = (id) => {
+export const pushTabToDoc = (doc, data, columns, widths) => {
+  return doc.content.push({
+    columns: [
+      table(data, columns, widths)
+    ], 
+    margin: [90,20,0,0],
+    alignment : 'center'
+  });
+}
+
+export const buildTableBody = (data, columns) => {
+  var body = [];
+
+  body.push(columns);
+
+  data.forEach(function(row) {
+      var dataRow = [];
+      columns.forEach(function(column) {
+          dataRow.push(row[column['text']].toString());
+      })
+      if (dataRow.includes('1900-01-01')) {
+        dataRow = dataRow.map(function(x){return x.replace('1900-01-01', 'N/A');});
+      } 
+      if (dataRow.includes('succesful')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#91eb9d'}});
+      if (dataRow.includes('In Progress')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#8cc0e6'}});
+      if (dataRow.includes('unsuccessful')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#eb9791'}});
+      if (dataRow.includes('canceled')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#eb9791'}});
+      if (dataRow.includes('incomplete')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#e8bc90'}});
+      body.push(dataRow);
+  });
+  return body;
+}
+
+export const table = (data, columns, widths) => {
+  columns = columns.map(column => {return {text: column, color: 'white', width:60 ,alignment: 'center', fillColor: '#C00000', fontSize: 15, style: 'tableHeader',}})
+      return {
+        table: {
+            style: 'tableExample',
+            widths: widths,
+            headerRows: 1,
+            body: buildTableBody(data, columns)
+        },
+        layout: {
+          hLineWidth: function (i, node) {
+            return (i === 0 || i === node.table.body.length) ? 2 : 1;
+          },
+          vLineWidth: function (i, node) {
+            return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+          },
+          hLineColor: function (i, node) {
+            return (i === 0 || i === node.table.body.length) ? 'white' : 'white';
+          },
+          vLineColor: function (i, node) {
+            return (i === 0 || i === node.table.widths.length) ? 'white' : 'white';
+          },
+          fillColor: function (rowIndex) {
+            return (rowIndex>0) ? '#e6e6e6' : null;
+          },
+          paddingTop: function(i, node) { return 8; },
+          paddingBottom: function(i, node) { return 8; },
+        }
+    };
+
+}
+
+export const getChartByContainerId = (id) => {
   var charts = am4core.registry.baseSprites;
   for(var i = 0; i < charts.length; i++) {
     if (charts[i].svgContainer.htmlElement.id === id) {
@@ -19,18 +77,16 @@ const getChartByContainerId = (id) => {
   }
 }
 
-const exportCharts = async (charts, tablesToPrint) => {
+export const exportCharts = async (charts) => {
     let promises_list = charts.map((chart) => chart?.exporting.getImage("png"));
     const nbr_charts = promises_list.length;
-    let tables_promesses = tablesToPrint.map(table => html2canvas(document.getElementById(table)));
-    promises_list = [...promises_list, ...tables_promesses];
+    promises_list = [...promises_list];
 
     return Promise.all(promises_list)
-    .then((res) => [res.slice(0, nbr_charts), res.slice(nbr_charts) ]);
+    .then((res) => [res.slice(0, nbr_charts)]);
 }
 
-const setupNewPage = (doc, title = '', pageBreak = true) => {
-
+export const setupNewPage = (doc, title = '', data, column, data1, column1, pageBreak = true, noData = false, string) => {
   doc.content.push({
     columns: [{
         image: TOPLEFT,
@@ -53,21 +109,73 @@ const setupNewPage = (doc, title = '', pageBreak = true) => {
     ], 
   });
 
-  if(title !== ''){
+  doc.content.push({
+    text : title,
+    fontSize : 22,
+    margin:[25,0,0,20],
+    alignment:'left',
+    color:'#c00000',
+    bold: true,
+    decoration: 'underline',
+  });
+
+  if (noData) {
     doc.content.push({
-      text : title,
+      text : string,
       fontSize : 22,
-      margin:[25,0,0,20],
-      alignment:'left',
-      color:'#c00000',
-      bold: true,
-      decoration: 'underline',
+      margin:[0,150,0,20],
+      alignment:'center',
+      color:'black',
     });
   }
-} 
+  switch(title) {
+    case "- Deployment and Relocation :":
+      pushTabToDoc(doc, data, column, [202, 202, 202]);
+      pushTabToDoc(doc, data1, column1, [308, 308]);
+      break;
+    case "- Wells Spud :":
+      pushTabToDoc(doc, data, column, [202, 202, 202]);
+      break;
+    case "- Extra Jobs Cementing :":
+      pushTabToDoc(doc, data, column, [40,50,72,80,50,150,61,105]);
+      break;
+    case "- Extra Jobs MWD :":
+      pushTabToDoc(doc, data, column, [40,50,72,80,150,61,105]);
+      break;
+    case "- Extra jobs status :":
+      pushTabToDoc(doc, data, column, [202, 202, 202]);
+      pushTabToDoc(doc, data1, column1, [200,60,60,100,170]);
+      break;
+    case "- Wells spud :":
+      pushTabToDoc(doc, data, column, [623]);
+      break;
+    case "- Deployments and Interventions :":
+      pushTabToDoc(doc, data, column, [70,70,120,100,170]);
+      break;
+    case "- Reservoir Tickets :":
+      pushTabToDoc(doc, data, column, [70,70,70,100,280]);
+      break;
+    default:
+      doc.content.push({
+        columns: [
+        ], 
+        margin: [90,20,0,0],
+        alignment : 'center'
+      });
+  } 
+}
 
-const createHeaderPage = (doc, range, title) =>{
- 
+
+export const createHeaderPage = (doc, range, title, reportType) =>{
+  let reportDate;
+  if (reportType=='weekly') {
+    reportDate=`From ${range.split(" - ")[0]} To ${range.split(" - ")[1]}`
+  } else {
+    reportDate=new Date(range.split(" - ")[0]);
+  reportDate.setDate(reportDate.getDate()+1);
+  reportDate=reportDate.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"});
+  }
+  
   doc.content.push({
     columns: [{image: BACKGROUND,
       margin:[-15,-20,0,-10],
@@ -78,7 +186,7 @@ const createHeaderPage = (doc, range, title) =>{
       alignment:'center',
       color:'#c00000',
       bold: true,},
-      {text : `From ${range.split(" - ")[0]} To ${range.split(" - ")[1]}`,
+      {text : reportDate,
       fontSize : 28,
       absolutePosition: {y: 280},
       alignment:'center',
@@ -88,16 +196,53 @@ const createHeaderPage = (doc, range, title) =>{
   });
 }
 
-const createLastPage = (doc) =>{
- 
-  doc.content.push({
-        image: LASTPAGE,
-        absolutePosition: {x:0, y: 0},
-        width: 842
+export const createPlainTextPage = (doc, data1, data2, text1, text2) =>{
+ doc.content.push(
+  {
+    style: 'tableExample',
+    table: {
+      headerRows: 1,
+      
+      body: [
+        [{text: text1, color: 'black', width:60 ,alignment: 'center', fillColor: '#e6e6e6', fontSize: 16, style: 'tableHeader', bold: true,},
+        {text: data1, color: 'black', width:60 ,alignment: 'center', fillColor: '#e6e6e6', fontSize: 16, style: 'tableHeader'}],
+        [{text: text2, color: 'black', width:60 ,alignment: 'center', fillColor: '#e6e6e6', fontSize: 16, style: 'tableHeader', bold: true,},
+        {text: data2, color: 'black', width:60 ,alignment: 'center', fillColor: '#e6e6e6', fontSize: 16, style: 'tableHeader'}],
+      ],
+    },
+    layout: {
+      hLineWidth: function (i, node) {
+        return (i === 0 || i === node.table.body.length) ? 2 : 1;
+      },
+      vLineWidth: function (i, node) {
+        return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+      },
+      hLineColor: function (i, node) {
+        return (i === 0 || i === node.table.body.length) ? 'white' : 'white';
+      },
+      vLineColor: function (i, node) {
+        return (i === 0 || i === node.table.widths.length) ? 'white' : 'white';
+      },
+      paddingTop: function(i, node) { return 40; },
+      paddingBottom: function(i, node) { return 40; },
+      paddingLeft: function(i, node) { return 40; },
+      paddingRight: function(i, node) { return 40; },
+    },
+    margin:[155,70,0,0]
   });
 }
 
-const addChartToPDF = (doc, chart, width = 650) =>{
+export const createLastPage = (doc, pageBreak=true) =>{
+ 
+  doc.content.push({
+    columns: [{image: LASTPAGE,
+        margin: [-15,-20,0,-10],
+        width: 842},],
+        pageBreak:pageBreak===true ? 'before':''
+  });
+}
+
+export const addChartToPDF = (doc, chart, width = 650) =>{
   if (chart === undefined){
     console.log("chart isn't defined");
     return
@@ -105,182 +250,13 @@ const addChartToPDF = (doc, chart, width = 650) =>{
 
   doc.content.push({
     image:chart,
-    margin : [0,10,0,0],
+    margin : [-40,10,0,0],
     width : width,
     alignment:'center',
 
   });
 }
 
-const add2ChartsInline = (doc, chart1, chart2, width, width2) =>{
-  doc.content.push({
-    columns :[
-      {
-        image:chart1,
-        width : width,
-        alignment:'center',
-    
-      },
-      {
-        image:chart2, 
-        width : width2,
-        alignment:'center',
-    
-      }
-    ], columnGap: 10,
-    margin : [125,10,0,0],
-    alignment : 'center'
-  });
-} 
 
-export const generateWeeklyReport = (chartsToPrint, tablesToPrint, range) =>{
-    if(chartsToPrint.length === 0){
-      return;
-    }
 
-    let charts = chartsToPrint.map((chartDivId)=>getChartByContainerId(chartDivId));
-    if(charts.length === 0){
-      return;
-    }
-
-    
-    exportCharts(charts, tablesToPrint)
-    .then(response => {
-        const [exportedCharts, exportedTables] = response; 
-    
-        pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
-        var doc={
-          pageSize: "A4",
-          pageOrientation: "landscape",
-          pageMargins: [15,20,0,10],
-          content: [],  
-          };
-
-          createHeaderPage(doc, range, "BO Weekly Report");
-
-          setupNewPage(doc, "- Deployment and Relocation :");
-          add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 295,295);
-
-          setupNewPage(doc, "- Wells Spud :");
-          addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 600);
-          
-          setupNewPage(doc, "- Rig Box, Maintenance :");
-          addChartToPDF(doc, exportedCharts[0]);
-
-          setupNewPage(doc, "- NDJ Jobs :");
-          addChartToPDF(doc, exportedCharts[1]);
-
-          setupNewPage(doc,  "- Extra Jobs :");
-          addChartToPDF(doc,  exportedTables[3]?.toDataURL("image/png"),600);
-
-          setupNewPage(doc,  "- Extra Jobs :");
-          addChartToPDF(doc, exportedTables[4]?.toDataURL("image/png"),600);
-
-          setupNewPage(doc,  "- Data Recovery :");
-          addChartToPDF(doc, exportedCharts[2])
-          setupNewPage(doc,  "- Data Recovery :");
-          addChartToPDF(doc, exportedCharts[3])
-          
-          setupNewPage(doc,  "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[4])
-          setupNewPage(doc,  "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[5])
-                    
-          setupNewPage(doc,  "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[6])
-          setupNewPage(doc,  "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[7])
-          
-          setupNewPage(doc,  "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[8])
-        
-          setupNewPage(doc,  "- Helpdesk Tickets :");
-          addChartToPDF(doc, exportedCharts[9])
-
-          createLastPage(doc);
-
-        pdfMake.createPdf(doc).download(`Weekly_report_${range}.pdf`);
-      });
-  }
-
-  export const generateDailyReport = (chartsToPrint, tablesToPrint, range) =>{
-    if(chartsToPrint.length === 0){
-      return;
-    }
-
-    let charts = chartsToPrint.map((chartDivId)=>getChartByContainerId(chartDivId));
-    if(charts.length === 0){
-      return;
-    }
-
-    console.log(charts)
-    console.log(tablesToPrint)
-    exportCharts(charts, tablesToPrint)
-    .then(response => {
-
-        const [exportedCharts, exportedTables] = response; 
-
-        pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
-        var doc={
-          pageSize: "A4",
-          pageOrientation: "landscape",
-          pageMargins: [15,20,0,10],
-          content: [],  
-          };
-
-          createHeaderPage(doc, range, "BO Daily Report");
-
-          setupNewPage(doc, "- Well Spud and Extra jobs status :");
-          add2ChartsInline(doc, exportedTables[0]?.toDataURL("image/png"), exportedTables[1]?.toDataURL("image/png"), 195,395);
-          addChartToPDF(doc, exportedTables[2]?.toDataURL("image/png"), 600);
-
-          setupNewPage(doc, "- Reservoire Tickets :");
-          addChartToPDF(doc, exportedTables[3]?.toDataURL("image/png"), 600);
-
-          setupNewPage(doc, "- Data Quality :");
-          addChartToPDF(doc, exportedTables[4]?.toDataURL("image/png"), 600);
-
-          setupNewPage(doc, "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[0]);
-
-          setupNewPage(doc, "- Data Quality :");
-          addChartToPDF(doc, exportedCharts[1]);
-
-          setupNewPage(doc, "- Data Loss :");
-          addChartToPDF(doc, exportedTables[5]?.toDataURL("image/png"), 600);
-
-          setupNewPage(doc, "- Data Loss :");
-          addChartToPDF(doc, exportedCharts[2]);
-
-          setupNewPage(doc, "- Data Loss :");
-          addChartToPDF(doc, exportedCharts[3]);
-
-          setupNewPage(doc, "- Data Loss :");
-          addChartToPDF(doc, exportedCharts[4]);
-
-          setupNewPage(doc, "- Data Recovery :");
-          addChartToPDF(doc, exportedTables[6]?.toDataURL("image/png"), 600);
-
-          setupNewPage(doc, "- Data Recovery :");
-          addChartToPDF(doc, exportedCharts[5]);
-
-          setupNewPage(doc, "- Data Recovery :");
-          addChartToPDF(doc, exportedCharts[6]);
-
-          setupNewPage(doc, "- Data Recovery :");
-          addChartToPDF(doc, exportedCharts[7]);
-
-          setupNewPage(doc, "- D/I :");
-          addChartToPDF(doc, exportedTables[7]?.toDataURL("image/png"), 600);
-
-          setupNewPage(doc, "- D/I :");
-          addChartToPDF(doc, exportedCharts[8]);
-
-          createLastPage(doc);
-
-        pdfMake.createPdf(doc).download(`Daily_report_${range}.pdf`);
-
-      });
-  }
+  
