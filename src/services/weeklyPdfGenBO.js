@@ -28,6 +28,7 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
           };
 
           createHeaderPage(doc, range, "BO Weekly Report", 'weekly');
+          createAgendaPage(doc);
 
           setupNewPage(doc, "- Deployment and Relocation :", weeklyData['deployements_and_interventions'], ['Deployement','Interventions','Distance'],weeklyData['remote_relocation'], ["N of Remote Relocations","Cost/Distance Saved"]);
 
@@ -72,8 +73,83 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
           setupNewPage(doc,  "- Helpdesk Tickets :");
           addChartToPDF(doc, exportedCharts[9])
 
+          if (!weeklyData['jira_data'].length) setupNewPage(doc, "- DevTasks  :", ...[,,,,,], true, "Connectivity Issue, Couldn't Get Data from Jira's Server"); else 
+          setupNewPage(doc, "- DevTasks :", weeklyData['jira_data'], ['Issue','Summary','Issue Type','Assigned To','Status','Priority']);
+
+
           createLastPage(doc);
 
         pdfMake.createPdf(doc).download(`Weekly_report_${range}.pdf`);
       });
+  }
+
+
+  export const createAgendaPage = (doc) =>{
+    setupNewPage(doc, "- Agenda :");
+      doc.content.push({
+        columns: [{
+            style: 'tableExample',
+            table:{
+            body: [
+                [{
+                  markerColor:'#C00000',
+                  ul: [
+                    {text:'Deployments and Relocations', listType: 'square', bold: true},
+                    {text:'Wells spud', listType: 'square', bold: true},
+                    {text:'Rib-box maintenance', listType: 'square', bold: true},
+                    {text:'NDJ jobs', listType: 'square', bold: true},
+                    {
+                      markerColor:'grey',
+                      ul: [
+                        {text:'Extra jobs cementing', listType: 'circle'},
+                        {text:'Extra jobs MWD', listType: 'circle'},
+                      ]
+                    },   
+                    {text:'Data Recovery', listType: 'square', bold: true},
+                    {
+                      markerColor:'grey',
+                      ul: [
+                        {text:'Weekly Recovery', listType: 'circle'},
+                        {text:'Global Recovery', listType: 'circle'},
+                      ]
+                    },
+                    {text:'Data quality', listType: 'square', bold: true},
+                    {
+                      markerColor:'grey',
+                      ul: [
+                        {text:'Pending quality tickets', listType: 'circle'},
+                        {text:'Resolved quality tickets', listType: 'circle'},
+                        {text:'Pending quality channels', listType: 'circle'},
+                        {text:'Resolved quality channels', listType: 'circle'},
+                        {text:'Resolved quality by user', listType: 'circle'},
+                      ]
+                    },
+                    {text:'Helpdesk Tickets', listType: 'square', bold: true},
+                    {text:'Development Tasks', listType: 'square', bold: true,},
+                  ],
+                fillColor:'#e6e6e6'},],
+        ],},
+        layout: {
+          hLineWidth: function (i, node) {
+            return (i === 0 || i === node.table.body.length) ? 2 : 1;
+          },
+          vLineWidth: function (i, node) {
+            return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+          },
+          hLineColor: function (i, node) {
+            return (i === 0 || i === node.table.body.length) ? 'white' : 'white';
+          },
+          vLineColor: function (i, node) {
+            return (i === 0 || i === node.table.widths.length) ? 'white' : 'white';
+          },
+          paddingTop: function(i, node) { return 20; },
+          paddingBottom: function(i, node) { return 20; },
+          paddingLeft: function(i, node) { return 60; },
+          paddingRight: function(i, node) { return 300; },
+        },
+      },
+      ],
+        margin: [100,0,0,0],
+        fontSize: 18,          
+    });
   }

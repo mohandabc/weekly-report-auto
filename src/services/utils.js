@@ -26,11 +26,11 @@ export const buildTableBody = (data, columns) => {
       if (dataRow.includes('1900-01-01')) {
         dataRow = dataRow.map(function(x){return x.replace('1900-01-01', 'N/A');});
       } 
-      if (dataRow.includes('succesful')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#91eb9d'}});
-      if (dataRow.includes('In Progress')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#8cc0e6'}});
-      if (dataRow.includes('unsuccessful')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#eb9791'}});
-      if (dataRow.includes('canceled')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#eb9791'}});
-      if (dataRow.includes('incomplete')) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#e8bc90'}});
+      if (['succesful','Done','Waiting For Deployment'].some(el => dataRow.includes(el))) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#bdffc6'}});
+      if (['In Progress','Unit Test'].some(el => dataRow.includes(el))) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#fff8bd'}});
+      if (['Under Test'].some(el => dataRow.includes(el))) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#bdfaff'}});
+      if (['unsuccessful','canceled'].some(el => dataRow.includes(el))) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#ffc1bd'}});
+      if (['incomplete','On Hold'].some(el => dataRow.includes(el))) dataRow = dataRow.map(function(row){return {text:row, fillColor:'#ffe0ba'}});
       body.push(dataRow);
   });
   return body;
@@ -146,6 +146,9 @@ export const setupNewPage = (doc, title = '', data, column, data1, column1, page
       pushTabToDoc(doc, data, column, [202, 202, 202]);
       pushTabToDoc(doc, data1, column1, [200,60,60,100,170]);
       break;
+    case "- DevTasks :":
+      pushTabToDoc(doc, data, column, [60,290,60,70,70,60]);
+      break;
     case "- Wells spud :":
       pushTabToDoc(doc, data, column, [623]);
       break;
@@ -196,7 +199,7 @@ export const createHeaderPage = (doc, range, title, reportType) =>{
   });
 }
 
-export const createPlainTextPage = (doc, data1, data2, text1, text2) =>{
+export const createStatsTablePage = (doc, data1, data2, text1, text2) =>{
  doc.content.push(
   {
     style: 'tableExample',
