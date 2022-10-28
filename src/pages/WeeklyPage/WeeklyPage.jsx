@@ -83,6 +83,9 @@ export const WeeklyPage = () => {
                     <Chart title = "Resolved Channels By Data Manager" id = {getDivId('chart')} chartData = {weeklyData['resolved_channels_by_user']} chartType="Bar"/>
                     <Chart title = "Helpdesk Tickets" id = {getDivId('chart')} chartData = {weeklyData['helpdesk_tickets']} chartType="ClusterBar"/>
                 </section>
+                <section id="main" className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2  pb-4`} >
+                    <Chart title = "Archived Wells" id = {getDivId('chart')} chartData = {weeklyData['archived_wells']} chartType="ClusterBar"/>
+                </section>
             </div>
         </div>
     );
