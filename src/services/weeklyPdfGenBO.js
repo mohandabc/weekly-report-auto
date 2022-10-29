@@ -49,6 +49,9 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
           setupNewPage(doc,  "- Data Recovery :");
           addChartToPDF(doc, exportedCharts[3])
           
+          setupNewPage(doc,  "- In Progress Archived Well Recovery :");
+          addChartToPDF(doc, exportedCharts[10])
+
           setupNewPage(doc,  "- Data Quality :");
           addChartToPDF(doc, exportedCharts[4])
 
@@ -111,6 +114,7 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
                       ul: [
                         {text:'Weekly Recovery', listType: 'circle'},
                         {text:'Global Recovery', listType: 'circle'},
+                        {text:'In Progress Archived Well Recovery', listType: 'circle'},
                       ]
                     },
                     {text:'Data quality', listType: 'square', bold: true},
