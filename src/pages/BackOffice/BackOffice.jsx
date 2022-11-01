@@ -16,13 +16,13 @@ export const BackOffice = () =>{
                 </div>
 
                 <div className="py-5">
-                    <h1 className="text-white text-3xl text-center">RTOM Dashboards</h1>
+                    <h1 className="text-white text-3xl text-center">BACK-OFFICE Reports</h1>
                 </div>
 
                 <div className="flex flex-wrap justify-center items-center">
 
                     <div className="w-1/4 px-8">
-                        <Link className="no-underline text-header" to="/dailyBo">
+                        <Link className="no-underline text-header" to="/dailyBo" style={{textDecoration: 'none', color: '#000'}}>
                             <div className="bg-gray-200 h-60 w-full p-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg position:relative z-0">
                                 <h3>BO Daily Report</h3>
                                 <p>Automatically Generate a back office daily report for a specific day</p>
@@ -31,7 +31,7 @@ export const BackOffice = () =>{
                     </div>
 
                     <div className="w-1/4 px-8 ">
-                        <Link className="no-underline text-header" to="/weeklyBo">
+                        <Link className="no-underline text-header" to="/weeklyBo" style={{textDecoration: 'none', color: '#000'}}>
                             <div className="bg-gray-200 h-60 w-full py-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg">
                                 <h3>BO Weekly Report</h3>
                                 <p>Automatically Generate a back office weekly report for a specific week</p>

@@ -8,14 +8,9 @@ import { ActionButton, Chart, ConfigBar, Table} from '../../components';
 import {generateDailyReport} from '../../services/dailyPdfGenBO';
 import { getData } from '../../services/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
-import { SideBar } from '../../components/SideBar';
 
 export const BoDailyPage = () => {
-    const [activeKey, setActiveKey] = React.useState('1');
-    const [openKeys, setOpenKeys] = React.useState(['3', '4']);
-    const [expanded, setExpand] = React.useState(true);
     const [chartsToPrint, setChartsToPrint] = useRecoilState(chartsToPrintState);
-    const [tablesToPrint, setTablesToPrint] = useRecoilState(tablesToPrintState);
     const [dailyData, setDailyData] = useRecoilState(dailyDataState);
     const range = useRecoilValue(dateStartEndState);
     const setIsHidden = useSetRecoilState(loaderIsHidden);
