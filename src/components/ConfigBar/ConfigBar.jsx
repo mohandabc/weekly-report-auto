@@ -12,17 +12,33 @@ import { useState } from "react";
 import ReactDOM from "react-dom";
 import "./styles.css";
 
-import { Input, InputGroup, Whisper, Tooltip } from "rsuite";
+import { Input, InputGroup, Whisper, Tooltip, SelectPicker } from "rsuite";
 import SearchIcon from "@rsuite/icons/Search";
 import InfoIcon from "@rsuite/icons/legacy/Info";
 import AvatarIcon from "@rsuite/icons/legacy/Avatar";
 
 const styles = {
   height: 38,
-  width: 255,
+  width: 257,
   marginBottom: 20,
   marginLeft: 40,
 };
+
+const wells_data = ['WOENS-1', 'KARS-3', 'DJHSE-1', 'HBKN-4', 'BIRN-1', 'EMR-1', 'RAA-8', 'HDZ-20'].map(
+    item => ({ label: item, value: item })
+  );
+
+const rigs_data = ['TP1', 'TP2', 'TP3', 'TP4', 'TP5', 'TP6', 'TP7', 'TP8'].map(
+    item => ({ label: item, value: item })
+);
+
+const poles_data = ['Nord', 'Centre', 'Sud'].map(
+    item => ({ label: item, value: item })
+);
+
+const phases_data = ['1', '2', '3', '4', '5', '6', '7'].map(
+    item => ({ label: item, value: item })
+);
 
 export const ConfigBar = ({ title, configBarAction, options }) => {
   const [activeKey, setActiveKey] = React.useState("1");
@@ -61,64 +77,24 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
           <div className="flex ">
             {/* @TODO impliment these components */}
             {options.rig ? (
-              <InputGroup inside style={styles}>
-                <Input style={{ width: 300 }} placeholder="Rig Name" />
-                <InputGroup.Addon>
-                  <Whisper
-                    placement="bottom"
-                    speaker={<Tooltip> Help information</Tooltip>}
-                  >
-                    <InfoIcon />
-                  </Whisper>
-                </InputGroup.Addon>
-              </InputGroup>
+              <SelectPicker label="Rig" data={rigs_data} style={styles} />
             ) : (
               <></>
             )}
             {options.well ? (
-              <InputGroup inside style={styles}>
-                <Input style={{ width: 300 }} placeholder="Well Name" />
-                <InputGroup.Addon>
-                  <Whisper
-                    placement="top"
-                    speaker={<Tooltip> Help information</Tooltip>}
-                  >
-                    <InfoIcon />
-                  </Whisper>
-                </InputGroup.Addon>
-              </InputGroup>
+              <SelectPicker label="Well" data={wells_data} style={styles} />
             ) : (
               <></>
             )}
           </div>
           <div className="flex ">
             {options.pole ? (
-              <InputGroup inside style={styles}>
-                <Input style={{ width: 300 }} placeholder="Pole " />
-                <InputGroup.Addon>
-                  <Whisper
-                    placement="top"
-                    speaker={<Tooltip> Help information</Tooltip>}
-                  >
-                    <InfoIcon />
-                  </Whisper>
-                </InputGroup.Addon>
-              </InputGroup>
+              <SelectPicker label="Pole" data={poles_data} style={styles} />
             ) : (
               <></>
             )}
             {options.phase ? (
-              <InputGroup inside style={styles}>
-                <Input style={{ width: 300 }} placeholder="Phase" />
-                <InputGroup.Addon>
-                  <Whisper
-                    placement="top"
-                    speaker={<Tooltip> Help information</Tooltip>}
-                  >
-                    <InfoIcon />
-                  </Whisper>
-                </InputGroup.Addon>
-              </InputGroup>
+                <SelectPicker label="Phase" data={phases_data} style={styles} />
             ) : (
               <></>
             )}
@@ -130,7 +106,7 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
           ) : (
             <>
               <div>
-                <div className="flex-initial w-64 justify-center mx-10">
+                <div className="flex-initial w-64 justify-center mx-10 my-1">
                   <DateSelector></DateSelector>
                 </div>
               </div>
