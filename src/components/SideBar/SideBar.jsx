@@ -4,6 +4,7 @@ import './styles.css';
 import { Navbar, Nav } from 'rsuite';
 import HomeIcon from '@rsuite/icons/legacy/Home';
 import CogIcon from '@rsuite/icons/legacy/Cog';
+import { Link } from 'react-router-dom';
 
 const custm = {
     width: 240,
@@ -20,7 +21,8 @@ export const SideBar = ({ onSelect, activeKey, ...props }) => {
           Home
         </Nav.Item>
         <Nav.Menu title="Reporting">
-          <Nav.Item eventKey="4">Back-Office Reports</Nav.Item>
+          <Nav.Item eventKey="4">
+          <Link to='/back-office'>Back-Office Reports</Link></Nav.Item>
           <Nav.Item eventKey="5">Front-Office Reports</Nav.Item>
         </Nav.Menu>
         <Nav.Menu title="Deliverables">

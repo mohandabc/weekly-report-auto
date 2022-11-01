@@ -9,7 +9,7 @@ import {generateWeeklyReport} from '../../services/weeklyPdfGenBO';
 import { getData } from '../../services/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 
-export const WeeklyPage = () => {
+export const BoWeeklyPage = () => {
     const [chartsToPrint, setChartsToPrint] = useRecoilState(chartsToPrintState);
     const [weeklyData, setWeeklyData] = useRecoilState(weeklyDataState);
     const range = useRecoilValue(dateStartEndState);

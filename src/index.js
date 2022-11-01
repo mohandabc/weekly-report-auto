@@ -6,7 +6,8 @@ import { RecoilRoot } from 'recoil';
 
 import { BrowserRouter, Routes, Route,} from "react-router-dom";
 
-import {DailyPage, MainPage, WeeklyPage} from './pages';
+import {MainPage, BackOffice} from './pages';
+import {BoDailyPage, BoWeeklyPage} from './pages/BackOffice';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -15,8 +16,9 @@ root.render(
       <BrowserRouter>
       <Routes>
         <Route index element={<MainPage />} />
-        <Route path="weekly" element={<WeeklyPage />}/>
-        <Route path="daily" element={<DailyPage />}/>
+        <Route path="/back-office" element={<BackOffice />}/>
+        <Route path="/weeklyBo" element={<BoWeeklyPage />}/>
+        <Route path="/dailyBo" element={<BoDailyPage />}/>
           
         {/* Add other rouetes for other pages */}
       </Routes>

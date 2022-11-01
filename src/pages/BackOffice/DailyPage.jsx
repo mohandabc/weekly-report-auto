@@ -10,7 +10,7 @@ import { getData } from '../../services/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 import { SideBar } from '../../components/SideBar';
 
-export const DailyPage = () => {
+export const BoDailyPage = () => {
     const [activeKey, setActiveKey] = React.useState('1');
     const [openKeys, setOpenKeys] = React.useState(['3', '4']);
     const [expanded, setExpand] = React.useState(true);
