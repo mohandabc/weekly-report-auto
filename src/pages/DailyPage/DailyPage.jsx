@@ -8,8 +8,12 @@ import { ActionButton, Chart, ConfigBar, Table} from '../../components';
 import {generateDailyReport} from '../../services/dailyPdfGenBO';
 import { getData } from '../../services/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
+import { SideBar } from '../../components/SideBar';
 
 export const DailyPage = () => {
+    const [activeKey, setActiveKey] = React.useState('1');
+    const [openKeys, setOpenKeys] = React.useState(['3', '4']);
+    const [expanded, setExpand] = React.useState(true);
     const [chartsToPrint, setChartsToPrint] = useRecoilState(chartsToPrintState);
     const [tablesToPrint, setTablesToPrint] = useRecoilState(tablesToPrintState);
     const [dailyData, setDailyData] = useRecoilState(dailyDataState);
@@ -62,7 +66,7 @@ export const DailyPage = () => {
                     options = {DEFAULT_CONFIG_BAR_OPTIONS}>
             </ConfigBar>
             <div className={`bg-slate-300 ${Object.keys(dailyData).length === 0? "hidden":""}`}>
-                <div className='flex flex-row-reverse bg-slate-300 sticky top-0 px-10 py-4  z-40'>
+                <div className='flex flex-row-reverse sticky top-14 px-10 py-4  z-40'>
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
                                     action={generateDailyReport} 
@@ -95,7 +99,7 @@ export const DailyPage = () => {
                     <Chart title = "Deployements And Interventions" id = {getDivId('chart')} chartData = {dailyData['obs_int_chart']} chartType="ClusterBar"/>
 
                 </section>
-
+                
             </div>
         </div>
     );

@@ -1,6 +1,7 @@
 import { DateSelector, ActionButton} from '..';
 
-
+import { SideBar } from "../../components/SideBar";
+import React from "react";
 import {dateStartEndState} from '../../shared/globalState';
 import {useRecoilValue} from 'recoil';
 import home from '../../assets/home.svg';
@@ -13,6 +14,7 @@ import { useState } from 'react';
 
 
 export const ConfigBar = ({title, configBarAction, options})=>{
+    const [activeKey, setActiveKey] = React.useState('1');
     const dateRange = useRecoilValue(dateStartEndState);
     const [well, setWell] = useState(0);
     const [rig, setRig] = useState(0);
@@ -28,15 +30,17 @@ export const ConfigBar = ({title, configBarAction, options})=>{
     }
 
     return (
-
+<div className="flex flex-col bg-header min-h-screen">
+            <div className="fixed top-0 z-50 w-full">
+                <SideBar
+                    activeKey={activeKey} 
+                    onSelect={setActiveKey}/>
+            </div>
         <header className={`flex flex-col bg-header min-h-screen text-white text-3xl  justify-center items-center`}>
-            <h1 className='fixed top-5 left-36 z-50'>{title}</h1>
             <div className='absolute mt-36'>
                 <Loader></Loader>
             </div>
-            <Link className="" to='/'>
-                <img src={home}  className="fixed top-5 left-10 w-11 z-50" alt='home'></img>
-            </Link>
+
             <div className= "sticky top-8">
 
 
@@ -73,7 +77,7 @@ export const ConfigBar = ({title, configBarAction, options})=>{
 
             </div>
         </header>
-
+</div>
 
     
     );
