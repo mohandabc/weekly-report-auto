@@ -4,23 +4,19 @@ import { SideBar } from "../../components/SideBar";
 import React from "react";
 import { dateStartEndState } from "../../shared/globalState";
 import { useRecoilValue } from "recoil";
-import home from "../../assets/home.svg";
 import { Loader } from "../../components";
-import { Link } from "react-router-dom";
 import { useState } from "react";
+import { DateRangePicker } from 'rsuite';
 
-import ReactDOM from "react-dom";
 import "./styles.css";
 
-import { Input, InputGroup, Whisper, Tooltip, SelectPicker } from "rsuite";
-import SearchIcon from "@rsuite/icons/Search";
-import InfoIcon from "@rsuite/icons/legacy/Info";
-import AvatarIcon from "@rsuite/icons/legacy/Avatar";
+import { SelectPicker } from "rsuite";
+
 
 const styles = {
   height: 38,
   width: 257,
-  marginBottom: 20,
+  marginBottom: 30,
   marginLeft: 40,
 };
 
@@ -106,13 +102,13 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
           ) : (
             <>
               <div>
-                <div className="flex-initial w-64 justify-center mx-10 my-1">
-                  <DateSelector></DateSelector>
-                </div>
+                {/* <div className="flex-initial w-64 justify-center mx-10"> */}
+                <DateRangePicker style={styles}/>
+                {/* </div> */}
               </div>
             </>
           )}
-          <div className="flex-initial w-64 justify-center mx-10 my-4">
+          <div className="flex-initial w-64 justify-center mx-10 my-2">
             <ActionButton
               className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base py-2 px-4 rounded "
               text="Submit"
