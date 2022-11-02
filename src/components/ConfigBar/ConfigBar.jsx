@@ -13,11 +13,16 @@ import "./styles.css";
 import { SelectPicker } from "rsuite";
 
 
-const styles = {
+const styles = { left:{
   height: 38,
   width: 257,
   marginBottom: 30,
-  marginLeft: 40,
+  marginRight: 40,},
+  right:{
+  height: 38,
+  width: 257,
+  marginBottom: 30,
+  }
 };
 
 const wells_data = ['WOENS-1', 'KARS-3', 'DJHSE-1', 'HBKN-4', 'BIRN-1', 'EMR-1', 'RAA-8', 'HDZ-20'].map(
@@ -60,12 +65,12 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
       <header
         className={`flex flex-col bg-header min-h-screen text-white text-3xl  justify-center items-center`}
       >
-        <div className="absolute mt-36">
+        <div className="absolute mt-80">
           <Loader></Loader>
         </div>
 
         <div className="sticky top-8 ">
-          <div className="flex justify-center">
+          <div className="flex  justify-center items-center">
             <div className="py-9">
               <h1 className="text-white text-3xl text-center">{title}</h1>
             </div>
@@ -73,42 +78,42 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
           <div className="flex ">
             {/* @TODO impliment these components */}
             {options.rig ? (
-              <SelectPicker label="Rig" data={rigs_data} style={styles} />
+              <SelectPicker label="Rig" data={rigs_data} style={styles.left} />
             ) : (
               <></>
             )}
             {options.well ? (
-              <SelectPicker label="Well" data={wells_data} style={styles} />
+              <SelectPicker label="Well" data={wells_data} style={styles.right} />
             ) : (
               <></>
             )}
           </div>
           <div className="flex ">
             {options.pole ? (
-              <SelectPicker label="Pole" data={poles_data} style={styles} />
+              <SelectPicker label="Pole" data={poles_data} style={styles.left} />
             ) : (
               <></>
             )}
             {options.phase ? (
-                <SelectPicker label="Phase" data={phases_data} style={styles} />
+                <SelectPicker label="Phase" data={phases_data} style={styles.right} />
             ) : (
               <></>
             )}
           </div>
           {options.datePicker === "range" ? (
-            <div className="flex-initial w-64">
+            <div className="flex mx-8 justify-center items-center" style={styles.right}>
               <DateSelector></DateSelector>
             </div>
           ) : (
             <>
               <div>
                 {/* <div className="flex-initial w-64 justify-center mx-10"> */}
-                <DateRangePicker style={styles}/>
+                <DateRangePicker style={styles.left}/>
                 {/* </div> */}
               </div>
             </>
           )}
-          <div className="flex-initial w-64 justify-center mx-10 my-2">
+          <div className="flex w-61 justify-center items-center">
             <ActionButton
               className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base py-2 px-4 rounded "
               text="Submit"
