@@ -42,7 +42,6 @@ const phases_data = ['1', '2', '3', '4', '5', '6', '7'].map(
 );
 
 export const ConfigBar = ({ title, configBarAction, options }) => {
-  const [activeKey, setActiveKey] = React.useState("1");
   const dateRange = useRecoilValue(dateStartEndState);
   const [well, setWell] = useState(0);
   const [rig, setRig] = useState(0);
@@ -60,7 +59,7 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
   return (
     <div className="flex flex-col bg-header min-h-screen">
       <div className="fixed top-0 z-50 w-full">
-        <SideBar activeKey={activeKey} onSelect={setActiveKey} />
+        <SideBar/>
       </div>
       <header
         className={`flex flex-col bg-header min-h-screen text-white text-3xl  justify-center items-center`}

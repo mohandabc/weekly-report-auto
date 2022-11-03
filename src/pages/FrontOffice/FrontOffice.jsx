@@ -3,16 +3,13 @@ import { SideBar } from "../../components/SideBar";
 import React from "react";
 
 export const FrontOffice = () =>{
-    const [activeKey, setActiveKey] = React.useState('1');
 
     return (
         <div className="App">
             <header className="flex flex-col bg-header min-h-screen">
 
                 <div className="sticky top-0 z-30 w-full">
-                    <SideBar
-                        activeKey={activeKey} 
-                        onSelect={setActiveKey}/>
+                    <SideBar/>
                 </div>
 
                 <div className="py-5">

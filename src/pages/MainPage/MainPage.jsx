@@ -1,69 +1,64 @@
-import { Link } from "react-router-dom";
+
 import { SideBar } from "../../components/SideBar";
 import React from "react";
+import { Form, Button, Schema  } from "rsuite";
+import { authenticate } from '../../services/api';
+import {useRecoilState} from 'recoil';
+import {sessionState} from '../../shared/globalState';
 
-export const MainPage = () =>{
-    const [activeKey, setActiveKey] = React.useState('1');
+export const MainPage = () => {
+  const [formValue, setFormValue] = React.useState({user:"",pass:""});
+  const [session, setSession] = useRecoilState(sessionState);
 
-    return (
-        <div className="App">
-            <header className="flex flex-col bg-header min-h-screen">
+  const formRef = React.useRef();
 
-                <div className="sticky top-0 z-30 w-full">
-                    <SideBar
-                        activeKey={activeKey} 
-                        onSelect={setActiveKey}/>
-                </div>
+  const model = Schema.Model({
+    user: Schema.Types.StringType().isRequired('This field is required.'),
+    pass: Schema.Types.StringType().isRequired('This field is required.')
+  });
 
-                <div className="py-5">
-                    <h1 className="text-white text-3xl text-center">RTOM Dashboards</h1>
-                </div>
+  const handleSubmit = () => {
+    if (!formRef.current.check()) {
+        console.error("ERROR");
+        return;
+    }
+    authenticate(formValue['user'],formValue['pass']).then(res=> {
+        let data = res.result;
+        setSession(data || {});
+        console.log(data);
+      });
 
-                <div className="flex flex-wrap">
-
-                    <div className="w-1/4 px-8">
-                        <Link className="no-underline text-header" to="daily">
-                            <div className="bg-gray-200 h-60 w-full p-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg position:relative z-0">
-                                <h3>BO Daily Report</h3>
-                                <p>Automatically Generate a back office daily report for a specific day</p>
-                            </div>
-                        </Link>
-                    </div>
-
-                    <div className="w-1/4 px-8 ">
-                        <Link className="no-underline text-header" to="weekly">
-                            <div className="bg-gray-200 h-60 w-full py-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg">
-                                <h3>BO Weekly Report</h3>
-                                <p>Automatically Generate a back office weekly report for a specific week</p>
-                            </div>
-                        </Link>
-                    </div>
-
-
-                    <div className="w-1/4 px-8">
-                        <Link className="no-underline text-header" to="">
-                            <div className="bg-gray-400 h-60 w-full p-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg">
-                                <h3>FO Daily Report</h3>
-                                <p>Automatically Generate a front office daily report for a specific day</p>
-                                <h5>Under Construction</h5>
-                            </div>
-                        </Link>
-                    </div>
-
-                    <div className="w-1/4 px-8">
-                        <Link className="no-underline text-header" to="">
-                            <div className="bg-gray-400 h-60 w-full py-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg">
-                                <h3>FO Weekly Report</h3>
-                                <p>Automatically Generate a front office weekly report for a specific week</p>
-                                <h5>Under Construction</h5>
-                            </div>
-                        </Link>
-                    </div>
-
-                    </div>
-
-            </header>
+  };
+  return (
+    <div className="App">
+      <header className="flex flex-col bg-header min-h-screen">
+        <div className="sticky top-0 z-30 w-full">
+          <SideBar/>
         </div>
-        
-    );
-}
+
+        <div className="flex sticky top-40 justify-center items-center">
+          <Form ref={formRef} model={model} onChange={setFormValue} onSubmit={handleSubmit}>
+            <Form.Group controlId="username-8">
+              <Form.ControlLabel>Username</Form.ControlLabel>
+              <Form.Control placeholder="Username" name="user" />
+            </Form.Group>
+
+            <Form.Group controlId="password-8">
+              <Form.ControlLabel>Password</Form.ControlLabel>
+              <Form.Control
+                placeholder="Password"
+                name="pass"
+                type="password"
+                autoComplete="off"
+              />
+            </Form.Group>
+
+            <Button appearance="primary" type="submit">
+              Login
+            </Button>
+          </Form>
+        </div>
+      </header>
+    </div>
+  );
+};
