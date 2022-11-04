@@ -17,13 +17,13 @@ export const LoginPage = () => {
 
   const handleSubmit = (event) => {
     // event.preventDefault();
-    login({user:formValue['user'],pass:formValue['pass']})
     if (!formRef.current.check()) {
         console.error("ERROR");
         return;
     }
     authenticate(formValue['user'],formValue['pass']).then(res=> {
         let data = res.result;
+        data["session"]["uid"]? login({user:formValue['user'],pass:formValue['pass'],name:data["session"]["name"]}) : setFormValue(null);
       });
 
   };
