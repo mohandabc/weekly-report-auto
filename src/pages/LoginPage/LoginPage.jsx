@@ -29,32 +29,33 @@ export const LoginPage = () => {
   };
   return (
     <div className="App">
-      <header className="flex flex-col bg-header min-h-screen">
+      <header className="flex flex-col bg-header min-h-screen items-center">
         <div className="sticky top-0 z-30 w-full">
           <SideBar/>
         </div>
+        <div class="flex sticky rounded-xl bg-gray-400 top-1/4 w-4/12 h-60 items-center justify-center">
+          <div className="flex sticky justify-center items-center">
+            <Form ref={formRef} model={model} onChange={setFormValue} onSubmit={handleSubmit}>
+              <Form.Group controlId="username-8">
+                <Form.ControlLabel>Username</Form.ControlLabel>
+                <Form.Control placeholder="Username" name="user" />
+              </Form.Group>
 
-        <div className="flex sticky top-40 justify-center items-center">
-          <Form ref={formRef} model={model} onChange={setFormValue} onSubmit={handleSubmit}>
-            <Form.Group controlId="username-8">
-              <Form.ControlLabel>Username</Form.ControlLabel>
-              <Form.Control placeholder="Username" name="user" />
-            </Form.Group>
+              <Form.Group controlId="password-8">
+                <Form.ControlLabel>Password</Form.ControlLabel>
+                <Form.Control
+                  placeholder="Password"
+                  name="pass"
+                  type="password"
+                  autoComplete="off"
+                />
+              </Form.Group>
 
-            <Form.Group controlId="password-8">
-              <Form.ControlLabel>Password</Form.ControlLabel>
-              <Form.Control
-                placeholder="Password"
-                name="pass"
-                type="password"
-                autoComplete="off"
-              />
-            </Form.Group>
-
-            <Button appearance="primary" type="submit">
-              Login
-            </Button>
-          </Form>
+              <Button appearance="primary" type="submit">
+                Login
+              </Button>
+            </Form>
+          </div>
         </div>
       </header>
     </div>

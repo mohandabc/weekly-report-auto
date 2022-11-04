@@ -20,7 +20,7 @@ export const MainPage = () => {
             Welcome {user.name} !
           </h1>
           <p class="leading-normal text-2xl mb-8">
-          A set of protocols and tools designed to extract data from your Analytics account into custom reports for more automated and efficient reporting and analysis !
+          Here is a set of protocols and tools designed to extract data into custom reports for more automated and efficient reporting and analysis !
           </p>
         </div>
       </div>
