@@ -3,7 +3,7 @@ import './styles.css';
 
 import { Navbar, Nav } from 'rsuite';
 import HomeIcon from '@rsuite/icons/legacy/Home';
-import CogIcon from '@rsuite/icons/legacy/Cog';
+import ExitIcon from '@rsuite/icons/Exit';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 
@@ -41,7 +41,7 @@ export const SideBar = ({ onSelect, activeKey, ...props }) => {
         </Nav.Menu>
       </Nav>
       <Nav pullRight>
-        <Nav.Item icon={<CogIcon />}>Settings</Nav.Item>
+        <Nav.Item as={Link} to="/logout" icon={<ExitIcon />}>Logout</Nav.Item>
       </Nav>
     </Navbar>
     );

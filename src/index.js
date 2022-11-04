@@ -14,27 +14,36 @@ import {
   TrippingSpeed,
   DrillingState,
   ReamBream,
+  LoginPage,
+  LogoutPage
 } from "./pages";
 import { BoDailyPage, BoWeeklyPage } from "./pages/BackOffice";
+import { ProtectedRoute } from "./components";
+import { AuthProvider } from "./services/useAuth";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <RecoilRoot>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/back-office" element={<BackOffice />} />
-          <Route path="/front-office" element={<FrontOffice />} />
-          <Route path="/weeklyBo" element={<BoWeeklyPage />} />
-          <Route path="/dailyBo" element={<BoDailyPage />} />
-          <Route path="/drillingBit" element={<DrillingBit />} />
-          <Route path="/trippingSpeed" element={<TrippingSpeed />} />
-          <Route path="/drillingState" element={<DrillingState />} />
-          <Route path="/reamBream" element={<ReamBream />} />
+        <AuthProvider>
+          <Routes>
+            
+            <Route path="/" element={<ProtectedRoute><MainPage /></ProtectedRoute>} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/back-office" element={<ProtectedRoute><BackOffice /></ProtectedRoute>} />
+            <Route path="/front-office" element={<ProtectedRoute><FrontOffice /></ProtectedRoute>} />
+            <Route path="/weeklyBo" element={<ProtectedRoute><BoWeeklyPage /></ProtectedRoute>} />
+            <Route path="/dailyBo" element={<ProtectedRoute><BoDailyPage /></ProtectedRoute>} />
+            <Route path="/drillingBit" element={<ProtectedRoute><DrillingBit /></ProtectedRoute>} />
+            <Route path="/trippingSpeed" element={<ProtectedRoute><TrippingSpeed /></ProtectedRoute>} />
+            <Route path="/drillingState" element={<ProtectedRoute><DrillingState /></ProtectedRoute>} />
+            <Route path="/reamBream" element={<ProtectedRoute><ReamBream /></ProtectedRoute>} />
+            <Route path="/logout" element={<ProtectedRoute><LogoutPage /></ProtectedRoute>} />
 
-          {/* Add other rouetes for other pages */}
-        </Routes>
+            {/* Add other rouetes for other pages */}
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </RecoilRoot>
   </React.StrictMode>
