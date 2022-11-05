@@ -6,7 +6,7 @@ export const FrontOffice = () =>{
 
     return (
         <div className="App">
-            <header className="flex flex-col bg-header min-h-screen">
+            <header className="flex flex-col h-72 bg-reporting_image min-h-screen bg-no-repeat bg-cover bg-center bg-fixed">
 
                 <div className="sticky top-0 z-30 w-full">
                     <SideBar/>

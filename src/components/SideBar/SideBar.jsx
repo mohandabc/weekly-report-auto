@@ -6,6 +6,7 @@ import HomeIcon from '@rsuite/icons/legacy/Home';
 import ExitIcon from '@rsuite/icons/Exit';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/logo.png';
+import { useAuth } from '../../services/useAuth';
 
 
 const custm = {
@@ -15,6 +16,7 @@ const custm = {
   };
 
 export const SideBar = ({ onSelect, activeKey, ...props }) => {
+    const { user }  = useAuth()
     return (
         <Navbar {...props}>
       <Navbar.Brand>
@@ -40,9 +42,10 @@ export const SideBar = ({ onSelect, activeKey, ...props }) => {
           <Nav.Item eventKey="10">Contact</Nav.Item>
         </Nav.Menu>
       </Nav>
-      <Nav pullRight>
+      {user?<Nav pullRight>
         <Nav.Item as={Link} to="/logout" icon={<ExitIcon />}>Logout</Nav.Item>
-      </Nav>
+      </Nav>:<></>}
+      
     </Navbar>
     );
 }
