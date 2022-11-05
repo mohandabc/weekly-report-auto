@@ -136,7 +136,7 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
             <>
               <div className="flex justify-center items-center">
                 {/* <div className="flex-initial w-64 justify-center mx-10"> */}
-                <DateRangePicker style={styles.left} />
+                <DateRangePicker style={styles.addi} />
                 {/* </div> */}
               </div>
             </>

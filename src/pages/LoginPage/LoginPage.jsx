@@ -7,6 +7,7 @@ import { useAuth } from "../../services/useAuth";
 export const LoginPage = () => {
   const [formValue, setFormValue] = React.useState({ user: "", pass: "" });
   const [loadingValue, setLoadingValue] = React.useState(false);
+  const [loginfailed, setLoginfailed] = React.useState(false);
   const formRef = React.useRef();
   const { login } = useAuth();
   const { user } = useAuth();
@@ -31,7 +32,7 @@ export const LoginPage = () => {
           pass: formValue["pass"],
           name: data["session"]["name"],
         })} 
-        else {setLoadingValue(false);}
+        else {setLoadingValue(false);setLoginfailed(true)}
     });
 
   };
@@ -46,14 +47,16 @@ export const LoginPage = () => {
         <></>
         }
         
-        <div class="flex sticky rounded-xl bg-gray-200 top-1/4 w-4/12 h-80 items-center justify-center">
+        <div className="flex sticky rounded-xl bg-gray-200 top-1/4 w-4/12 h-96 items-center justify-center">
           <div className="flex sticky justify-center items-center">
+            
             <Form
               ref={formRef}
               model={model}
               onChange={setFormValue}
               onSubmit={handleSubmit}
             >
+              <h3 className="mb-4">Sign In</h3>
               <Form.Group controlId="username-8">
                 <Form.ControlLabel className="text-black/[.6]">Username</Form.ControlLabel>
                 <Form.Control placeholder="TeamSpace Username" name="user" />
@@ -70,8 +73,9 @@ export const LoginPage = () => {
                 />
                 <Form.HelpText tooltip className="text-blue-600">Login can only be done using Teamspace credentials</Form.HelpText>
               </Form.Group>
-              <div className="flex sticky justify-center items-center">
-
+              <div className="flex flex-col justify-center items-center">
+                {loginfailed?<div className="text-red-600">Your username or password is incorrect. Please try again.</div>:<></>}
+                
                  <Button appearance="primary" type="submit" loading={loadingValue}
                  className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base my-3 py-2 px-4 rounded ">
                     Login
