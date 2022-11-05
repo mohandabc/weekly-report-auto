@@ -40,6 +40,7 @@ root.render(
             <Route path="/drillingState" element={<ProtectedRoute><DrillingState /></ProtectedRoute>} />
             <Route path="/reamBream" element={<ProtectedRoute><ReamBream /></ProtectedRoute>} />
             <Route path="/logout" element={<ProtectedRoute><LogoutPage /></ProtectedRoute>} />
+            <Route path="*" element={<LoginPage />} />
 
             {/* Add other rouetes for other pages */}
           </Routes>

@@ -3,6 +3,7 @@ import React from "react";
 import { Form, Button, Schema, Whisper, Popover } from "rsuite";
 import { authenticate } from "../../services/api";
 import { useAuth } from "../../services/useAuth";
+import { SONATRACH_LOGO } from "../../constants/logos";
 
 export const LoginPage = () => {
   const [formValue, setFormValue] = React.useState({ user: "", pass: "" });
@@ -38,7 +39,7 @@ export const LoginPage = () => {
   };
   return (
     <div className="App">
-      <header className="flex flex-col bg-reporting_image min-h-screen bg-no-repeat bg-cover bg-center bg-fixed items-center">
+      <header className="flex flex-row bg-reporting_image min-h-screen bg-no-repeat bg-cover bg-center bg-fixed items-center justify-center">
         {user?
         <div className="sticky top-0 z-30 w-full">
         <SideBar />
@@ -47,7 +48,7 @@ export const LoginPage = () => {
         <></>
         }
         
-        <div className="flex sticky rounded-xl bg-gray-200 top-1/4 w-4/12 h-96 items-center justify-center">
+        <div className="flex sticky rounded-xl bg-gray-200 w-3/12 h-5/6 items-center justify-center">
           <div className="flex sticky justify-center items-center">
             
             <Form
@@ -56,10 +57,12 @@ export const LoginPage = () => {
               onChange={setFormValue}
               onSubmit={handleSubmit}
             >
+              <div className="flex flex-col my-7 justify-center items-center">
+              <img src={SONATRACH_LOGO}></img></div>
               <h3 className="mb-4">Sign In</h3>
               <Form.Group controlId="username-8">
                 <Form.ControlLabel className="text-black/[.6]">Username</Form.ControlLabel>
-                <Form.Control placeholder="TeamSpace Username" name="user" />
+                <Form.Control placeholder="Username" name="user" />
                 <Form.HelpText tooltip>Login can only be done using Teamspace credentials</Form.HelpText>
               </Form.Group>
 
@@ -74,13 +77,11 @@ export const LoginPage = () => {
                 <Form.HelpText tooltip className="text-blue-600">Login can only be done using Teamspace credentials</Form.HelpText>
               </Form.Group>
               <div className="flex flex-col justify-center items-center">
-                {loginfailed?<div className="text-red-600">Your username or password is incorrect. Please try again.</div>:<></>}
-                
                  <Button appearance="primary" type="submit" loading={loadingValue}
                  className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base my-3 py-2 px-4 rounded ">
                     Login
                   </Button>
-
+                  {loginfailed?<div className="text-red-600">Your username or password is incorrect.</div>:<br/>}
               </div>
             </Form>
           </div>
