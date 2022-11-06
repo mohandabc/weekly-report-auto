@@ -3,12 +3,14 @@ export const DEFAULT_CONFIG_BAR_OPTIONS = {
   rig: false,
   pole: false,
   phase: false,
-  datePicker: "range",
+  datePicker: true,
+  files: false
 };
 export const DELIVERABLE_CONFIG_BAR_OPTIONS = {
   well: true,
   rig: true,
   pole: true,
   phase: true,
-  datePicker: "ranges",
+  datePicker: true,
+  files: true
 };

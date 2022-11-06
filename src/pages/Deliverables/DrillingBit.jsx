@@ -4,11 +4,17 @@ import { ActionButton, ConfigBar } from "../../components";
 
 import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../constants/constants";
 
+const processData =  (params) =>{
+    
+  console.log("Params from DrillingBit : ", params)
+}
+
 export const DrillingBit = () => {
   return (
     <div className="App">
       <ConfigBar
         title="Drilling Bit Analysis"
+        configBarAction = {processData} 
         options={DELIVERABLE_CONFIG_BAR_OPTIONS}
       ></ConfigBar>
       <div className={`bg-slate-300 ${true? "hidden":""}`}>

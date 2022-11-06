@@ -19,10 +19,8 @@ export const SideBar = ({ onSelect, activeKey, ...props }) => {
     const { user }  = useAuth()
     return (
         <Navbar {...props}>
-      <Navbar.Brand>
-      <Link to='/'>
+      <Navbar.Brand href="/">
           <img style={{ width: 120, height: 28.24 }} src={logo} alt="Logo"/>
-      </Link>
       </Navbar.Brand>
       <Nav onSelect={onSelect} activeKey={activeKey}>
         <Nav.Item as={Link} to="/" eventKey="1" icon={<HomeIcon color="#000"/>}>Home</Nav.Item>

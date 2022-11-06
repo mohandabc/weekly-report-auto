@@ -1,6 +1,6 @@
 import { SideBar } from "../../components/SideBar";
 import React from "react";
-import { Form, Button, Schema, Whisper, Popover } from "rsuite";
+import { Form, Button, Schema } from "rsuite";
 import { authenticate } from "../../services/api";
 import { useAuth } from "../../services/useAuth";
 import { SONATRACH_LOGO } from "../../constants/logos";
@@ -18,8 +18,7 @@ export const LoginPage = () => {
     pass: Schema.Types.StringType().isRequired("This field is required."),
   });
 
-  const handleSubmit = (event) => {
-    // event.preventDefault();
+  const handleSubmit = () => {
     if (!formRef.current.check()) {
       console.error("ERROR");
       return;
@@ -54,8 +53,10 @@ export const LoginPage = () => {
             <Form
               ref={formRef}
               model={model}
-              onChange={setFormValue}
+              formValue={formValue}
+              onChange={formValue => setFormValue(formValue)}
               onSubmit={handleSubmit}
+              onCheck={()=>setFormValue({ user: "", pass: "" })} 
             >
               <div className="flex flex-col my-7 justify-center items-center">
               <img src={SONATRACH_LOGO}></img></div>
@@ -81,7 +82,7 @@ export const LoginPage = () => {
                  className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base my-3 py-2 px-4 rounded ">
                     Login
                   </Button>
-                  {loginfailed?<div className="text-red-600">Your username or password is incorrect.</div>:<br/>}
+                  {loginfailed?<div className="text-red-600 my-6">Your username or password is incorrect.</div>:<a href="http://10.171.59.80:8069/web/reset_password?" target="_blank" className="my-5 no-underline hover:underline ...">Forgot your password?</a>}
               </div>
             </Form>
           </div>

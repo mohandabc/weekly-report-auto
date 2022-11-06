@@ -30,7 +30,7 @@ export const loaderIsHidden = atom({
     default : true
 });
 
-export const sessionState = atom({
-    key : 'session',
+export const files = atom({
+    key : 'files',
     default : {}
 });
