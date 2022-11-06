@@ -1,9 +1,9 @@
-import { DateSelector, ActionButton } from "..";
+import { ActionButton } from "..";
 
 import { SideBar } from "../../components/SideBar";
 import React from "react";
 import { dateStartEndState } from "../../shared/globalState";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { Loader } from "../../components";
 import { useState } from "react";
 import { DateRangePicker } from "rsuite";
@@ -56,7 +56,9 @@ const phases_data = ["1", "2", "3", "4", "5", "6", "7"].map((item) => ({
 }));
 
 export const ConfigBar = ({ title, configBarAction, options }) => {
-  const dateRange = useRecoilValue(dateStartEndState);
+  const [dateStartEnd, setDateStartEnd] = useRecoilState(dateStartEndState);
+  const [value, setValue] = React.useState([new Date(dateStartEnd.split(' - ')[0]), new Date(dateStartEnd.split(' - ')[1])]);
+
   const [well, setWell] = useState(0);
   const [rig, setRig] = useState(0);
   const [pole, setPole] = useState(0);
@@ -67,8 +69,19 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
     rig: rig,
     pole: pole,
     phase: phase,
-    dates: dateRange,
+    dates: formatDate(value[0]) + ' - ' + formatDate(value[1]),
   };
+
+  function formatDate(date) {
+    return [
+      padTo2Digits(date.getMonth() + 1),
+      padTo2Digits(date.getDate()),
+      date.getFullYear(),
+    ].join('/');
+  }
+  function padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
+  }
 
   return (
     <div className="flex flex-col h-72 bg-reporting_image min-h-screen bg-no-repeat bg-cover bg-center bg-fixed">
@@ -125,22 +138,9 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
               <></>
             )}
           </div>
-          {options.datePicker === "range" ? (
-            <div
-              className="flex mx-80 justify-center"
-              style={styles.addi}
-            >
-              <DateSelector></DateSelector>
-            </div>
-          ) : (
-            <>
-              <div className="flex justify-center items-center">
-                {/* <div className="flex-initial w-64 justify-center mx-10"> */}
-                <DateRangePicker style={styles.addi} />
-                {/* </div> */}
-              </div>
-            </>
-          )}
+          <div className="flex justify-center items-center">
+            <DateRangePicker value={value} onChange={setValue} style={styles.addi} format="dd-MM-yyyy"/>
+          </div>
           <div className="flex items-center justify-center">
             <ActionButton
               className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base py-2 px-4 rounded "
