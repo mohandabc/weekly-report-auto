@@ -1,27 +1,51 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import reportWebVitals from './reportWebVitals';
-import { RecoilRoot } from 'recoil';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+import { RecoilRoot } from "recoil";
 
-import { BrowserRouter, Routes, Route,} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import {DailyPage, MainPage, WeeklyPage} from './pages';
+import {
+  MainPage,
+  BackOffice,
+  FrontOffice,
+  DrillingBit,
+  TrippingSpeed,
+  DrillingState,
+  ReamBream,
+  LoginPage,
+  LogoutPage
+} from "./pages";
+import { BoDailyPage, BoWeeklyPage } from "./pages/BackOffice";
+import { ProtectedRoute } from "./components";
+import { AuthProvider } from "./services/useAuth";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <RecoilRoot>
       <BrowserRouter>
-      <Routes>
-        <Route index element={<MainPage />} />
-        <Route path="weekly" element={<WeeklyPage />}/>
-        <Route path="daily" element={<DailyPage />}/>
-          
-        {/* Add other rouetes for other pages */}
-      </Routes>
-    </BrowserRouter>
-      
+        <AuthProvider>
+          <Routes>
+            
+            <Route path="/" element={<ProtectedRoute><MainPage /></ProtectedRoute>} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/back-office" element={<ProtectedRoute><BackOffice /></ProtectedRoute>} />
+            <Route path="/front-office" element={<ProtectedRoute><FrontOffice /></ProtectedRoute>} />
+            <Route path="/weeklyBo" element={<ProtectedRoute><BoWeeklyPage /></ProtectedRoute>} />
+            <Route path="/dailyBo" element={<ProtectedRoute><BoDailyPage /></ProtectedRoute>} />
+            <Route path="/drillingBit" element={<ProtectedRoute><DrillingBit /></ProtectedRoute>} />
+            <Route path="/trippingSpeed" element={<ProtectedRoute><TrippingSpeed /></ProtectedRoute>} />
+            <Route path="/drillingState" element={<ProtectedRoute><DrillingState /></ProtectedRoute>} />
+            <Route path="/reamBream" element={<ProtectedRoute><ReamBream /></ProtectedRoute>} />
+            <Route path="/logout" element={<ProtectedRoute><LogoutPage /></ProtectedRoute>} />
+            <Route path="*" element={<LoginPage />} />
+
+            {/* Add other rouetes for other pages */}
+          </Routes>
+        </AuthProvider>
+      </BrowserRouter>
     </RecoilRoot>
   </React.StrictMode>
 );

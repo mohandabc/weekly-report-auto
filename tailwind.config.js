@@ -10,6 +10,9 @@ module.exports = {
       serif: ['Merriweather', 'serif'],
     },
     extend: {
+      backgroundImage: {
+        'reporting_image': "url('./assets/bg.png')",
+      },
       colors:{
         header : '#282c34',
         smartestred : '#C11823',

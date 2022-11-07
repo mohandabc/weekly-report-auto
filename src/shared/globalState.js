@@ -29,3 +29,8 @@ export const loaderIsHidden = atom({
     key : "loaderIsHidden",
     default : true
 });
+
+export const files = atom({
+    key : 'files',
+    default : {}
+});
