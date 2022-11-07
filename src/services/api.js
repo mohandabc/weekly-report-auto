@@ -16,14 +16,14 @@ export const getData = async (route, params)=>{
 }
 
 
-const authenticate = async () =>{
+export const authenticate = async (user,pass) =>{
     const body = {
                 "jsonrpc":"2.0",
                 "method": "call",
                 "params":{
-                    "db": "15_09_2021",
-                    "login": "admin",
-                    "password":"Ext3ns1on"
+                    "db": "prod_04_09",
+                    "login": user,
+                    "password": pass
                 }}
 
     const requestOptions = {
@@ -32,7 +32,8 @@ const authenticate = async () =>{
       body: JSON.stringify(body)
     };
 
-    const response = await fetch(AUTH_URL, requestOptions)
-        // .then(response => response.json())
+    return fetch(`${AUTH_URL}`, requestOptions)
+    .then(response => response.json())
+    .catch(error => console.error('Error:', error))
 }
 

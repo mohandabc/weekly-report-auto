@@ -9,7 +9,7 @@ import {generateWeeklyReport} from '../../services/weeklyPdfGenBO';
 import { getData } from '../../services/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 
-export const WeeklyPage = () => {
+export const BoWeeklyPage = () => {
     const [chartsToPrint, setChartsToPrint] = useRecoilState(chartsToPrintState);
     const [weeklyData, setWeeklyData] = useRecoilState(weeklyDataState);
     const range = useRecoilValue(dateStartEndState);
@@ -57,7 +57,7 @@ export const WeeklyPage = () => {
                 options={DEFAULT_CONFIG_BAR_OPTIONS}>
             </ConfigBar>
             <div className={`bg-slate-300 ${Object.keys(weeklyData).length === 0? "hidden":""}`}>
-                <div className='flex flex-row-reverse bg-slate-300 sticky top-0 px-10 py-4  z-40'>
+                <div className='flex flex-row-reverse sticky top-14 px-10 py-4  z-40'>
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
                                     action={generateWeeklyReport} 
