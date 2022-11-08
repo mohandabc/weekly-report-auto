@@ -29,10 +29,8 @@ export const SideBar = ({ onSelect, activeKey, ...props }) => {
           <Nav.Item as={Link} to="/front-office" eventKey="3">Front-Office Reports</Nav.Item>
         </Nav.Menu>
         <Nav.Menu title="Deliverables">
-          <Nav.Item as={Link} to="/drillingBit" eventKey="4">Drilling Bit</Nav.Item>
-          <Nav.Item as={Link} to="/drillingState" eventKey="5">Drilling State</Nav.Item>
-          <Nav.Item as={Link} to="/trippingSpeed" eventKey="6">Tripping Spead</Nav.Item>
-          <Nav.Item as={Link} to="/reamBream" eventKey="7">Ream-Back Ream</Nav.Item>
+          <Nav.Item as={Link} to="/run" eventKey="4">Run Deliverable</Nav.Item>
+          <Nav.Item as={Link} to="/drillingState" eventKey="5">Data Browser</Nav.Item>
         </Nav.Menu>
         <Nav.Menu title="About">
           <Nav.Item eventKey="8">Company</Nav.Item>

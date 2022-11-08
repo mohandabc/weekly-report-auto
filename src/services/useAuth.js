@@ -4,8 +4,16 @@ import { useLocalStorage } from "./useLocalStorage";
 
 const AuthContext = createContext();
 
+var rand = function() {
+  return Math.random().toString(36)
+};
+
+var token = function() {
+    return rand() + rand();
+};
+
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useLocalStorage("user", null);
+  const [user, setUser] = useLocalStorage(String(token()), null);
   const navigate = useNavigate();
 
   const login = async (data) => {

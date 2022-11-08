@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
-import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
-import {chartsToPrintState, dateStartEndState, tablesToPrintState, dailyDataState ,loaderIsHidden} from '../../shared/globalState';
+import {useRecoilState, useSetRecoilState} from 'recoil';
+import {chartsToPrintState, dateStartEndState, dailyDataState ,loaderIsHidden} from '../../shared/globalState';
 
 import { ActionButton, Chart, ConfigBar, Table} from '../../components';
 
@@ -12,7 +12,7 @@ import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 export const BoDailyPage = () => {
     const [chartsToPrint, setChartsToPrint] = useRecoilState(chartsToPrintState);
     const [dailyData, setDailyData] = useRecoilState(dailyDataState);
-    const range = useRecoilValue(dateStartEndState);
+    const [range, setRange] = useRecoilState(dateStartEndState);
     const setIsHidden = useSetRecoilState(loaderIsHidden);
 
     let chartsIds = [];
@@ -36,6 +36,7 @@ export const BoDailyPage = () => {
         const path = 'reports/daily_report';
     
         setIsHidden(false);
+        setRange(params['dates'])
         getData(path, params)
         .then(res=> {
           let data = res.result;

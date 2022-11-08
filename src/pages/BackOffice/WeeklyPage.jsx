@@ -12,7 +12,7 @@ import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 export const BoWeeklyPage = () => {
     const [chartsToPrint, setChartsToPrint] = useRecoilState(chartsToPrintState);
     const [weeklyData, setWeeklyData] = useRecoilState(weeklyDataState);
-    const range = useRecoilValue(dateStartEndState);
+    const [range, setRange] = useRecoilState(dateStartEndState);
     const setIsHidden = useSetRecoilState(loaderIsHidden);
 
     let chartsIds = [];
@@ -32,6 +32,7 @@ export const BoWeeklyPage = () => {
         const path = 'reports/weekly_report';
     
         setIsHidden(false);
+        setRange(params['dates'])
         getData(path, params)
         .then(res=> {
           let data = res.result;

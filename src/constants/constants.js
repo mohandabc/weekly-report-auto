@@ -4,7 +4,8 @@ export const DEFAULT_CONFIG_BAR_OPTIONS = {
   pole: false,
   phase: false,
   datePicker: true,
-  files: false
+  files: false,
+  option : 'Reporting'
 };
 export const DELIVERABLE_CONFIG_BAR_OPTIONS = {
   well: true,
@@ -12,5 +13,6 @@ export const DELIVERABLE_CONFIG_BAR_OPTIONS = {
   pole: true,
   phase: true,
   datePicker: true,
-  files: true
+  files: true,
+  option : 'Deliverable'
 };

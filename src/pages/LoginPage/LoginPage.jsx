@@ -10,8 +10,7 @@ export const LoginPage = () => {
   const [loadingValue, setLoadingValue] = React.useState(false);
   const [loginfailed, setLoginfailed] = React.useState(false);
   const formRef = React.useRef();
-  const { login } = useAuth();
-  const { user } = useAuth();
+  const { login,user } = useAuth();
 
   const model = Schema.Model({
     user: Schema.Types.StringType().isRequired("This field is required."),
@@ -27,11 +26,10 @@ export const LoginPage = () => {
     authenticate(formValue["user"], formValue["pass"]).then((res) => {
       let data = res.result;
        if (data["session"]["uid"])
-        {login({
-          user: formValue["user"],
-          pass: formValue["pass"],
+        { login({
           name: data["session"]["name"],
-        })} 
+        })
+        } 
         else {setLoadingValue(false);setLoginfailed(true)}
     });
 
@@ -56,7 +54,7 @@ export const LoginPage = () => {
               formValue={formValue}
               onChange={formValue => setFormValue(formValue)}
               onSubmit={handleSubmit}
-              onCheck={()=>setFormValue({ user: "", pass: "" })} 
+              onCheck={()=>setFormValue({ user: formValue["user"], pass: "" })} 
             >
               <div className="flex flex-col my-7 justify-center items-center">
               <img src={SONATRACH_LOGO}></img></div>
