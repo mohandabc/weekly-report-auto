@@ -12,7 +12,7 @@
   border-radius: 10px 10px 0 0;
   background: rgb(68, 68, 68,0.5);
   font-weight: 200;
-  font-size: 13px;
+  font-size: 15px;
   font-family: Helvetica;
   display: inline-block;
   border: 1px solid transparent;
@@ -25,8 +25,8 @@
 }
 
 .react-tabs__tab--selected {
-  font-weight: 200;
-  font-size: 15px;
+  font-weight: 600;
+  font-size: 17px;
   background: #e5e7eb;
   border-color: #e5e7eb;
   color: rgb(94, 94, 94);

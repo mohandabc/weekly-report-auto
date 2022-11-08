@@ -1,9 +1,6 @@
 import React from "react";
 
 import { ActionButton } from "../../../components";
-import { DateRangePicker, Uploader } from "rsuite";
-import { dateStartEndState } from "../../../shared/globalState";
-import { useRecoilState } from "recoil";
 import { Loader } from "../../../components";
 import { SelectPicker } from "rsuite";
 import { useState } from "react";
@@ -25,41 +22,38 @@ const processInput = (params) => {
 };
 
 export const TrippingSpeed = () => {
-  const [dateStartEnd, setDateStartEnd] = useRecoilState(dateStartEndState);
-  const [value, setValue] = React.useState([
-    new Date(dateStartEnd.split(" - ")[0]),
-    new Date(dateStartEnd.split(" - ")[1]),
-  ]);
-  const [uploaderValue, setUploaderValue] = React.useState([]);
-  const uploader = React.useRef();
-
   const [well, setWell] = useState(0);
   const [rig, setRig] = useState(0);
-  const [pole, setPole] = useState(0);
+  const [rotarySys, setRotarySys] = useState(0);
   const [phase, setPhase] = useState(0);
+  const [lastCSG, setLastCSG] = useState(0);
+  const [TrippingType, setTrippingType] = useState(0);
+  const [tripReason, setTripReason] = useState(0);
+  const [tripNumber, setTripNumber] = useState(0);
+  const [casedHole, setCasedHole] = useState(0);
+  const [drillString, setDrillString] = useState(0);
+  const [BHAname, setBHAname] = useState(0);
+  const [benchmarkTS, setBenchmarkTS] = useState(0);
+  const [benchmarkCT, setBenchmarkCT] = useState(0);
+  const [threshold, setThreshold] = useState(0);
 
   const params = {
     well: well,
     rig: rig,
-    pole: pole,
+    rotarySys: rotarySys,
     phase: phase,
-    dates: value
-      ? formatDate(value[0]) + " - " + formatDate(value[1])
-      : dateStartEnd,
-    files: uploaderValue,
+    lastCSG: lastCSG,
+    TrippingType: TrippingType,
+    tripReason: tripReason,
+    tripNumber: tripNumber,
+    casedHole: casedHole,
+    drillString: drillString,
+    BHAname: BHAname,
+    benchmarkTS: benchmarkTS,
+    benchmarkCT: benchmarkCT,
+    threshold: threshold,
+    // files: uploaderValue,
   };
-
-  function formatDate(date) {
-    if (date)
-      return [
-        padTo2Digits(date.getMonth() + 1),
-        padTo2Digits(date.getDate()),
-        date.getFullYear(),
-      ].join("/");
-  }
-  function padTo2Digits(num) {
-    return num.toString().padStart(2, "0");
-  }
 
   return (
     <>
@@ -76,7 +70,7 @@ export const TrippingSpeed = () => {
         </div>
         <div className="flex items-center justify-center">
           <SelectPicker
-            onChange={setRig}
+            onChange={setWell}
             placeholder="Well"
             data={data_placeHolder}
             style={styles.wide}
@@ -88,13 +82,13 @@ export const TrippingSpeed = () => {
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setRig}
+            onChange={setRotarySys}
             placeholder="Rotary System"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setRig}
+            onChange={setPhase}
             placeholder="Phase"
             data={data_placeHolder}
             style={styles.wide}
@@ -102,25 +96,25 @@ export const TrippingSpeed = () => {
         </div>
         <div className="flex items-center justify-center">
           <SelectPicker
-            onChange={setPole}
+            onChange={setLastCSG}
             placeholder="Last CSG Shoe [m]"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setTrippingType}
             placeholder="Tripping Type"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setTripReason}
             placeholder="Trip reason"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setTripNumber}
             placeholder="Trip number"
             data={data_placeHolder}
             style={styles.wide}
@@ -128,25 +122,25 @@ export const TrippingSpeed = () => {
         </div>
         <div className="flex items-center justify-center">
           <SelectPicker
-            onChange={setPole}
+            onChange={setCasedHole}
             placeholder="Cased Hole/Open Hole"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setDrillString}
             placeholder="Drill String Size"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setBHAname}
             placeholder="BHA Name"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setBenchmarkTS}
             placeholder="Benchmark (Tripping Speed [m/h])"
             data={data_placeHolder}
             style={styles.wide}
@@ -154,13 +148,13 @@ export const TrippingSpeed = () => {
         </div>
         <div className="flex items-center justify-center">
           <SelectPicker
-            onChange={setPole}
+            onChange={setBenchmarkCT}
             placeholder="Benchmark (Connection Time [min])"
             data={data_placeHolder}
             style={styles.ewide}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setThreshold}
             placeholder="Threshold [T]"
             data={data_placeHolder}
             style={styles.ewide}

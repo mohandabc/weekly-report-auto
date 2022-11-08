@@ -25,41 +25,30 @@ const processInput = (params) => {
 };
 
 export const DrillingState = () => {
-  const [dateStartEnd, setDateStartEnd] = useRecoilState(dateStartEndState);
-  const [value, setValue] = React.useState([
-    new Date(dateStartEnd.split(" - ")[0]),
-    new Date(dateStartEnd.split(" - ")[1]),
-  ]);
-  const [uploaderValue, setUploaderValue] = React.useState([]);
-  const uploader = React.useRef();
-
   const [well, setWell] = useState(0);
   const [rig, setRig] = useState(0);
-  const [pole, setPole] = useState(0);
+  const [rotarySys, setRotarySys] = useState(0);
   const [phase, setPhase] = useState(0);
+  const [lastCSG, setLastCSG] = useState(0);
+  const [runNum, setRunNum] = useState(0);
+  const [drillString, setDrillString] = useState(0);
+  const [BHAname, setBHAname] = useState(0);
+  const [benchmarkCT, setBenchmarkCT] = useState(0);
+  const [threshold, setThreshold] = useState(0);
 
   const params = {
     well: well,
     rig: rig,
-    pole: pole,
+    rotarySys: rotarySys,
     phase: phase,
-    dates: value
-      ? formatDate(value[0]) + " - " + formatDate(value[1])
-      : dateStartEnd,
-    files: uploaderValue,
+    lastCSG: lastCSG,
+    runNum: runNum,
+    drillString: drillString,
+    BHAname: BHAname,
+    benchmarkCT: benchmarkCT,
+    threshold: threshold,
+    // files: uploaderValue,
   };
-
-  function formatDate(date) {
-    if (date)
-      return [
-        padTo2Digits(date.getMonth() + 1),
-        padTo2Digits(date.getDate()),
-        date.getFullYear(),
-      ].join("/");
-  }
-  function padTo2Digits(num) {
-    return num.toString().padStart(2, "0");
-  }
 
   return (
     <>
@@ -76,7 +65,7 @@ export const DrillingState = () => {
         </div>
         <div className="flex items-center justify-center">
           <SelectPicker
-            onChange={setRig}
+            onChange={setWell}
             placeholder="Well"
             style={styles.wide}
             data={data_placeHolder}
@@ -88,13 +77,13 @@ export const DrillingState = () => {
             data={data_placeHolder}
           />
           <SelectPicker
-            onChange={setRig}
+            onChange={setRotarySys}
             placeholder="Rotary System"
             style={styles.wide}
             data={data_placeHolder}
           />
           <SelectPicker
-            onChange={setRig}
+            onChange={setPhase}
             placeholder="Phase"
             style={styles.wide}
             data={data_placeHolder}
@@ -102,25 +91,25 @@ export const DrillingState = () => {
         </div>
         <div className="flex items-center justify-center">
           <SelectPicker
-            onChange={setPole}
+            onChange={setLastCSG}
             placeholder="Last CSG Shoe [m]"
             style={styles.wide}
             data={data_placeHolder}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setRunNum}
             placeholder="Run number"
             style={styles.wide}
             data={data_placeHolder}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setDrillString}
             placeholder="Drill String Size"
             style={styles.wide}
             data={data_placeHolder}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setBHAname}
             placeholder="BHA Name"
             style={styles.wide}
             data={data_placeHolder}
@@ -128,13 +117,13 @@ export const DrillingState = () => {
         </div>
         <div className="flex items-center justify-center">
           <SelectPicker
-            onChange={setPole}
+            onChange={setBenchmarkCT}
             placeholder="Benchmark (Connection Time [min])"
             style={styles.ewide}
             data={data_placeHolder}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setThreshold}
             placeholder="Threshold [T]"
             style={styles.ewide}
             data={data_placeHolder}

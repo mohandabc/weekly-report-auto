@@ -24,42 +24,17 @@ const processInput = (params) => {
 };
 
 export const ReamBream = () => {
-  const [dateStartEnd, setDateStartEnd] = useRecoilState(dateStartEndState);
-  const [value, setValue] = React.useState([
-    new Date(dateStartEnd.split(" - ")[0]),
-    new Date(dateStartEnd.split(" - ")[1]),
-  ]);
-  const [uploaderValue, setUploaderValue] = React.useState([]);
-  const uploader = React.useRef();
-
   const [well, setWell] = useState(0);
-  const [rig, setRig] = useState(0);
-  const [pole, setPole] = useState(0);
   const [phase, setPhase] = useState(0);
+  const [npt, setNpt] = useState(0);
+
 
   const params = {
     well: well,
-    rig: rig,
-    pole: pole,
     phase: phase,
-    dates: value
-      ? formatDate(value[0]) + " - " + formatDate(value[1])
-      : dateStartEnd,
-    files: uploaderValue,
+    npt: npt,
+    // files: uploaderValue,
   };
-
-  function formatDate(date) {
-    if (date)
-      return [
-        padTo2Digits(date.getMonth() + 1),
-        padTo2Digits(date.getDate()),
-        date.getFullYear(),
-      ].join("/");
-  }
-  function padTo2Digits(num) {
-    return num.toString().padStart(2, "0");
-  }
-
   return (
     <>
       <div className="absolute mt-56 z-50">
@@ -75,19 +50,19 @@ export const ReamBream = () => {
         </div>
         <div className="flex items-center justify-center">
           <SelectPicker
-            onChange={setRig}
+            onChange={setWell}
             placeholder="Well"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setRig}
+            onChange={setPhase}
             placeholder="Phase"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setRig}
+            onChange={setNpt}
             placeholder="NPT"
             data={data_placeHolder}
             style={styles.wide}

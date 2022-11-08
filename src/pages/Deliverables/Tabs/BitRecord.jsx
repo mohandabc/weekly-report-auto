@@ -1,9 +1,6 @@
 import React from "react";
 
 import { ActionButton } from "../../../components";
-import { DateRangePicker, Uploader } from "rsuite";
-import { dateStartEndState } from "../../../shared/globalState";
-import { useRecoilState } from "recoil";
 import { Loader } from "../../../components";
 import { SelectPicker } from "rsuite";
 import { useState } from "react";
@@ -25,41 +22,46 @@ const processInput = (params) => {
 };
 
 export const BitRecord = () => {
-  const [dateStartEnd, setDateStartEnd] = useRecoilState(dateStartEndState);
-  const [value, setValue] = React.useState([
-    new Date(dateStartEnd.split(" - ")[0]),
-    new Date(dateStartEnd.split(" - ")[1]),
-  ]);
-  const [uploaderValue, setUploaderValue] = React.useState([]);
-  const uploader = React.useRef();
-
   const [well, setWell] = useState(0);
-  const [rig, setRig] = useState(0);
-  const [pole, setPole] = useState(0);
-  const [phase, setPhase] = useState(0);
+  const [bitSize, setBitSize] = useState(0);
+  const [bitType, setBitType] = useState(0);
+  const [bitManu, setBitManu] = useState(0);
+  const [tfa, setTfa] = useState(0);
+  const [bitSerialNo, setBitSerialNo] = useState(0);
+  const [bitIADCcode, setBitIADCcode] = useState(0);
+  const [bitModel, setBitModel] = useState(0);
+  const [bitJets, setBitJets] = useState(0);
+  const [bitNumber, setBitNumber] = useState(0);
+  const [innerRows, setInnerRows] = useState(0);
+  const [outerRows, setOuterRows] = useState(0);
+  const [dull, setDull] = useState(0);
+  const [location, setLocation] = useState(0);
+  const [bearingSeals, setBearingSeals] = useState(0);
+  const [gauge, setGauge] = useState(0);
+  const [other, setOther] = useState(0);
+  const [reason, setReason] = useState(0);
 
   const params = {
     well: well,
-    rig: rig,
-    pole: pole,
-    phase: phase,
-    dates: value
-      ? formatDate(value[0]) + " - " + formatDate(value[1])
-      : dateStartEnd,
-    files: uploaderValue,
+    bitSize: bitSize,
+    bitType: bitType,
+    bitManu: bitManu,
+    tfa: tfa,
+    bitSerialNo: bitSerialNo,
+    bitIADCcode: bitIADCcode,
+    bitModel: bitModel,
+    bitJets: bitJets,
+    bitNumber: bitNumber,
+    innerRows: innerRows,
+    outerRows: outerRows,
+    dull: dull,
+    location: location,
+    bearingSeals: bearingSeals,
+    gauge: gauge,
+    other: other,
+    reason: reason,
+    // files: uploaderValue,
   };
-
-  function formatDate(date) {
-    if (date)
-      return [
-        padTo2Digits(date.getMonth() + 1),
-        padTo2Digits(date.getDate()),
-        date.getFullYear(),
-      ].join("/");
-  }
-  function padTo2Digits(num) {
-    return num.toString().padStart(2, "0");
-  }
 
   return (
     <>
@@ -76,25 +78,25 @@ export const BitRecord = () => {
         </div>
         <div className="flex items-center justify-center">
           <SelectPicker
-            onChange={setRig}
+            onChange={setWell}
             placeholder="Well"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setRig}
+            onChange={setBitSize}
             placeholder="Bit Size"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setRig}
+            onChange={setBitType}
             placeholder="Bit Type"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setRig}
+            onChange={setBitManu}
             placeholder="Bit Manufactor"
             data={data_placeHolder}
             style={styles.wide}
@@ -102,25 +104,25 @@ export const BitRecord = () => {
         </div>
         <div className="flex items-center justify-center">
           <SelectPicker
-            onChange={setPole}
+            onChange={setTfa}
             placeholder="TFA"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setBitSerialNo}
             placeholder="Bit Serial Number"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setBitIADCcode}
             placeholder="Bit IADC Code"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setBitModel}
             placeholder="Bit Model"
             data={data_placeHolder}
             style={styles.wide}
@@ -128,13 +130,13 @@ export const BitRecord = () => {
         </div>
         <div className="flex items-center justify-center">
           <SelectPicker
-            onChange={setPole}
+            onChange={setBitJets}
             placeholder="Bit Jets"
             data={data_placeHolder}
             style={styles.ewide}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setBitNumber}
             placeholder="Bit Number"
             data={data_placeHolder}
             style={styles.ewide}
@@ -142,50 +144,50 @@ export const BitRecord = () => {
         </div>
         <div className="flex items-center justify-center">
           <SelectPicker
-            onChange={setPole}
+            onChange={setInnerRows}
             placeholder="Inner rows"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setOuterRows}
             placeholder="Outer rows"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setPole}
+            onChange={setDull}
             placeholder="Dull"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setLocation}
             placeholder="Location"
             style={styles.wide}
           />
         </div>
         <div className="flex items-center justify-center">
           <SelectPicker
-            onChange={setPole}
+            onChange={setBearingSeals}
             placeholder="Bearing seals"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setGauge}
             placeholder="Gauge 1/16 in"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setPole}
+            onChange={setOther}
             placeholder="Other"
             data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
-            onChange={setPhase}
+            onChange={setReason}
             placeholder="Reason"
             data={data_placeHolder}
             style={styles.wide}
