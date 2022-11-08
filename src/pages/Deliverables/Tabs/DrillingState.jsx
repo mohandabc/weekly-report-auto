@@ -14,16 +14,10 @@ const styles = {
   ewide: { height: 38, width: 520, margin: 10 },
 };
 
-const wells_data = [
+const data_placeHolder = [
   // Test populating data
-  "WOENS-1",
-  "KARS-3",
-  "DJHSE-1",
-  "HBKN-4",
-  "BIRN-1",
-  "EMR-1",
-  "RAA-8",
-  "HDZ-20",
+  "TEST-1",
+  "TEST-2",
 ].map((item) => ({ label: item, value: item }));
 
 const processInput = (params) => {
@@ -85,21 +79,25 @@ export const DrillingState = () => {
             onChange={setRig}
             placeholder="Well"
             style={styles.wide}
+            data={data_placeHolder}
           />
           <SelectPicker
             onChange={setRig}
             placeholder="Rig"
             style={styles.wide}
+            data={data_placeHolder}
           />
           <SelectPicker
             onChange={setRig}
             placeholder="Rotary System"
             style={styles.wide}
+            data={data_placeHolder}
           />
           <SelectPicker
             onChange={setRig}
             placeholder="Phase"
             style={styles.wide}
+            data={data_placeHolder}
           />
         </div>
         <div className="flex items-center justify-center">
@@ -107,21 +105,25 @@ export const DrillingState = () => {
             onChange={setPole}
             placeholder="Last CSG Shoe [m]"
             style={styles.wide}
+            data={data_placeHolder}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Run number"
             style={styles.wide}
+            data={data_placeHolder}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Drill String Size"
             style={styles.wide}
+            data={data_placeHolder}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="BHA Name"
             style={styles.wide}
+            data={data_placeHolder}
           />
         </div>
         <div className="flex items-center justify-center">
@@ -129,11 +131,13 @@ export const DrillingState = () => {
             onChange={setPole}
             placeholder="Benchmark (Connection Time [min])"
             style={styles.ewide}
+            data={data_placeHolder}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Threshold [T]"
             style={styles.ewide}
+            data={data_placeHolder}
           />
         </div>
         <div className="flex items-center justify-center">

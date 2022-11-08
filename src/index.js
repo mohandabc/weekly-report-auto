@@ -10,11 +10,8 @@ import {
   MainPage,
   BackOffice,
   FrontOffice,
-  BitRecord,
-  TrippingSpeed,
-  DrillingState,
   RunDeliverable,
-  ReamBream,
+  DataBrowser,
   LoginPage,
   LogoutPage
 } from "./pages";
@@ -36,11 +33,12 @@ root.render(
             <Route path="/front-office" element={<ProtectedRoute><FrontOffice /></ProtectedRoute>} />
             <Route path="/weeklyBo" element={<ProtectedRoute><BoWeeklyPage /></ProtectedRoute>} />
             <Route path="/dailyBo" element={<ProtectedRoute><BoDailyPage /></ProtectedRoute>} />
-            <Route path="/drillingBit" element={<ProtectedRoute><BitRecord /></ProtectedRoute>} />
+            {/* <Route path="/drillingBit" element={<ProtectedRoute><BitRecord /></ProtectedRoute>} />
             <Route path="/trippingSpeed" element={<ProtectedRoute><TrippingSpeed /></ProtectedRoute>} />
             <Route path="/drillingState" element={<ProtectedRoute><DrillingState /></ProtectedRoute>} />
-            <Route path="/reamBream" element={<ProtectedRoute><ReamBream /></ProtectedRoute>} />
+            <Route path="/reamBream" element={<ProtectedRoute><ReamBream /></ProtectedRoute>} /> */}
             <Route path="/run" element={<ProtectedRoute><RunDeliverable /></ProtectedRoute>} />
+            <Route path="/data" element={<ProtectedRoute><DataBrowser /></ProtectedRoute>} />
             <Route path="/logout" element={<ProtectedRoute><LogoutPage /></ProtectedRoute>} />
             <Route path="*" element={<LoginPage />} />
 

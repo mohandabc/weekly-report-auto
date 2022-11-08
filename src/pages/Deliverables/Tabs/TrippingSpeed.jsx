@@ -14,34 +14,11 @@ const styles = {
   ewide: { height: 38, width: 520, margin: 10 },
 };
 
-const wells_data = [
+const data_placeHolder = [
   // Test populating data
-  "WOENS-1",
-  "KARS-3",
-  "DJHSE-1",
-  "HBKN-4",
-  "BIRN-1",
-  "EMR-1",
-  "RAA-8",
-  "HDZ-20",
+  "TEST-1",
+  "TEST-2",
 ].map((item) => ({ label: item, value: item }));
-
-const rigs_data = ["TP1", "TP2", "TP3", "TP4", "TP5", "TP6", "TP7", "TP8"].map(
-  // Test populating data
-  (item) => ({ label: item, value: item })
-);
-
-const poles_data = ["Nord", "Centre", "Sud"].map((item) => ({
-  // Test populating data
-  label: item,
-  value: item,
-}));
-
-const phases_data = ["1", "2", "3", "4", "5", "6", "7"].map((item) => ({
-  // Test populating data
-  label: item,
-  value: item,
-}));
 
 const processInput = (params) => {
   console.log("Params from TrippingSpeed : ", params);
@@ -101,25 +78,25 @@ export const TrippingSpeed = () => {
           <SelectPicker
             onChange={setRig}
             placeholder="Well"
-            data={rigs_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setRig}
             placeholder="Rig"
-            data={rigs_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setRig}
             placeholder="Rotary System"
-            data={rigs_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setRig}
             placeholder="Phase"
-            data={rigs_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
         </div>
@@ -127,25 +104,25 @@ export const TrippingSpeed = () => {
           <SelectPicker
             onChange={setPole}
             placeholder="Last CSG Shoe [m]"
-            data={poles_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Tripping Type"
-            data={phases_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Trip reason"
-            data={phases_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Trip number"
-            data={phases_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
         </div>
@@ -153,25 +130,25 @@ export const TrippingSpeed = () => {
           <SelectPicker
             onChange={setPole}
             placeholder="Cased Hole/Open Hole"
-            data={poles_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Drill String Size"
-            data={phases_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="BHA Name"
-            data={phases_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Benchmark (Tripping Speed [m/h])"
-            data={phases_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
         </div>
@@ -179,13 +156,13 @@ export const TrippingSpeed = () => {
           <SelectPicker
             onChange={setPole}
             placeholder="Benchmark (Connection Time [min])"
-            data={poles_data}
+            data={data_placeHolder}
             style={styles.ewide}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Threshold [T]"
-            data={phases_data}
+            data={data_placeHolder}
             style={styles.ewide}
           />
         </div>

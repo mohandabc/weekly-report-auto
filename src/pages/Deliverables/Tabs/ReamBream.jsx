@@ -13,34 +13,11 @@ const styles = {
   wide: { height: 38, width: 340, margin: 10 },
 };
 
-const wells_data = [
+const data_placeHolder = [
   // Test populating data
-  "WOENS-1",
-  "KARS-3",
-  "DJHSE-1",
-  "HBKN-4",
-  "BIRN-1",
-  "EMR-1",
-  "RAA-8",
-  "HDZ-20",
+  "TEST-1",
+  "TEST-2",
 ].map((item) => ({ label: item, value: item }));
-
-const rigs_data = ["TP1", "TP2", "TP3", "TP4", "TP5", "TP6", "TP7", "TP8"].map(
-  // Test populating data
-  (item) => ({ label: item, value: item })
-);
-
-const poles_data = ["Nord", "Centre", "Sud"].map((item) => ({
-  // Test populating data
-  label: item,
-  value: item,
-}));
-
-const phases_data = ["1", "2", "3", "4", "5", "6", "7"].map((item) => ({
-  // Test populating data
-  label: item,
-  value: item,
-}));
 
 const processInput = (params) => {
   console.log("Params from ReamBream : ", params);
@@ -100,19 +77,19 @@ export const ReamBream = () => {
           <SelectPicker
             onChange={setRig}
             placeholder="Well"
-            data={rigs_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setRig}
             placeholder="Phase"
-            data={rigs_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setRig}
             placeholder="NPT"
-            data={rigs_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
         </div>

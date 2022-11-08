@@ -30,12 +30,12 @@ export const SideBar = ({ onSelect, activeKey, ...props }) => {
         </Nav.Menu>
         <Nav.Menu title="Deliverables">
           <Nav.Item as={Link} to="/run" eventKey="4">Run Deliverable</Nav.Item>
-          <Nav.Item as={Link} to="/drillingState" eventKey="5">Data Browser</Nav.Item>
+          <Nav.Item as={Link} to="/data" eventKey="5">Data Uploader</Nav.Item>
         </Nav.Menu>
         <Nav.Menu title="About">
-          <Nav.Item eventKey="8">Company</Nav.Item>
-          <Nav.Item eventKey="9">Team</Nav.Item>
-          <Nav.Item eventKey="10">Contact</Nav.Item>
+          <Nav.Item eventKey="6">Company</Nav.Item>
+          <Nav.Item eventKey="7">Team</Nav.Item>
+          <Nav.Item eventKey="8">Contact</Nav.Item>
         </Nav.Menu>
       </Nav>
       {user?<Nav pullRight>

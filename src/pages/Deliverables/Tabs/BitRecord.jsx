@@ -14,34 +14,11 @@ const styles = {
   ewide: { height: 38, width: 520, margin: 10 },
 };
 
-const wells_data = [
+const data_placeHolder = [
   // Test populating data
-  "WOENS-1",
-  "KARS-3",
-  "DJHSE-1",
-  "HBKN-4",
-  "BIRN-1",
-  "EMR-1",
-  "RAA-8",
-  "HDZ-20",
+  "TEST-1",
+  "TEST-2",
 ].map((item) => ({ label: item, value: item }));
-
-const rigs_data = ["TP1", "TP2", "TP3", "TP4", "TP5", "TP6", "TP7", "TP8"].map(
-  // Test populating data
-  (item) => ({ label: item, value: item })
-);
-
-const poles_data = ["Nord", "Centre", "Sud"].map((item) => ({
-  // Test populating data
-  label: item,
-  value: item,
-}));
-
-const phases_data = ["1", "2", "3", "4", "5", "6", "7"].map((item) => ({
-  // Test populating data
-  label: item,
-  value: item,
-}));
 
 const processInput = (params) => {
   console.log("Params from BitRecord : ", params);
@@ -101,25 +78,25 @@ export const BitRecord = () => {
           <SelectPicker
             onChange={setRig}
             placeholder="Well"
-            data={rigs_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setRig}
             placeholder="Bit Size"
-            data={rigs_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setRig}
             placeholder="Bit Type"
-            data={rigs_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setRig}
             placeholder="Bit Manufactor"
-            data={rigs_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
         </div>
@@ -127,25 +104,25 @@ export const BitRecord = () => {
           <SelectPicker
             onChange={setPole}
             placeholder="TFA"
-            data={poles_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Bit Serial Number"
-            data={phases_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Bit IADC Code"
-            data={phases_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Bit Model"
-            data={phases_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
         </div>
@@ -153,13 +130,13 @@ export const BitRecord = () => {
           <SelectPicker
             onChange={setPole}
             placeholder="Bit Jets"
-            data={poles_data}
+            data={data_placeHolder}
             style={styles.ewide}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Bit Number"
-            data={phases_data}
+            data={data_placeHolder}
             style={styles.ewide}
           />
         </div>
@@ -167,19 +144,19 @@ export const BitRecord = () => {
           <SelectPicker
             onChange={setPole}
             placeholder="Inner rows"
-            data={poles_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Outer rows"
-            data={phases_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setPole}
             placeholder="Dull"
-            data={poles_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
@@ -192,25 +169,25 @@ export const BitRecord = () => {
           <SelectPicker
             onChange={setPole}
             placeholder="Bearing seals"
-            data={poles_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Gauge 1/16 in"
-            data={phases_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setPole}
             placeholder="Other"
-            data={poles_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Reason"
-            data={phases_data}
+            data={data_placeHolder}
             style={styles.wide}
           />
         </div>
