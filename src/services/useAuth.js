@@ -4,16 +4,8 @@ import { useLocalStorage } from "./useLocalStorage";
 
 const AuthContext = createContext();
 
-var rand = function() {
-  return Math.random().toString(36)
-};
-
-var token = function() {
-    return rand() + rand();
-};
-
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useLocalStorage(String(token()), null);
+  const [user, setUser] = useLocalStorage("e7cf24fe1d299dc5310dadcdb92600e2", null);
   const navigate = useNavigate();
 
   const login = async (data) => {
@@ -23,6 +15,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
+    window.localStorage.clear();
     navigate("/login", { replace: true });
   };
 
