@@ -37,13 +37,13 @@ export const AuthProvider = ({ children }) => {
       values.push(localStorage.getItem(keys[i]));
       var key = keys[i];
     }
-    if (values.length)
-    {console.log(values)
+    if (values.length) {
       if (values[0] == "null") {
-      return Math.random().toString(36);
-    } else {
-      return key;
-    }} else return Math.random().toString(36);
+        return Math.random().toString(36);
+      } else {
+        return key;
+      }
+    } else return Math.random().toString(36);
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -7,7 +7,8 @@ import { useState } from "react";
 import { IconButton } from "rsuite";
 import FileUploadIcon from "@rsuite/icons/FileUpload";
 import { Tooltip, Whisper } from "rsuite";
-import {rocket} from "../../assets/rocket.gif"
+import "./styles.css"
+import rocket from "../../assets/rocket.gif"
 
 const wells_placeholder = [
   // Test populating data
@@ -25,7 +26,7 @@ const processInput = (params) => {
   console.log("Params from ReamBream : ", params);
 };
 
-export const DataBrowser = () => {
+export const DataUploader = () => {
   const [well, setWell] = useState(0);
   const [uploaderValue, setUploaderValue] = React.useState([]);
   const uploader = React.useRef();
@@ -48,7 +49,7 @@ export const DataBrowser = () => {
           <div className="absolute mt-56 z-50">
             <Loader></Loader>
           </div>
-          <div className="overflow-y-auto h-3/6 rounded-xl bg-gray-200 w-1/3">
+          <div className="container overflow-y-auto h-3/6 rounded-xl bg-gray-200 w-1/3">
             <div className="flex justify-center items-center">
               <div className="py-9">
                 <h1 className="text-zinc-500 text-3xl text-center">
@@ -56,10 +57,10 @@ export const DataBrowser = () => {
                 </h1>
                 <div className="items-center justify-center rounded-xl bg-gray-300 text-black text-sm my-10 p-10 text-center">
                   <div className="">
-                    {console.log(uploaderValue.length)}
                     {uploaderValue.length ? (
+                      <>
                       <Whisper speaker={<Tooltip>Send to server !</Tooltip>}>
-                        <span>
+                        <span className="object-center">
                           <IconButton
                             style={{ height: 40, width: 80, marginBottom: 20 }}
                             icon={<FileUploadIcon fill='geen'/>}
@@ -69,9 +70,10 @@ export const DataBrowser = () => {
                               uploader.current.start();
                               processInput(params);
                             }}
-                          />
+                            />
                         </span>
                       </Whisper>
+                            </>
                     ) : (
                       <Whisper
                         speaker={<Tooltip>No files to upload !</Tooltip>}
@@ -104,13 +106,13 @@ export const DataBrowser = () => {
                     ref={uploader}
                     style={{ width: 238 }}
                     autoUpload={false}
-                    // action="//10.171.59.66:8069/web/create_data"
+                    // action="//10.171.59.66:8069/web/create_data" // controller that uploads data
                     multiple
                     draggable
                   >
                     <span style={{ width: 238, height: 40 }}>
                       Click or Drag files to upload
-                    </span>
+                    </span>                  
                   </Uploader>
                 </div>
               </div>

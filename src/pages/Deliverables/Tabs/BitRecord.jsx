@@ -187,6 +187,7 @@ export const BitRecord = () => {
           <SelectPicker
             onChange={setLocation}
             placeholder="Location"
+            data={data_placeHolder}
             style={styles.small}
           />
           <SelectPicker

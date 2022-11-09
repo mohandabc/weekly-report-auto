@@ -3,5 +3,5 @@ export { DrillingState } from "./Tabs/DrillingState";
 export { ReamBream } from "./Tabs/ReamBream";
 export { TrippingSpeed } from "./Tabs/TrippingSpeed";
 export { RunDeliverable } from "./RunDeliverable";
-export {DataBrowser} from "./DataBrowser";
+export {DataUploader} from "./DataUploader";
 

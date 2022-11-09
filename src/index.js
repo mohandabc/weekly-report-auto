@@ -11,7 +11,7 @@ import {
   BackOffice,
   FrontOffice,
   RunDeliverable,
-  DataBrowser,
+  DataUploader,
   LoginPage,
   LogoutPage
 } from "./pages";
@@ -38,7 +38,7 @@ root.render(
             <Route path="/drillingState" element={<ProtectedRoute><DrillingState /></ProtectedRoute>} />
             <Route path="/reamBream" element={<ProtectedRoute><ReamBream /></ProtectedRoute>} /> */}
             <Route path="/run" element={<ProtectedRoute><RunDeliverable /></ProtectedRoute>} />
-            <Route path="/data" element={<ProtectedRoute><DataBrowser /></ProtectedRoute>} />
+            <Route path="/data" element={<ProtectedRoute><DataUploader /></ProtectedRoute>} />
             <Route path="/logout" element={<ProtectedRoute><LogoutPage /></ProtectedRoute>} />
             <Route path="*" element={<LoginPage />} />
 
