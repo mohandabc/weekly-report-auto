@@ -10,7 +10,7 @@ import { useState } from "react";
 import "./styles.css";
 
 const styles = {
-  wide: { height: 38, width: 340, margin: 10 },
+  wide: { height: 38, width: 250, margin: 10 },
 };
 
 const data_placeHolder = [
@@ -24,17 +24,36 @@ const processInput = (params) => {
 };
 
 export const ReamBream = () => {
+  const [dateStartEnd, setDateStartEnd] = useRecoilState(dateStartEndState);
+  const [dateRangeValue, setDateRangeValue] = React.useState([
+    new Date(dateStartEnd.split(" - ")[0]),
+    new Date(dateStartEnd.split(" - ")[1]),
+  ]);
   const [well, setWell] = useState(0);
   const [phase, setPhase] = useState(0);
   const [npt, setNpt] = useState(0);
-
 
   const params = {
     well: well,
     phase: phase,
     npt: npt,
+    dateRangeValue: formatDate(dateRangeValue[0]) + " - " + formatDate(dateRangeValue[1])
     // files: uploaderValue,
   };
+
+  function formatDate(date) {
+    if (date)
+      return [
+        padTo2Digits(date.getMonth() + 1),
+        padTo2Digits(date.getDate()),
+        date.getFullYear(),
+      ].join("/");
+  }
+
+  function padTo2Digits(num) {
+    return num.toString().padStart(2, "0");
+  }
+
   return (
     <>
       <div className="absolute mt-56 z-50">
@@ -66,6 +85,15 @@ export const ReamBream = () => {
             placeholder="NPT"
             data={data_placeHolder}
             style={styles.wide}
+          />
+          <DateRangePicker
+            value={dateRangeValue}
+            onChange={setDateRangeValue}
+            format="dd-MM-yyyy"
+            style={{
+              width: 250,
+              margin: 10,
+            }}
           />
         </div>
         <div className="flex items-center justify-center">

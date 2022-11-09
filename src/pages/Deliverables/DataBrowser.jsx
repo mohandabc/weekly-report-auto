@@ -3,25 +3,38 @@ import { SideBar } from "../../components/SideBar";
 import { Loader } from "../../components/Loader";
 import { Uploader } from "rsuite";
 import { SelectPicker } from "rsuite";
+import { useState } from "react";
 import { IconButton } from "rsuite";
 import FileUploadIcon from "@rsuite/icons/FileUpload";
 import { Tooltip, Whisper } from "rsuite";
+import {rocket} from "../../assets/rocket.gif"
+
+const wells_placeholder = [
+  // Test populating data
+  "WOENS-1",
+  "KARS-3",
+  "DJHSE-1",
+  "HBKN-4",
+  "BIRN-1",
+  "EMR-1",
+  "RAA-8",
+  "HDZ-20",
+].map((item) => ({ label: item, value: item }));
+
+const processInput = (params) => {
+  console.log("Params from ReamBream : ", params);
+};
 
 export const DataBrowser = () => {
+  const [well, setWell] = useState(0);
   const [uploaderValue, setUploaderValue] = React.useState([]);
   const uploader = React.useRef();
 
-  const wells_placeholder = [
-    // Test populating data
-    "WOENS-1",
-    "KARS-3",
-    "DJHSE-1",
-    "HBKN-4",
-    "BIRN-1",
-    "EMR-1",
-    "RAA-8",
-    "HDZ-20",
-  ].map((item) => ({ label: item, value: item }));
+  const params = {
+    well: well,
+    uploaderValue: uploaderValue,
+    // files: uploaderValue,
+  };
 
   return (
     <div className="App">
@@ -43,28 +56,55 @@ export const DataBrowser = () => {
                 </h1>
                 <div className="items-center justify-center rounded-xl bg-gray-300 text-black text-sm my-10 p-10 text-center">
                   <div className="">
-                    <Whisper speaker={<Tooltip>Send to server !</Tooltip>}>
-                      <span>
-                        <IconButton
-                          style={{ height: 40, width: 80, marginBottom: 20 }}
-                          icon={<FileUploadIcon />}
-                          color="green"
-                          appearance="primary"
-                          onClick={() => {uploader.current.start()}}
-                        />
-                      </span>
-                    </Whisper>
+                    {console.log(uploaderValue.length)}
+                    {uploaderValue.length ? (
+                      <Whisper speaker={<Tooltip>Send to server !</Tooltip>}>
+                        <span>
+                          <IconButton
+                            style={{ height: 40, width: 80, marginBottom: 20 }}
+                            icon={<FileUploadIcon fill='geen'/>}
+                            color="green"
+                            appearance="primary"
+                            onClick={() => {
+                              uploader.current.start();
+                              processInput(params);
+                            }}
+                          />
+                        </span>
+                      </Whisper>
+                    ) : (
+                      <Whisper
+                        speaker={<Tooltip>No files to upload !</Tooltip>}
+                      >
+                        <span>
+                          <IconButton
+                            style={{ height: 40, width: 80, marginBottom: 20 }}
+                            icon={<FileUploadIcon />}
+                            color="red"
+                            appearance="primary"
+                            disabled
+                            onClick={() => {
+                              uploader.current.start();
+                              processInput(params);
+                            }}
+                          />
+                        </span>
+                      </Whisper>
+                    )}
                   </div>
                   <SelectPicker
                     style={{ width: 238, marginBottom: 20 }}
                     label="Well"
                     data={wells_placeholder}
+                    onChange={setWell}
                   />
                   <Uploader
+                    value={uploaderValue}
+                    onChange={setUploaderValue}
+                    ref={uploader}
                     style={{ width: 238 }}
                     autoUpload={false}
-                    ref={uploader}
-                    action="//localhost:3000/upload"
+                    // action="//10.171.59.66:8069/web/create_data"
                     multiple
                     draggable
                   >

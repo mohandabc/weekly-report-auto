@@ -1,12 +1,16 @@
 import React from "react";
 
 import { ActionButton } from "../../../components";
+import { DateRangePicker } from "rsuite";
+import { dateStartEndState } from "../../../shared/globalState";
+import { useRecoilState } from "recoil";
 import { Loader } from "../../../components";
 import { SelectPicker } from "rsuite";
 import { useState } from "react";
 import "./styles.css";
 
 const styles = {
+  small: { height: 38, width: 160, margin: 10 },
   wide: { height: 38, width: 250, margin: 10 },
   ewide: { height: 38, width: 520, margin: 10 },
 };
@@ -22,6 +26,11 @@ const processInput = (params) => {
 };
 
 export const BitRecord = () => {
+  const [dateStartEnd, setDateStartEnd] = useRecoilState(dateStartEndState);
+  const [dateRangeValue, setDateRangeValue] = React.useState([
+    new Date(dateStartEnd.split(" - ")[0]),
+    new Date(dateStartEnd.split(" - ")[1]),
+  ]);
   const [well, setWell] = useState(0);
   const [bitSize, setBitSize] = useState(0);
   const [bitType, setBitType] = useState(0);
@@ -60,8 +69,22 @@ export const BitRecord = () => {
     gauge: gauge,
     other: other,
     reason: reason,
+    dateRangeValue: formatDate(dateRangeValue[0]) + " - " + formatDate(dateRangeValue[1])
     // files: uploaderValue,
   };
+
+  function formatDate(date) {
+    if (date)
+      return [
+        padTo2Digits(date.getMonth() + 1),
+        padTo2Digits(date.getDate()),
+        date.getFullYear(),
+      ].join("/");
+  }
+
+  function padTo2Digits(num) {
+    return num.toString().padStart(2, "0");
+  }
 
   return (
     <>
@@ -147,39 +170,39 @@ export const BitRecord = () => {
             onChange={setInnerRows}
             placeholder="Inner rows"
             data={data_placeHolder}
-            style={styles.wide}
+            style={styles.small}
           />
           <SelectPicker
             onChange={setOuterRows}
             placeholder="Outer rows"
             data={data_placeHolder}
-            style={styles.wide}
+            style={styles.small}
           />
           <SelectPicker
             onChange={setDull}
             placeholder="Dull"
             data={data_placeHolder}
-            style={styles.wide}
+            style={styles.small}
           />
           <SelectPicker
             onChange={setLocation}
             placeholder="Location"
-            style={styles.wide}
+            style={styles.small}
           />
-        </div>
-        <div className="flex items-center justify-center">
           <SelectPicker
             onChange={setBearingSeals}
             placeholder="Bearing seals"
             data={data_placeHolder}
-            style={styles.wide}
+            style={styles.small}
           />
           <SelectPicker
             onChange={setGauge}
             placeholder="Gauge 1/16 in"
             data={data_placeHolder}
-            style={styles.wide}
+            style={styles.small}
           />
+        </div>
+        <div className="flex items-center justify-center">
           <SelectPicker
             onChange={setOther}
             placeholder="Other"
@@ -191,6 +214,15 @@ export const BitRecord = () => {
             placeholder="Reason"
             data={data_placeHolder}
             style={styles.wide}
+          />
+          <DateRangePicker
+            value={dateRangeValue}
+            onChange={setDateRangeValue}
+            format="dd-MM-yyyy"
+            style={{
+              width: 520,
+              margin: 10,
+            }}
           />
         </div>
         <div className="flex items-center justify-center">

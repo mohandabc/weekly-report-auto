@@ -1,6 +1,9 @@
 import React from "react";
 
 import { ActionButton } from "../../../components";
+import { DateRangePicker } from "rsuite";
+import { dateStartEndState } from "../../../shared/globalState";
+import { useRecoilState } from "recoil";
 import { Loader } from "../../../components";
 import { SelectPicker } from "rsuite";
 import { useState } from "react";
@@ -8,7 +11,6 @@ import "./styles.css";
 
 const styles = {
   wide: { height: 38, width: 250, margin: 10 },
-  ewide: { height: 38, width: 520, margin: 10 },
 };
 
 const data_placeHolder = [
@@ -22,6 +24,11 @@ const processInput = (params) => {
 };
 
 export const TrippingSpeed = () => {
+  const [dateStartEnd, setDateStartEnd] = useRecoilState(dateStartEndState);
+  const [dateRangeValue, setDateRangeValue] = React.useState([
+    new Date(dateStartEnd.split(" - ")[0]),
+    new Date(dateStartEnd.split(" - ")[1]),
+  ]);
   const [well, setWell] = useState(0);
   const [rig, setRig] = useState(0);
   const [rotarySys, setRotarySys] = useState(0);
@@ -52,8 +59,23 @@ export const TrippingSpeed = () => {
     benchmarkTS: benchmarkTS,
     benchmarkCT: benchmarkCT,
     threshold: threshold,
+    dateRangeValue:
+      formatDate(dateRangeValue[0]) + " - " + formatDate(dateRangeValue[1]),
     // files: uploaderValue,
   };
+
+  function formatDate(date) {
+    if (date)
+      return [
+        padTo2Digits(date.getMonth() + 1),
+        padTo2Digits(date.getDate()),
+        date.getFullYear(),
+      ].join("/");
+  }
+
+  function padTo2Digits(num) {
+    return num.toString().padStart(2, "0");
+  }
 
   return (
     <>
@@ -151,13 +173,22 @@ export const TrippingSpeed = () => {
             onChange={setBenchmarkCT}
             placeholder="Benchmark (Connection Time [min])"
             data={data_placeHolder}
-            style={styles.ewide}
+            style={styles.wide}
           />
           <SelectPicker
             onChange={setThreshold}
             placeholder="Threshold [T]"
             data={data_placeHolder}
-            style={styles.ewide}
+            style={styles.wide}
+          />
+          <DateRangePicker
+            value={dateRangeValue}
+            onChange={setDateRangeValue}
+            format="dd-MM-yyyy"
+            style={{
+              width: 520,
+              margin: 10,
+            }}
           />
         </div>
         <div className="flex items-center justify-center">

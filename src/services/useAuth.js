@@ -5,7 +5,7 @@ import { useLocalStorage } from "./useLocalStorage";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useLocalStorage("e7cf24fe1d299dc5310dadcdb92600e2", null);
+  const [user, setUser] = useLocalStorage(token(), null);
   const navigate = useNavigate();
 
   const login = async (data) => {
@@ -23,10 +23,28 @@ export const AuthProvider = ({ children }) => {
     () => ({
       user,
       login,
-      logout
+      logout,
     }),
     [user]
   );
+
+  function token() {
+    var values = [],
+      keys = Object.keys(localStorage),
+      i = keys.length;
+
+    while (i--) {
+      values.push(localStorage.getItem(keys[i]));
+      var key = keys[i];
+    }
+    if (values.length)
+    {console.log(values)
+      if (values[0] == "null") {
+      return Math.random().toString(36);
+    } else {
+      return key;
+    }} else return Math.random().toString(36);
+  }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
