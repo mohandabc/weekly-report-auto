@@ -22,6 +22,7 @@ import { AuthProvider } from "./services/useAuth";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
+    {/* TODO: Dont forget to remote the strict mode when doployin because the strict more renders everything twice */}
     <RecoilRoot>
       <BrowserRouter>
         <AuthProvider>

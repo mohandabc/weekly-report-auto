@@ -8,7 +8,6 @@ import { IconButton } from "rsuite";
 import FileUploadIcon from "@rsuite/icons/FileUpload";
 import { Tooltip, Whisper } from "rsuite";
 import "./styles.css"
-import rocket from "../../assets/rocket.gif"
 
 const wells_placeholder = [
   // Test populating data
@@ -42,7 +41,7 @@ export const DataUploader = () => {
       <div className="flex flex-col h-72 bg-reporting_image min-h-screen bg-no-repeat bg-cover bg-center bg-fixed">
         <div className="fixed top-0 z-50 w-full">
           <SideBar />
-        </div>
+                </div>
         <header
           className={`flex flex-col h-72 bg-reporting_image min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl items-center justify-center`}
         >
