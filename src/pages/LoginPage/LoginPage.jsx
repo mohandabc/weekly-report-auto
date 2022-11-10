@@ -1,3 +1,8 @@
+/*****************************************************************************************
+ * TO AUTHENTICATE USERS USING "REPORT/AUTHENTICATE" CONTROLLER (WEEKLY_REPORT_AUTO.PY), *
+ *       GENERATING A TOKEN FOR THEM AND KEEPING THEM SIGNED IN USING LOCALSTORAGE       *
+ *****************************************************************************************/
+
 import { SideBar } from "../../components/SideBar";
 import React from "react";
 import { Form, Button, Schema } from "rsuite";

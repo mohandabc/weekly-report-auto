@@ -1,3 +1,7 @@
+/*****************************************************
+ * TODO: IMPLEMENT THE FRONTOFFICE REPORTS GENERATORS*
+ *****************************************************/
+
 import { Link } from "react-router-dom";
 import { SideBar } from "../../components/SideBar";
 import React from "react";

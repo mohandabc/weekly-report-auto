@@ -1,3 +1,8 @@
+/***********************************************************************************************
+ * THIS PAGE CONTAING A SIMPLE DATA UPLOADER WITH A WELL SELECTOR AND A DRAGABLE FILE UPLOADER *
+ *            THE UPLOADED FILES ARE IN PARAMS FOR FURTHER PROCESSING (CHECK LOGS)             *
+ ***********************************************************************************************/
+
 import React from "react";
 import { SideBar } from "../../components/SideBar";
 import { Loader } from "../../components/Loader";
@@ -22,6 +27,9 @@ const wells_placeholder = [
 ].map((item) => ({ label: item, value: item }));
 
 const processInput = (params) => {
+/***************************************************************************
+ * TODO: FURTHER PROCESSING , SEND PARAMS TO WHATEVER THE OTHER SIDE IS ;) *
+ ***************************************************************************/
   console.log("Params from ReamBream : ", params);
 };
 
@@ -105,7 +113,11 @@ export const DataUploader = () => {
                     ref={uploader}
                     style={{ width: 238 }}
                     autoUpload={false}
-                    // action="//10.171.59.66:8069/web/create_data" // controller that uploads data
+                        /************************************************
+                         * THE PAGE THAT SHOULD RECEIVE THE POST METHOD *
+                         *   TO UPLOAD THE FILES GOES HERE IN ACTION    *
+                         ************************************************/
+                    // action="//10.171.59.66:8069/web/create_data"
                     multiple
                     draggable
                   >

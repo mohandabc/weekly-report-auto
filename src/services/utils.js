@@ -1,3 +1,7 @@
+/************************************************************
+ * A SET OF HELPER FUNCTIONS USED IN GENERATING THE REPORTS *
+ ************************************************************/
+
 import * as am4core from "@amcharts/amcharts4/core";
 
 import {SMARTEST_LOGO,SONATRACH_LOGO} from '../constants/logos'

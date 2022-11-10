@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { RecoilRoot } from "recoil";
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import {
@@ -22,22 +21,17 @@ import { AuthProvider } from "./services/useAuth";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    {/* TODO: Dont forget to remote the strict mode when doployin because the strict more renders everything twice */}
+    {/* TODO: Dont forget to remove the strict mode when doployin because the strict mode renders everything twice */}
     <RecoilRoot>
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            
             <Route path="/" element={<ProtectedRoute><MainPage /></ProtectedRoute>} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/back-office" element={<ProtectedRoute><BackOffice /></ProtectedRoute>} />
             <Route path="/front-office" element={<ProtectedRoute><FrontOffice /></ProtectedRoute>} />
             <Route path="/weeklyBo" element={<ProtectedRoute><BoWeeklyPage /></ProtectedRoute>} />
             <Route path="/dailyBo" element={<ProtectedRoute><BoDailyPage /></ProtectedRoute>} />
-            {/* <Route path="/drillingBit" element={<ProtectedRoute><BitRecord /></ProtectedRoute>} />
-            <Route path="/trippingSpeed" element={<ProtectedRoute><TrippingSpeed /></ProtectedRoute>} />
-            <Route path="/drillingState" element={<ProtectedRoute><DrillingState /></ProtectedRoute>} />
-            <Route path="/reamBream" element={<ProtectedRoute><ReamBream /></ProtectedRoute>} /> */}
             <Route path="/run" element={<ProtectedRoute><RunDeliverable /></ProtectedRoute>} />
             <Route path="/data" element={<ProtectedRoute><DataUploader /></ProtectedRoute>} />
             <Route path="/logout" element={<ProtectedRoute><LogoutPage /></ProtectedRoute>} />

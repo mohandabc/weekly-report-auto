@@ -1,5 +1,12 @@
+/***************************************************************
+ *       THE USEAUTH HAS FOUR MAIN PURPOSES WHICH ARE :        *
+ * HANDLING THE LOGIN, HANDLING THE LOGOUT, SETTING USER STATE *
+ * AND BUILDING VARIABLE TOKENS TO BE STORED IN LOCAL STORAGE  *
+ ***************************************************************/
+
 import { createContext, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { LoginPage } from "../pages"
 import { useLocalStorage } from "./useLocalStorage";
 
 const AuthContext = createContext();

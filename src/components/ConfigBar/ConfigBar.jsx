@@ -1,3 +1,12 @@
+/******************************************************************************
+ * PLEASE NOTE THAT THIS COMPONENT IS USED MULTIPLE TIMES EACH WITH DIFFERENT *
+ *         CUSTOMIZATION AND THE JSX RETURNED HERE BECAME A BIT MESSY         *
+ *  /***********************************************************************  *
+ *  * TODO : SPLIT THIS CONFIGBAR TO TWO DIFFERENT COMPONENTS ONE BELONGS *   *
+ *  *            TO THE REPORTING AND ONE TO THE DELIVERABLES             *   *
+ *  ***********************************************************************   *
+ ******************************************************************************/
+
 import "./react-tabs.css";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { DateRangePicker } from "rsuite";

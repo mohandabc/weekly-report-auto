@@ -1,3 +1,6 @@
+/**********************************************************
+ * TODO : FIND SOMETHING THAT SHOULD BE HERE ON MAIN PAGE *
+ **********************************************************/
 
 import { SideBar } from "../../components/SideBar";
 import React from "react";

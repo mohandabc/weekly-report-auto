@@ -22,6 +22,9 @@ const data_placeHolder = [
 ].map((item) => ({ label: item, value: item }));
 
 const processInput = (params) => {
+/***************************************************************************
+ * TODO: FURTHER PROCESSING , SEND PARAMS TO WHATEVER THE OTHER SIDE IS ;) *
+ ***************************************************************************/
   console.log("Params from BitRecord : ", params);
 };
 

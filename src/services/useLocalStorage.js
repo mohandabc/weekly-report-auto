@@ -1,3 +1,10 @@
+/******************************************************************************
+ *  SYNC STATE TO LOCAL STORAGE SO THAT IT PERSISTS THROUGH A PAGE REFRESH.   *
+ *  USAGE IS SIMILAR TO USESTATE EXCEPT WE PASS IN A LOCAL STORAGE KEY WHICH  *
+ * IS IN OUR CASE THE TOKEN SO THAT WE CAN DEFAULT TO THAT VALUE ON PAGE LOAD *
+ *                  INSTEAD OF THE SPECIFIED INITIAL VALUE.                   *
+ ******************************************************************************/
+
 import { useState } from "react";
 
 export const useLocalStorage = (keyName, defaultValue) => {

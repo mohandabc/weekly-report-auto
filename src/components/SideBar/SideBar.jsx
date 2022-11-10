@@ -1,6 +1,10 @@
-import React from "react";
-import "./styles.css";
+/***********************************************************************************************
+ *   A NAV BAR COMPONENT FOR NAVIGATION AT THE TOP OF THE PAGE USING RSUITE NAVBAR COMPONENT   *
+ *                                          # PROPS #                                          *
+ * <NAVBAR (AS) (APPEARANCE='DEFAULT' | 'INVERSE' | 'SUBTLE') (CLASSPREFIX=STRING ('NAVBAR'))> *
+ ***********************************************************************************************/
 
+import React from "react";
 import { Navbar, Nav } from "rsuite";
 import HomeIcon from "@rsuite/icons/legacy/Home";
 import ExitIcon from "@rsuite/icons/Exit";
@@ -14,6 +18,7 @@ const custm = {
   marginRight: 100,
 };
 
+// TODO : this sidebar was replaced with a navbar now, consider renaming the component to Navbar
 export const SideBar = ({ onSelect, activeKey, ...props }) => {
   const { user } = useAuth();
   return (

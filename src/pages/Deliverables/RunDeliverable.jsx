@@ -1,7 +1,6 @@
+
 import React from "react";
-
 import { ConfigBar } from "../../components";
-
 import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../constants/constants";
 
 const processInput =  (params) =>{
