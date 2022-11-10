@@ -4,7 +4,7 @@
  *****************************************************************************************/
 
 import { SideBar } from "../../components/SideBar";
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import { Form, Button, Schema } from "rsuite";
 import { authenticate } from "../../services/api";
 import { useAuth } from "../../services/useAuth";
@@ -37,8 +37,14 @@ export const LoginPage = () => {
         } 
         else {setLoadingValue(false);setLoginfailed(true)}
     });
-
   };
+
+  const [animation, setAnimation] = useState(false);
+
+  useEffect(()=>{
+      setAnimation(true);
+  });
+
   return (
     <div className="App">
       <header className="flex flex-row bg-reporting_image min-h-screen bg-no-repeat bg-cover bg-center bg-fixed items-center justify-center">
@@ -50,9 +56,10 @@ export const LoginPage = () => {
         <></>
         }
         
-        <div className="flex sticky rounded-xl bg-gray-200 w-3/12 h-5/6 items-center justify-center">
-          <div className="flex sticky justify-center items-center">
-            
+        <div className={`flex sticky rounded-xl bg-gray-200 w-3/12 h-5/6 items-center justify-center transform transition-all duration-500 ease-out
+          ${animation?"scale-100":"scale-0"}`}>
+          <div className={`flex sticky justify-center items-center delay-200 duration-1000 transform transition-all ease-out
+                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
             <Form
               ref={formRef}
               model={model}

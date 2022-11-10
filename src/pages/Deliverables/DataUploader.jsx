@@ -3,12 +3,11 @@
  *            THE UPLOADED FILES ARE IN PARAMS FOR FURTHER PROCESSING (CHECK LOGS)             *
  ***********************************************************************************************/
 
-import React from "react";
+ import React, { useEffect, useState } from 'react';
 import { SideBar } from "../../components/SideBar";
 import { Loader } from "../../components/Loader";
 import { Uploader } from "rsuite";
 import { SelectPicker } from "rsuite";
-import { useState } from "react";
 import { IconButton } from "rsuite";
 import FileUploadIcon from "@rsuite/icons/FileUpload";
 import { Tooltip, Whisper } from "rsuite";
@@ -44,6 +43,12 @@ export const DataUploader = () => {
     // files: uploaderValue,
   };
 
+  const [animation, setAnimation] = useState(false);
+
+  useEffect(()=>{
+      setAnimation(true);
+  });
+
   return (
     <div className="App">
       <div className="flex flex-col h-72 bg-reporting_image min-h-screen bg-no-repeat bg-cover bg-center bg-fixed">
@@ -56,10 +61,13 @@ export const DataUploader = () => {
           <div className="absolute mt-56 z-50">
             <Loader></Loader>
           </div>
-          <div className="container overflow-y-auto h-3/6 rounded-xl bg-gray-200 w-1/3">
-            <div className="flex justify-center items-center">
+          <div className={`container overflow-y-auto h-3/6 rounded-xl bg-gray-200 w-1/3 transform transition-all duration-500 ease-out
+          ${animation?"scale-100":"scale-0"}`}>
+        <div className={`flex items-center justify-center delay-200 duration-1000 relative transform transition-all ease-out
+                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
               <div className="py-9">
-                <h1 className="text-zinc-500 text-3xl text-center">
+              <h1 className={`text-zinc-500 text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
+                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
                   Data Uploader
                 </h1>
                 <div className="items-center justify-center rounded-xl bg-gray-300 text-black text-sm my-10 p-10 text-center">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
 
 import { ActionButton } from "../../../components";
 import { DateRangePicker } from "rsuite";
@@ -6,7 +6,6 @@ import { dateStartEndState } from "../../../shared/globalState";
 import { useRecoilState } from "recoil";
 import { Loader } from "../../../components";
 import { SelectPicker } from "rsuite";
-import { useState } from "react";
 import "./styles.css";
 
 const styles = {
@@ -80,6 +79,12 @@ export const TrippingSpeed = () => {
     return num.toString().padStart(2, "0");
   }
 
+  const [animation, setAnimation] = useState(false);
+
+  useEffect(()=>{
+      setAnimation(true);
+  });
+  
   return (
     <>
       <div className="absolute mt-56 z-50">
@@ -88,12 +93,14 @@ export const TrippingSpeed = () => {
       <div className="sticky rounded-xl bg-gray-200 h-auto">
         <div className="flex justify-center items-center">
           <div className="py-9">
-            <h1 className="text-zinc-500 text-3xl text-center">
+          <h1 className={`text-zinc-500 text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
+                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
               Tripping Speed Analysis
             </h1>
           </div>
         </div>
-        <div className="flex items-center justify-center">
+        <div className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
+                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
           <SelectPicker
             onChange={setWell}
             placeholder="Well"
@@ -119,7 +126,8 @@ export const TrippingSpeed = () => {
             style={styles.wide}
           />
         </div>
-        <div className="flex items-center justify-center">
+        <div className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
+                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
           <SelectPicker
             onChange={setLastCSG}
             placeholder="Last CSG Shoe [m]"
@@ -145,7 +153,8 @@ export const TrippingSpeed = () => {
             style={styles.wide}
           />
         </div>
-        <div className="flex items-center justify-center">
+        <div className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
+                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
           <SelectPicker
             onChange={setCasedHole}
             placeholder="Cased Hole/Open Hole"
@@ -171,7 +180,8 @@ export const TrippingSpeed = () => {
             style={styles.wide}
           />
         </div>
-        <div className="flex items-center justify-center">
+        <div className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
+                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
           <SelectPicker
             onChange={setBenchmarkCT}
             placeholder="Benchmark (Connection Time [min])"
@@ -194,7 +204,8 @@ export const TrippingSpeed = () => {
             }}
           />
         </div>
-        <div className="flex items-center justify-center">
+        <div className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
+                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
           <ActionButton
             className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base my-7 py-2 px-4 rounded "
             text="Submit"
