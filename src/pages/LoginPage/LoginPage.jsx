@@ -23,6 +23,7 @@ export const LoginPage = () => {
   });
 
   const handleSubmit = () => {
+    setLoginfailed(false)
     if (!formRef.current.check()) {
       console.error("ERROR");
       return;
@@ -56,7 +57,7 @@ export const LoginPage = () => {
         <></>
         }
         
-        <div className={`flex sticky rounded-xl bg-gray-200 w-3/12 h-5/6 items-center justify-center transform transition-all duration-500 ease-out
+        <div className={`flex sticky rounded-xl bg-gray-200 w-3/12 h-5/6 items-center justify-center transform transition-all duration-500 ease-out ${loginfailed?"animate-shake":""}
           ${animation?"scale-100":"scale-0"}`}>
           <div className={`flex sticky justify-center items-center delay-200 duration-1000 transform transition-all ease-out
                     ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
