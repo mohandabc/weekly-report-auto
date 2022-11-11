@@ -5,14 +5,15 @@
  **********************************************************************************/
 
 import { Navigate } from "react-router-dom";
-import { LoginPage } from "../../pages"
 import { useAuth } from "../../services/useAuth";
+import { decrypt } from "../../services/utils";
 
 export const ProtectedRoute = ({ children }) => {
+
   const { user } = useAuth();
-  if (!user) {
-    // user is not authenticated
-    return <Navigate to="/login" />;
-  }
+  console.log("user", user);
+  if (!user) return <Navigate to="/login" />
+  if ((user['keyID']!==decrypt("M4dji1S4lty", user['token']))) return <Navigate to="/login" />;
   return children;
-};
+  }
+
