@@ -5,16 +5,19 @@
 import { SideBar } from "../../components/SideBar";
 import React from "react";
 import { useAuth } from "../../services/useAuth";
+import { useRecoilValue } from "recoil";
+import { darkModeState } from "../../shared/globalState";
 
 export const MainPage = () => {
+  const darkMode = useRecoilValue(darkModeState);
   const { user }  = useAuth()
   return (
     <>
     <div className="App">
-      <div className="sticky top-0 z-30 w-full">
-        <SideBar />
+    <div className={`sticky top-0 z-30 w-full ${darkMode?"bg-black":""}`}>
+        <SideBar appearance={`${darkMode?"subtle":"default"}`} />
       </div>
-      <header className="flex flex-col h-72 bg-reporting_image min-h-screen bg-no-repeat bg-cover bg-center bg-fixed">
+      <header className={`flex flex-col h-72 bg-${darkMode?"dark-mode":"light-mode"} min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}>
         <div className="flex sticky top-40 justify-center items-center">
         <div className="pt-24">
       <div className="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">

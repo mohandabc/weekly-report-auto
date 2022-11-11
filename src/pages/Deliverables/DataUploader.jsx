@@ -3,7 +3,7 @@
  *            THE UPLOADED FILES ARE IN PARAMS FOR FURTHER PROCESSING (CHECK LOGS)             *
  ***********************************************************************************************/
 
- import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { SideBar } from "../../components/SideBar";
 import { Loader } from "../../components/Loader";
 import { Uploader } from "rsuite";
@@ -11,7 +11,9 @@ import { SelectPicker } from "rsuite";
 import { IconButton } from "rsuite";
 import FileUploadIcon from "@rsuite/icons/FileUpload";
 import { Tooltip, Whisper } from "rsuite";
-import "./styles.css"
+import { useRecoilValue } from "recoil";
+import "./styles.css";
+import { darkModeState } from "../../shared/globalState";
 
 const wells_placeholder = [
   // Test populating data
@@ -26,13 +28,15 @@ const wells_placeholder = [
 ].map((item) => ({ label: item, value: item }));
 
 const processInput = (params) => {
-/***************************************************************************
- * TODO: FURTHER PROCESSING , SEND PARAMS TO WHATEVER THE OTHER SIDE IS ;) *
- ***************************************************************************/
+  /***************************************************************************
+   * TODO: FURTHER PROCESSING , SEND PARAMS TO WHATEVER THE OTHER SIDE IS ;) *
+   ***************************************************************************/
   console.log("Params from ReamBream : ", params);
 };
 
 export const DataUploader = () => {
+  const darkMode = useRecoilValue(darkModeState);
+
   const [well, setWell] = useState(0);
   const [uploaderValue, setUploaderValue] = React.useState([]);
   const uploader = React.useRef();
@@ -45,50 +49,74 @@ export const DataUploader = () => {
 
   const [animation, setAnimation] = useState(false);
 
-  useEffect(()=>{
-      setAnimation(true);
+  useEffect(() => {
+    setAnimation(true);
   });
 
   return (
     <div className="App">
-      <div className="flex flex-col h-72 bg-reporting_image min-h-screen bg-no-repeat bg-cover bg-center bg-fixed">
-        <div className="fixed top-0 z-50 w-full">
-          <SideBar />
-                </div>
+      <div
+        className={`flex flex-col h-72 bg-${
+          darkMode ? "dark-mode" : "light-mode"
+        } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
+      >
+        <div
+          className={`fixed top-0 z-30 w-full ${darkMode ? "bg-black" : ""}`}
+        >
+          <SideBar appearance={`${darkMode ? "subtle" : "default"}`} />
+        </div>
         <header
           className={`flex flex-col h-72 bg-reporting_image min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl items-center justify-center`}
         >
           <div className="absolute mt-56 z-50">
             <Loader></Loader>
           </div>
-          <div className={`container overflow-y-auto h-3/6 rounded-xl bg-gray-200 w-1/3 transform transition-all duration-500 ease-out
-          ${animation?"scale-100":"scale-0"}`}>
-        <div className={`flex items-center justify-center delay-200 duration-1000 relative transform transition-all ease-out
-                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
+          <div
+            className={`container overflow-y-auto h-3/6 rounded-xl bg-gray-200 w-1/3 transform transition-all duration-500 ease-out
+          ${animation ? "scale-100" : "scale-0"}`}
+          >
+            <div
+              className={`flex items-center justify-center delay-200 duration-1000 relative transform transition-all ease-out
+                    ${
+                      animation
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 translate-y-12"
+                    }`}
+            >
               <div className="py-9">
-              <h1 className={`text-zinc-500 text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
-                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
+                <h1
+                  className={`text-zinc-500 text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
+                    ${
+                      animation
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 translate-y-12"
+                    }`}
+                >
                   Data Uploader
                 </h1>
                 <div className="items-center justify-center rounded-xl bg-gray-300 text-black text-sm my-10 p-10 text-center">
                   <div className="">
                     {uploaderValue.length ? (
                       <>
-                      <Whisper speaker={<Tooltip>Send to server !</Tooltip>}>
-                        <span className="object-center">
-                          <IconButton
-                            style={{ height: 40, width: 80, marginBottom: 20 }}
-                            icon={<FileUploadIcon fill='geen'/>}
-                            color="green"
-                            appearance="primary"
-                            onClick={() => {
-                              uploader.current.start();
-                              processInput(params);
-                            }}
+                        <Whisper speaker={<Tooltip>Send to server !</Tooltip>}>
+                          <span className="object-center">
+                            <IconButton
+                              style={{
+                                height: 40,
+                                width: 80,
+                                marginBottom: 20,
+                              }}
+                              icon={<FileUploadIcon fill="geen" />}
+                              color="green"
+                              appearance="primary"
+                              onClick={() => {
+                                uploader.current.start();
+                                processInput(params);
+                              }}
                             />
-                        </span>
-                      </Whisper>
-                            </>
+                          </span>
+                        </Whisper>
+                      </>
                     ) : (
                       <Whisper
                         speaker={<Tooltip>No files to upload !</Tooltip>}
@@ -121,17 +149,17 @@ export const DataUploader = () => {
                     ref={uploader}
                     style={{ width: 238 }}
                     autoUpload={false}
-                        /************************************************
-                         * THE PAGE THAT SHOULD RECEIVE THE POST METHOD *
-                         *   TO UPLOAD THE FILES GOES HERE IN ACTION    *
-                         ************************************************/
+                    /************************************************
+                     * THE PAGE THAT SHOULD RECEIVE THE POST METHOD *
+                     *   TO UPLOAD THE FILES GOES HERE IN ACTION    *
+                     ************************************************/
                     // action="//10.171.59.66:8069/web/create_data"
                     multiple
                     draggable
                   >
                     <span style={{ width: 238, height: 40 }}>
                       Click or Drag files to upload
-                    </span>                  
+                    </span>
                   </Uploader>
                 </div>
               </div>

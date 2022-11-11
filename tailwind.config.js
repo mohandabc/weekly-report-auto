@@ -11,7 +11,8 @@ module.exports = {
     },
     extend: {
       backgroundImage: {
-        'reporting_image': "url('./assets/bg.png')",
+        'light-mode': "url('./assets/lightbg.png')",
+        'dark-mode': "url('./assets/darkbg.jpeg')",
       },
       colors:{
         header : '#282c34',

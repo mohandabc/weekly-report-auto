@@ -4,13 +4,18 @@
  * <NAVBAR (AS) (APPEARANCE='DEFAULT' | 'INVERSE' | 'SUBTLE') (CLASSPREFIX=STRING ('NAVBAR'))> *
  ***********************************************************************************************/
 
-import React from "react";
+import React, { useEffect } from "react";
+
 import { Navbar, Nav } from "rsuite";
 import HomeIcon from "@rsuite/icons/legacy/Home";
 import ExitIcon from "@rsuite/icons/Exit";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { useAuth } from "../../services/useAuth";
+import { IconButton } from "rsuite";
+import CreativeIcon from "@rsuite/icons/Creative";
+import { useRecoilState } from "recoil";
+import { darkModeState } from "../../shared/globalState";
 
 const custm = {
   width: 240,
@@ -20,7 +25,10 @@ const custm = {
 
 // TODO : this sidebar was replaced with a navbar now, consider renaming the component to Navbar
 export const SideBar = ({ onSelect, activeKey, ...props }) => {
+  const [darkMode, setDarkMode] = useRecoilState(darkModeState);
+
   const { user } = useAuth();
+
   return (
     <Navbar {...props}>
       <Navbar.Brand href="/">
@@ -58,11 +66,36 @@ export const SideBar = ({ onSelect, activeKey, ...props }) => {
         </Nav.Menu>
       </Nav>
       {user ? (
-        <Nav pullRight>
-          <Nav.Item as={Link} to="/logout" icon={<ExitIcon />}>
-            Logout
-          </Nav.Item>
-        </Nav>
+        <>
+          <Nav pullRight>
+            <Nav.Item as={Link} to="/logout" icon={<ExitIcon />}>
+              Logout
+            </Nav.Item>
+          </Nav>
+          <Nav pullRight>
+            {darkMode ? (
+              <IconButton
+                onClick={() =>
+                  darkMode ? setDarkMode(false) : setDarkMode(true)
+                }
+                className="my-2"
+                icon={<CreativeIcon color="yellow" />}
+                appearance="link"
+                circle
+              />
+            ) : (
+              <IconButton
+                onClick={() =>
+                  darkMode ? setDarkMode(false) : setDarkMode(true)
+                }
+                className="my-2"
+                icon={<CreativeIcon color="grey" />}
+                appearance="link"
+                circle
+              />
+            )}
+          </Nav>
+        </>
       ) : (
         <></>
       )}

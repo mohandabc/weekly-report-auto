@@ -12,8 +12,9 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { DateRangePicker } from "rsuite";
 import { SideBar } from "../../components/SideBar";
 import { dateStartEndState } from "../../shared/globalState";
-import React, { useEffect, useState } from 'react';
-import { useRecoilState } from "recoil";
+import React, { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { darkModeState } from "../../shared/globalState";
 
 import "./styles.css";
 
@@ -27,6 +28,7 @@ import { Loader } from "../Loader";
 import { ActionButton } from "../ActionButton";
 
 export const ConfigBar = ({ title, configBarAction, options }) => {
+  const darkMode = useRecoilValue(darkModeState);
   const [dateStartEnd, setDateStartEnd] = useRecoilState(dateStartEndState);
   const [value, setValue] = React.useState([
     new Date(dateStartEnd.split(" - ")[0]),
@@ -54,17 +56,22 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
 
   const [animation, setAnimation] = useState(false);
 
-  useEffect(()=>{
-      setAnimation(true);
+  useEffect(() => {
+    setAnimation(true);
   });
-  
+
   return (
-    <div className="flex flex-col h-72 bg-reporting_image min-h-screen bg-no-repeat bg-cover bg-center bg-fixed">
-      <div className="fixed top-0 z-50 w-full">
-        <SideBar />
+    <div
+      className={`flex flex-col h-72 bg-reporting_image min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
+    >
+      <div className={`fixed top-0 z-50 w-full ${darkMode ? "bg-black" : ""}`}>
+        <SideBar appearance={`${darkMode ? "subtle" : "default"}`} />
       </div>
+
       <header
-        className={`flex flex-col h-72 bg-reporting_image min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl ${
+        className={`flex flex-col h-72 bg-${
+          darkMode ? "dark-mode" : "light-mode"
+        } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl ${
           options.option == "Reporting" ? "justify-center" : ""
         } items-center`}
       >
@@ -73,18 +80,34 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
             <div className="absolute mt-56 z-50">
               <Loader></Loader>
             </div>
-            <div className={`sticky rounded-xl bg-gray-200 w-1/4 h-1/3 transform transition-all duration-500 ease-out
-          ${animation?"scale-100":"scale-0"}`}>
+            <div
+              className={`sticky rounded-xl bg-gray-200 w-1/4 h-1/3 duration-1000 transform transition-all ease-out
+          ${
+            animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+          }`}
+            >
               <div className="flex justify-center items-center">
                 <div className="py-9">
-                <h1 className={`text-zinc-500 text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
-                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
+                  <h1
+                    className={`text-zinc-500 text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
+                    ${
+                      animation
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 translate-y-12"
+                    }`}
+                  >
                     {title}
                   </h1>
                 </div>
               </div>
-              <div className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
-                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
+              <div
+                className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
+                    ${
+                      animation
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 translate-y-12"
+                    }`}
+              >
                 <DateRangePicker
                   value={value}
                   onChange={setValue}
@@ -94,8 +117,14 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
                   }}
                 />
               </div>
-              <div className={`flex items-center justify-center m-11 duration-1000 relative transform transition-all ease-out
-                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
+              <div
+                className={`flex items-center justify-center m-11 duration-1000 relative transform transition-all ease-out
+                    ${
+                      animation
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 translate-y-12"
+                    }`}
+              >
                 <ActionButton
                   className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base py-2 px-4 rounded "
                   text="Submit"
@@ -106,8 +135,12 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
             </div>
           </>
         ) : (
-          <div className={`flex sticky my-36 transform transition-all duration-700 ease-out
-          ${animation?"scale-100":"scale-0"}`}>
+          <div
+            className={`flex sticky my-36 transform transition-all duration-1000 ease-out
+          ${
+            animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+          }`}
+          >
             <Tabs>
               <TabList>
                 <Tab>Bit Record</Tab>
