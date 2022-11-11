@@ -74,7 +74,7 @@ export const DataUploader = () => {
             <Loader></Loader>
           </div>
           <div
-            className={`container overflow-y-auto h-3/6 rounded-xl bg-gray-200 w-1/3 transform transition-all duration-500 ease-out
+            className={`container overflow-y-auto rounded-xl bg-gray-200 w-1/4 h-2/5 transform transition-all duration-500 ease-out
           ${animation ? "scale-100" : "scale-0"}`}
           >
             <div
