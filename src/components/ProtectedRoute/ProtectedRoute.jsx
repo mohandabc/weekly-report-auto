@@ -11,7 +11,6 @@ import { decrypt } from "../../services/utils";
 export const ProtectedRoute = ({ children }) => {
 
   const { user } = useAuth();
-  console.log("user", user);
   if (!user) return <Navigate to="/login" />
   if ((user['keyID']!==decrypt("M4dji1S4lty", user['token']))) return <Navigate to="/login" />;
   return children;

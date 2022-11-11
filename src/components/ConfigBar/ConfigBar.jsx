@@ -62,7 +62,9 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
 
   return (
     <div
-      className={`flex flex-col h-72 bg-reporting_image min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
+      className={`flex flex-col h-72 bg-${
+        darkMode ? "dark-mode" : "light-mode"
+      } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
     >
       <div className={`fixed top-0 z-50 w-full ${darkMode ? "bg-black" : ""}`}>
         <SideBar appearance={`${darkMode ? "subtle" : "default"}`} />
@@ -70,7 +72,7 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
 
       <header
         className={`flex flex-col h-72 bg-${
-          darkMode ? "dark-mode" : "light-mode"
+          darkMode ? "-black" : "-black"
         } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl ${
           options.option == "Reporting" ? "justify-center" : ""
         } items-center`}
