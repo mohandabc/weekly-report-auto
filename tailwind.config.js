@@ -11,7 +11,7 @@ module.exports = {
     },
     extend: {
       backgroundImage: {
-        'light-mode': "url('./assets/lightbg.png')",
+        'light-mode': "url('./assets/lightbg.jpeg')",
         'dark-mode': "url('./assets/darkbg.jpeg')",
       },
       colors:{

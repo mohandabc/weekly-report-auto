@@ -15,8 +15,8 @@ export const BackOffice = () => {
   return (
     <div className="App">
       <header
-        className={`flex flex-col h-72 bg-${
-          darkMode ? "dark-mode" : "light-mode"
+        className={`flex flex-col h-72 ${
+          darkMode ? "bg-dark-mode" : "bg-light-mode"
         } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
       >
         <div

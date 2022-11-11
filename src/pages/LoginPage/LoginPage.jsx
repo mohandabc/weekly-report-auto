@@ -55,8 +55,8 @@ export const LoginPage = () => {
   return (
     <div className="App">
       <header
-        className={`flex flex-row bg-${
-          darkMode ? "dark-mode" : "light-mode"
+        className={`flex flex-row ${
+          darkMode ? "bg-dark-mode" : "bg-light-mode"
         }  min-h-screen bg-no-repeat bg-cover bg-center bg-fixed items-center justify-center`}
       >
         {user ? (

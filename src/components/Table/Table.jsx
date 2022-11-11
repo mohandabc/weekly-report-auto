@@ -8,7 +8,7 @@ export const Table = ({title, id, tableData})=>{
                 tableData === undefined ? 
                 <></>
                 :
-                <table id = {id.toString()} className="mx-auto table-auto border-collapse border border-2 border-slate-600">
+                <table id = {id.toString()} className="mx-auto table-auto border-collapse border-2 border-slate-600">
                     {title !== undefined ? <caption className="text-center font-normal mb-8 text-gray-700 text-3xl" align="top">{title}</caption> : <></>}
                 <thead className="text-center text-white bg-smartestgray text-align-top">
                     <tr>

@@ -56,8 +56,8 @@ export const DataUploader = () => {
   return (
     <div className="App">
       <div
-        className={`flex flex-col h-72 bg-${
-          darkMode ? "dark-mode" : "light-mode"
+        className={`flex flex-col h-72 ${
+          darkMode ? "bg-dark-mode" : "bg-light-mode"
         } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
       >
         <div
@@ -66,8 +66,8 @@ export const DataUploader = () => {
           <SideBar appearance={`${darkMode ? "subtle" : "default"}`} />
         </div>
         <header
-          className={`flex flex-col h-72 bg-${
-            darkMode ? "dark-mode" : "light-mode"
+          className={`flex flex-col h-72 ${
+            darkMode ? "bg-dark-mode" : "bg-light-mode"
           } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl items-center justify-center`}
         >
           <div className="absolute mt-56 z-50">

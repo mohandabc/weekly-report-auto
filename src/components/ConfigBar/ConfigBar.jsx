@@ -16,8 +16,6 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { darkModeState } from "../../shared/globalState";
 
-import "./styles.css";
-
 import {
   BitRecord,
   DrillingState,
@@ -62,8 +60,8 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
 
   return (
     <div
-      className={`flex flex-col h-72 bg-${
-        darkMode ? "dark-mode" : "light-mode"
+      className={`flex flex-col h-72 ${
+          darkMode ? "bg-dark-mode" : "bg-light-mode"
       } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
     >
       <div className={`fixed top-0 z-50 w-full ${darkMode ? "bg-black" : ""}`}>
@@ -71,8 +69,8 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
       </div>
 
       <header
-        className={`flex flex-col h-72 bg-${
-          darkMode ? "-black" : "-black"
+        className={`flex flex-col h-72 ${
+          darkMode ? "bg-dark-mode" : "bg-light-mode"
         } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl ${
           options.option == "Reporting" ? "justify-center" : ""
         } items-center`}
