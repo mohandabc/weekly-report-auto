@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
 
-import {useRecoilState, useSetRecoilState} from 'recoil';
-import {chartsToPrintState, dateStartEndState, dailyDataState ,loaderIsHidden} from '../../shared/globalState';
+import {useRecoilState, useSetRecoilState, useRecoilValue} from 'recoil';
+import {chartsToPrintState, dateStartEndState, dailyDataState ,loaderIsHidden, darkModeState} from '../../shared/globalState';
 
 import { ActionButton, Chart, ConfigBar, Table} from '../../components';
 
 import {generateDailyReport} from '../../services/dailyPdfGenBO';
 import { getData } from '../../services/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
+import * as Mode from "../../constants/darkmode_constants";
 
 export const BoDailyPage = () => {
+    const darkMode = useRecoilValue(darkModeState);
     const [chartsToPrint, setChartsToPrint] = useRecoilState(chartsToPrintState);
     const [dailyData, setDailyData] = useRecoilState(dailyDataState);
     const [range, setRange] = useRecoilState(dateStartEndState);
@@ -61,7 +63,7 @@ export const BoDailyPage = () => {
                     configBarAction = {getDailyData} 
                     options = {DEFAULT_CONFIG_BAR_OPTIONS}>
             </ConfigBar>
-            <div className={`bg-slate-300 ${Object.keys(dailyData).length === 0? "hidden":""}`}>
+            <div className={`${darkMode ? Mode.DARK_REPORTbg : Mode.LIGHT_REPORTbg} ${Object.keys(dailyData).length === 0? "hidden":""}`}>
                 <div className='flex flex-row-reverse sticky top-14 px-10 py-4  z-40'>
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
@@ -93,7 +95,6 @@ export const BoDailyPage = () => {
                     <Chart title = "Resolved Recovery Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['data_recovery_ticket_byRootCause']} chartType="ClusterBar"/>
                     <Table title = "Deployements And Interventions" id = {getDivId('table')} tableData = {dailyData['deployements_and_interventions']}/>
                     <Chart title = "Deployements And Interventions" id = {getDivId('chart')} chartData = {dailyData['obs_int_chart']} chartType="ClusterBar"/>
-
                 </section>
                 
             </div>
