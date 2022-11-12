@@ -44,10 +44,10 @@ export const Chart = ({title, id, chartData, chartType}) => {
               }
               {(chartData === undefined || chartData.length === 0) ? 
                     <h3 className='text-black text-center mt-36'>No Data To Display for <span className='italic font-normal'>{title}</span></h3> 
-                  : <></>}
-              <div className='inline-block mx-auto h-full w-full' id={divID}>
+                  : <div className='inline-block mx-auto h-full w-full' id={divID}>
                   
-              </div>    
+                  </div>}
+                  
         </div>
   );
 }
