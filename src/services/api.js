@@ -25,7 +25,7 @@ export const authenticate = async (user, pass) => {
     jsonrpc: "2.0",
     method: "call",
     params: {
-      db: "rocsys_prod",
+      db: "prod_04_09",
       login: user,
       password: pass,
     },

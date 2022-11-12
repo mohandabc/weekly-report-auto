@@ -13,9 +13,10 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { useAuth } from "../../services/useAuth";
 import { IconButton } from "rsuite";
-import CreativeIcon from "@rsuite/icons/Creative";
 import { useRecoilState } from "recoil";
 import { darkModeState } from "../../shared/globalState";
+import lightModeIcon from "../../assets/light-mode-icon.png";
+import darkModeIcon from "../../assets/dark-mode-icon.png";
 
 const custm = {
   width: 240,
@@ -75,24 +76,24 @@ export const SideBar = ({ onSelect, activeKey, ...props }) => {
           <Nav pullRight>
             {darkMode ? (
               <IconButton
-                onClick={() =>
-                  darkMode ? setDarkMode(false) : setDarkMode(true)
-                }
-                className="my-2"
-                icon={<CreativeIcon color="yellow" />}
-                appearance="link"
-                circle
-              />
+              onClick={() =>
+                darkMode ? setDarkMode(false) : setDarkMode(true)
+              }
+              className="my-2"
+              appearance="link"
+            >
+              <img className="h-6" src={lightModeIcon} />
+            </IconButton>
             ) : (
               <IconButton
                 onClick={() =>
                   darkMode ? setDarkMode(false) : setDarkMode(true)
                 }
                 className="my-2"
-                icon={<CreativeIcon color="grey" />}
                 appearance="link"
-                circle
-              />
+              >
+                <img className="h-6" src={darkModeIcon} />
+              </IconButton>
             )}
           </Nav>
         </>
