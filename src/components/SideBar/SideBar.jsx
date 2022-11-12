@@ -32,7 +32,7 @@ export const SideBar = ({ onSelect, activeKey, ...props }) => {
 
   return (
     <Navbar {...props}>
-      <Navbar.Brand href="/">
+      <Navbar.Brand>
         <img style={{ width: 120, height: 28.24 }} src={logo} alt="Logo" />
       </Navbar.Brand>
       <Nav onSelect={onSelect} activeKey={activeKey}>
@@ -76,14 +76,14 @@ export const SideBar = ({ onSelect, activeKey, ...props }) => {
           <Nav pullRight>
             {darkMode ? (
               <IconButton
-              onClick={() =>
-                darkMode ? setDarkMode(false) : setDarkMode(true)
-              }
-              className="my-2"
-              appearance="link"
-            >
-              <img className="h-6" src={lightModeIcon} />
-            </IconButton>
+                onClick={() =>
+                  darkMode ? setDarkMode(false) : setDarkMode(true)
+                }
+                className="my-2"
+                appearance="link"
+              >
+                <img className="h-6" src={lightModeIcon} />
+              </IconButton>
             ) : (
               <IconButton
                 onClick={() =>

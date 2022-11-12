@@ -45,7 +45,7 @@ module.exports = {
         '40%, 60%' : {
           transform: 'translate3d(10px, 0, 0)',
         }}
-      }
+      },
     },
   },
   plugins: [

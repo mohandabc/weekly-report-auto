@@ -14,6 +14,7 @@ import { Tooltip, Whisper } from "rsuite";
 import { useRecoilValue } from "recoil";
 import "./styles.css";
 import { darkModeState } from "../../shared/globalState";
+import * as Mode from "../../constants/darkmode_constants";
 
 const wells_placeholder = [
   // Test populating data
@@ -57,24 +58,34 @@ export const DataUploader = () => {
     <div className="App">
       <div
         className={`flex flex-col h-72 ${
-          darkMode ? "bg-dark-mode" : "bg-light-mode"
+          darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
         } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
       >
         <div
-          className={`fixed top-0 z-30 w-full ${darkMode ? "bg-black" : ""}`}
+          className={`fixed top-0 z-30 w-full ${
+            darkMode ? Mode.NAVBAR_DARK : Mode.NAVBAR_LIGHT
+          }`}
         >
-          <SideBar appearance={`${darkMode ? "subtle" : "default"}`} />
+          <SideBar
+            appearance={`${
+              darkMode
+                ? Mode.NAVBAR_DARK_APPEARANCE
+                : Mode.NAVBAR_LIGHT_APPEARANCE
+            }`}
+          />
         </div>
         <header
           className={`flex flex-col h-72 ${
-            darkMode ? "bg-dark-mode" : "bg-light-mode"
+            darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
           } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl items-center justify-center`}
         >
           <div className="absolute mt-56 z-50">
             <Loader></Loader>
           </div>
           <div
-            className={`container overflow-y-auto rounded-xl bg-gray-200 w-1/4 h-2/5 transform transition-all duration-500 ease-out
+            className={`container overflow-y-auto rounded-xl ${
+              darkMode ? Mode.CONTAINER_DARK_COLOR : Mode.CONTAINER_LIGHT_COLOR
+            } w-1/4 h-2/5 transform transition-all duration-500 ease-out
           ${animation ? "scale-100" : "scale-0"}`}
           >
             <div
@@ -87,7 +98,11 @@ export const DataUploader = () => {
             >
               <div className="py-9">
                 <h1
-                  className={`text-zinc-500 text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
+                  className={`${
+                    darkMode
+                      ? Mode.CONTAINER_DARK_TITLE
+                      : Mode.CONTAINER_LIGHT_TITLE
+                  } text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
                     ${
                       animation
                         ? "opacity-100 translate-y-0"

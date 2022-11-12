@@ -15,6 +15,7 @@ import { dateStartEndState } from "../../shared/globalState";
 import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { darkModeState } from "../../shared/globalState";
+import * as Mode from "../../constants/darkmode_constants";
 
 import {
   BitRecord,
@@ -26,7 +27,6 @@ import { Loader } from "../Loader";
 import { ActionButton } from "../ActionButton";
 
 export const ConfigBar = ({ title, configBarAction, options }) => {
-  const darkMode = useRecoilValue(darkModeState);
   const [dateStartEnd, setDateStartEnd] = useRecoilState(dateStartEndState);
   const [value, setValue] = React.useState([
     new Date(dateStartEnd.split(" - ")[0]),
@@ -53,6 +53,7 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
   }
 
   const [animation, setAnimation] = useState(false);
+  const darkMode = useRecoilValue(darkModeState);
 
   useEffect(() => {
     setAnimation(true);
@@ -61,16 +62,26 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
   return (
     <div
       className={`flex flex-col h-72 ${
-          darkMode ? "bg-dark-mode" : "bg-light-mode"
+        darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
       } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
     >
-      <div className={`fixed top-0 z-50 w-full ${darkMode ? "bg-black" : ""}`}>
-        <SideBar appearance={`${darkMode ? "subtle" : "default"}`} />
+      <div
+        className={`fixed top-0 z-50 w-full ${
+          darkMode ? Mode.NAVBAR_DARK : Mode.NAVBAR_LIGHT
+        }`}
+      >
+        <SideBar
+          appearance={`${
+            darkMode
+              ? Mode.NAVBAR_DARK_APPEARANCE
+              : Mode.NAVBAR_LIGHT_APPEARANCE
+          }`}
+        />
       </div>
 
       <header
         className={`flex flex-col h-72 ${
-          darkMode ? "bg-dark-mode" : "bg-light-mode"
+          darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
         } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl ${
           options.option == "Reporting" ? "justify-center" : ""
         } items-center`}
@@ -81,7 +92,11 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
               <Loader></Loader>
             </div>
             <div
-              className={`sticky rounded-xl bg-gray-200 w-1/4 h-1/3 duration-1000 transform transition-all ease-out
+              className={`sticky rounded-xl ${
+                darkMode
+                  ? Mode.CONTAINER_DARK_COLOR
+                  : Mode.CONTAINER_LIGHT_COLOR
+              } w-1/4 h-1/3 duration-1000 transform transition-all ease-out
           ${
             animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}
@@ -89,7 +104,11 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
               <div className="flex justify-center items-center">
                 <div className="py-9">
                   <h1
-                    className={`text-zinc-500 text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
+                    className={`${
+                      darkMode
+                        ? Mode.CONTAINER_DARK_TITLE
+                        : Mode.CONTAINER_LIGHT_TITLE
+                    } text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
                     ${
                       animation
                         ? "opacity-100 translate-y-0"
@@ -141,7 +160,13 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
             animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}
           >
-            <Tabs>
+            <Tabs
+              selectedTabClassName={`${
+                darkMode
+                  ? "react-tabs__tab--selecteddark"
+                  : "react-tabs__tab--selectedlight"
+              }`}
+            >
               <TabList>
                 <Tab>Bit Record</Tab>
                 <Tab>Tripping Speed</Tab>

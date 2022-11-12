@@ -7,6 +7,7 @@ import { SideBar } from "../../components/SideBar";
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { darkModeState } from "../../shared/globalState";
+import * as Mode from "../../constants/darkmode_constants";
 
 export const FrontOffice = () => {
   const darkMode = useRecoilValue(darkModeState);
@@ -19,13 +20,21 @@ export const FrontOffice = () => {
     <div className="App">
       <header
         className={`flex flex-col h-72 ${
-          darkMode ? "bg-dark-mode" : "bg-light-mode"
+          darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
         } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
       >
         <div
-          className={`sticky top-0 z-30 w-full ${darkMode ? "bg-black" : ""}`}
+          className={`sticky top-0 z-30 w-full ${
+            darkMode ? Mode.NAVBAR_DARK : Mode.NAVBAR_LIGHT
+          }`}
         >
-          <SideBar appearance={`${darkMode ? "subtle" : "default"}`} />
+          <SideBar
+            appearance={`${
+              darkMode
+                ? Mode.NAVBAR_DARK_APPEARANCE
+                : Mode.NAVBAR_LIGHT_APPEARANCE
+            }`}
+          />
         </div>
 
         <div className="py-5">
@@ -48,13 +57,19 @@ export const FrontOffice = () => {
               to=""
               style={{ textDecoration: "none", color: "#000" }}
             >
-              <div className="bg-gray-400 h-60 w-full p-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg">
+              <div
+                className={`${
+                  darkMode
+                    ? Mode.CARDS_DARK_DEACTIVATED
+                    : Mode.CARDS_LIGHT_DEACTIVATED
+                } h-60 w-full p-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg position:relative z-0`}
+              >
                 <h3>FO Daily Report</h3>
                 <p>
                   Automatically Generate a front office daily report for a
                   specific day
                 </p>
-                <h5>Under Construction</h5>
+                <h5 className="my-10">Under Construction</h5>
               </div>
             </Link>
           </div>
@@ -71,13 +86,19 @@ export const FrontOffice = () => {
               to=""
               style={{ textDecoration: "none", color: "#000" }}
             >
-              <div className="bg-gray-400 h-60 w-full py-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg">
+              <div
+                className={`${
+                  darkMode
+                    ? Mode.CARDS_DARK_DEACTIVATED
+                    : Mode.CARDS_LIGHT_DEACTIVATED
+                } h-60 w-full p-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg position:relative z-0`}
+              >
                 <h3>FO Weekly Report</h3>
                 <p>
                   Automatically Generate a front office weekly report for a
                   specific week
                 </p>
-                <h5>Under Construction</h5>
+                <h5 className="my-10">Under Construction</h5>
               </div>
             </Link>
           </div>
@@ -95,13 +116,19 @@ export const FrontOffice = () => {
               to=""
               style={{ textDecoration: "none", color: "#000" }}
             >
-              <div className="bg-gray-400 h-60 w-full py-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg">
+              <div
+                className={`${
+                  darkMode
+                    ? Mode.CARDS_DARK_DEACTIVATED
+                    : Mode.CARDS_LIGHT_DEACTIVATED
+                } h-60 w-full p-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg position:relative z-0`}
+              >
                 <h3>FO Monthly Report</h3>
                 <p>
                   Automatically Generate a front office monthly report for a
                   specific week
                 </p>
-                <h5>Under Construction</h5>
+                <h5 className="my-10">Under Construction</h5>
               </div>
             </Link>
           </div>

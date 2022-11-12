@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 import { ActionButton } from "../../../components";
-import { DateRangePicker, Uploader } from "rsuite";
-import { dateStartEndState } from "../../../shared/globalState";
-import { useRecoilState } from "recoil";
+import { DateRangePicker } from "rsuite";
+import { dateStartEndState, darkModeState } from "../../../shared/globalState";
+import * as Mode from "../../../constants/darkmode_constants";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { Loader } from "../../../components";
 import { SelectPicker } from "rsuite";
 import "./styles.css";
@@ -19,9 +20,9 @@ const data_placeHolder = [
 ].map((item) => ({ label: item, value: item }));
 
 const processInput = (params) => {
-/***************************************************************************
- * TODO: FURTHER PROCESSING , SEND PARAMS TO WHATEVER THE OTHER SIDE IS ;) *
- ***************************************************************************/
+  /***************************************************************************
+   * TODO: FURTHER PROCESSING , SEND PARAMS TO WHATEVER THE OTHER SIDE IS ;) *
+   ***************************************************************************/
   console.log("Params from ReamBream : ", params);
 };
 
@@ -39,7 +40,8 @@ export const ReamBream = () => {
     well: well,
     phase: phase,
     npt: npt,
-    dateRangeValue: formatDate(dateRangeValue[0]) + " - " + formatDate(dateRangeValue[1])
+    dateRangeValue:
+      formatDate(dateRangeValue[0]) + " - " + formatDate(dateRangeValue[1]),
     // files: uploaderValue,
   };
 
@@ -57,9 +59,10 @@ export const ReamBream = () => {
   }
 
   const [animation, setAnimation] = useState(false);
+  const darkMode = useRecoilValue(darkModeState);
 
-  useEffect(()=>{
-      setAnimation(true);
+  useEffect(() => {
+    setAnimation(true);
   });
 
   return (
@@ -67,17 +70,37 @@ export const ReamBream = () => {
       <div className="absolute mt-56 z-50">
         <Loader></Loader>
       </div>
-      <div className="sticky rounded-xl bg-gray-200 h-auto">
+      <div
+        className={`sticky rounded-xl ${
+          darkMode ? Mode.CONTAINER_DARK_COLOR : Mode.CONTAINER_LIGHT_COLOR
+        } h-auto}`}
+      >
         <div className="flex justify-center items-center">
           <div className="py-9">
-          <h1 className={`text-zinc-500 text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
-                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
+            <h1
+              className={`${
+                darkMode
+                  ? Mode.CONTAINER_DARK_TITLE
+                  : Mode.CONTAINER_LIGHT_TITLE
+              } text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
+                    ${
+                      animation
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 translate-y-12"
+                    }`}
+            >
               Ream-Back Ream Analysis
             </h1>
           </div>
         </div>
-        <div className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
-                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
+        <div
+          className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
+                    ${
+                      animation
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 translate-y-12"
+                    }`}
+        >
           <SelectPicker
             onChange={setWell}
             placeholder="Well"
@@ -106,8 +129,14 @@ export const ReamBream = () => {
             }}
           />
         </div>
-        <div className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
-                    ${animation?"opacity-100 translate-y-0":"opacity-0 translate-y-12"}`}>
+        <div
+          className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
+                    ${
+                      animation
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 translate-y-12"
+                    }`}
+        >
           <ActionButton
             className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base my-7 py-2 px-4 rounded "
             text="Submit"

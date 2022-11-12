@@ -11,6 +11,7 @@ import { useAuth } from "../../services/useAuth";
 import { SONATRACH_LOGO } from "../../constants/logos";
 import { useRecoilValue } from "recoil";
 import { darkModeState } from "../../shared/globalState";
+import * as Mode from "../../constants/darkmode_constants";
 
 export const LoginPage = () => {
   const darkMode = useRecoilValue(darkModeState);
@@ -56,14 +57,22 @@ export const LoginPage = () => {
     <div className="App">
       <header
         className={`flex flex-row ${
-          darkMode ? "bg-dark-mode" : "bg-light-mode"
+          darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
         }  min-h-screen bg-no-repeat bg-cover bg-center bg-fixed items-center justify-center`}
       >
         {user ? (
           <div
-            className={`fixed top-0 z-30 w-full ${darkMode ? "bg-black" : ""}`}
+            className={`fixed top-0 z-30 w-full ${
+              darkMode ? Mode.NAVBAR_DARK : Mode.NAVBAR_LIGHT
+            }`}
           >
-            <SideBar appearance={`${darkMode ? "subtle" : "default"}`} />
+            <SideBar
+              appearance={`${
+                darkMode
+                  ? Mode.NAVBAR_DARK_APPEARANCE
+                  : Mode.NAVBAR_LIGHT_APPEARANCE
+              }`}
+            />
           </div>
         ) : (
           <></>
