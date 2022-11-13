@@ -6,6 +6,7 @@
 
 import { createContext, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { LOCALSTORAGE_SALTKEY } from "../constants/SALTKEY";
 import { useLocalStorage } from "./useLocalStorage";
 import { crypt } from "./utils";
 
@@ -17,14 +18,13 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (data) => {
     var keyID = keyId()
-    Object.assign(data, { keyID : keyID, token : crypt("M4dji1S4lty", keyID)});
+    Object.assign(data, { keyID : keyID, token : crypt(LOCALSTORAGE_SALTKEY, keyID)});
     setUser(data);
     navigate("/", { replace: true });
   };
 
   const logout = () => {
     setUser(null);
-    window.localStorage.clear();
     navigate("/login", { replace: true });
   };
 
