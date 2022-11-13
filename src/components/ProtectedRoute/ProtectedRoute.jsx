@@ -10,10 +10,13 @@ import { useAuth } from "../../services/useAuth";
 import { decrypt } from "../../services/utils";
 
 export const ProtectedRoute = ({ children }) => {
-
   const { user } = useAuth();
+  
+  // Navigate to the login page if user is null.
   if (!user) return <Navigate to="/login" />
+  // Navigate to the login page if keyID doesnt match the crypted token (In Case the Local storage is stolen)
   if ((user['keyID']!==decrypt(LOCALSTORAGE_SALTKEY, user['token']))) return <Navigate to="/login" />;
+  // Returns children of this component (in this case the protected component).
   return children;
   }
 

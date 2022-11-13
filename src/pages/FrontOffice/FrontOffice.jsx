@@ -20,11 +20,13 @@ export const FrontOffice = () => {
     <div className="App">
       <header
         className={`flex flex-col h-72 ${
-          darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
+          // choose background on Whether darkmode is in "dark" or "light" mode.
+            darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
         } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
       >
         <div
           className={`sticky top-0 z-30 w-full ${
+            // choose Navbar Color on Whether darkmode is in "dark" or "light" mode.
             darkMode ? Mode.NAVBAR_DARK : Mode.NAVBAR_LIGHT
           }`}
         >
@@ -47,6 +49,7 @@ export const FrontOffice = () => {
           <div
             className={`w-1/4 px-8 block duration-700 relative transform transition-all ease-out
                     ${
+                      // hiding components when they first appear and then applying a translate effect gradually
                       animation
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-12"
@@ -76,6 +79,7 @@ export const FrontOffice = () => {
           <div
             className={`w-1/4 px-8 block duration-700 relative transform transition-all ease-out
                     ${
+                      // hiding components when they first appear and then applying a translate effect gradually
                       animation
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-12"
@@ -106,6 +110,7 @@ export const FrontOffice = () => {
           <div
             className={`w-1/4 px-8 block duration-700 relative transform transition-all ease-out
                     ${
+                      // hiding components when they first appear and then applying a translate effect gradually
                       animation
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-12"

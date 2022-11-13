@@ -36,6 +36,7 @@ const processInput = (params) => {
 };
 
 export const DataUploader = () => {
+  // Sets the dark mode value.
   const darkMode = useRecoilValue(darkModeState);
 
   const [well, setWell] = useState(0);
@@ -48,6 +49,7 @@ export const DataUploader = () => {
     // files: uploaderValue,
   };
 
+  // Sets the state of the animation to false before assigning it a true value to animate components on useEffect.
   const [animation, setAnimation] = useState(false);
 
   useEffect(() => {
@@ -58,11 +60,13 @@ export const DataUploader = () => {
     <div className="App">
       <div
         className={`flex flex-col h-72 ${
-          darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
+          // choose background on Whether darkmode is in "dark" or "light" mode.
+            darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
         } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
       >
         <div
           className={`fixed top-0 z-30 w-full ${
+            // choose Navbar Color on Whether darkmode is in "dark" or "light" mode.
             darkMode ? Mode.NAVBAR_DARK : Mode.NAVBAR_LIGHT
           }`}
         >
@@ -76,6 +80,7 @@ export const DataUploader = () => {
         </div>
         <header
           className={`flex flex-col h-72 ${
+            // choose background on Whether darkmode is in "dark" or "light" mode.
             darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
           } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl items-center justify-center`}
         >
@@ -84,6 +89,7 @@ export const DataUploader = () => {
           </div>
           <div
             className={`container overflow-y-auto rounded-xl ${
+              // choose container color on Whether darkmode is in "dark" or "light" mode.
               darkMode ? Mode.CONTAINER_DARK_COLOR : Mode.CONTAINER_LIGHT_COLOR
             } w-1/4 h-2/5 transform transition-all duration-500 ease-out
           ${animation ? "scale-100" : "scale-0"}`}
@@ -91,6 +97,7 @@ export const DataUploader = () => {
             <div
               className={`flex items-center justify-center delay-200 duration-1000 relative transform transition-all ease-out
                     ${
+                      // hiding components when they first appear and then applying a translate effect gradually
                       animation
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-12"
@@ -99,11 +106,13 @@ export const DataUploader = () => {
               <div className="py-9">
                 <h1
                   className={`${
+                    // choose the container title's color on Whether darkmode is in "dark" or "light" mode.
                     darkMode
                       ? Mode.CONTAINER_DARK_TITLE
                       : Mode.CONTAINER_LIGHT_TITLE
                   } text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
                     ${
+                      // hiding components when they first appear and then applying a translate effect gradually
                       animation
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-12"
@@ -114,6 +123,7 @@ export const DataUploader = () => {
                 <div className="items-center justify-center rounded-xl bg-gray-300 text-black text-sm my-10 p-10 text-center">
                   <div className="">
                     {uploaderValue.length ? (
+                      // file upload iconbutton when uploader is not empty.
                       <>
                         <Whisper speaker={<Tooltip>Send to server !</Tooltip>}>
                           <span className="object-center">
@@ -135,6 +145,7 @@ export const DataUploader = () => {
                         </Whisper>
                       </>
                     ) : (
+                      // file upload iconbutton when uploader is empty.
                       <Whisper
                         speaker={<Tooltip>No files to upload !</Tooltip>}
                       >

@@ -25,6 +25,8 @@ const custm = {
 };
 
 // TODO : this sidebar was replaced with a navbar now, consider renaming the component to Navbar
+
+// Exports a rsuite navbar component.
 export const SideBar = ({ onSelect, activeKey, ...props }) => {
   const [darkMode, setDarkMode] = useRecoilState(darkModeState);
 
@@ -66,7 +68,8 @@ export const SideBar = ({ onSelect, activeKey, ...props }) => {
           <Nav.Item eventKey="8">Contact</Nav.Item>
         </Nav.Menu>
       </Nav>
-      {user ? (
+      { // if user is signed in show logout button and darkmode preference button
+      user ? (
         <>
           <Nav pullRight>
             <Nav.Item as={Link} to="/logout" icon={<ExitIcon />}>

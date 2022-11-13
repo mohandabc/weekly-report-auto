@@ -2,6 +2,7 @@
  * GLOBAL CONSTANTS TO TUNE THE COLORS OF *
  *        DARK MODE AND LIGHT MODE        *
  ******************************************/
+// Export string representations of the two themes.
 /*************************************************************** */
 export const DARK_BACKGROUND = "bg-dark-mode";
 export const LIGHT_BACKGROUND = "bg-light-mode";

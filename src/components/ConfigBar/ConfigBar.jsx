@@ -62,12 +62,14 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
   return (
     <div
       className={`flex flex-col h-72 ${
-        darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
+        // choose background on Whether darkmode is in "dark" or "light" mode.
+            darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
       } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
     >
       <div
         className={`fixed top-0 z-50 w-full ${
-          darkMode ? Mode.NAVBAR_DARK : Mode.NAVBAR_LIGHT
+          // choose Navbar Color on Whether darkmode is in "dark" or "light" mode.
+            darkMode ? Mode.NAVBAR_DARK : Mode.NAVBAR_LIGHT
         }`}
       >
         <SideBar
@@ -81,7 +83,8 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
 
       <header
         className={`flex flex-col h-72 ${
-          darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
+          // choose background on Whether darkmode is in "dark" or "light" mode.
+            darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
         } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl ${
           options.option == "Reporting" ? "justify-center" : ""
         } items-center`}
@@ -110,6 +113,7 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
                         : Mode.CONTAINER_LIGHT_TITLE
                     } text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
                     ${
+                      // hiding components when they first appear and then applying a translate effect gradually
                       animation
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-12"
@@ -122,6 +126,7 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
               <div
                 className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
                     ${
+                      // hiding components when they first appear and then applying a translate effect gradually
                       animation
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-12"
@@ -139,6 +144,7 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
               <div
                 className={`flex items-center justify-center m-11 duration-1000 relative transform transition-all ease-out
                     ${
+                      // hiding components when they first appear and then applying a translate effect gradually
                       animation
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-12"

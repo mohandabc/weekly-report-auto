@@ -7,6 +7,7 @@
 
 import { useState } from "react";
 
+// localStorage setter.
 export const useLocalStorage = (keyName, defaultValue) => {
   const [storedValue, setStoredValue] = useState(() => {
     try {

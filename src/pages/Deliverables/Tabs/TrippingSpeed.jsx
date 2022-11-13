@@ -94,7 +94,8 @@ export const TrippingSpeed = () => {
       </div>
       <div
         className={`sticky rounded-xl ${
-          darkMode ? Mode.CONTAINER_DARK_COLOR : Mode.CONTAINER_LIGHT_COLOR
+          // choose container color on Whether darkmode is in "dark" or "light" mode.
+              darkMode ? Mode.CONTAINER_DARK_COLOR : Mode.CONTAINER_LIGHT_COLOR
         } h-auto}`}
       >
         <div className="flex justify-center items-center">
@@ -106,6 +107,7 @@ export const TrippingSpeed = () => {
                   : Mode.CONTAINER_LIGHT_TITLE
               } text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
                     ${
+                      // hiding components when they first appear and then applying a translate effect gradually
                       animation
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-12"
@@ -118,6 +120,7 @@ export const TrippingSpeed = () => {
         <div
           className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
                     ${
+                      // hiding components when they first appear and then applying a translate effect gradually
                       animation
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-12"
@@ -151,6 +154,7 @@ export const TrippingSpeed = () => {
         <div
           className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
                     ${
+                      // hiding components when they first appear and then applying a translate effect gradually
                       animation
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-12"
@@ -184,6 +188,7 @@ export const TrippingSpeed = () => {
         <div
           className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
                     ${
+                      // hiding components when they first appear and then applying a translate effect gradually
                       animation
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-12"
@@ -217,6 +222,7 @@ export const TrippingSpeed = () => {
         <div
           className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
                     ${
+                      // hiding components when they first appear and then applying a translate effect gradually
                       animation
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-12"
@@ -247,6 +253,7 @@ export const TrippingSpeed = () => {
         <div
           className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
                     ${
+                      // hiding components when they first appear and then applying a translate effect gradually
                       animation
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-12"

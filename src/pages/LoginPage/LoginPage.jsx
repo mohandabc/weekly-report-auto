@@ -57,13 +57,15 @@ export const LoginPage = () => {
     <div className="App">
       <header
         className={`flex flex-row ${
-          darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
+          // choose background on Whether darkmode is in "dark" or "light" mode.
+            darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
         }  min-h-screen bg-no-repeat bg-cover bg-center bg-fixed items-center justify-center`}
       >
         {user ? (
           <div
             className={`fixed top-0 z-30 w-full ${
-              darkMode ? Mode.NAVBAR_DARK : Mode.NAVBAR_LIGHT
+              // choose Navbar Color on Whether darkmode is in "dark" or "light" mode.
+            darkMode ? Mode.NAVBAR_DARK : Mode.NAVBAR_LIGHT
             }`}
           >
             <SideBar
@@ -87,6 +89,7 @@ export const LoginPage = () => {
           <div
             className={`flex sticky justify-center items-center delay-200 duration-1000 transform transition-all ease-out
                     ${
+                      // hiding components when they first appear and then applying a translate effect gradually
                       animation
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-12"
