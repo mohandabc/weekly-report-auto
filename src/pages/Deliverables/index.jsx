@@ -1,4 +1,7 @@
-export { DrillingBit } from "./DrillingBit";
-export { DrillingState } from "./DrillingState";
-export { ReamBream } from "./ReamBream";
-export { TrippingSpeed } from "./TrippingSpeed";
+export { BitRecord } from "./Tabs/BitRecord";
+export { DrillingState } from "./Tabs/DrillingState";
+export { ReamBream } from "./Tabs/ReamBream";
+export { TrippingSpeed } from "./Tabs/TrippingSpeed";
+export { RunDeliverable } from "./RunDeliverable";
+export {DataUploader} from "./DataUploader";
+
