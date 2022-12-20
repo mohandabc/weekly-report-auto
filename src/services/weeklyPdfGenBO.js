@@ -1,3 +1,8 @@
+/*******************************************************************************
+ *                    GENERATING THE DAILY PDF REPORT HERE                     *
+ * IF YOU WANT TO ADD ANY HELPER FUNCTIONS IN ORDER TO BETTER GENERATE THE PDF *
+ *     PLEASE ADD THEM IN SERVICES/UTILS.JS TO KEEP THE PROJECT STRUCTURE      *
+ *******************************************************************************/
 
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";

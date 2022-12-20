@@ -1,16 +1,19 @@
 import React from "react";
-
+import { useRecoilValue } from "recoil";
+import { darkModeState } from "../../shared/globalState";
+import * as Mode from "../../constants/darkmode_constants"
 
 export const Table = ({title, id, tableData})=>{
+    const darkMode = useRecoilValue(darkModeState);
     return (
-        <div  className="min-h-120 rounded-lg py-3 px-2 bg-white shadow w-full">
+        <div  className={`min-h-120 rounded-lg py-3 px-2 ${darkMode ? Mode.DARK_CHART_BACKGROUND : Mode.LIGHT_CHART_BACKGROUND} shadow w-full`}>
             {
                 tableData === undefined ? 
                 <></>
                 :
-                <table id = {id.toString()} className="mx-auto table-auto border-collapse border border-2 border-slate-600">
-                    {title !== undefined ? <caption className="text-center font-normal mb-8 text-gray-700 text-3xl" align="top">{title}</caption> : <></>}
-                <thead className="text-center text-white bg-smartestgray text-align-top">
+                <table id = {id.toString()} className="mx-auto table-auto border-collapse border-2 border-slate-900">
+                    {title !== undefined ? <caption className="text-center font-normal mb-8 text-black text-3xl" align="top">{title}</caption> : <></>}
+                <thead className={`text-center ${darkMode ? "text-black" : "text-white"} bg-stone-700 text-align-top`}>
                     <tr>
 
                     {   tableData.length > 0 ?
@@ -30,20 +33,20 @@ export const Table = ({title, id, tableData})=>{
                 {
                     tableData.map((row, index) => 
                     title == "Data Quality" || title == "Data Loss" || title == "Data Recovery" ?
-                    <tr className={`${index%2===0?"":"bg-slate-200"}`} key={index}>
+                    <tr className={`${index%2===0?"":darkMode ? "bg-stone-500" : "bg-slate-200"}`} key={index}>
                         {
                             Object.entries(row).map((item, index) => 
-                            <td key={index} className="px-20 py-20 text-center">
+                            <td key={index} className="px-20 py-20 text-center text-black">
                                 <h3>{
                                     item[1]
                                 }</h3>
                             </td>)
                         }
                     </tr> :
-                    <tr className={`${index%2===0?"":"bg-slate-200"}`} key={index}>
+                    <tr className={`${index%2===0?"":darkMode ? "bg-stone-700" : "bg-slate-200"}`} key={index}>
                     {
                         Object.entries(row).map((item, index) => 
-                        <td key={index} className="px-auto py-2.5 text-center">
+                        <td key={index} className="px-auto py-2.5 text-center text-black">
                             {
                                 item[1]
                             }

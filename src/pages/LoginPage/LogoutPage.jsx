@@ -1,3 +1,6 @@
+/******************************************************************
+ * SIGNING OUT THE USER BY CALLING THE LOGOUT METHOD FROM USEAUTH *
+ ******************************************************************/
 
 import { useAuth } from "../../services/useAuth";
 

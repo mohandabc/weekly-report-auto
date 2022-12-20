@@ -1,18 +1,20 @@
 import React, { useEffect } from 'react';
 
 import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
-import {chartsToPrintState, dateStartEndState, weeklyDataState ,loaderIsHidden} from '../../shared/globalState';
+import {chartsToPrintState, dateStartEndState, weeklyDataState ,loaderIsHidden, darkModeState} from '../../shared/globalState';
 
 import { ActionButton, Chart, ConfigBar, Table} from '../../components';
 
 import {generateWeeklyReport} from '../../services/weeklyPdfGenBO';
 import { getData } from '../../services/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
+import * as Mode from "../../constants/darkmode_constants";
 
 export const BoWeeklyPage = () => {
+    const darkMode = useRecoilValue(darkModeState);
     const [chartsToPrint, setChartsToPrint] = useRecoilState(chartsToPrintState);
     const [weeklyData, setWeeklyData] = useRecoilState(weeklyDataState);
-    const range = useRecoilValue(dateStartEndState);
+    const [range, setRange] = useRecoilState(dateStartEndState);
     const setIsHidden = useSetRecoilState(loaderIsHidden);
 
     let chartsIds = [];
@@ -32,6 +34,7 @@ export const BoWeeklyPage = () => {
         const path = 'reports/weekly_report';
     
         setIsHidden(false);
+        setRange(params['dates'])
         getData(path, params)
         .then(res=> {
           let data = res.result;
@@ -56,7 +59,7 @@ export const BoWeeklyPage = () => {
                 configBarAction={getWeeklyData}
                 options={DEFAULT_CONFIG_BAR_OPTIONS}>
             </ConfigBar>
-            <div className={`bg-slate-300 ${Object.keys(weeklyData).length === 0? "hidden":""}`}>
+            <div className={`${darkMode ? Mode.DARK_REPORTbg : Mode.LIGHT_REPORTbg} ${Object.keys(weeklyData).length === 0? "hidden":""}`}>
                 <div className='flex flex-row-reverse sticky top-14 px-10 py-4  z-40'>
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
