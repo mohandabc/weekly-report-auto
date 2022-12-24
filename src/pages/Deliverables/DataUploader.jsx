@@ -16,6 +16,9 @@ import "./styles.css";
 import { darkModeState } from "../../shared/globalState";
 import * as Mode from "../../constants/darkmode_constants";
 
+import { postData } from "../../services/api";
+import { ActionButton } from "../../components";
+
 const wells_placeholder = [
   // Test populating data
   "WOENS-1",
@@ -26,12 +29,50 @@ const wells_placeholder = [
   "EMR-1",
   "RAA-8",
   "HDZ-20",
+  "TOT-10",
 ].map((item) => ({ label: item, value: item }));
+
+// function multiPartPost(bodyObj) {
+//   const url = 'https://httpbin.org/post';
+
+//   const bodyJson = JSON.stringify(bodyObj);
+//   const blob = new Blob([bodyJson], {
+//     type: 'application/json;charset=UTF-8'
+//   });
+//   const fileName = 'jsonAttrs';
+//   const file = new File([blob], fileName, {type: "text/json;charset=utf-8"});
+//   const formData = new FormData();
+//   formData.append(fileName, file);
+
+//   return this.$http.post(url, formData, {
+//     transformRequest: angular.identity,
+//     headers: {'Content-Type': undefined}
+//   });
+// }
 
 const processInput = (params) => {
   /***************************************************************************
    * TODO: FURTHER PROCESSING , SEND PARAMS TO WHATEVER THE OTHER SIDE IS ;) *
    ***************************************************************************/
+
+  var files = [];
+  var fileNames = [];
+  //  const fileName = params['uploaderValue'][0]['name'];
+   (params['uploaderValue']).forEach(item => {
+    files.push(item['blobFile'])
+    fileNames.push(item['name'])
+   });
+  //  const file = params['uploaderValue'][0]['blobFile'];
+   const well = params['well']
+   const formData = new FormData();
+   formData.append('fileNames', fileNames);
+   formData.append('files', files);
+   formData.append("well", well);
+
+   for (var key of formData.entries()) {
+    console.log(key[0] + ', ' + key[1]);
+}
+  postData('http://localhost:8000/submit/', formData)
   console.log("Params from ReamBream : ", params);
 };
 
@@ -137,7 +178,7 @@ export const DataUploader = () => {
                               color="green"
                               appearance="primary"
                               onClick={() => {
-                                uploader.current.start();
+                                // uploader.current.start();
                                 processInput(params);
                               }}
                             />
@@ -157,7 +198,7 @@ export const DataUploader = () => {
                             appearance="primary"
                             disabled
                             onClick={() => {
-                              uploader.current.start();
+                              // uploader.current.start();
                               processInput(params);
                             }}
                           />
@@ -172,7 +213,7 @@ export const DataUploader = () => {
                     onChange={setWell}
                   />
                   <Uploader
-                    value={uploaderValue}
+                    method="POST"
                     onChange={setUploaderValue}
                     ref={uploader}
                     style={{ width: 238 }}
@@ -181,7 +222,7 @@ export const DataUploader = () => {
                      * THE PAGE THAT SHOULD RECEIVE THE POST METHOD *
                      *   TO UPLOAD THE FILES GOES HERE IN ACTION    *
                      ************************************************/
-                    // action="//10.171.59.66:8069/web/create_data"
+                    action="http://localhost:8000/submit/"
                     multiple
                     draggable
                   >
