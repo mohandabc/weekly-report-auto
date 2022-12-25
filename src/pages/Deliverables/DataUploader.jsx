@@ -8,9 +8,6 @@ import { SideBar } from "../../components/SideBar";
 import { Loader } from "../../components/Loader";
 import { Uploader } from "rsuite";
 import { SelectPicker } from "rsuite";
-import { IconButton } from "rsuite";
-import FileUploadIcon from "@rsuite/icons/FileUpload";
-import { Tooltip, Whisper } from "rsuite";
 import { useRecoilValue } from "recoil";
 import "./styles.css";
 import { darkModeState } from "../../shared/globalState";
@@ -30,14 +27,12 @@ const wells_placeholder = [
 ].map((item) => ({ label: item, value: item }));
 
 export const DataUploader = () => {
-  
   // Sets the dark mode value.
   const darkMode = useRecoilValue(darkModeState);
 
   const [well, setWell] = useState(0);
-  const [successful, setSuccessful] = useState(0);
+  const [msg, setMsg] = useState(0);
   const [uploaderValue, setUploaderValue] = React.useState([]);
-  const uploader = React.useRef();
 
   const params = {
     well: well,
@@ -50,11 +45,14 @@ export const DataUploader = () => {
     setAnimation(true);
   });
 
-  function onSuccessFun(){
-    setUploaderValue([])
-    setWell('')
-    setSuccessful(1)
-    console.log("Uploaded Successfully",successful)
+  function onSuccessFun() {
+    setUploaderValue([]);
+    setWell("");
+    setMsg({'msg':'Files Uploaded Successfully', 'color':'green'})
+  }
+
+  function onErrorFun(reason) {
+    setMsg({'msg':reason['response'].match(new RegExp('<pre class="exception_value">(.*)</pre>'))[1], 'color':'red'})
   }
 
   return (
@@ -62,7 +60,7 @@ export const DataUploader = () => {
       <div
         className={`flex flex-col h-72 ${
           // choose background on Whether darkmode is in "dark" or "light" mode.
-            darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
+          darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
         } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
       >
         <div
@@ -92,7 +90,7 @@ export const DataUploader = () => {
             className={`container overflow-y-auto rounded-xl ${
               // choose container color on Whether darkmode is in "dark" or "light" mode.
               darkMode ? Mode.CONTAINER_DARK_COLOR : Mode.CONTAINER_LIGHT_COLOR
-            } w-1/4 h-2/5 transform transition-all duration-500 ease-out
+            } w-1/3 h-1/2 transform transition-all duration-500 ease-out
           ${animation ? "scale-100" : "scale-0"}`}
           >
             <div
@@ -121,49 +119,7 @@ export const DataUploader = () => {
                 >
                   Data Uploader
                 </h1>
-                <div className="items-center justify-center rounded-xl bg-gray-300 text-black text-sm my-10 p-10 text-center">
-                  <div className="">
-                    {uploaderValue.length ? (
-                      // file upload iconbutton when uploader is not empty.
-                      <>
-                        <Whisper speaker={<Tooltip>Send to server !</Tooltip>}>
-                          <span className="object-center">
-                            <IconButton
-                              style={{
-                                height: 40,
-                                width: 80,
-                                marginBottom: 20,
-                              }}
-                              icon={<FileUploadIcon fill="geen" />}
-                              color="green"
-                              appearance="primary"
-                              onClick={() => {
-                                uploader.current.start();
-                              }}
-                            />
-                          </span>
-                        </Whisper>
-                      </>
-                    ) : (
-                      // file upload iconbutton when uploader is empty.
-                      <Whisper
-                        speaker={<Tooltip>No files to upload !</Tooltip>}
-                      >
-                        <span>
-                          <IconButton
-                            style={{ height: 40, width: 80, marginBottom: 20 }}
-                            icon={<FileUploadIcon />}
-                            color="red"
-                            appearance="primary"
-                            disabled
-                            onClick={() => {
-                              uploader.current.start();
-                            }}
-                          />
-                        </span>
-                      </Whisper>
-                    )}
-                  </div>
+                <div className="rounded-xl bg-gray-300 text-black text-sm my-10 p-10 text-center">
                   <SelectPicker
                     style={{ width: 238, marginBottom: 20 }}
                     label="Well"
@@ -171,34 +127,47 @@ export const DataUploader = () => {
                     onChange={setWell}
                     value={well}
                   />
-                  <Uploader
-                    accept=".xlsx"
-                    name="excel_files_combined"
-                    method="POST"
-                    fileList={uploaderValue}
-                    onChange={setUploaderValue}
-                    onSuccess={onSuccessFun}
-                    data={params}
-                    ref={uploader}
-                    style={{ width: 238 }}
-                    autoUpload={false}
-                    /************************************************
-                    * THE PAGE THAT SHOULD RECEIVE THE POST METHOD *
-                    *   TO UPLOAD THE FILES GOES HERE IN ACTION    *
-                    ************************************************/
-                    action="http://localhost:8000/submit/"
-                    multiple
-                    draggable
-                  >
-                    <span style={{ width: 238, height: 40 }}>
-                      Click or Drag files to upload
+                  {well ? (
+                    <Uploader
+                      className="self-center"
+                      accept=".xlsx"
+                      name="excel_files_combined"
+                      method="POST"
+                      fileList={uploaderValue}
+                      onChange={setUploaderValue}
+                      onSuccess={onSuccessFun}
+
+                      data={params}
+                      style={{ width: 238, marginBottom: 20}}
+                      autoUpload={true}
+                      onError={(reason) => {onErrorFun(reason)}}
+                      /************************************************
+                       * THE PAGE THAT SHOULD RECEIVE THE POST METHOD *
+                       *   TO UPLOAD THE FILES GOES HERE IN ACTION    *
+                       ************************************************/
+                      action="http://localhost:8000/submit/"
+                      multiple
+                      draggable
+                    >
+                      <div style={{width: 238, height: 40 }}>
+                        Click or Drag files to upload
+                      </div>
+                    </Uploader>
+                  ) : (
+                    <></>
+                  )}
+                  <div style={{
+                        width: 238, }}>
+                    <span
+                      style={{
+                        width: 238, 
+                        overflowWrap: 'normal',
+                        color: msg['color'],
+                      }}
+                    >
+                      {msg['msg']}
                     </span>
-                  </Uploader>
-                  {successful?
-                  <span style={{ width: 238, height: 40 ,color:"green",fontWeight: 'bold'}}>
-                      Uploaded Successfully
-                  </span>:<></>
-                  }
+                  </div >
                 </div>
               </div>
             </div>
