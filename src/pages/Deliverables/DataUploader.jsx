@@ -16,9 +16,6 @@ import "./styles.css";
 import { darkModeState } from "../../shared/globalState";
 import * as Mode from "../../constants/darkmode_constants";
 
-import { postData } from "../../services/api";
-import { ActionButton } from "../../components";
-
 const wells_placeholder = [
   // Test populating data
   "WOENS-1",
@@ -32,62 +29,18 @@ const wells_placeholder = [
   "TOT-10",
 ].map((item) => ({ label: item, value: item }));
 
-// function multiPartPost(bodyObj) {
-//   const url = 'https://httpbin.org/post';
-
-//   const bodyJson = JSON.stringify(bodyObj);
-//   const blob = new Blob([bodyJson], {
-//     type: 'application/json;charset=UTF-8'
-//   });
-//   const fileName = 'jsonAttrs';
-//   const file = new File([blob], fileName, {type: "text/json;charset=utf-8"});
-//   const formData = new FormData();
-//   formData.append(fileName, file);
-
-//   return this.$http.post(url, formData, {
-//     transformRequest: angular.identity,
-//     headers: {'Content-Type': undefined}
-//   });
-// }
-
-const processInput = (params) => {
-  /***************************************************************************
-   * TODO: FURTHER PROCESSING , SEND PARAMS TO WHATEVER THE OTHER SIDE IS ;) *
-   ***************************************************************************/
-
-  var files = [];
-  var fileNames = [];
-  //  const fileName = params['uploaderValue'][0]['name'];
-   (params['uploaderValue']).forEach(item => {
-    files.push(item['blobFile'])
-    fileNames.push(item['name'])
-   });
-  //  const file = params['uploaderValue'][0]['blobFile'];
-   const well = params['well']
-   const formData = new FormData();
-   formData.append('fileNames', fileNames);
-   formData.append('files', files);
-   formData.append("well", well);
-
-   for (var key of formData.entries()) {
-    console.log(key[0] + ', ' + key[1]);
-}
-  postData('http://localhost:8000/submit/', formData)
-  console.log("Params from ReamBream : ", params);
-};
-
 export const DataUploader = () => {
+  
   // Sets the dark mode value.
   const darkMode = useRecoilValue(darkModeState);
 
   const [well, setWell] = useState(0);
+  const [successful, setSuccessful] = useState(0);
   const [uploaderValue, setUploaderValue] = React.useState([]);
   const uploader = React.useRef();
 
   const params = {
     well: well,
-    uploaderValue: uploaderValue,
-    // files: uploaderValue,
   };
 
   // Sets the state of the animation to false before assigning it a true value to animate components on useEffect.
@@ -96,6 +49,13 @@ export const DataUploader = () => {
   useEffect(() => {
     setAnimation(true);
   });
+
+  function onSuccessFun(){
+    setUploaderValue([])
+    setWell('')
+    setSuccessful(1)
+    console.log("Uploaded Successfully",successful)
+  }
 
   return (
     <div className="App">
@@ -178,8 +138,7 @@ export const DataUploader = () => {
                               color="green"
                               appearance="primary"
                               onClick={() => {
-                                // uploader.current.start();
-                                processInput(params);
+                                uploader.current.start();
                               }}
                             />
                           </span>
@@ -198,8 +157,7 @@ export const DataUploader = () => {
                             appearance="primary"
                             disabled
                             onClick={() => {
-                              // uploader.current.start();
-                              processInput(params);
+                              uploader.current.start();
                             }}
                           />
                         </span>
@@ -211,17 +169,23 @@ export const DataUploader = () => {
                     label="Well"
                     data={wells_placeholder}
                     onChange={setWell}
+                    value={well}
                   />
                   <Uploader
+                    accept=".xlsx"
+                    name="excel_files_combined"
                     method="POST"
+                    fileList={uploaderValue}
                     onChange={setUploaderValue}
+                    onSuccess={onSuccessFun}
+                    data={params}
                     ref={uploader}
                     style={{ width: 238 }}
                     autoUpload={false}
                     /************************************************
-                     * THE PAGE THAT SHOULD RECEIVE THE POST METHOD *
-                     *   TO UPLOAD THE FILES GOES HERE IN ACTION    *
-                     ************************************************/
+                    * THE PAGE THAT SHOULD RECEIVE THE POST METHOD *
+                    *   TO UPLOAD THE FILES GOES HERE IN ACTION    *
+                    ************************************************/
                     action="http://localhost:8000/submit/"
                     multiple
                     draggable
@@ -230,6 +194,11 @@ export const DataUploader = () => {
                       Click or Drag files to upload
                     </span>
                   </Uploader>
+                  {successful?
+                  <span style={{ width: 238, height: 40 ,color:"green",fontWeight: 'bold'}}>
+                      Uploaded Successfully
+                  </span>:<></>
+                  }
                 </div>
               </div>
             </div>

@@ -20,29 +20,6 @@ export const getData = async (route, params) => {
     .catch((error) => console.error("Error:", error));
 };
 
-
-
-
-
-export const postData = async(route, data) =>{
-  return fetch(`${route}`, {
-    method: "POST",
-    body: data,
-    // headers: {
-    //   "Content-Type": "multipart/form-data",
-    // },
-  })
-    .then((response) => {
-      console.log(response)
-    })
-    .catch((error) => console.error("Error:", error));
-}
-
-
-
-
-
-
 export const authenticate = async (user,pass) =>{
     const body = {
                 "jsonrpc":"2.0",
