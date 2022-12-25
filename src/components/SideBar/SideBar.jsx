@@ -17,6 +17,7 @@ import { useRecoilState } from "recoil";
 import { darkModeState } from "../../shared/globalState";
 import lightModeIcon from "../../assets/light-mode-icon.png";
 import darkModeIcon from "../../assets/dark-mode-icon.png";
+import logOut from "../../assets/logout.png"
 
 const custm = {
   width: 240,
@@ -72,8 +73,9 @@ export const SideBar = ({ onSelect, activeKey, ...props }) => {
       user ? (
         <>
           <Nav pullRight>
-            <Nav.Item as={Link} to="/logout" icon={<ExitIcon />}>
-              Logout
+            <Nav.Item as={Link} to="/logout">
+            <img className="h-8" src={logOut} />
+
             </Nav.Item>
           </Nav>
           <Nav pullRight>
