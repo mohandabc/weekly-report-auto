@@ -48,11 +48,11 @@ export const DataUploader = () => {
   function onSuccessFun() {
     setUploaderValue([]);
     setWell("");
-    setMsg({'msg':'Files Uploaded Successfully', 'color':'green'})
+    setMsg({ msg: "Files Uploaded Successfully", color: "green" });
   }
 
   function onErrorFun(reason) {
-    setMsg({'msg':reason['response'].match(new RegExp('<pre class="exception_value">(.*)</pre>'))[1], 'color':'red'})
+    setMsg({ msg: reason["response"]["detail"], color: "red" });
   }
 
   return (
@@ -137,9 +137,11 @@ export const DataUploader = () => {
                       onChange={setUploaderValue}
                       onSuccess={onSuccessFun}
                       data={params}
-                      style={{ width: 238, marginBottom: 20}}
+                      style={{ width: 238, marginBottom: 20 }}
                       autoUpload={true}
-                      onError={(reason) => {onErrorFun(reason)}}
+                      onError={(reason) => {
+                        onErrorFun(reason);
+                      }}
                       /************************************************
                        * THE PAGE THAT SHOULD RECEIVE THE POST METHOD *
                        *   TO UPLOAD THE FILES GOES HERE IN ACTION    *
@@ -148,27 +150,32 @@ export const DataUploader = () => {
                       multiple
                       draggable
                     >
-                      <div style={{width: 238, height: 40 }}>
+                      <div style={{ width: 238, height: 40 }}>
                         Click or Drag files to upload
                       </div>
                     </Uploader>
                   ) : (
                     <></>
                   )}
-                  <div style={{
-                        width: 238, }}>
+                  <div
+                    style={{
+                      width: 238,
+                    }}
+                  >
                     <span
                       style={{
-                        width: 238, 
-                        overflowWrap: 'normal',
-                        color: msg['color'],
+                        width: 238,
+                        overflowWrap: "normal",
+                        color: msg["color"],
                       }}
                     >
-                      {well?
-                      <></>
-                      :msg['msg']}
+                      {well && msg["msg"] == "Files Uploaded Successfully" ? (
+                        <></>
+                      ) : (
+                        msg["msg"]
+                      )}
                     </span>
-                  </div >
+                  </div>
                 </div>
               </div>
             </div>
