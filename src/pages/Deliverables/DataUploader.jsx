@@ -136,7 +136,6 @@ export const DataUploader = () => {
                       fileList={uploaderValue}
                       onChange={setUploaderValue}
                       onSuccess={onSuccessFun}
-
                       data={params}
                       style={{ width: 238, marginBottom: 20}}
                       autoUpload={true}
@@ -145,7 +144,7 @@ export const DataUploader = () => {
                        * THE PAGE THAT SHOULD RECEIVE THE POST METHOD *
                        *   TO UPLOAD THE FILES GOES HERE IN ACTION    *
                        ************************************************/
-                      action="http://localhost:8000/submit/"
+                      action="http://localhost:8000/submit"
                       multiple
                       draggable
                     >
@@ -165,7 +164,9 @@ export const DataUploader = () => {
                         color: msg['color'],
                       }}
                     >
-                      {msg['msg']}
+                      {well?
+                      <></>
+                      :msg['msg']}
                     </span>
                   </div >
                 </div>
