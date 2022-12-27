@@ -55,6 +55,12 @@ export const DataUploader = () => {
     setMsg({ msg: reason["response"]["detail"], color: "red" });
   }
 
+  function onProgressFun(percent) {
+    percent!=100?
+    setMsg({ msg: 'Uploading...'+parseInt(percent)+'%', color: "#375a70" }):
+    setMsg({ msg: 'Inserting data to database...This operation may take a while, Please dont close this window.', color: "#375a70" })
+  }
+
   return (
     <div className="App">
       <div
@@ -134,6 +140,7 @@ export const DataUploader = () => {
                       name="excel_files_combined"
                       method="POST"
                       fileList={uploaderValue}
+                      onProgress={onProgressFun}
                       onChange={setUploaderValue}
                       onSuccess={onSuccessFun}
                       data={params}
