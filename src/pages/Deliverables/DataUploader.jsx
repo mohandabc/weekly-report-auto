@@ -154,7 +154,7 @@ export const DataUploader = () => {
                        *   TO UPLOAD THE FILES GOES HERE IN ACTION    *
                        ************************************************/
                       action="http://localhost:8000/submit"
-                      multiple
+                      // multiple -- Currently multiple is deactivated
                       draggable
                     >
                       <div style={{ width: 238, height: 40 }}>
