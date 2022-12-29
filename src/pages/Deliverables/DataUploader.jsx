@@ -45,10 +45,9 @@ export const DataUploader = () => {
     setAnimation(true);
   });
 
-  function onSuccessFun() {
-    setUploaderValue([]);
-    setWell("");
-    setMsg({ msg: "Files Uploaded Successfully", color: "green" });
+  function onSuccessFun(response,file) {
+    console.log(file)
+    setMsg({ msg: file.name.slice(0, -5), msg1 : " Has been uploaded and inserted successfully", color: "#375a70" });
   }
 
   function onErrorFun(reason) {
@@ -165,23 +164,28 @@ export const DataUploader = () => {
                     <></>
                   )}
                   <div
-                    style={{
-                      width: 238,
-                    }}
                   >
-                    <span
+                    <div
                       style={{
+                        fontSize:9,
                         width: 238,
                         overflowWrap: "normal",
                         color: msg["color"],
                       }}
                     >
-                      {well && msg["msg"] == "Files Uploaded Successfully" ? (
-                        <></>
-                      ) : (
-                        msg["msg"]
-                      )}
-                    </span>
+                        {msg["msg"]}
+                    </div>
+                    <div
+                      style={{
+                        fontSize:9,
+                        width: 238,
+                        overflowWrap: "normal",
+                        color: 'green',
+                      }}
+                    >
+                        {msg["msg1"]}
+                    </div>
+                    
                   </div>
                 </div>
               </div>
