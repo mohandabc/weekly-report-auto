@@ -45,9 +45,13 @@ export const DataUploader = () => {
     setAnimation(true);
   });
 
-  function onSuccessFun(response,file) {
-    console.log(file)
-    setMsg({ msg: file.name.slice(0, -5), msg1 : " Has been uploaded and inserted successfully", color: "#375a70" });
+  function onSuccessFun(response, file) {
+    console.log(file);
+    setMsg({
+      msg: file.name.slice(0, -5),
+      msg1: " Has been uploaded and inserted successfully",
+      color: "#375a70",
+    });
   }
 
   function onErrorFun(reason) {
@@ -55,9 +59,15 @@ export const DataUploader = () => {
   }
 
   function onProgressFun(percent) {
-    percent!=100?
-    setMsg({ msg: 'Uploading...'+parseInt(percent)+'%', color: "#375a70" }):
-    setMsg({ msg: 'Inserting data to database...This operation may take a while, Please dont close this window.', color: "#375a70" })
+    percent != 100
+      ? setMsg({
+          msg: "Uploading..." + parseInt(percent) + "%",
+          color: "#375a70",
+        })
+      : setMsg({
+          msg: "Inserting data to database...This operation may take a while, Please dont close this window.",
+          color: "#375a70",
+        });
   }
 
   return (
@@ -95,7 +105,7 @@ export const DataUploader = () => {
             className={`container overflow-y-auto rounded-xl ${
               // choose container color on Whether darkmode is in "dark" or "light" mode.
               darkMode ? Mode.CONTAINER_DARK_COLOR : Mode.CONTAINER_LIGHT_COLOR
-            } w-1/3 h-1/2 transform transition-all duration-500 ease-out
+            } w-2/4 h-1/2 transform transition-all duration-500 ease-out
           ${animation ? "scale-100" : "scale-0"}`}
           >
             <div
@@ -107,7 +117,7 @@ export const DataUploader = () => {
                         : "opacity-0 translate-y-12"
                     }`}
             >
-              <div className="py-9">
+              <div className="py-9 w-2/3">
                 <h1
                   className={`${
                     // choose the container title's color on Whether darkmode is in "dark" or "light" mode.
@@ -124,17 +134,17 @@ export const DataUploader = () => {
                 >
                   Data Uploader
                 </h1>
-                <div className="rounded-xl bg-gray-300 text-black text-sm my-10 p-10 text-center">
+                <div className="flex-row rounded-xl bg-gray-300 text-black text-sm my-10 p-10 text-center">
                   <SelectPicker
-                    style={{ width: 238, marginBottom: 20 }}
+                    style={{ width: 300, marginBottom: 20 }}
                     label="Well"
                     data={wells_placeholder}
                     onChange={setWell}
                     value={well}
                   />
+
                   {well ? (
                     <Uploader
-                      className="self-center"
                       accept=".xlsx"
                       name="excel_files_combined"
                       method="POST"
@@ -143,7 +153,7 @@ export const DataUploader = () => {
                       onChange={setUploaderValue}
                       onSuccess={onSuccessFun}
                       data={params}
-                      style={{ width: 238, marginBottom: 20 }}
+                      style={{ marginBottom: 20}}
                       autoUpload={true}
                       onError={(reason) => {
                         onErrorFun(reason);
@@ -153,10 +163,10 @@ export const DataUploader = () => {
                        *   TO UPLOAD THE FILES GOES HERE IN ACTION    *
                        ************************************************/
                       action="http://localhost:8000/submit"
-                      // multiple -- Currently multiple is deactivated
+                      multiple
                       draggable
                     >
-                      <div style={{ width: 238, height: 40 }}>
+                      <div style={{ height: 40 }}>
                         Click or Drag files to upload
                       </div>
                     </Uploader>
@@ -167,23 +177,21 @@ export const DataUploader = () => {
                   >
                     <div
                       style={{
-                        fontSize:9,
-                        width: 238,
+                        fontSize: 10,
                         overflowWrap: "normal",
                         color: msg["color"],
                       }}
                     >
-                        {msg["msg"]}
+                      {msg["msg"]}
                     </div>
                     <div
                       style={{
-                        fontSize:9,
-                        width: 238,
+                        fontSize: 10,
                         overflowWrap: "normal",
-                        color: 'green',
+                        color: "green",
                       }}
                     >
-                        {msg["msg1"]}
+                      {msg["msg1"]}
                     </div>
                     
                   </div>
