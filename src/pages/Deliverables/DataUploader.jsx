@@ -46,7 +46,6 @@ export const DataUploader = () => {
   });
 
   function onSuccessFun(response, file) {
-    console.log(file);
     setMsg({
       msg: file.name.slice(0, -5),
       msg1: " Has been uploaded and inserted successfully",
@@ -153,7 +152,7 @@ export const DataUploader = () => {
                       onChange={setUploaderValue}
                       onSuccess={onSuccessFun}
                       data={params}
-                      style={{ marginBottom: 20}}
+                      style={{ marginBottom: 20 }}
                       autoUpload={true}
                       onError={(reason) => {
                         onErrorFun(reason);
@@ -166,18 +165,17 @@ export const DataUploader = () => {
                       multiple
                       draggable
                     >
-                      <div style={{ height: 40 }}>
-                        Click or Drag files to upload
+                      <div style={{ height: 40, paddingTop: "8px" }}>
+                        Click or drag files to this area to upload
                       </div>
                     </Uploader>
                   ) : (
                     <></>
                   )}
-                  <div
-                  >
+                  <div>
                     <div
                       style={{
-                        fontSize: 10,
+                        fontSize: 12,
                         overflowWrap: "normal",
                         color: msg["color"],
                       }}
@@ -186,14 +184,13 @@ export const DataUploader = () => {
                     </div>
                     <div
                       style={{
-                        fontSize: 10,
+                        fontSize: 12,
                         overflowWrap: "normal",
                         color: "green",
                       }}
                     >
                       {msg["msg1"]}
                     </div>
-                    
                   </div>
                 </div>
               </div>
