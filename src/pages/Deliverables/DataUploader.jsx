@@ -12,26 +12,14 @@ import { useRecoilValue } from "recoil";
 import "./styles.css";
 import { darkModeState } from "../../shared/globalState";
 import * as Mode from "../../constants/darkmode_constants";
-
-const wells_placeholder = [
-  // Test populating data
-  "WOENS-1",
-  "KARS-3",
-  "DJHSE-1",
-  "HBKN-4",
-  "BIRN-1",
-  "EMR-1",
-  "RAA-8",
-  "HDZ-20",
-  "TOT-10",
-].map((item) => ({ label: item, value: item }));
+import { getData } from "../../services/api";
 
 export const DataUploader = () => {
-  // Sets the dark mode value.
   const darkMode = useRecoilValue(darkModeState);
 
   const [well, setWell] = useState(0);
   const [msg, setMsg] = useState(0);
+  const [wellsplaceholder, setWellsplaceholder] = useState(0);
   const [uploaderValue, setUploaderValue] = React.useState([]);
 
   const params = {
@@ -44,6 +32,10 @@ export const DataUploader = () => {
   useEffect(() => {
     setAnimation(true);
   });
+
+  useEffect(()=>{
+    populateWellsPicker();
+}, [])
 
   function onSuccessFun(response, file) {
     setMsg({
@@ -67,6 +59,15 @@ export const DataUploader = () => {
           msg: "Inserting data to database...This operation may take a while, Please dont close this window.",
           color: "#375a70",
         });
+  }
+
+  function populateWellsPicker() {
+    const path = 'reports/getwells';
+      getData(path, params)
+      .then(res=> {
+        let data = res.result['wells'].map((item) => ({ label: item['name'], value: item['name'] }));;
+        setWellsplaceholder(data || []);
+      });
   }
 
   return (
@@ -136,8 +137,9 @@ export const DataUploader = () => {
                 <div className="flex-row rounded-xl bg-gray-300 text-black text-sm my-10 p-10 text-center">
                   <SelectPicker
                     style={{ width: 300, marginBottom: 20 }}
+                    loading = {wellsplaceholder?false:true}
                     label="Well"
-                    data={wells_placeholder}
+                    data={wellsplaceholder||[]}
                     onChange={setWell}
                     value={well}
                   />
