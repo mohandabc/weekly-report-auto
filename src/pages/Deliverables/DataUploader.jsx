@@ -161,7 +161,7 @@ export const DataUploader = () => {
                        * THE PAGE THAT SHOULD RECEIVE THE POST METHOD *
                        *   TO UPLOAD THE FILES GOES HERE IN ACTION    *
                        ************************************************/
-                      action="http://localhost:8000/submit"
+                      action="http://localhost:8000/uploadData/"
                       multiple
                       draggable
                     >
