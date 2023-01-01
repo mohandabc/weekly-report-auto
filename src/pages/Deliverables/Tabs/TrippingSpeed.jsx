@@ -7,6 +7,8 @@ import * as Mode from "../../../constants/darkmode_constants";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { Loader } from "../../../components";
 import { SelectPicker } from "rsuite";
+import { BACK_URL } from "../../../constants/URI";
+import { getData } from "../../../services/api";
 import "./styles.css";
 
 const styles = {
@@ -24,6 +26,13 @@ const processInput = (params) => {
    * TODO: FURTHER PROCESSING , SEND PARAMS TO WHATEVER THE OTHER SIDE IS ;) *
    ***************************************************************************/
   console.log("Params from TrippingSpeed : ", params);
+    const path = 'TrippingSpeed/';
+    getData(BACK_URL, path, params)
+    .then(res=> {
+      let data = res;
+      console.log(data);
+    });
+
 };
 
 export const TrippingSpeed = () => {

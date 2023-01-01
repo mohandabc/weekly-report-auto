@@ -9,6 +9,7 @@ import {generateDailyReport} from '../../services/dailyPdfGenBO';
 import { getData } from '../../services/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 import * as Mode from "../../constants/darkmode_constants";
+import { API_URL } from '../../constants/URI';
 
 export const BoDailyPage = () => {
     const darkMode = useRecoilValue(darkModeState);
@@ -39,7 +40,7 @@ export const BoDailyPage = () => {
     
         setIsHidden(false);
         setRange(params['dates'])
-        getData(path, params)
+        getData(API_URL, path, params)
         .then(res=> {
           let data = res.result;
           setDailyData(data || {});
