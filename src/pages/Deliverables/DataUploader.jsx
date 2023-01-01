@@ -13,7 +13,7 @@ import "./styles.css";
 import { darkModeState } from "../../shared/globalState";
 import * as Mode from "../../constants/darkmode_constants";
 import { getData } from "../../services/api";
-import { API_URL } from '../../constants/URI';
+import { API_URL, BACK_URL} from '../../constants/URI';
 
 export const DataUploader = () => {
   const darkMode = useRecoilValue(darkModeState);
@@ -164,7 +164,7 @@ export const DataUploader = () => {
                        * THE PAGE THAT SHOULD RECEIVE THE POST METHOD *
                        *   TO UPLOAD THE FILES GOES HERE IN ACTION    *
                        ************************************************/
-                      action="http://localhost:8000/uploadData/"
+                      action={BACK_URL+"uploadData/"}
                       multiple
                       draggable
                     >
