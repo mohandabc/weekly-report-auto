@@ -20,7 +20,7 @@ function formatDateString(dateString) {
   let hours = ('0' + date.getHours()).slice(-2);
   let minutes = ('0' + date.getMinutes()).slice(-2);
   let seconds = ('0' + date.getSeconds()).slice(-2);
-  let formattedDateString = day + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+  let formattedDateString = day + '-' + month + '-' + year + ' ' + hours + ':' + minutes;
   console.log(formattedDateString)
   return formattedDateString;
 }
