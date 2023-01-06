@@ -102,11 +102,18 @@ export const TrippingSpeed = () => {
             Object.keys(data).length === 0 ? "hidden" : ""
           }`}
         >
-          {/* <div> */}
-          <TsAnalysis
-            TsAnalysisData={data["ts_analysis"]["standline"]}
-          ></TsAnalysis>
-          {/* </div> */}
+          <div
+            className={`sticky rounded-xl ${
+              // choose container color on Whether darkmode is in "dark" or "light" mode.
+              darkMode ? Mode.CONTAINER_DARK_COLOR : Mode.CONTAINER_LIGHT_COLOR
+            } h-auto}`}
+          >
+            <div className="flex justify-center items-center">
+              <div className="py-4 px-4">
+                <TsAnalysis TsAnalysisData={data["ts_analysis"]}></TsAnalysis>
+              </div>
+            </div>
+          </div>
         </div>
       ) : (
         <div

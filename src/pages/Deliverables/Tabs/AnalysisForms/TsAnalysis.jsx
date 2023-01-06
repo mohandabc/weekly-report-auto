@@ -1,132 +1,255 @@
-import React from 'react';
-
-import { Table, Button, Checkbox } from 'rsuite';
-import { DatePicker } from 'rsuite';
-
+import React from "react";
+import { Table, Button, Checkbox, Pagination } from "rsuite";
+import { DatePicker } from "rsuite";
+import "./styles.css";
 
 const { Column, HeaderCell, Cell } = Table;
 
 function minutesToTime(minutes) {
-    const date = new Date();
-    date.setMinutes(Math.floor(minutes));
-    date.setSeconds((minutes % 1) * 60);
-    return date;
-  }
+  const date = new Date();
+  date.setMinutes(Math.floor(minutes));
+  date.setSeconds((minutes % 1) * 60);
+  return date;
+}
+
+function formatDateString(dateString) {
+  let date = new Date(dateString);
+  let year = date.getFullYear();
+  let month = ('0' + (date.getMonth() + 1)).slice(-2);
+  let day = ('0' + date.getDate()).slice(-2);
+  let hours = ('0' + date.getHours()).slice(-2);
+  let minutes = ('0' + date.getMinutes()).slice(-2);
+  let seconds = ('0' + date.getSeconds()).slice(-2);
+  let formattedDateString = day + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+  console.log(formattedDateString)
+  return formattedDateString;
+}
 
 const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
-    const editing = rowData.status === 'EDIT';
-    return (
-      <Cell {...props} className={editing ? 'table-content-editing' : ''} style={{ color: 'black', fontSize: '11px' }}>
-        {editing ? (
-          dataKey === 'date_to' || dataKey === 'date_from' ? (
-            <DatePicker
-              format="yyyy-MM-dd HH:mm:ss"
-              defaultValue={new Date(rowData[dataKey])}
-              onChange={(date) => onChange(rowData.id, dataKey, date.toLocaleString())}
-            />
-          ) : dataKey === 'connection_time' ? (
-            <DatePicker
-              format="mm:ss"
-              defaultValue={minutesToTime(rowData[dataKey])}
-              onChange={(date) => onChange(rowData.id, dataKey, date.getMinutes()+ date.getSeconds() / 60)}
-            />
-          ) : dataKey === 'abnormal' ? (
-            <Checkbox
-              defaultChecked={rowData[dataKey]}
-              onChange={(value) => onChange(rowData.id, dataKey, value)}
-            />
-          ) : (
-            <input
-              className="rs-input"
-              defaultValue={rowData[dataKey]}
-              onChange={(event) => onChange(rowData.id, dataKey, event.target.value)}
-            />
-          )
-        ) : (dataKey === 'abnormal' ? 
-            <Checkbox defaultChecked={rowData[dataKey]} disabled></Checkbox>
-                :
-                <span className="table-content-edit-span">{rowData[dataKey]}</span>
-            
-        )}
-      </Cell>
-    );
-  };
+  const editing = rowData.status === "EDIT";
+  return (
+    <Cell
+      {...props}
+      className={editing ? "table-content-editing" : ""}
+      style={{ padding: "0px", color: "black", fontSize: "11px" }}
+    >
+      {editing ? (
+        dataKey === "date_to" || dataKey === "date_from" ? (
+          <DatePicker
+            format="yyyy-MM-dd HH:mm:ss"
+            onChange={(date) =>
+              onChange(rowData.id, dataKey, date.toISOString())
+            }
+          />
+        ) : dataKey === "connection_time" ? (
+          <DatePicker
+            format="mm:ss"
+            defaultValue={
+                minutesToTime(rowData[dataKey])}
+            onChange={(date) =>
+              onChange(
+                rowData.id,
+                dataKey,
+                date.getMinutes() + date.getSeconds()/60
+              )
+            }
+          />
+        ) : dataKey === "abnormal" ? (
+          <Checkbox
+            defaultChecked={rowData[dataKey]}
+            onChange={(value) => onChange(rowData.id, dataKey, value)}
+          />
+        ) : dataKey === "depth_from" || dataKey === "depth_to" ? (
+          <input
+            type="number"
+            className="rs-input"
+            defaultValue={rowData[dataKey]}
+            onChange={(event) =>
+              onChange(rowData.id, dataKey, event.target.value)
+            }
+          />
+        ) : (
+          <input
+            className="rs-input"
+            defaultValue={rowData[dataKey]}
+            onChange={(event) =>
+              onChange(rowData.id, dataKey, event.target.value)
+            }
+          />
+        )
+      ) : dataKey === "abnormal" ? (
+        <Checkbox defaultChecked={rowData[dataKey]} disabled></Checkbox>
+      ) : dataKey === "connection_time" ? (
+        <span className="table-content-edit-span">
+          {minutesToTime(rowData[dataKey]).getMinutes() +
+            ":" +
+            minutesToTime(rowData[dataKey]).getSeconds()}
+        </span>
+      ) : dataKey === "date_to" || dataKey === "date_from" ? (
+        <span className="table-content-edit-span">{formatDateString(rowData[dataKey])}</span>
+      ) : (
+        <span className="table-content-edit-span">{rowData[dataKey]}</span>
+      )}
+    </Cell>
+  );
+};
 
 const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
   return (
-    <Cell {...props} style={{ padding: '6px' }}>
+    <Cell
+      {...props}
+      style={{ padding: "0px", color: "black", fontSize: "11px" }}
+    >
       <Button
         appearance="link"
         onClick={() => {
           onClick(rowData.id);
         }}
       >
-        {rowData.status === 'EDIT' ? 'Save' : 'Edit'}
+        {rowData.status === "EDIT" ? "Save" : "Edit"}
       </Button>
     </Cell>
   );
 };
 
 export const TsAnalysis = (TsAnalysisData) => {
-  const [data, setData] = React.useState(TsAnalysisData.TsAnalysisData);
+  const [limit, setLimit] = React.useState(10);
+  const [page, setPage] = React.useState(1);
+  const [defData, setdefData] = React.useState(
+    TsAnalysisData.TsAnalysisData.standline
+  );
 
   const handleChange = (id, key, value) => {
     const nextData = Object.assign([], data);
-    nextData.find(item => item.id === id)[key] = value;
-    setData(nextData);
+    nextData.find((item) => item.id === id)[key] = value;
+    setdefData(nextData);
   };
-  const handleEditState = id => {
+  const handleEditState = (id) => {
     const nextData = Object.assign([], data);
-    const activeItem = nextData.find(item => item.id === id);
-    activeItem.status = activeItem.status ? null : 'EDIT';
-    setData(nextData);
+    const activeItem = nextData.find((item) => item.id === id);
+    activeItem.status = activeItem.status ? null : "EDIT";
+    setdefData(nextData);
   };
+
+  const handleChangeLimit = (dataKey) => {
+    setPage(1);
+    setLimit(dataKey);
+  };
+
+  const data = defData.filter((v, i) => {
+    const start = limit * (page - 1);
+    const end = start + limit;
+    return i >= start && i < end;
+  });
 
   return (
-    <Table padding={100} height={420} width={900}  data={data}>
-      <Column width={40}>
-        <HeaderCell>standNum</HeaderCell>
-        <EditableCell dataKey="standNum" onChange={handleChange} />
-      </Column>
-      <Column width={150}>
-        <HeaderCell>date_from</HeaderCell>
-        <EditableCell dataKey="date_from" onChange={handleChange} />
-      </Column>
+    <>
+      <Table
+        bordered
+        cellBordered
+        rowHeight={30}
+        padding={100}
+        height={350}
+        width={1000}
+        data={data}
+      >
+        <Column width={50}>
+          <HeaderCell>N</HeaderCell>
+          <EditableCell dataKey="standNum" onChange={handleChange} />
+        </Column>
+        <Column width={130}>
+          <HeaderCell>Start</HeaderCell>
+          <EditableCell dataKey="date_from" onChange={handleChange} />
+        </Column>
 
-      <Column width={150}>
-        <HeaderCell>date_to</HeaderCell>
-        <EditableCell dataKey="date_to" onChange={handleChange} />
-      </Column>
+        <Column width={130}>
+          <HeaderCell>End</HeaderCell>
+          <EditableCell dataKey="date_to" onChange={handleChange} />
+        </Column>
 
-      <Column width={100}>
-        <HeaderCell>depth_from</HeaderCell>
-        <EditableCell dataKey="depth_from" onChange={handleChange} />
-      </Column>
-      
-      <Column width={100}>
-        <HeaderCell>depth_to</HeaderCell>
-        <EditableCell dataKey="depth_to" onChange={handleChange} />
-      </Column>
+        <Column width={100}>
+          <HeaderCell>Depth from</HeaderCell>
+          <EditableCell dataKey="depth_from" onChange={handleChange} />
+        </Column>
 
-      <Column width={100}>
-        <HeaderCell>connection_time</HeaderCell>
-        <EditableCell dataKey="connection_time" onChange={handleChange} />
-      </Column>
+        <Column width={100}>
+          <HeaderCell>Depth to</HeaderCell>
+          <EditableCell dataKey="depth_to" onChange={handleChange} />
+        </Column>
 
-      <Column width={100}>
-        <HeaderCell>abnormal</HeaderCell>
-        <EditableCell dataKey="abnormal" onChange={handleChange} />
-      </Column>
+        <Column width={120}>
+          <HeaderCell>Connection Time</HeaderCell>
+          <EditableCell dataKey="connection_time" onChange={handleChange} />
+        </Column>
 
-      <Column width={100}>
-        <HeaderCell>description</HeaderCell>
-        <EditableCell dataKey="description" onChange={handleChange} />
-      </Column>
+        <Column width={90}>
+          <HeaderCell>Abnormal</HeaderCell>
+          <EditableCell dataKey="abnormal" onChange={handleChange} />
+        </Column>
 
-      <Column flexGrow={1}>
-        <HeaderCell>-</HeaderCell>
-        <ActionCell dataKey="standNum" onClick={handleEditState} />
-      </Column>
-    </Table>
+        <Column width={150}>
+          <HeaderCell>Description</HeaderCell>
+          <EditableCell dataKey="description" onChange={handleChange} />
+        </Column>
+
+        <Column flexGrow={1}>
+          <HeaderCell>-</HeaderCell>
+          <ActionCell dataKey="standNum" onClick={handleEditState} />
+        </Column>
+      </Table>
+      <div className="px-4 text-black">
+        <Pagination
+          prev
+          next
+          first
+          last
+          ellipsis
+          boundaryLinks
+          maxButtons={5}
+          size="xs"
+          layout={["total", "-", "limit", "|", "pager", "skip"]}
+          total={TsAnalysisData.TsAnalysisData.standline.length}
+          limitOptions={[10, 20, 30]}
+          limit={limit}
+          activePage={page}
+          onChangePage={setPage}
+          onChangeLimit={handleChangeLimit}
+        />
+      </div>
+      <div className="flex justify-between">
+        <div className="float-left p-2 text-black text-sm">
+          <div>
+            <b>Well :</b> {TsAnalysisData.TsAnalysisData.well}
+          </div>
+          <div>
+            <b>Trip Number : </b> {TsAnalysisData.TsAnalysisData.trip_number}
+          </div>
+        </div>
+        <div className="float-right p-2 text-black text-sm">
+          <div>
+            <b>CSG Size : </b> {TsAnalysisData.TsAnalysisData.csg_size}
+          </div>
+          <div>
+            <b>Drill Pipe Size : </b>{" "}
+            {TsAnalysisData.TsAnalysisData.drill_pipe_size}
+          </div>
+        </div>
+      </div>
+      <div>
+        <div className="flex justify-center my-4">
+          <Button appearance="default" className="mx-4">
+            Cancel
+          </Button>
+          <Button color="blue" appearance="primary" className="mx-4">
+            Save
+          </Button>
+        </div>
+        <div className="flex justify-center">
+          <Button color="red" appearance="primary">
+            Delete Analysis
+          </Button>
+        </div>
+      </div>
+    </>
   );
 };
