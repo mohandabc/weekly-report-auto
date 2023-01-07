@@ -19,9 +19,8 @@ function formatDateString(dateString) {
   let day = ('0' + date.getDate()).slice(-2);
   let hours = ('0' + date.getHours()).slice(-2);
   let minutes = ('0' + date.getMinutes()).slice(-2);
-  let seconds = ('0' + date.getSeconds()).slice(-2);
+  // let seconds = ('0' + date.getSeconds()).slice(-2);
   let formattedDateString = day + '-' + month + '-' + year + ' ' + hours + ':' + minutes;
-  console.log(formattedDateString)
   return formattedDateString;
 }
 
@@ -38,7 +37,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
           <DatePicker
             format="yyyy-MM-dd HH:mm:ss"
             onChange={(date) =>
-              onChange(rowData.id, dataKey, date.toISOString())
+              onChange(rowData.standNum, dataKey, date.toISOString())
             }
           />
         ) : dataKey === "connection_time" ? (
@@ -48,7 +47,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
                 minutesToTime(rowData[dataKey])}
             onChange={(date) =>
               onChange(
-                rowData.id,
+                rowData.standNum,
                 dataKey,
                 date.getMinutes() + date.getSeconds()/60
               )
@@ -57,7 +56,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
         ) : dataKey === "abnormal" ? (
           <Checkbox
             defaultChecked={rowData[dataKey]}
-            onChange={(value) => onChange(rowData.id, dataKey, value)}
+            onChange={(value) => onChange(rowData.standNum, dataKey, value)}
           />
         ) : dataKey === "depth_from" || dataKey === "depth_to" ? (
           <input
@@ -65,7 +64,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
             className="rs-input"
             defaultValue={rowData[dataKey]}
             onChange={(event) =>
-              onChange(rowData.id, dataKey, event.target.value)
+              onChange(rowData.standNum, dataKey, event.target.value)
             }
           />
         ) : (
@@ -73,7 +72,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
             className="rs-input"
             defaultValue={rowData[dataKey]}
             onChange={(event) =>
-              onChange(rowData.id, dataKey, event.target.value)
+              onChange(rowData.standNum, dataKey, event.target.value)
             }
           />
         )
@@ -103,7 +102,7 @@ const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
       <Button
         appearance="link"
         onClick={() => {
-          onClick(rowData.id);
+          onClick(rowData.standNum);
         }}
       >
         {rowData.status === "EDIT" ? "Save" : "Edit"}
@@ -119,14 +118,15 @@ export const TsAnalysis = (TsAnalysisData) => {
     TsAnalysisData.TsAnalysisData.standline
   );
 
-  const handleChange = (id, key, value) => {
+  const handleChange = (standNum, key, value) => {
     const nextData = Object.assign([], data);
-    nextData.find((item) => item.id === id)[key] = value;
+    nextData.find((item) => item.standNum === standNum)[key] = value;
     setdefData(nextData);
   };
-  const handleEditState = (id) => {
+  const handleEditState = (standNum) => {
     const nextData = Object.assign([], data);
-    const activeItem = nextData.find((item) => item.id === id);
+    console.log(nextData.find((item) => item.standNum === 5))
+    const activeItem = nextData.find((item) => item.standNum === standNum);
     activeItem.status = activeItem.status ? null : "EDIT";
     setdefData(nextData);
   };
