@@ -19,11 +19,12 @@ function minutesToTime(minutes) {
 function formatDateString(dateString) {
   let date = new Date(dateString);
   let year = date.getFullYear();
-  let month = ('0' + (date.getMonth() + 1)).slice(-2);
-  let day = ('0' + date.getDate()).slice(-2);
-  let hours = ('0' + date.getHours()).slice(-2);
-  let minutes = ('0' + date.getMinutes()).slice(-2);
-  let formattedDateString = day + '-' + month + '-' + year + ' ' + hours + ':' + minutes;
+  let month = ("0" + (date.getMonth() + 1)).slice(-2);
+  let day = ("0" + date.getDate()).slice(-2);
+  let hours = ("0" + date.getHours()).slice(-2);
+  let minutes = ("0" + date.getMinutes()).slice(-2);
+  let formattedDateString =
+    day + "-" + month + "-" + year + " " + hours + ":" + minutes;
   return formattedDateString;
 }
 
@@ -46,20 +47,21 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
         ) : dataKey === "connection_time" ? (
           <DatePicker
             format="mm:ss"
-            defaultValue={
-                minutesToTime(rowData[dataKey])}
+            defaultValue={minutesToTime(rowData[dataKey])}
             onChange={(date) =>
               onChange(
                 rowData.standNum,
                 dataKey,
-                date.getMinutes() + date.getSeconds()/60
+                date.getMinutes() + date.getSeconds() / 60
               )
             }
           />
         ) : dataKey === "abnormal" ? (
           <Checkbox
             checked={rowData[dataKey]}
-            onClick={(event) => onChange(rowData.standNum, dataKey, !rowData[dataKey])}
+            onClick={(event) =>
+              onChange(rowData.standNum, dataKey, !rowData[dataKey])
+            }
           />
         ) : dataKey === "depth_from" || dataKey === "depth_to" ? (
           <input
@@ -81,10 +83,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
         )
       ) : dataKey === "abnormal" ? (
         // <Checkbox defaultChecked={rowData[dataKey]} disabled></Checkbox>
-        <Checkbox
-          checked={rowData[dataKey]}
-          disabled
-        />
+        <Checkbox checked={rowData[dataKey]} disabled />
       ) : dataKey === "connection_time" ? (
         <span className="table-content-edit-span">
           {minutesToTime(rowData[dataKey]).getMinutes() +
@@ -92,7 +91,9 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
             minutesToTime(rowData[dataKey]).getSeconds()}
         </span>
       ) : dataKey === "date_to" || dataKey === "date_from" ? (
-        <span className="table-content-edit-span">{formatDateString(rowData[dataKey])}</span>
+        <span className="table-content-edit-span">
+          {formatDateString(rowData[dataKey])}
+        </span>
       ) : (
         <span className="table-content-edit-span">{rowData[dataKey]}</span>
       )}
@@ -150,97 +151,120 @@ export const TsAnalysis = (TsAnalysisData) => {
   };
 
   const handleDeleteClick = () => {
-    deleteDoc(BACK_URL, "TrippingSpeed/deleteDoc/", TsAnalysisData.doc_id).then(res=> {
-      if ('msg' in res && res.msg === 'Document deleted successfully') {
-        setShowTstab(true);
-        alert('Document deleted successfully');
+    deleteDoc(BACK_URL, "TrippingSpeed/deleteDoc/", TsAnalysisData.doc_id).then(
+      (res) => {
+        if ("msg" in res && res.msg === "Document deleted successfully") {
+          setShowTstab(true);
+          alert("Document deleted successfully");
+        }
       }
-    });
-  }
+    );
+  };
 
-  return (
-    showTstab? (<TrippingSpeed
-      options={DELIVERABLE_CONFIG_BAR_OPTIONS}
-    ></TrippingSpeed>) : (
-    <>
-      <Table
-        bordered
-        cellBordered
-        rowHeight={30}
-        padding={100}
-        height={342}
-        width={1000}
-        data={data}
+  const handleCancelClick = () => {
+    setShowTstab(true);
+  };
+
+  const [animation, setAnimation] = React.useState(false);
+
+  React.useEffect(() => {
+    setAnimation(true);
+  });
+
+  return showTstab ? (
+    <TrippingSpeed options={DELIVERABLE_CONFIG_BAR_OPTIONS}></TrippingSpeed>
+  ) : (
+    <div className="py-4 px-4">
+      <div
+        className={`text-black duration-1000 transition-all ease-out ${
+          // hiding components when they first appear and then applying a translate effect gradually
+          animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+        }`}
       >
-        <Column width={50}>
-          <HeaderCell>N</HeaderCell>
-          <EditableCell dataKey="standNum" onChange={handleChange} />
-        </Column>
-        <Column width={130}>
-          <HeaderCell>Start</HeaderCell>
-          <EditableCell dataKey="date_from" onChange={handleChange} />
-        </Column>
+        <Table
+          bordered
+          cellBordered
+          rowHeight={30}
+          padding={100}
+          height={342}
+          width={1000}
+          data={data}
+        >
+          <Column width={50}>
+            <HeaderCell>N</HeaderCell>
+            <EditableCell dataKey="standNum" onChange={handleChange} />
+          </Column>
+          <Column width={130}>
+            <HeaderCell>Start</HeaderCell>
+            <EditableCell dataKey="date_from" onChange={handleChange} />
+          </Column>
 
-        <Column width={130}>
-          <HeaderCell>End</HeaderCell>
-          <EditableCell dataKey="date_to" onChange={handleChange} />
-        </Column>
+          <Column width={130}>
+            <HeaderCell>End</HeaderCell>
+            <EditableCell dataKey="date_to" onChange={handleChange} />
+          </Column>
 
-        <Column width={90}>
-          <HeaderCell>Depth from</HeaderCell>
-          <EditableCell dataKey="depth_from" onChange={handleChange} />
-        </Column>
+          <Column width={90}>
+            <HeaderCell>Depth from</HeaderCell>
+            <EditableCell dataKey="depth_from" onChange={handleChange} />
+          </Column>
 
-        <Column width={80}>
-          <HeaderCell>Depth to</HeaderCell>
-          <EditableCell dataKey="depth_to" onChange={handleChange} />
-        </Column>
+          <Column width={80}>
+            <HeaderCell>Depth to</HeaderCell>
+            <EditableCell dataKey="depth_to" onChange={handleChange} />
+          </Column>
 
-        <Column width={105}>
-          <HeaderCell>Connection Time</HeaderCell>
-          <EditableCell dataKey="connection_time" onChange={handleChange} />
-        </Column>
+          <Column width={105}>
+            <HeaderCell>Connection Time</HeaderCell>
+            <EditableCell dataKey="connection_time" onChange={handleChange} />
+          </Column>
 
-        <Column width={120}>
-          <HeaderCell>Tripping Speed</HeaderCell>
-          <EditableCell dataKey="tripping_speed" onChange={handleChange} />
-        </Column>
+          <Column width={120}>
+            <HeaderCell>Tripping Speed</HeaderCell>
+            <EditableCell dataKey="tripping_speed" onChange={handleChange} />
+          </Column>
 
-        <Column width={72}>
-          <HeaderCell>Abnormal</HeaderCell>
-          <EditableCell dataKey="abnormal" onChange={handleChange} />
-        </Column>
+          <Column width={72}>
+            <HeaderCell>Abnormal</HeaderCell>
+            <EditableCell dataKey="abnormal" onChange={handleChange} />
+          </Column>
 
-        <Column width={150}>
-          <HeaderCell>Description</HeaderCell>
-          <EditableCell dataKey="description" onChange={handleChange} />
-        </Column>
+          <Column width={150}>
+            <HeaderCell>Description</HeaderCell>
+            <EditableCell dataKey="description" onChange={handleChange} />
+          </Column>
 
-        <Column flexGrow={1}>
-          <HeaderCell>-</HeaderCell>
-          <ActionCell dataKey="standNum" onClick={handleEditState} />
-        </Column>
-      </Table>
-      <div className="px-4 text-black">
-        <Pagination
-          prev
-          next
-          first
-          last
-          ellipsis
-          boundaryLinks
-          maxButtons={5}
-          size="xs"
-          layout={["total", "-", "limit", "|", "pager", "skip"]}
-          total={TsAnalysisData.TsAnalysisData.standline.length}
-          limitOptions={[10, 20, 30]}
-          limit={limit}
-          activePage={page}
-          onChangePage={setPage}
-          onChangeLimit={handleChangeLimit}
-        />
+          <Column flexGrow={1}>
+            <HeaderCell>-</HeaderCell>
+            <ActionCell dataKey="standNum" onClick={handleEditState} />
+          </Column>
+        </Table>
+        <div className="px-5">
+          <Pagination
+            prev
+            next
+            first
+            last
+            ellipsis
+            boundaryLinks
+            maxButtons={5}
+            size="xs"
+            layout={["total", "-", "limit", "|", "pager", "skip"]}
+            total={TsAnalysisData.TsAnalysisData.standline.length}
+            limitOptions={[10, 20, 30]}
+            limit={limit}
+            activePage={page}
+            onChangePage={setPage}
+            onChangeLimit={handleChangeLimit}
+          />
+        </div>
       </div>
-      <div className="flex justify-between">
+      <div
+        className={`flex justify-between delay-100 duration-1000 transition-all ease-out ${
+          // hiding components when they first appear and then applying a translate effect gradually
+          animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+        }`}
+      >
         <div className="float-left p-2 text-black text-sm">
           <div>
             <b>Well :</b> {TsAnalysisData.TsAnalysisData.well}
@@ -260,20 +284,34 @@ export const TsAnalysis = (TsAnalysisData) => {
         </div>
       </div>
       <div>
-        <div className="flex justify-center my-4">
-          <Button appearance="default" className="mx-4">
+        <div
+          className={`flex justify-center my-4 delay-200 duration-1000 transition-all ease-out ${
+            // hiding components when they first appear and then applying a translate effect gradually
+            animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+          }`}
+        >
+          <Button
+            appearance="default"
+            className="mx-4"
+            onClick={handleCancelClick}
+          >
             Cancel
           </Button>
           <Button color="blue" appearance="primary" className="mx-4">
             Save
           </Button>
         </div>
-        <div className="flex justify-center">
-        <Button color="red" appearance="primary" onClick={handleDeleteClick}>
-          Delete Analysis
-        </Button>
+        <div
+          className={`flex justify-center delay-300 duration-1000 transition-all ease-out ${
+            // hiding components when they first appear and then applying a translate effect gradually
+            animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+          }`}
+        >
+          <Button color="red" appearance="primary" onClick={handleDeleteClick}>
+            Delete Analysis
+          </Button>
         </div>
       </div>
-    </>)
+    </div>
   );
 };

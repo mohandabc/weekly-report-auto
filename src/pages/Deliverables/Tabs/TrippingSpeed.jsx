@@ -98,24 +98,14 @@ export const TrippingSpeed = () => {
   return (
     <>
       {data ? (
-        <div
-          className={`${darkMode ? Mode.DARK_REPORTbg : Mode.LIGHT_REPORTbg} ${
-            Object.keys(data).length === 0 ? "hidden" : ""
-          }`}
-        >
           <div
             className={`sticky rounded-xl ${
               // choose container color on Whether darkmode is in "dark" or "light" mode.
               darkMode ? Mode.CONTAINER_DARK_COLOR : Mode.CONTAINER_LIGHT_COLOR
-            } h-auto}`}
+            } h-auto`}
           >
-            <div className="flex justify-center items-center">
-              <div className="py-4 px-4">
                 <TsAnalysis TsAnalysisData={data["ts_analysis"]} doc_id={data["_id"]}></TsAnalysis>
-              </div>
-            </div>
           </div>
-        </div>
       ) : (
         <div
           className={`sticky rounded-xl ${
