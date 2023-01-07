@@ -19,7 +19,6 @@ function formatDateString(dateString) {
   let day = ('0' + date.getDate()).slice(-2);
   let hours = ('0' + date.getHours()).slice(-2);
   let minutes = ('0' + date.getMinutes()).slice(-2);
-  // let seconds = ('0' + date.getSeconds()).slice(-2);
   let formattedDateString = day + '-' + month + '-' + year + ' ' + hours + ':' + minutes;
   return formattedDateString;
 }
@@ -77,6 +76,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
           />
         )
       ) : dataKey === "abnormal" ? (
+
         <Checkbox defaultChecked={rowData[dataKey]} disabled></Checkbox>
       ) : dataKey === "connection_time" ? (
         <span className="table-content-edit-span">
@@ -118,14 +118,19 @@ export const TsAnalysis = (TsAnalysisData) => {
     TsAnalysisData.TsAnalysisData.standline
   );
 
+  const data = defData.filter((v, i) => {
+    const start = limit * (page - 1);
+    const end = start + limit;
+    return i >= start && i < end;
+  });
+
   const handleChange = (standNum, key, value) => {
-    const nextData = Object.assign([], data);
+    const nextData = Object.assign([], defData);
     nextData.find((item) => item.standNum === standNum)[key] = value;
     setdefData(nextData);
   };
   const handleEditState = (standNum) => {
-    const nextData = Object.assign([], data);
-    console.log(nextData.find((item) => item.standNum === 5))
+    const nextData = Object.assign([], defData);
     const activeItem = nextData.find((item) => item.standNum === standNum);
     activeItem.status = activeItem.status ? null : "EDIT";
     setdefData(nextData);
@@ -135,12 +140,6 @@ export const TsAnalysis = (TsAnalysisData) => {
     setPage(1);
     setLimit(dataKey);
   };
-
-  const data = defData.filter((v, i) => {
-    const start = limit * (page - 1);
-    const end = start + limit;
-    return i >= start && i < end;
-  });
 
   return (
     <>
