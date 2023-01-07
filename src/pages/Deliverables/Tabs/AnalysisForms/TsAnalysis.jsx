@@ -54,8 +54,8 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
           />
         ) : dataKey === "abnormal" ? (
           <Checkbox
-            defaultChecked={rowData[dataKey]}
-            onChange={(value) => onChange(rowData.standNum, dataKey, value)}
+            checked={rowData[dataKey]}
+            onClick={(event) => onChange(rowData.standNum, dataKey, !rowData[dataKey])}
           />
         ) : dataKey === "depth_from" || dataKey === "depth_to" ? (
           <input
@@ -76,8 +76,11 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
           />
         )
       ) : dataKey === "abnormal" ? (
-
-        <Checkbox defaultChecked={rowData[dataKey]} disabled></Checkbox>
+        // <Checkbox defaultChecked={rowData[dataKey]} disabled></Checkbox>
+        <Checkbox
+          checked={rowData[dataKey]}
+          disabled
+        />
       ) : dataKey === "connection_time" ? (
         <span className="table-content-edit-span">
           {minutesToTime(rowData[dataKey]).getMinutes() +
@@ -124,6 +127,8 @@ export const TsAnalysis = (TsAnalysisData) => {
     return i >= start && i < end;
   });
 
+  console.log(data)
+
   const handleChange = (standNum, key, value) => {
     const nextData = Object.assign([], defData);
     nextData.find((item) => item.standNum === standNum)[key] = value;
@@ -148,7 +153,7 @@ export const TsAnalysis = (TsAnalysisData) => {
         cellBordered
         rowHeight={30}
         padding={100}
-        height={350}
+        height={342}
         width={1000}
         data={data}
       >
@@ -166,22 +171,27 @@ export const TsAnalysis = (TsAnalysisData) => {
           <EditableCell dataKey="date_to" onChange={handleChange} />
         </Column>
 
-        <Column width={100}>
+        <Column width={90}>
           <HeaderCell>Depth from</HeaderCell>
           <EditableCell dataKey="depth_from" onChange={handleChange} />
         </Column>
 
-        <Column width={100}>
+        <Column width={80}>
           <HeaderCell>Depth to</HeaderCell>
           <EditableCell dataKey="depth_to" onChange={handleChange} />
         </Column>
 
-        <Column width={120}>
+        <Column width={105}>
           <HeaderCell>Connection Time</HeaderCell>
           <EditableCell dataKey="connection_time" onChange={handleChange} />
         </Column>
 
-        <Column width={90}>
+        <Column width={120}>
+          <HeaderCell>Tripping Speed</HeaderCell>
+          <EditableCell dataKey="tripping_speed" onChange={handleChange} />
+        </Column>
+
+        <Column width={72}>
           <HeaderCell>Abnormal</HeaderCell>
           <EditableCell dataKey="abnormal" onChange={handleChange} />
         </Column>

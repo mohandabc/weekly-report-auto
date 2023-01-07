@@ -91,6 +91,7 @@ export const TrippingSpeed = () => {
     const path = "TrippingSpeed/";
     getData(BACK_URL, path, params).then((res) => {
       setData(res);
+      console.log("Returned Results : ", res);
     });
   };
 
