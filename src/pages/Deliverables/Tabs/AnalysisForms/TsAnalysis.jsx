@@ -153,12 +153,16 @@ export const TsAnalysis = (TsAnalysisData) => {
   const handleDeleteClick = () => {
     deleteDoc(BACK_URL, "TrippingSpeed/deleteDoc/", TsAnalysisData.doc_id).then(
       (res) => {
-        if ("msg" in res && res.msg === "Document deleted successfully") {
+        if ("msg" in res && res.status == 200) {
           setShowTstab(true);
           alert("Document deleted successfully");
         }
       }
     );
+  };
+
+  const handleSaveClick = () => {
+    alert("Save button function isn't implemented yet !, an update function should be implemented in the back side first !");
   };
 
   const handleCancelClick = () => {
@@ -260,7 +264,7 @@ export const TsAnalysis = (TsAnalysisData) => {
         </div>
       </div>
       <div
-        className={`flex justify-between delay-100 duration-1000 transition-all ease-out ${
+        className={`flex justify-between delay-200 duration-1000 transition-all ease-out ${
           // hiding components when they first appear and then applying a translate effect gradually
           animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
         }`}
@@ -297,12 +301,12 @@ export const TsAnalysis = (TsAnalysisData) => {
           >
             Cancel
           </Button>
-          <Button color="blue" appearance="primary" className="mx-4">
+          <Button color="blue" appearance="primary" className="mx-4" onClick={handleSaveClick}>
             Save
           </Button>
         </div>
         <div
-          className={`flex justify-center delay-300 duration-1000 transition-all ease-out ${
+          className={`flex justify-center delay-200 duration-1000 transition-all ease-out ${
             // hiding components when they first appear and then applying a translate effect gradually
             animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}
