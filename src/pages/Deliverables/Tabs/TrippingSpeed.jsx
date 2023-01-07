@@ -111,7 +111,7 @@ export const TrippingSpeed = () => {
           >
             <div className="flex justify-center items-center">
               <div className="py-4 px-4">
-                <TsAnalysis TsAnalysisData={data["ts_analysis"]}></TsAnalysis>
+                <TsAnalysis TsAnalysisData={data["ts_analysis"]} doc_id={data["_id"]}></TsAnalysis>
               </div>
             </div>
           </div>

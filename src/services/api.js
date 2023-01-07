@@ -20,6 +20,15 @@ export const getData = async (URL, route, params) => {
     .catch((error) => console.error("Error:", error));
 };
 
+export const deleteDoc = async (URL, route, id) => {
+  //@@@@ IMPORTANT :  dbfilter setting needs to be set to a database for the REST interface to work.
+  return fetch(`${URL}${route}${id}`, {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
 export const authenticate = async (user,pass) =>{
     const body = {
                 "jsonrpc":"2.0",

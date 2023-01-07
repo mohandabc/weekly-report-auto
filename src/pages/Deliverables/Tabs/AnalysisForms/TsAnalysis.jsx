@@ -1,6 +1,10 @@
 import React from "react";
 import { Table, Button, Checkbox, Pagination } from "rsuite";
 import { DatePicker } from "rsuite";
+import { TrippingSpeed } from "../..";
+import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../../../constants/constants";
+import { BACK_URL } from "../../../../constants/URI";
+import { deleteDoc } from "../../../../services/api";
 import "./styles.css";
 
 const { Column, HeaderCell, Cell } = Table;
@@ -120,14 +124,13 @@ export const TsAnalysis = (TsAnalysisData) => {
   const [defData, setdefData] = React.useState(
     TsAnalysisData.TsAnalysisData.standline
   );
+  const [showTstab, setShowTstab] = React.useState(false);
 
   const data = defData.filter((v, i) => {
     const start = limit * (page - 1);
     const end = start + limit;
     return i >= start && i < end;
   });
-
-  console.log(data)
 
   const handleChange = (standNum, key, value) => {
     const nextData = Object.assign([], defData);
@@ -146,7 +149,19 @@ export const TsAnalysis = (TsAnalysisData) => {
     setLimit(dataKey);
   };
 
+  const handleDeleteClick = () => {
+    deleteDoc(BACK_URL, "TrippingSpeed/deleteDoc/", TsAnalysisData.doc_id).then(res=> {
+      if ('msg' in res && res.msg === 'Document deleted successfully') {
+        setShowTstab(true);
+        alert('Document deleted successfully');
+      }
+    });
+  }
+
   return (
+    showTstab? (<TrippingSpeed
+      options={DELIVERABLE_CONFIG_BAR_OPTIONS}
+    ></TrippingSpeed>) : (
     <>
       <Table
         bordered
@@ -254,11 +269,11 @@ export const TsAnalysis = (TsAnalysisData) => {
           </Button>
         </div>
         <div className="flex justify-center">
-          <Button color="red" appearance="primary">
-            Delete Analysis
-          </Button>
+        <Button color="red" appearance="primary" onClick={handleDeleteClick}>
+          Delete Analysis
+        </Button>
         </div>
       </div>
-    </>
+    </>)
   );
 };
