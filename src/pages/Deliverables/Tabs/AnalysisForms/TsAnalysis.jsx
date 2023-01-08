@@ -6,6 +6,9 @@ import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../../../constants/constants"
 import { BACK_URL } from "../../../../constants/URI";
 import { deleteDoc } from "../../../../services/api";
 import "./styles.css";
+import * as Mode from "../../../../constants/darkmode_constants";
+import { darkModeState } from "../../../../shared/globalState";
+import { useRecoilValue } from "recoil";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -162,6 +165,13 @@ export const TsAnalysis = (TsAnalysisData) => {
   };
 
   const handleSaveClick = () => {
+    const updatedData = defData.map(object => {
+      const { status, ...otherFields } = object;
+      return otherFields;
+    });
+    TsAnalysisData.TsAnalysisData['standline'] = updatedData;
+    console.log("The document that is going to be updated with its new data : ",
+    {"document_id":TsAnalysisData.doc_id, "params" : TsAnalysisData.TsAnalysisData});
     alert("Save button function isn't implemented yet !, an update function should be implemented in the back side first !");
   };
 
@@ -170,6 +180,7 @@ export const TsAnalysis = (TsAnalysisData) => {
   };
 
   const [animation, setAnimation] = React.useState(false);
+  const darkMode = useRecoilValue(darkModeState);
 
   React.useEffect(() => {
     setAnimation(true);
@@ -264,12 +275,16 @@ export const TsAnalysis = (TsAnalysisData) => {
         </div>
       </div>
       <div
-        className={`flex justify-between delay-200 duration-1000 transition-all ease-out ${
+        className={`${
+          darkMode
+            ? Mode.CONTAINER_DARK_TITLE
+            : Mode.CONTAINER_LIGHT_TITLE
+        } flex justify-between delay-200 duration-1000 transition-all ease-out ${
           // hiding components when they first appear and then applying a translate effect gradually
           animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
         }`}
       >
-        <div className="float-left p-2 text-black text-sm">
+        <div className="float-left p-2 text-sm">
           <div>
             <b>Well :</b> {TsAnalysisData.TsAnalysisData.well}
           </div>
@@ -277,12 +292,12 @@ export const TsAnalysis = (TsAnalysisData) => {
             <b>Trip Number : </b> {TsAnalysisData.TsAnalysisData.trip_number}
           </div>
         </div>
-        <div className="float-right p-2 text-black text-sm">
+        <div className="float-right p-2 text-sm">
           <div>
             <b>CSG Size : </b> {TsAnalysisData.TsAnalysisData.csg_size}
           </div>
           <div>
-            <b>Drill Pipe Size : </b>{" "}
+            <b>Drill Pipe Size : </b>
             {TsAnalysisData.TsAnalysisData.drill_pipe_size}
           </div>
         </div>
