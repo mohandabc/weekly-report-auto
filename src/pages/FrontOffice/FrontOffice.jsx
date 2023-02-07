@@ -14,21 +14,15 @@ export const FrontOffice = () => {
   const [animation, setAnimation] = useState(false);
   useEffect(() => {
     setAnimation(true);
-  });
+  },[]);
 
   return (
     <div className="App">
       <header
-        className={`flex flex-col h-72 ${
-          // choose background on Whether darkmode is in "dark" or "light" mode.
-            darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
-        } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
+        className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
       >
         <div
-          className={`sticky top-0 z-30 w-full ${
-            // choose Navbar Color on Whether darkmode is in "dark" or "light" mode.
-            darkMode ? Mode.NAVBAR_DARK : Mode.NAVBAR_LIGHT
-          }`}
+          className={`sticky top-0 z-30 w-full dark:bg-black`}
         >
           <SideBar
             appearance={`${
@@ -61,11 +55,7 @@ export const FrontOffice = () => {
               style={{ textDecoration: "none", color: "#000" }}
             >
               <div
-                className={`${
-                  darkMode
-                    ? Mode.CARDS_DARK_DEACTIVATED
-                    : Mode.CARDS_LIGHT_DEACTIVATED
-                } h-60 w-full p-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg position:relative z-0`}
+                className={`bg-gray-400 text-black dark:bg-stone-800 text-white h-60 w-full p-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg position:relative z-0`}
               >
                 <h3>FO Daily Report</h3>
                 <p>
@@ -91,11 +81,7 @@ export const FrontOffice = () => {
               style={{ textDecoration: "none", color: "#000" }}
             >
               <div
-                className={`${
-                  darkMode
-                    ? Mode.CARDS_DARK_DEACTIVATED
-                    : Mode.CARDS_LIGHT_DEACTIVATED
-                } h-60 w-full p-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg position:relative z-0`}
+                className={`bg-gray-400 text-black dark:bg-stone-800 text-white h-60 w-full p-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg position:relative z-0`}
               >
                 <h3>FO Weekly Report</h3>
                 <p>
@@ -122,11 +108,7 @@ export const FrontOffice = () => {
               style={{ textDecoration: "none", color: "#000" }}
             >
               <div
-                className={`${
-                  darkMode
-                    ? Mode.CARDS_DARK_DEACTIVATED
-                    : Mode.CARDS_LIGHT_DEACTIVATED
-                } h-60 w-full p-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg position:relative z-0`}
+                className={`bg-gray-400 text-black dark:bg-stone-800 text-white h-60 w-full p-4 text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg position:relative z-0`}
               >
                 <h3>FO Monthly Report</h3>
                 <p>

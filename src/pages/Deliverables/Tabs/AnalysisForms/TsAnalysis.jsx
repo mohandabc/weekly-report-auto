@@ -6,9 +6,6 @@ import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../../../constants/constants"
 import { BACK_URL } from "../../../../constants/URI";
 import { deleteDoc } from "../../../../services/api";
 import "./styles.css";
-import * as Mode from "../../../../constants/darkmode_constants";
-import { darkModeState } from "../../../../shared/globalState";
-import { useRecoilValue } from "recoil";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -180,11 +177,10 @@ export const TsAnalysis = (TsAnalysisData) => {
   };
 
   const [animation, setAnimation] = React.useState(false);
-  const darkMode = useRecoilValue(darkModeState);
 
   React.useEffect(() => {
     setAnimation(true);
-  });
+  },[]);
 
   return showTstab ? (
     <TrippingSpeed options={DELIVERABLE_CONFIG_BAR_OPTIONS}></TrippingSpeed>
@@ -275,11 +271,7 @@ export const TsAnalysis = (TsAnalysisData) => {
         </div>
       </div>
       <div
-        className={`${
-          darkMode
-            ? Mode.CONTAINER_DARK_TITLE
-            : Mode.CONTAINER_LIGHT_TITLE
-        } flex justify-between delay-200 duration-1000 transition-all ease-out ${
+        className={`text-zinc-500 dark:text-black flex justify-between delay-200 duration-1000 transition-all ease-out ${
           // hiding components when they first appear and then applying a translate effect gradually
           animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
         }`}

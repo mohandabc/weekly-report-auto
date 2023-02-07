@@ -57,20 +57,14 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
 
   useEffect(() => {
     setAnimation(true);
-  });
+  },[]);
 
   return (
     <div
-      className={`flex flex-col h-72 ${
-        // choose background on Whether darkmode is in "dark" or "light" mode.
-            darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
-      } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
+      className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
     >
       <div
-        className={`fixed top-0 z-50 w-full ${
-          // choose Navbar Color on Whether darkmode is in "dark" or "light" mode.
-            darkMode ? Mode.NAVBAR_DARK : Mode.NAVBAR_LIGHT
-        }`}
+        className={`fixed top-0 z-50 w-full dark:bg-black`}
       >
         <SideBar
           appearance={`${
@@ -82,10 +76,7 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
       </div>
 
       <header
-        className={`flex flex-col h-72 ${
-          // choose background on Whether darkmode is in "dark" or "light" mode.
-            darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
-        } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl ${
+        className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl ${
           options.option == "Reporting" ? "justify-center" : ""
         } items-center`}
       >
@@ -95,11 +86,7 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
               <Loader></Loader>
             </div>
             <div
-              className={`sticky rounded-xl ${
-                darkMode
-                  ? Mode.CONTAINER_DARK_COLOR
-                  : Mode.CONTAINER_LIGHT_COLOR
-              } w-1/4 h-1/3 duration-1000 transform transition-all ease-out
+              className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 w-1/4 h-1/3 duration-1000 transform transition-all ease-out
           ${
             animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}
@@ -107,11 +94,7 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
               <div className="flex justify-center items-center">
                 <div className="py-9">
                   <h1
-                    className={`${
-                      darkMode
-                        ? Mode.CONTAINER_DARK_TITLE
-                        : Mode.CONTAINER_LIGHT_TITLE
-                    } text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
+                    className={`text-zinc-500 dark:text-black text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
                     ${
                       // hiding components when they first appear and then applying a translate effect gradually
                       animation

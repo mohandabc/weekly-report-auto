@@ -8,7 +8,6 @@ import React, { useEffect } from "react";
 
 import { Navbar, Nav } from "rsuite";
 import HomeIcon from "@rsuite/icons/legacy/Home";
-import ExitIcon from "@rsuite/icons/Exit";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { useAuth } from "../../services/useAuth";
@@ -19,19 +18,17 @@ import lightModeIcon from "../../assets/light-mode-icon.png";
 import darkModeIcon from "../../assets/dark-mode-icon.png";
 import logOut from "../../assets/logout.png"
 
-const custm = {
-  width: 240,
-  display: "inline-table",
-  marginRight: 100,
-};
 
 // TODO : this sidebar was replaced with a navbar now, consider renaming the component to Navbar
 
 // Exports a rsuite navbar component.
 export const SideBar = ({ onSelect, activeKey, ...props }) => {
   const [darkMode, setDarkMode] = useRecoilState(darkModeState);
-
   const { user } = useAuth();
+
+  useEffect(() => {
+        document.body.className = (darkMode===true) ? "dark" : "light";
+      }, [darkMode]);
 
   return (
     <Navbar {...props}>
@@ -74,32 +71,26 @@ export const SideBar = ({ onSelect, activeKey, ...props }) => {
         <>
           <Nav pullRight>
             <Nav.Item as={Link} to="/logout">
-            <img className="h-8" src={logOut} />
+            <img className="h-8" src={logOut} alt="..."/>
 
             </Nav.Item>
           </Nav>
+
           <Nav pullRight>
-            {darkMode ? (
               <IconButton
-                onClick={() =>
-                  darkMode ? setDarkMode(false) : setDarkMode(true)
-                }
+                onClick={() => setDarkMode(!darkMode)}
                 className="my-2"
-                appearance="link"
-              >
-                <img className="h-6" src={lightModeIcon} />
-              </IconButton>
-            ) : (
-              <IconButton
-                onClick={() =>
-                  darkMode ? setDarkMode(false) : setDarkMode(true)
+                appearance="link">
+                  
+                {darkMode?(
+                  <img className="h-6" src={lightModeIcon} alt="..."/>
+                ):
+                (
+                  <img className="h-6" src={darkModeIcon} alt="..."/>
+                )
                 }
-                className="my-2"
-                appearance="link"
-              >
-                <img className="h-6" src={darkModeIcon} />
               </IconButton>
-            )}
+
           </Nav>
         </>
       ) : (

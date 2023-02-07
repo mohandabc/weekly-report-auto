@@ -2,12 +2,8 @@ import React, { useLayoutEffect} from 'react';
 import { useState } from 'react';
 import { BarChart, PieChart, ClusteredBarChart } from './charts';
 import gear from '../../assets/gear.svg';
-import { useRecoilValue } from "recoil";
-import { darkModeState } from "../../shared/globalState";
-import * as Mode from "../../constants/darkmode_constants"
 
 export const Chart = ({title, id, chartData, chartType}) => {
-  const darkMode = useRecoilValue(darkModeState);
   const divID = id.toString();
   const [type, setType] = useState(chartType);
 
@@ -34,7 +30,7 @@ export const Chart = ({title, id, chartData, chartType}) => {
   });
 
   return (
-        <div className={`h-120  pb-5 ${darkMode ? Mode.DARK_CHART_BACKGROUND : Mode.LIGHT_CHART_BACKGROUND} rounded-lg shadow w-full`}>
+        <div className={`h-120  pb-5 bg-white dark:bg-stone-600 rounded-lg shadow w-full`}>
               {
                 type==='Pie' || type === 'Bar' ? 
                 <div>
