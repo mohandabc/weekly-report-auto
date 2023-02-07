@@ -11,7 +11,6 @@ import { SelectPicker } from "rsuite";
 import { useRecoilValue } from "recoil";
 import "./styles.css";
 import { darkModeState } from "../../shared/globalState";
-import * as Mode from "../../constants/darkmode_constants";
 import { getData } from "../../services/api";
 import { API_URL, BACK_URL} from '../../constants/URI';
 
@@ -80,11 +79,7 @@ export const DataUploader = () => {
           className={`fixed top-0 z-30 w-full dark:bg-black`}
         >
           <SideBar
-            appearance={`${
-              darkMode
-                ? Mode.NAVBAR_DARK_APPEARANCE
-                : Mode.NAVBAR_LIGHT_APPEARANCE
-            }`}
+            appearance={`${darkMode ? "subtle": "default"}`}
           />
         </div>
         <header

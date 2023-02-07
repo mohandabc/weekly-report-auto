@@ -3,7 +3,6 @@ import { SideBar } from "../../components/SideBar";
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { darkModeState } from "../../shared/globalState";
-import * as Mode from "../../constants/darkmode_constants";
 
 export const BackOffice = () => {
   const darkMode = useRecoilValue(darkModeState);
@@ -20,11 +19,7 @@ export const BackOffice = () => {
       >
         <div className={`sticky top-0 z-30 w-full dark:bg-black`}>
           <SideBar
-            appearance={`${
-              darkMode
-                ? Mode.NAVBAR_DARK_APPEARANCE
-                : Mode.NAVBAR_LIGHT_APPEARANCE
-            }`}
+            appearance={`${darkMode ? "subtle": "default"}`}
           />
         </div>
 

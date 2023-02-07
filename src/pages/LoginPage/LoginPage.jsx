@@ -11,7 +11,6 @@ import { useAuth } from "../../services/useAuth";
 import { SONATRACH_LOGO } from "../../constants/logos";
 import { useRecoilValue } from "recoil";
 import { darkModeState } from "../../shared/globalState";
-import * as Mode from "../../constants/darkmode_constants";
 
 export const LoginPage = () => {
   const darkMode = useRecoilValue(darkModeState);
@@ -63,11 +62,7 @@ export const LoginPage = () => {
             className={`fixed top-0 z-30 w-full dark:bg-black`}
           >
             <SideBar
-              appearance={`${
-                darkMode
-                  ? Mode.NAVBAR_DARK_APPEARANCE
-                  : Mode.NAVBAR_LIGHT_APPEARANCE
-              }`}
+              appearance={`${darkMode ? "subtle": "default"}`}
             />
           </div>
         ) : (

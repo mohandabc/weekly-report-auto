@@ -13,9 +13,8 @@ import { DateRangePicker } from "rsuite";
 import { SideBar } from "../../components/SideBar";
 import { dateStartEndState } from "../../shared/globalState";
 import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { darkModeState } from "../../shared/globalState";
-import * as Mode from "../../constants/darkmode_constants";
 
 import {
   BitRecord,
@@ -27,7 +26,7 @@ import { Loader } from "../Loader";
 import { ActionButton } from "../ActionButton";
 
 export const ConfigBar = ({ title, configBarAction, options }) => {
-  const [dateStartEnd, setDateStartEnd] = useRecoilState(dateStartEndState);
+  const dateStartEnd = useRecoilValue(dateStartEndState);
   const [value, setValue] = React.useState([
     new Date(dateStartEnd.split(" - ")[0]),
     new Date(dateStartEnd.split(" - ")[1]),
@@ -67,11 +66,7 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
         className={`fixed top-0 z-50 w-full dark:bg-black`}
       >
         <SideBar
-          appearance={`${
-            darkMode
-              ? Mode.NAVBAR_DARK_APPEARANCE
-              : Mode.NAVBAR_LIGHT_APPEARANCE
-          }`}
+          appearance={`${darkMode ? "subtle": "default"}`}
         />
       </div>
 

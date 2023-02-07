@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { ActionButton } from "../../../components";
 import { DateRangePicker } from "rsuite";
 import { dateStartEndState} from "../../../shared/globalState";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { Loader } from "../../../components";
 import { SelectPicker } from "rsuite";
 import "./styles.css";
@@ -28,7 +28,7 @@ const processInput = (params) => {
 };
 
 export const BitRecord = () => {
-  const [dateStartEnd, setDateStartEnd] = useRecoilState(dateStartEndState);
+  const dateStartEnd = useRecoilValue(dateStartEndState);
   const [dateRangeValue, setDateRangeValue] = React.useState([
     new Date(dateStartEnd.split(" - ")[0]),
     new Date(dateStartEnd.split(" - ")[1]),
