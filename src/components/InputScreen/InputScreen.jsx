@@ -10,11 +10,15 @@
 import "./react-tabs.css";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { DateRangePicker } from "rsuite";
-import { SideBar } from "../../components/SideBar";
+import { TopMenu } from "../TopMenu";
 import { dateStartEndState } from "../../shared/globalState";
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { darkModeState } from "../../shared/globalState";
+
+
+import { Loader } from "../Loader";
+import { ActionButton } from "../ActionButton";
 
 import {
   BitRecord,
@@ -22,10 +26,8 @@ import {
   ReamBream,
   TrippingSpeed,
 } from "../../pages";
-import { Loader } from "../Loader";
-import { ActionButton } from "../ActionButton";
 
-export const ConfigBar = ({ title, configBarAction, options }) => {
+export const InputScreen = ({ title, configBarAction, options }) => {
   const dateStartEnd = useRecoilValue(dateStartEndState);
   const [value, setValue] = React.useState([
     new Date(dateStartEnd.split(" - ")[0]),
@@ -65,7 +67,7 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
       <div
         className={`fixed top-0 z-50 w-full dark:bg-black`}
       >
-        <SideBar
+        <TopMenu
           appearance={`${darkMode ? "subtle": "default"}`}
         />
       </div>
