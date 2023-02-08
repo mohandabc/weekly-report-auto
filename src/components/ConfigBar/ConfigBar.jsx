@@ -72,10 +72,10 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
 
       <header
         className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl ${
-          options.option == "Reporting" ? "justify-center" : ""
+          options.option === "Reporting" ? "justify-center" : ""
         } items-center`}
       >
-        {options.option == "Reporting" ? (
+        {options.option === "Reporting" ? (
           <>
             <div className="absolute mt-56 z-50">
               <Loader></Loader>

@@ -153,7 +153,7 @@ export const TsAnalysis = (TsAnalysisData) => {
   const handleDeleteClick = () => {
     deleteDoc(BACK_URL, "TrippingSpeed/deleteDoc/", TsAnalysisData.doc_id).then(
       (res) => {
-        if ("msg" in res && res.status == 200) {
+        if ("msg" in res && res.status === 200) {
           setShowTstab(true);
           alert("Document deleted successfully");
         }

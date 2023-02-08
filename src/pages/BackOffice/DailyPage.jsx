@@ -40,13 +40,12 @@ export const BoDailyPage = () => {
         setRange(params['dates'])
         getData(API_URL, path, params)
         .then(res=> {
-          let data = res.result;
-          setDailyData(data || {});
-          console.log(data);
+            let data = res.result;
+            setDailyData(data || {});
+            setIsHidden(true);
         });
     }
     useEffect(()=>{
-        setIsHidden(true);
         window.scrollTo(0,400);
     });
 
