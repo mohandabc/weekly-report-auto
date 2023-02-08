@@ -2,7 +2,7 @@
  * TODO : FIND SOMETHING THAT SHOULD BE HERE ON MAIN PAGE *
  **********************************************************/
 
-import { SideBar } from "../../components/SideBar";
+import { TopMenu } from "../../components/TopMenu";
 import React from "react";
 import { useAuth } from "../../services/useAuth";
 import { useRecoilValue } from "recoil";
@@ -16,7 +16,7 @@ export const MainPage = () => {
       <div
         className={`sticky top-0 z-30 w-full dark:bg-black`}
       >
-        <SideBar
+        <TopMenu
           appearance={`${darkMode ? "subtle": "default"}`}
         />
       </div>

@@ -3,7 +3,7 @@
  *       GENERATING A TOKEN FOR THEM AND KEEPING THEM SIGNED IN USING LOCALSTORAGE       *
  *****************************************************************************************/
 
-import { SideBar } from "../../components/SideBar";
+import { TopMenu } from "../../components/TopMenu";
 import React, { useEffect, useState } from "react";
 import { Form, Button, Schema } from "rsuite";
 import { authenticate } from "../../services/api";
@@ -61,7 +61,7 @@ export const LoginPage = () => {
           <div
             className={`fixed top-0 z-30 w-full dark:bg-black`}
           >
-            <SideBar
+            <TopMenu
               appearance={`${darkMode ? "subtle": "default"}`}
             />
           </div>

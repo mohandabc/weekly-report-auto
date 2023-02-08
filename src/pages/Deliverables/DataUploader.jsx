@@ -4,7 +4,7 @@
  ***********************************************************************************************/
 
 import React, { useEffect, useState } from "react";
-import { SideBar } from "../../components/SideBar";
+import { TopMenu } from "../../components/TopMenu";
 import { Loader } from "../../components/Loader";
 import { Uploader } from "rsuite";
 import { SelectPicker } from "rsuite";
@@ -50,7 +50,7 @@ export const DataUploader = () => {
   }
 
   function onProgressFun(percent) {
-    percent != 100
+    percent !== 100
       ? setMsg({
           msg: "Uploading..." + parseInt(percent) + "%",
           color: "#375a70",
@@ -78,7 +78,7 @@ export const DataUploader = () => {
         <div
           className={`fixed top-0 z-30 w-full dark:bg-black`}
         >
-          <SideBar
+          <TopMenu
             appearance={`${darkMode ? "subtle": "default"}`}
           />
         </div>

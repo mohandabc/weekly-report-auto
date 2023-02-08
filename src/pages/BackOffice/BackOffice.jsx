@@ -1,4 +1,4 @@
-import { SideBar } from "../../components/SideBar";
+import { TopMenu } from "../../components/TopMenu";
 import React from "react";
 import { useRecoilValue } from "recoil";
 import { darkModeState } from "../../shared/globalState";
@@ -14,7 +14,7 @@ export const BackOffice = () => {
         className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode  min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
       >
         <div className={`sticky top-0 z-30 w-full dark:bg-black`}>
-          <SideBar
+          <TopMenu
             appearance={`${darkMode ? "subtle": "default"}`}
           />
         </div>

@@ -2,7 +2,7 @@
  * TODO: IMPLEMENT THE FRONTOFFICE REPORTS GENERATORS*
  *****************************************************/
 
-import { SideBar } from "../../components/SideBar";
+import { TopMenu } from "../../components/TopMenu";
 import React from "react";
 import { useRecoilValue } from "recoil";
 import { darkModeState } from "../../shared/globalState";
@@ -19,7 +19,7 @@ export const FrontOffice = () => {
         <div
           className={`sticky top-0 z-30 w-full dark:bg-black`}
         >
-          <SideBar
+          <TopMenu
             appearance={`${darkMode ? "subtle": "default"}`}
           />
         </div>
