@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import {useRecoilState,  useSetRecoilState} from 'recoil';
 import {chartsToPrintState, dateStartEndState, weeklyDataState ,loaderIsHidden} from '../../shared/globalState';
 
-import { ActionButton, Chart, ConfigBar, Table} from '../../components';
+import { ActionButton, Chart, ReportInputScreen , Table} from '../../components';
 
 import {generateWeeklyReport} from '../../services/weeklyPdfGenBO';
 import { getData } from '../../services/api';
@@ -53,11 +53,11 @@ export const BoWeeklyPage = () => {
      
     return (
         <div className="App">
-            <ConfigBar
+            <ReportInputScreen 
                 title = "Back Office Weekly Report" 
                 configBarAction={getWeeklyData}
                 options={DEFAULT_CONFIG_BAR_OPTIONS}>
-            </ConfigBar>
+            </ReportInputScreen >
             <div className={`bg-slate-300 dark:bg-zinc-900 ${Object.keys(weeklyData).length === 0? "hidden":""}`}>
                 <div className='flex flex-row-reverse sticky top-14 px-10 py-4  z-40'>
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
