@@ -3,7 +3,7 @@
  *       GENERATING A TOKEN FOR THEM AND KEEPING THEM SIGNED IN USING LOCALSTORAGE       *
  *****************************************************************************************/
 
-import { SideBar } from "../../components/SideBar";
+import { TopMenu } from "../../components/TopMenu";
 import React, { useEffect, useState } from "react";
 import { Form, Button, Schema } from "rsuite";
 import { authenticate } from "../../services/api";
@@ -11,7 +11,6 @@ import { useAuth } from "../../services/useAuth";
 import { SONATRACH_LOGO } from "../../constants/logos";
 import { useRecoilValue } from "recoil";
 import { darkModeState } from "../../shared/globalState";
-import * as Mode from "../../constants/darkmode_constants";
 
 export const LoginPage = () => {
   const darkMode = useRecoilValue(darkModeState);
@@ -62,12 +61,8 @@ export const LoginPage = () => {
           <div
             className={`fixed top-0 z-30 w-full dark:bg-black`}
           >
-            <SideBar
-              appearance={`${
-                darkMode
-                  ? Mode.NAVBAR_DARK_APPEARANCE
-                  : Mode.NAVBAR_LIGHT_APPEARANCE
-              }`}
+            <TopMenu
+              appearance={`${darkMode ? "subtle": "default"}`}
             />
           </div>
         ) : (

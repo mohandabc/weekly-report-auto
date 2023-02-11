@@ -10,12 +10,15 @@
 import "./react-tabs.css";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { DateRangePicker } from "rsuite";
-import { SideBar } from "../../components/SideBar";
+import { TopMenu } from "../TopMenu";
 import { dateStartEndState } from "../../shared/globalState";
 import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { darkModeState } from "../../shared/globalState";
-import * as Mode from "../../constants/darkmode_constants";
+
+
+import { Loader } from "../Loader";
+import { ActionButton } from "../ActionButton";
 
 import {
   BitRecord,
@@ -23,11 +26,9 @@ import {
   ReamBream,
   TrippingSpeed,
 } from "../../pages";
-import { Loader } from "../Loader";
-import { ActionButton } from "../ActionButton";
 
-export const ConfigBar = ({ title, configBarAction, options }) => {
-  const [dateStartEnd, setDateStartEnd] = useRecoilState(dateStartEndState);
+export const InputScreen = ({ title, configBarAction, options }) => {
+  const dateStartEnd = useRecoilValue(dateStartEndState);
   const [value, setValue] = React.useState([
     new Date(dateStartEnd.split(" - ")[0]),
     new Date(dateStartEnd.split(" - ")[1]),
@@ -66,21 +67,17 @@ export const ConfigBar = ({ title, configBarAction, options }) => {
       <div
         className={`fixed top-0 z-50 w-full dark:bg-black`}
       >
-        <SideBar
-          appearance={`${
-            darkMode
-              ? Mode.NAVBAR_DARK_APPEARANCE
-              : Mode.NAVBAR_LIGHT_APPEARANCE
-          }`}
+        <TopMenu
+          appearance={`${darkMode ? "subtle": "default"}`}
         />
       </div>
 
       <header
         className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl ${
-          options.option == "Reporting" ? "justify-center" : ""
+          options.option === "Reporting" ? "justify-center" : ""
         } items-center`}
       >
-        {options.option == "Reporting" ? (
+        {options.option === "Reporting" ? (
           <>
             <div className="absolute mt-56 z-50">
               <Loader></Loader>

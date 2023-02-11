@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { ActionButton } from "../../../components";
 import { DateRangePicker } from "rsuite";
 import { dateStartEndState} from "../../../shared/globalState";
-import { useRecoilState} from "recoil";
+import { useRecoilValue} from "recoil";
 import { SelectPicker } from "rsuite";
 import { BACK_URL } from "../../../constants/URI";
 import { getData } from "../../../services/api";
@@ -21,7 +21,7 @@ const data_placeHolder = [
 ].map((item) => ({ label: item, value: item }));
 
 export const TrippingSpeed = () => {
-  const [dateStartEnd, setDateStartEnd] = useRecoilState(dateStartEndState);
+  const dateStartEnd = useRecoilValue(dateStartEndState);
   const [dateRangeValue, setDateRangeValue] = React.useState([
     new Date(dateStartEnd.split(" - ")[0]),
     new Date(dateStartEnd.split(" - ")[1]),

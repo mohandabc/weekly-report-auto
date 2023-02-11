@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
       var key = keys[i];
     }
     if (values.length) {
-      if (values[0] == "null") {
+      if (values[0] === "null") {
         return Math.random().toString(36);
       } else {
         return key;

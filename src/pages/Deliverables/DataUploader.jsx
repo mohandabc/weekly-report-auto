@@ -4,14 +4,13 @@
  ***********************************************************************************************/
 
 import React, { useEffect, useState } from "react";
-import { SideBar } from "../../components/SideBar";
+import { TopMenu } from "../../components/TopMenu";
 import { Loader } from "../../components/Loader";
 import { Uploader } from "rsuite";
 import { SelectPicker } from "rsuite";
 import { useRecoilValue } from "recoil";
 import "./styles.css";
 import { darkModeState } from "../../shared/globalState";
-import * as Mode from "../../constants/darkmode_constants";
 import { getData } from "../../services/api";
 import { API_URL, BACK_URL} from '../../constants/URI';
 
@@ -51,7 +50,7 @@ export const DataUploader = () => {
   }
 
   function onProgressFun(percent) {
-    percent != 100
+    percent !== 100
       ? setMsg({
           msg: "Uploading..." + parseInt(percent) + "%",
           color: "#375a70",
@@ -79,12 +78,8 @@ export const DataUploader = () => {
         <div
           className={`fixed top-0 z-30 w-full dark:bg-black`}
         >
-          <SideBar
-            appearance={`${
-              darkMode
-                ? Mode.NAVBAR_DARK_APPEARANCE
-                : Mode.NAVBAR_LIGHT_APPEARANCE
-            }`}
+          <TopMenu
+            appearance={`${darkMode ? "subtle": "default"}`}
           />
         </div>
         <header

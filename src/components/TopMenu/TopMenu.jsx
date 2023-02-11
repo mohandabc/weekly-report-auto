@@ -16,21 +16,26 @@ import { useRecoilState } from "recoil";
 import { darkModeState } from "../../shared/globalState";
 import lightModeIcon from "../../assets/light-mode-icon.png";
 import darkModeIcon from "../../assets/dark-mode-icon.png";
-import logOut from "../../assets/logout.png"
+import logOut from "../../assets/logout.png";
+import Cookies from 'js-cookie';
 
 
-// TODO : this sidebar was replaced with a navbar now, consider renaming the component to Navbar
 
 // Exports a rsuite navbar component.
-export const SideBar = ({ onSelect, activeKey, ...props }) => {
+export const TopMenu = ({ onSelect, activeKey, ...props }) => {
   const [darkMode, setDarkMode] = useRecoilState(darkModeState);
   const { user } = useAuth();
 
+  const toggleDarkMode = () =>{
+    setDarkMode(!darkMode);
+    Cookies.set('darkMode', !darkMode);
+  }
   useEffect(() => {
-        document.body.className = (darkMode===true) ? "dark" : "light";
-      }, [darkMode]);
+    document.body.className = (darkMode===true) ? "dark" : "light";
+    }, [darkMode]);
 
   return (
+    <div className={`fixed top-0 z-50 w-full dark:bg-black`}>
     <Navbar {...props}>
       <Navbar.Brand>
         <img style={{ width: 120, height: 28.24 }} src={logo} alt="Logo" />
@@ -78,7 +83,7 @@ export const SideBar = ({ onSelect, activeKey, ...props }) => {
 
           <Nav pullRight>
               <IconButton
-                onClick={() => setDarkMode(!darkMode)}
+                onClick={() => toggleDarkMode()}
                 className="my-2"
                 appearance="link">
                   
@@ -97,5 +102,6 @@ export const SideBar = ({ onSelect, activeKey, ...props }) => {
         <></>
       )}
     </Navbar>
+    </div>
   );
 };

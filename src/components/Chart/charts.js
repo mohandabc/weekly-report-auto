@@ -8,14 +8,16 @@ class Chart
      * Abstract class 
      * @param {*} data : Data to display in he chart
      * @param {*} container HTML div where to render the chart
+     * @param {*} title 
+     * @param {*} options a set of display options
      */
-    constructor(data, container, title = ''){
+    constructor(data, container, title = '', options=null){
         if(this.constructor === Chart){
             throw new Error("FYI: Abstract class 'Chart' cannot be instantiated");
         }
 
         am4core.options.autoDispose = true;
-        this.chart = this.buildChart(data, container, title);
+        this.chart = this.buildChart(data, container, title, options);
     }
 
     /**
@@ -23,7 +25,7 @@ class Chart
      * @param {*} data Chart data
      * @param {*} container html container to render the chart in
      */
-    buildChart(data, container, title){
+    buildChart(data, container, title, options){
         /*override this function to define a chart */
     }
 
@@ -102,7 +104,7 @@ class Chart
 
 export class PieChart extends Chart
 {   
-    buildChart(data, container, title){
+    buildChart(data, container, title, options){
         
         let params = {}
         if (data?.length > 0){
@@ -121,10 +123,14 @@ export class PieChart extends Chart
         let series = chart.series.push(new am4charts.PieSeries());
         series.dataFields.value = params?.value;
         series.dataFields.category = params?.category;
+        series.labels.template.fill = options['label-color'];
+        series.slices.template.stroke = options['stroke-color'];
+        series.slices.template.lak = options['stroke-color'];
 
         var chartTitle = chart.titles.create();
         chartTitle.text = title;
-        chartTitle.fontSize = 25;
+        chartTitle.fill = options["title-color"];
+        chartTitle.fontSize = 24;
         chartTitle.marginBottom = 30;
         
         // Add data
@@ -135,7 +141,7 @@ export class PieChart extends Chart
 
 export class BarChart extends Chart
 {
-    buildChart(data, container, title){
+    buildChart(data, container, title, options){
         let params = {}
         if (data?.length > 0){
             params = {
@@ -156,6 +162,7 @@ export class BarChart extends Chart
         categoryAxis.renderer.grid.template.location = 0;
         categoryAxis.renderer.minGridDistance = 30;
 
+        categoryAxis.renderer.labels.template.fill = options["label-color"];
         categoryAxis.renderer.labels.template.adapter.add("dy", function(dy, target) {
         if (target.dataItem && data.length >= 8 && target.dataItem.index % 2 !== 0 ) {
             //if there are too much data, alternate the positions of names of bars
@@ -167,6 +174,9 @@ export class BarChart extends Chart
         // eslint-disable-next-line
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
         valueAxis.extraMax = 0.1;
+        valueAxis.stroke = options['stroke-color'];
+        valueAxis.renderer.grid.template.stroke = options['stroke-color'];
+
 
         // Create series
         var series = chart.series.push(new am4charts.ColumnSeries());
@@ -178,9 +188,9 @@ export class BarChart extends Chart
 
         var bullet = series.bullets.push(new am4charts.LabelBullet())
             bullet.interactionsEnabled = false
-            bullet.dy = -10;
-            bullet.label.text = '[bold]{valueY}'
-            bullet.label.fill = am4core.color('#555')
+            bullet.dy = -15;
+            bullet.label.text = '[bold]{valueY}';
+            bullet.label.fill = am4core.color(options['value-color']);
         
 
         var columnTemplate = series.columns.template;
@@ -189,7 +199,8 @@ export class BarChart extends Chart
     
         var chartTitle = chart.titles.create();
         chartTitle.text = title;
-        chartTitle.fontSize = 25;
+        chartTitle.fill = options["title-color"];
+        chartTitle.fontSize = 24;
         chartTitle.marginBottom = 30;
 
         // Add data
@@ -200,7 +211,7 @@ export class BarChart extends Chart
 
 export class ClusteredBarChart extends Chart
 {
-    buildChart(data, container, title){
+    buildChart(data, container, title, options){
         if (data === undefined){
             return
         }
@@ -226,9 +237,13 @@ export class ClusteredBarChart extends Chart
         xAxis.renderer.cellStartLocation = 0.1
         xAxis.renderer.cellEndLocation = 0.9
         xAxis.renderer.grid.template.location = 0;
+        xAxis.renderer.labels.template.fill= options['label-color'];
 
         var yAxis = chart.yAxes.push(new am4charts.ValueAxis());
         yAxis.min = 0;
+        yAxis.renderer.line.stroke = options['stroke-color'];
+        yAxis.renderer.grid.template.stroke = options['stroke-color'];
+
 
         function createSeries(value, name) {
             var series = chart.series.push(new am4charts.ColumnSeries())
@@ -243,7 +258,7 @@ export class ClusteredBarChart extends Chart
             bullet.interactionsEnabled = false
             bullet.label.dy = -10;
             bullet.label.text = '[bold]{valueY}'
-            bullet.label.fill = am4core.color('#555')
+            bullet.label.fill = am4core.color(options['value-color'])
             return series;
         }
 
@@ -295,7 +310,8 @@ export class ClusteredBarChart extends Chart
 
         var chartTitle = chart.titles.create();
         chartTitle.text = title;
-        chartTitle.fontSize = 25;
+        chartTitle.fontSize = 24;
+        chartTitle.fill = options["title-color"];
         chartTitle.marginBottom = 30;
 
 

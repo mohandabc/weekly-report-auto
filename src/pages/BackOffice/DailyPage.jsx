@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import {useRecoilState, useSetRecoilState} from 'recoil';
 import {chartsToPrintState, dateStartEndState, dailyDataState ,loaderIsHidden} from '../../shared/globalState';
 
-import { ActionButton, Chart, ConfigBar, Table} from '../../components';
+import { ActionButton, Chart, ReportInputScreen, Table} from '../../components';
 
 import {generateDailyReport} from '../../services/dailyPdfGenBO';
 import { getData } from '../../services/api';
@@ -40,14 +40,14 @@ export const BoDailyPage = () => {
         setRange(params['dates'])
         getData(API_URL, path, params)
         .then(res=> {
-          let data = res.result;
-          setDailyData(data || {});
-          console.log(data);
+            let data = res.result;
+            setDailyData(data || {});
+            setIsHidden(true);
         });
     }
     useEffect(()=>{
-        setIsHidden(true);
-        window.scrollTo(0,400);
+        const mainSection = document.getElementById('result-section');
+        mainSection?.scrollIntoView({behavior: "smooth"});
     });
 
     useEffect(()=>{
@@ -57,12 +57,12 @@ export const BoDailyPage = () => {
 
     return (
         <div className="App">
-            <ConfigBar 
+            <ReportInputScreen 
                     title="Back Office Daily Report"
                     configBarAction = {getDailyData} 
                     options = {DEFAULT_CONFIG_BAR_OPTIONS}>
-            </ConfigBar>
-            <div className={`bg-slate-300 dark:bg-zinc-900 ${Object.keys(dailyData).length === 0? "hidden":""}`}>
+            </ReportInputScreen>
+            <div id="result-section" className={`bg-slate-300 dark:bg-zinc-900 ${Object.keys(dailyData).length === 0? "hidden":""}`}>
                 <div className='flex flex-row-reverse sticky top-14 px-10 py-4  z-40'>
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
@@ -73,7 +73,7 @@ export const BoDailyPage = () => {
 
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
 
-                    <section id="main" className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2`} >
+                    <section className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2`} >
                     <Table title = "Wells Spud" id = {getDivId('table')} tableData = {dailyData['wells_spud']}/>
                     <Table title = "Extra Jobs status" id = {getDivId('table')} tableData = {dailyData['extra_jobs_n']}/>
                     </section>
@@ -83,7 +83,7 @@ export const BoDailyPage = () => {
                     <Table title = "Data Quality" id = {getDivId('table')} tableData = {dailyData['data_quality']}/>
                 </section>
 
-                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
+                <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
                     <Chart title = "Pending Quality Tickets" id = {getDivId('chart')} chartData = {dailyData['pending_Q_tickets']} chartType="ClusterBar"/>
                     <Chart title = "Resolved Quality Tickets-Channels" id = {getDivId('chart')} chartData = {dailyData['resolved_Q_tickets_channels']} chartType="ClusterBar"/>
                     <Table title = "Data Loss" id = {getDivId('table')} tableData = {dailyData['data_loss']}/>
