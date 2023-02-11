@@ -51,22 +51,16 @@ export const LoginPage = () => {
 
   useEffect(() => {
     setAnimation(true);
-  });
+  },[]);
 
   return (
     <div className="App">
       <header
-        className={`flex flex-row ${
-          // choose background on Whether darkmode is in "dark" or "light" mode.
-            darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
-        }  min-h-screen bg-no-repeat bg-cover bg-center bg-fixed items-center justify-center`}
+        className={`flex flex-row bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed items-center justify-center`}
       >
         {user ? (
           <div
-            className={`fixed top-0 z-30 w-full ${
-              // choose Navbar Color on Whether darkmode is in "dark" or "light" mode.
-            darkMode ? Mode.NAVBAR_DARK : Mode.NAVBAR_LIGHT
-            }`}
+            className={`fixed top-0 z-30 w-full dark:bg-black`}
           >
             <SideBar
               appearance={`${
@@ -106,7 +100,7 @@ export const LoginPage = () => {
               }
             >
               <div className="flex flex-col my-7 justify-center items-center">
-                <img src={SONATRACH_LOGO}></img>
+                <img src={SONATRACH_LOGO} alt="..." />
               </div>
               <h3 className="mb-4">Sign In</h3>
               <Form.Group controlId="username-8">
@@ -150,8 +144,8 @@ export const LoginPage = () => {
                   <a
                     href="http://10.171.59.80:8069/web/reset_password?"
                     target="_blank"
-                    className="my-5 no-underline hover:underline ..."
-                  >
+                    rel="noreferrer"
+                    className="my-5 no-underline hover:underline ...">
                     Forgot your password?
                   </a>
                 )}

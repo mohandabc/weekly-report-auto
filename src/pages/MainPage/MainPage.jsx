@@ -15,10 +15,7 @@ export const MainPage = () => {
   return (
     <>
       <div
-        className={`sticky top-0 z-30 w-full ${
-          // choose Navbar Color on Whether darkmode is in "dark" or "light" mode.
-            darkMode ? Mode.NAVBAR_DARK : Mode.NAVBAR_LIGHT
-        }`}
+        className={`sticky top-0 z-30 w-full dark:bg-black`}
       >
         <SideBar
           appearance={`${
@@ -29,10 +26,7 @@ export const MainPage = () => {
         />
       </div>
       <header
-        className={`flex flex-col h-72 ${
-          // choose background on Whether darkmode is in "dark" or "light" mode.
-            darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
-        } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
+        className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
       >
         <div className="flex sticky top-40 justify-center items-center">
           <div className="pt-24">

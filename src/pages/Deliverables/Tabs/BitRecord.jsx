@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 
 import { ActionButton } from "../../../components";
 import { DateRangePicker } from "rsuite";
-import { dateStartEndState, darkModeState } from "../../../shared/globalState";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { dateStartEndState} from "../../../shared/globalState";
+import { useRecoilState } from "recoil";
 import { Loader } from "../../../components";
 import { SelectPicker } from "rsuite";
 import "./styles.css";
-import * as Mode from "../../../constants/darkmode_constants";
 
 const styles = {
   small: { height: 38, width: 160, margin: 10 },
@@ -91,11 +90,10 @@ export const BitRecord = () => {
   }
 
   const [animation, setAnimation] = useState(false);
-  const darkMode = useRecoilValue(darkModeState);
 
   useEffect(() => {
     setAnimation(true);
-  });
+  },[]);
 
   return (
     <>
@@ -103,19 +101,12 @@ export const BitRecord = () => {
         <Loader></Loader>
       </div>
       <div
-        className={`sticky rounded-xl ${
-          // choose container color on Whether darkmode is in "dark" or "light" mode.
-              darkMode ? Mode.CONTAINER_DARK_COLOR : Mode.CONTAINER_LIGHT_COLOR
-        } h-auto}`}
+        className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto}`}
       >
         <div className="flex justify-center items-center">
           <div className="py-9">
             <h1
-              className={`${
-                darkMode
-                  ? Mode.CONTAINER_DARK_TITLE
-                  : Mode.CONTAINER_LIGHT_TITLE
-              } text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
+              className={`text-zinc-500 dark:text-black text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
                     ${
                       // hiding components when they first appear and then applying a translate effect gradually
                       animation

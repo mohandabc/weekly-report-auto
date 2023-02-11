@@ -1,18 +1,16 @@
 import React, { useEffect } from 'react';
 
-import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
-import {chartsToPrintState, dateStartEndState, weeklyDataState ,loaderIsHidden, darkModeState} from '../../shared/globalState';
+import {useRecoilState,  useSetRecoilState} from 'recoil';
+import {chartsToPrintState, dateStartEndState, weeklyDataState ,loaderIsHidden} from '../../shared/globalState';
 
 import { ActionButton, Chart, ConfigBar, Table} from '../../components';
 
 import {generateWeeklyReport} from '../../services/weeklyPdfGenBO';
 import { getData } from '../../services/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
-import * as Mode from "../../constants/darkmode_constants";
 import { API_URL } from '../../constants/URI';
 
 export const BoWeeklyPage = () => {
-    const darkMode = useRecoilValue(darkModeState);
     const [chartsToPrint, setChartsToPrint] = useRecoilState(chartsToPrintState);
     const [weeklyData, setWeeklyData] = useRecoilState(weeklyDataState);
     const [range, setRange] = useRecoilState(dateStartEndState);
@@ -60,7 +58,7 @@ export const BoWeeklyPage = () => {
                 configBarAction={getWeeklyData}
                 options={DEFAULT_CONFIG_BAR_OPTIONS}>
             </ConfigBar>
-            <div className={`${darkMode ? Mode.DARK_REPORTbg : Mode.LIGHT_REPORTbg} ${Object.keys(weeklyData).length === 0? "hidden":""}`}>
+            <div className={`bg-slate-300 dark:bg-zinc-900 ${Object.keys(weeklyData).length === 0? "hidden":""}`}>
                 <div className='flex flex-row-reverse sticky top-14 px-10 py-4  z-40'>
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 

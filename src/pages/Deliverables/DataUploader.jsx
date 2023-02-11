@@ -32,7 +32,7 @@ export const DataUploader = () => {
 
   useEffect(() => {
     setAnimation(true);
-  });
+  },[]);
 
   useEffect(()=>{
     populateWellsPicker();
@@ -74,16 +74,10 @@ export const DataUploader = () => {
   return (
     <div className="App">
       <div
-        className={`flex flex-col h-72 ${
-          // choose background on Whether darkmode is in "dark" or "light" mode.
-          darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
-        } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
+        className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
       >
         <div
-          className={`fixed top-0 z-30 w-full ${
-            // choose Navbar Color on Whether darkmode is in "dark" or "light" mode.
-            darkMode ? Mode.NAVBAR_DARK : Mode.NAVBAR_LIGHT
-          }`}
+          className={`fixed top-0 z-30 w-full dark:bg-black`}
         >
           <SideBar
             appearance={`${
@@ -94,19 +88,13 @@ export const DataUploader = () => {
           />
         </div>
         <header
-          className={`flex flex-col h-72 ${
-            // choose background on Whether darkmode is in "dark" or "light" mode.
-            darkMode ? Mode.DARK_BACKGROUND : Mode.LIGHT_BACKGROUND
-          } min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl items-center justify-center`}
+          className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl items-center justify-center`}
         >
           <div className="absolute mt-56 z-50">
             <Loader></Loader>
           </div>
           <div
-            className={`container overflow-y-auto rounded-xl ${
-              // choose container color on Whether darkmode is in "dark" or "light" mode.
-              darkMode ? Mode.CONTAINER_DARK_COLOR : Mode.CONTAINER_LIGHT_COLOR
-            } w-2/4 h-1/2 transform transition-all duration-500 ease-out
+            className={`container overflow-y-auto rounded-xl bg-gray-200 dark:bg-stone-700 w-2/4 h-1/2 transform transition-all duration-500 ease-out
           ${animation ? "scale-100" : "scale-0"}`}
           >
             <div
@@ -120,12 +108,7 @@ export const DataUploader = () => {
             >
               <div className="py-9 w-2/3">
                 <h1
-                  className={`${
-                    // choose the container title's color on Whether darkmode is in "dark" or "light" mode.
-                    darkMode
-                      ? Mode.CONTAINER_DARK_TITLE
-                      : Mode.CONTAINER_LIGHT_TITLE
-                  } text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
+                  className={`text-zinc-500 dark:text-black text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
                     ${
                       // hiding components when they first appear and then applying a translate effect gradually
                       animation
