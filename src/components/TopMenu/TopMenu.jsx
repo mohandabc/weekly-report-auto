@@ -16,7 +16,8 @@ import { useRecoilState } from "recoil";
 import { darkModeState } from "../../shared/globalState";
 import lightModeIcon from "../../assets/light-mode-icon.png";
 import darkModeIcon from "../../assets/dark-mode-icon.png";
-import logOut from "../../assets/logout.png"
+import logOut from "../../assets/logout.png";
+import Cookies from 'js-cookie';
 
 
 
@@ -25,6 +26,10 @@ export const TopMenu = ({ onSelect, activeKey, ...props }) => {
   const [darkMode, setDarkMode] = useRecoilState(darkModeState);
   const { user } = useAuth();
 
+  const toggleDarkMode = () =>{
+    setDarkMode(!darkMode);
+    Cookies.set('darkMode', !darkMode);
+  }
   useEffect(() => {
     document.body.className = (darkMode===true) ? "dark" : "light";
     }, [darkMode]);
@@ -78,7 +83,7 @@ export const TopMenu = ({ onSelect, activeKey, ...props }) => {
 
           <Nav pullRight>
               <IconButton
-                onClick={() => setDarkMode(!darkMode)}
+                onClick={() => toggleDarkMode()}
                 className="my-2"
                 appearance="link">
                   

@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 const { atom } = require("recoil");
 const date = new Date();
 
@@ -34,7 +36,7 @@ export const loaderIsHidden = atom({
 
 export const darkModeState = atom({
   key: "darkMode",
-  default: false,
+  default: Cookies.get('darkMode') || true,
 });
 
 export const files = atom({
