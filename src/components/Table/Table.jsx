@@ -5,7 +5,7 @@ import { darkModeState } from "../../shared/globalState";
 export const Table = ({title, id, tableData})=>{
     const darkMode = useRecoilValue(darkModeState);
     return (
-        <div  className={`min-h-120 rounded-lg py-3 px-2 bg-white dark:bg-stone-600 shadow w-full`}>
+        <div  className={`min-h-120 rounded-lg py-3 px-2 bg-stone-100 dark:bg-stone-400 shadow w-full`}>
             {
                 tableData === undefined ? 
                 <></>

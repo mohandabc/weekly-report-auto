@@ -24,7 +24,7 @@ export const FrontOffice = () => {
           />
         </div>
 
-        <div className="py-5">
+        <div className="py-5 my-20">
           <h1 className="text-white text-3xl text-center">
             FRONT-OFFICE Reports
           </h1>

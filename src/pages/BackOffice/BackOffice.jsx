@@ -19,7 +19,7 @@ export const BackOffice = () => {
           />
         </div>
 
-        <div className="py-5">
+        <div className="py-5 my-20">
           <h1 className="text-white text-3xl text-center">
             BACK-OFFICE Reports
           </h1>

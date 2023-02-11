@@ -39,11 +39,12 @@ export const BoWeeklyPage = () => {
           let data = res.result;
           setWeeklyData(data || {});
           console.log(data);
+          setIsHidden(true);
         });
       }
     useEffect(()=>{
-        setIsHidden(true);
-        window.scrollTo(0,400);
+        const mainSection = document.getElementById('weekly-result-section');
+        mainSection?.scrollIntoView({behavior: "smooth"});
     });
 
     useEffect(()=>{
@@ -58,7 +59,7 @@ export const BoWeeklyPage = () => {
                 configBarAction={getWeeklyData}
                 options={DEFAULT_CONFIG_BAR_OPTIONS}>
             </ReportInputScreen >
-            <div className={`bg-slate-300 dark:bg-zinc-900 ${Object.keys(weeklyData).length === 0? "hidden":""}`}>
+            <div id="weekly-result-section" className={`bg-slate-300 dark:bg-zinc-900 ${Object.keys(weeklyData).length === 0? "hidden":""}`}>
                 <div className='flex flex-row-reverse sticky top-14 px-10 py-4  z-40'>
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
@@ -67,7 +68,7 @@ export const BoWeeklyPage = () => {
                     </ActionButton>
                 </div>
                 <section id="main" className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2  pb-4`} >
-                    <section id="main" className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2`} >
+                    <section className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2`} >
                     <Table title = "Remote Relocation" id = {getDivId('table')} tableData = {weeklyData['remote_relocation']}/>
                     <Table title = "Deployment & Intervention" id = {getDivId('table')} tableData = {weeklyData['deployements_and_interventions']}/>
                     </section>
@@ -85,7 +86,7 @@ export const BoWeeklyPage = () => {
                     <Chart title = "Resolved Channels By Data Manager" id = {getDivId('chart')} chartData = {weeklyData['resolved_channels_by_user']} chartType="Bar"/>
                     <Chart title = "Helpdesk Tickets" id = {getDivId('chart')} chartData = {weeklyData['helpdesk_tickets']} chartType="ClusterBar"/>
                 </section>
-                <section id="main" className={`grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2  pb-4`} >
+                <section className={`grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2  pb-4`} >
                     <Chart title = "Archived Wells" id = {getDivId('chart')} chartData = {weeklyData['archived_wells']} chartType="ClusterBar"/>
                 </section>
             </div>
