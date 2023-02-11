@@ -1,11 +1,13 @@
-import React, { useLayoutEffect} from 'react';
-import { useState } from 'react';
+import React, { useLayoutEffect, useState} from 'react';
+import { useRecoilValue } from "recoil";
 import { BarChart, PieChart, ClusteredBarChart } from './charts';
+import { darkModeState } from "../../shared/globalState";
 import gear from '../../assets/gear.svg';
 
-export const Chart = ({title, id, chartData, chartType}) => {
+export const Chart = ({title, id, chartData, chartType, dashboard}) => {
   const divID = id.toString();
   const [type, setType] = useState(chartType);
+  const darkMode = useRecoilValue(darkModeState);
 
   const changeType = () =>{
     const newType = type==='Pie' ? 'Bar' : 'Pie';
@@ -17,22 +19,39 @@ export const Chart = ({title, id, chartData, chartType}) => {
       return
     }
 
+    // these should be the default settings
+    let options = {
+                    'title-color' : '#111',
+                    'label-color' : '#000',
+                    'value-color' : '#555',
+                    'stroke-color' : null,
+                  };
+    
+    if (dashboard){
+      options['title-color'] = darkMode ? "#fff" : "#fff";
+      options['label-color'] = "#fff";
+      options['value-color'] = darkMode ? "#fff" : "#fff";
+      options['stroke-color'] = "#fff";
+    }
+    
     if(type === "Pie"){ 
-      chart = new PieChart(chartData, divID, title).chart; 
+      chart = new PieChart(chartData, divID, title, options).chart; 
     }
     if(type === "Bar"){
-      chart = new BarChart(chartData, divID, title).chart; 
+      chart = new BarChart(chartData, divID, title, options).chart; 
     }
     if(type === "ClusterBar"){
       // eslint-disable-next-line
-      chart = new ClusteredBarChart(chartData, divID, title).chart; 
+      chart = new ClusteredBarChart(chartData, divID, title, options).chart; 
     }
   });
 
   return (
-        <div className={`h-120  pb-5 bg-white dark:bg-stone-600 rounded-lg shadow w-full`}>
+        <div className={dashboard ? 
+                        `h-120 pb-5  rounded-lg w-full`
+                      :`h-120 pb-5 bg-stone-100 dark:bg-stone-400 rounded-lg shadow w-full`}>
               {
-                type==='Pie' || type === 'Bar' ? 
+                (type==='Pie' || type === 'Bar') && !dashboard ? 
                 <div>
                   <img src={gear} onClick={changeType} className="px-2 py-2 w-10 hover:cursor-pointer hover:animate-spin" alt="..."></img>
                 </div>
