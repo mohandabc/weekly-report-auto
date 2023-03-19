@@ -32,6 +32,11 @@ export const FrontOffice = () => {
 
         <div className="flex flex-wrap justify-center items-center">  
             <ReportCard 
+                to="/eowr"
+                title="End Of Well Report (EOWR)" 
+                description="Automatically Generate End of Well Report"
+              />
+            <ReportCard 
                 to=""
                 title="FO Daily Report" 
                 description="Automatically Generate a front office daily report for a specific day"

@@ -9,6 +9,7 @@ import {
   MainPage,
   BackOffice,
   FrontOffice,
+  EOWR,
   RunDeliverable,
   DataUploader,
   LoginPage,
@@ -32,6 +33,7 @@ root.render(
             <Route path="/front-office" element={<ProtectedRoute><FrontOffice /></ProtectedRoute>} />
             <Route path="/weeklyBo" element={<ProtectedRoute><BoWeeklyPage /></ProtectedRoute>} />
             <Route path="/dailyBo" element={<ProtectedRoute><BoDailyPage /></ProtectedRoute>} />
+            <Route path="/eowr" element={<ProtectedRoute><EOWR /></ProtectedRoute>} />
             <Route path="/run" element={<ProtectedRoute><RunDeliverable /></ProtectedRoute>} />
             <Route path="/data" element={<ProtectedRoute><DataUploader /></ProtectedRoute>} />
             <Route path="/logout" element={<ProtectedRoute><LogoutPage /></ProtectedRoute>} />

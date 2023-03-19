@@ -12,7 +12,7 @@ export const MainPage = () => {
   const [testData, setTestData] = useState({})
   const [testData2, setTestData2] = useState({})
 
-  const handleClick = () => {
+  const seeStatsClick = () => {
     // TODO: Call back to get necessary data and set it to states, no need for recoil global state, cause these will not be printed
     setTestData([{'category': 'good', 'value':2}, {'category': 'bad', 'value':5}])
     setTestData2([{'type' : 'test', 'category': 'good', 'value':2}, {'type' : 'test', 'category': 'bad', 'value':5},{'type' : 'test2', 'category': 'bad', 'value':2}, {'type' : 'test2', 'category': 'good', 'value':2}])
@@ -60,7 +60,7 @@ export const MainPage = () => {
           </div>
         </div>
         <div className="fixed bottom-10 left-0 right-0 pb-10 flex justify-center">
-          <button id="go-down" onClick={handleClick} className="z-100 bg-indigo-600 text-white py-8 px-4 rounded-full shadow-lg transition transition-transform duration-300">
+          <button id="go-down"  className="z-100 bg-indigo-600 text-white py-8 px-4 rounded-full shadow-lg transition transition-transform duration-300">
               See Stats
           </button>
         </div>
