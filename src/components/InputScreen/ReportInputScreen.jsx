@@ -1,41 +1,45 @@
-import { darkModeState } from "../../shared/globalState";
 import React, { useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { TopMenu } from "../TopMenu";
 import { Loader } from "../Loader";
 import { DateRangePicker, SelectPicker} from "rsuite";
 import { ActionButton } from "../ActionButton";
 import { dateStartEndState } from "../../shared/globalState";
 import { getData } from "../../services/api";
-import { API_URL } from "../../constants/URI";
-
+import { API_URL} from "../../constants/URI";
+import { predefinedRanges } from "../../constants/constants";
 
 
 export const ReportInputScreen = ({ title, configBarAction, options }) => {
     const dateStartEnd = useRecoilValue(dateStartEndState);
     const [animation, setAnimation] = useState(false);
-    const darkMode = useRecoilValue(darkModeState);
-    const [wellsplaceholder, setWellsplaceholder] = useState(0);
+    const [wellsplaceholder, setWellsplaceholder] = useState([]);
     const [value, setValue] = useState([
       new Date(dateStartEnd.split(" - ")[0]),
       new Date(dateStartEnd.split(" - ")[1]),
     ]);
-    const [well, setWell] = useState(null)
+    const [wid, setWid] = useState(null)
 
     const params = {
-      well :well,
+      wid :wid,
       dates: value
         ? formatDate(value[0]) + " - " + formatDate(value[1])
         : dateStartEnd,
+      startDate:formatDate(value[0], true, "-"),
+      endDate:formatDate(value[1], true, "-")
     };
     
-    function formatDate(date) {
-      if (date)
-        return [
+    function formatDate(date, dayFirst=false, separater="/") {
+      if (date){
+        let formattedDate = [
           padTo2Digits(date.getMonth() + 1),
           padTo2Digits(date.getDate()),
           date.getFullYear(),
-        ].join("/");
+        ]
+        if (dayFirst===true){
+          formattedDate.unshift(formattedDate.pop());
+        }
+        return formattedDate.join(separater);
+      }
     }
   
     function padTo2Digits(num) {
@@ -48,12 +52,11 @@ export const ReportInputScreen = ({ title, configBarAction, options }) => {
     },[]);
   
     useEffect(() => {
-      const path = 'reports/getwells';
+      const path = 'api/reports/getwells';
       getData(API_URL, path, {})
       .then(res=> {
-        let data = res.result['wells'].map((item) => ({ label: item['name'], value: item['name'] }));
-        
-        setWellsplaceholder(data || [])
+        let data = res.result['wells'].map((item) => ({ label: item['name'], value: item['wid'] }));
+        setWellsplaceholder(data || []) 
       });
     },[]);
 
@@ -64,7 +67,7 @@ export const ReportInputScreen = ({ title, configBarAction, options }) => {
 
     if(options.well === true){
       inputScreenContent.push(<SelectPicker
-        onChange={setWell}
+        onChange={setWid}
         placeholder="Well"
         data={wellsplaceholder}
       
@@ -72,13 +75,14 @@ export const ReportInputScreen = ({ title, configBarAction, options }) => {
     }
     if (options.datePicker===true){
       inputScreenContent.push(<DateRangePicker
-                                value={value}
-                                onChange={setValue}
-                                format="dd-MM-yyyy"
-                                style={{
-                                  width: 257,
-                                }}
-                                />
+        ranges={predefinedRanges}
+        value={value}
+        onChange={setValue}
+        format="dd-MM-yyyy"
+        style={{
+          width: 257,
+        }}
+        />
                                 ) 
       }
       
@@ -87,7 +91,7 @@ export const ReportInputScreen = ({ title, configBarAction, options }) => {
   
     return (
       <div className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}>
-          <TopMenu appearance={`${darkMode ? "subtle": "default"}`}/>
+          
        
           <header className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl justify-center items-center`}>
               <div className="absolute mt-56 z-50">
