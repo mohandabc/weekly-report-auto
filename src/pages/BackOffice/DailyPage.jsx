@@ -6,7 +6,7 @@ import {chartsToPrintState, dateStartEndState, dailyDataState ,loaderIsHidden, d
 import { ActionButton, Chart, ReportInputScreen, Table} from '../../components';
 
 import {generateDailyReport} from '../../services/dailyPdfGenBO';
-import { getData } from '../../services/api';
+import { getData } from '../../api/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 import { API_URL } from '../../constants/URI';
 import { TopMenu } from '../../components/TopMenu';

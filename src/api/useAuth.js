@@ -8,7 +8,7 @@ import { createContext, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE_SALTKEY } from "../constants/SALTKEY";
 import { useLocalStorage } from "./useLocalStorage";
-import { crypt } from "./utils";
+import { crypt } from "../services/utils";
 
 const AuthContext = createContext();
 

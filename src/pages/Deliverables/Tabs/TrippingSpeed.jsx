@@ -6,7 +6,7 @@ import { dateStartEndState} from "../../../shared/globalState";
 import { useRecoilValue} from "recoil";
 import { SelectPicker } from "rsuite";
 import { BACK_URL } from "../../../constants/URI";
-import { getData } from "../../../services/api";
+import { getData } from "../../../api/api";
 import { TsAnalysis } from "./AnalysisForms/TsAnalysis";
 import "./styles.css";
 

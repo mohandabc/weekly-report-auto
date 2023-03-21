@@ -17,7 +17,7 @@ import {
 } from "./pages";
 import { BoDailyPage, BoWeeklyPage } from "./pages/BackOffice";
 import { ProtectedRoute } from "./components";
-import { AuthProvider } from "./services/useAuth";
+import { AuthProvider } from "./api/useAuth";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

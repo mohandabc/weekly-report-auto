@@ -6,7 +6,7 @@
 
 import { Navigate } from "react-router-dom";
 import { LOCALSTORAGE_SALTKEY } from "../../constants/SALTKEY";
-import { useAuth } from "../../services/useAuth";
+import { useAuth } from "../../api/useAuth";
 import { decrypt } from "../../services/utils";
 
 export const ProtectedRoute = ({ children }) => {
