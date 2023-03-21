@@ -6,7 +6,7 @@
 import { TopMenu } from "../../components/TopMenu";
 import React, { useEffect, useState } from "react";
 import { Form, Button, Schema } from "rsuite";
-import { authenticate } from "../../services/api";
+import { authenticate } from "../../api/api";
 import { useAuth } from "../../services/useAuth";
 import { SONATRACH_LOGO } from "../../constants/logos";
 import { useRecoilValue } from "recoil";

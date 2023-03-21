@@ -4,7 +4,7 @@ import { DatePicker } from "rsuite";
 import { TrippingSpeed } from "../..";
 import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../../../constants/constants";
 import { BACK_URL } from "../../../../constants/URI";
-import { deleteDoc } from "../../../../services/api";
+import { deleteDoc } from "../../../../api/api";
 import "./styles.css";
 
 const { Column, HeaderCell, Cell } = Table;

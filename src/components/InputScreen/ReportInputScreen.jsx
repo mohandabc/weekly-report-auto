@@ -4,7 +4,7 @@ import { Loader } from "../Loader";
 import { DateRangePicker, SelectPicker} from "rsuite";
 import { ActionButton } from "../ActionButton";
 import { dateStartEndState } from "../../shared/globalState";
-import { getData } from "../../services/api";
+import { getData } from "../../api/api";
 import { API_URL} from "../../constants/URI";
 import { predefinedRanges } from "../../constants/constants";
 
