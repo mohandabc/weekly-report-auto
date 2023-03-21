@@ -5,7 +5,7 @@
  * ************************************************  *
  *****************************************************/
 
-import { AUTH_URL} from "../constants/URI";
+import { AUTH_URL, db} from "../constants/URI";
 
 export const getData = async (URL, route, params) => {
   //@@@@ IMPORTANT :  dbfilter setting needs to be set to a database for the REST interface to work.
@@ -34,7 +34,7 @@ export const authenticate = async (user,pass) =>{
                 "jsonrpc":"2.0",
                 "method": "call",
                 "params":{
-                    "db": "rocsys_prod",
+                    "db": db,
                     "login": user,
                     "password": pass
                 }}

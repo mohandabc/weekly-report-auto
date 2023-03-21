@@ -62,7 +62,7 @@ export const DataUploader = () => {
   }
 
   function populateWellsPicker() {
-    const path = 'reports/getwells';
+    const path = 'api/reports/getwells';
       getData(API_URL, path, params)
       .then(res=> {
         let data = res.result['wells'].map((item) => ({ label: item['name'], value: item['name'] }));;
