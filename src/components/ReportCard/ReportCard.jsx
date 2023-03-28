@@ -19,7 +19,7 @@ export const ReportCard = ({to, title, description, notReady}) => {
             >
             <Link
                 className="no-underline text-header"
-                to={to}
+                to={notReady?"":to}
                 style={{ textDecoration: "none", color: "#000" }}
             >
                 {/* <div className={`bg-gray-400 text-black dark:bg-stone-800 dark:text-white h-60 w-full p-4 text-center rounded-lg 

@@ -35,6 +35,7 @@ export const FrontOffice = () => {
                 to="/eowr"
                 title="End Of Well Report (EOWR)" 
                 description="Automatically Generate End of Well Report"
+                notReady
               />
             <ReportCard 
                 to=""
