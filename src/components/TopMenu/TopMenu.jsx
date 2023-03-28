@@ -10,7 +10,7 @@ import { Navbar, Nav } from "rsuite";
 import HomeIcon from "@rsuite/icons/legacy/Home";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import { useAuth } from "../../services/useAuth";
+import { useAuth } from "../../api/useAuth";
 import { IconButton } from "rsuite";
 import { useRecoilState } from "recoil";
 import { darkModeState } from "../../shared/globalState";

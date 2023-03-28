@@ -11,7 +11,7 @@ import { SelectPicker } from "rsuite";
 import { useRecoilValue } from "recoil";
 import "./styles.css";
 import { darkModeState } from "../../shared/globalState";
-import { getData } from "../../services/api";
+import { getData } from "../../api/api";
 import { API_URL, BACK_URL} from '../../constants/URI';
 
 export const DataUploader = () => {
@@ -62,7 +62,7 @@ export const DataUploader = () => {
   }
 
   function populateWellsPicker() {
-    const path = 'reports/getwells';
+    const path = 'api/reports/getwells';
       getData(API_URL, path, params)
       .then(res=> {
         let data = res.result['wells'].map((item) => ({ label: item['name'], value: item['name'] }));;

@@ -1,0 +1,1 @@
+export {Paragraphe} from './Paragraphe'

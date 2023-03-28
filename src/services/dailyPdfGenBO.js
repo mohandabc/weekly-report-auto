@@ -4,10 +4,8 @@
  *     PLEASE ADD THEM IN SERVICES/UTILS.JS TO KEEP THE PROJECT STRUCTURE      *
  *******************************************************************************/
 
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
-
-import {getChartByContainerId ,exportCharts, setupNewPage, createHeaderPage, createStatsTablePage, createLastPage, addChartToPDF} from './utils';
+import { BACKGROUND } from '../constants/backgrounds';
+import {getChartByContainerId ,exportCharts, setupNewPage, createHeaderPage, createStatsTablePage, createLastPage, addChartToPDF, createDoc, downloadPDF} from './utils';
 
 export const generateDailyReport = (chartsToPrint, dailyData, range) =>{
     if(chartsToPrint.length === 0){
@@ -24,15 +22,22 @@ export const generateDailyReport = (chartsToPrint, dailyData, range) =>{
 
         const [exportedCharts] = response; 
 
-        pdfMake.vfs = pdfFonts.pdfMake.vfs;
+          var doc=createDoc('A4', 'landscape', [15,20,0,10]) 
 
-        var doc={
-          pageSize: "A4",
-          pageOrientation: "landscape",
-          pageMargins: [15,20,0,10],
-          content: [],  
-          };
-          createHeaderPage(doc, range, "BO Daily Report", 'daily');
+          var displayedDate=new Date(range.split(" - ")[0]);
+          displayedDate.setDate(displayedDate.getDate()+1);
+          displayedDate=displayedDate.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"});
+
+          const headerOptions = {
+            title:"BO Daily Report",
+            range:displayedDate,
+            bg: {image: BACKGROUND,
+              margin:[-15,-20,0,-10],
+              width: 842},
+            titlePosition: {y: 236},
+            datePosition: {y: 280},
+          }
+          createHeaderPage(doc, headerOptions);
           createAgendaPage(doc);
           
           setupNewPage(doc, "- Extra jobs status :", dailyData['extra_jobs_n'], ['Extra Job Transmitted','Extra Job  Not Transmitted','Extra Job Not Completed'],dailyData['extra_jobs'], ['NDJ Name','Well','Rig','NDJ Result','RootCause']);
@@ -85,7 +90,7 @@ export const generateDailyReport = (chartsToPrint, dailyData, range) =>{
           setupNewPage(doc, "- DevTasks :", dailyData['jira_data'], ['Issue','Summary','Issue Type','Assigned To','Status','Priority']);
           createLastPage(doc);
 
-        pdfMake.createPdf(doc).download(`Daily_report_${range}.pdf`);
+          downloadPDF(doc, `Daily_report_${range}`)
 
       });
   }

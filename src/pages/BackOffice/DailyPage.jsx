@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
 
-import {useRecoilState, useSetRecoilState} from 'recoil';
-import {chartsToPrintState, dateStartEndState, dailyDataState ,loaderIsHidden} from '../../shared/globalState';
+import {useRecoilState, useSetRecoilState, useRecoilValue} from 'recoil';
+import {chartsToPrintState, dateStartEndState, dailyDataState ,loaderIsHidden, darkModeState} from '../../shared/globalState';
 
 import { ActionButton, Chart, ReportInputScreen, Table} from '../../components';
 
 import {generateDailyReport} from '../../services/dailyPdfGenBO';
-import { getData } from '../../services/api';
+import { getData } from '../../api/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 import { API_URL } from '../../constants/URI';
+import { TopMenu } from '../../components/TopMenu';
 
 export const BoDailyPage = () => {
+    const darkMode = useRecoilValue(darkModeState);
     const [chartsToPrint, setChartsToPrint] = useRecoilState(chartsToPrintState);
     const [dailyData, setDailyData] = useRecoilState(dailyDataState);
     const [range, setRange] = useRecoilState(dateStartEndState);
@@ -34,7 +36,7 @@ export const BoDailyPage = () => {
     }
     const getDailyData =  (params) =>{
     
-        const path = 'reports/daily_report';
+        const path = 'api/reports/daily_report';
     
         setIsHidden(false);
         setRange(params['dates'])
@@ -57,6 +59,7 @@ export const BoDailyPage = () => {
 
     return (
         <div className="App">
+            <TopMenu appearance={`${darkMode ? "subtle": "default"}`}/>
             <ReportInputScreen 
                     title="Back Office Daily Report"
                     configBarAction = {getDailyData} 

@@ -19,13 +19,13 @@ export const ReportCard = ({to, title, description, notReady}) => {
             >
             <Link
                 className="no-underline text-header"
-                to={to}
+                to={notReady?"":to}
                 style={{ textDecoration: "none", color: "#000" }}
             >
                 {/* <div className={`bg-gray-400 text-black dark:bg-stone-800 dark:text-white h-60 w-full p-4 text-center rounded-lg 
                 shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg position:relative z-0`}> */}
-                <div className={`${notReady? "bg-gray-400":"bg-gray-200"} text-black dark:${notReady?"bg-stone-800":"bg-stone-600"} dark:text-white h-60 w-full p-4 
-                text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out hover:scale-105 hover:shadow-lg position:relative z-0`}>
+                <div className={`${notReady? "bg-gray-400":"bg-gray-200"} text-black dark:${notReady?"bg-stone-200":"bg-stone-800"} dark:text-white h-60 w-full p-4 
+                text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out ${notReady?"":"hover:scale-105 hover:shadow-lg"} position:relative z-0`}>
                     <h3>{title}</h3>
                     <p>{description}</p>
                     {

@@ -1,12 +1,32 @@
 /************************************************************
  * A SET OF HELPER FUNCTIONS USED IN GENERATING THE REPORTS *
  *                   AND LOGGING IN USERS                   *
+ * functions here should do only one task and do general 
+ * case. exp: setupNewPage has a relation with data, meaning
+ * I can't use it to create a new page in any report type
  ************************************************************/
 
 import * as am4core from "@amcharts/amcharts4/core";
 
 import {SMARTEST_LOGO,SONATRACH_LOGO} from '../constants/logos'
-import {BACKGROUND,LASTPAGE,TOPLEFT} from '../constants/backgrounds'
+
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import { LASTPAGE, TOPLEFT } from "../constants/backgrounds";
+
+export const createDoc = (size, orientation, margin) =>{
+  pdfMake.vfs = pdfFonts.pdfMake.vfs;
+  return {
+      pageSize: size,
+      pageOrientation: orientation,
+      pageMargins: margin,
+      content: [],  
+  };
+}
+
+export const downloadPDF = (doc, title) =>{
+  pdfMake.createPdf(doc).download(`${title}.pdf`);
+}
 
 export const pushTabToDoc = (doc, data, columns, widths) => {
   return doc.content.push({
@@ -174,32 +194,27 @@ export const setupNewPage = (doc, title = '', data, column, data1, column1, page
 }
 
 
-export const createHeaderPage = (doc, range, title, reportType) =>{
-  let reportDate;
-  if (reportType=='weekly') {
-    reportDate=`From ${range.split(" - ")[0]} To ${range.split(" - ")[1]}`
-  } else {
-    reportDate=new Date(range.split(" - ")[0]);
-  reportDate.setDate(reportDate.getDate()+1);
-  reportDate=reportDate.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"});
-  }
-  
+export const createHeaderPage = (doc, options) =>{
+
   doc.content.push({
-    columns: [{image: BACKGROUND,
-      margin:[-15,-20,0,-10],
-      width: 842},
-    {text : title,
-      fontSize : 36,
-      absolutePosition: {y: 236},
-      alignment:'center',
-      color:'#c00000',
-      bold: true,},
-      {text : reportDate,
-      fontSize : 28,
-      absolutePosition: {y: 280},
-      alignment:'center',
-      color:'#00000',
-      bold: true,}
+    columns: [
+      options.bg,
+      {
+        text : options.title,
+        fontSize : 36,
+        absolutePosition: options.titlePosition,
+        alignment:'center',
+        color:'#c00000',
+        bold: true,
+      },
+      {
+        text : options.range,
+        fontSize : 28,
+        absolutePosition: options.datePosition,
+        alignment:'center',
+        color:'#00000',
+        bold: true,
+      }
     ],
   });
 }
