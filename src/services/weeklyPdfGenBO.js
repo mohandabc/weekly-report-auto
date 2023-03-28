@@ -4,10 +4,8 @@
  *     PLEASE ADD THEM IN SERVICES/UTILS.JS TO KEEP THE PROJECT STRUCTURE      *
  *******************************************************************************/
 
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
-
-import {getChartByContainerId ,exportCharts, setupNewPage, createHeaderPage, createLastPage, addChartToPDF} from './utils';
+import { BACKGROUND } from '../constants/backgrounds';
+import {getChartByContainerId ,exportCharts, setupNewPage, createHeaderPage, createLastPage, addChartToPDF, createDoc, downloadPDF} from './utils';
 
 export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
     if(chartsToPrint.length === 0){
@@ -23,16 +21,20 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
     .then(response => {
         const [exportedCharts] = response; 
     
-        pdfMake.vfs = pdfFonts.pdfMake.vfs;
+          var doc= createDoc('A4', 'landscape', [15,20,0,10]);
+          
+          const displayedDate=`From ${range.split(" - ")[0]} To ${range.split(" - ")[1]}`
+          const headerOptions = {
+            title:"BO Weekly Report",
+            range:displayedDate,
+            bg: {image: BACKGROUND,
+              margin:[-15,-20,0,-10],
+              width: 842},
+            titlePosition: {y: 236},
+            datePosition: {y: 280},
+          }
 
-        var doc={
-          pageSize: "A4",
-          pageOrientation: "landscape",
-          pageMargins: [15,20,0,10],
-          content: [],  
-          };
-
-          createHeaderPage(doc, range, "BO Weekly Report", 'weekly');
+          createHeaderPage(doc, headerOptions);
           createAgendaPage(doc);
 
           setupNewPage(doc, "- Deployment and Relocation :", weeklyData['deployements_and_interventions'], ['Deployement','Interventions','Distance'],weeklyData['remote_relocation'], ["N of Remote Relocations","Cost/Distance Saved"]);
@@ -87,7 +89,7 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
 
           createLastPage(doc);
 
-        pdfMake.createPdf(doc).download(`Weekly_report_${range}.pdf`);
+          downloadPDF(doc, `Weekly_report_${range}`);
       });
   }
 

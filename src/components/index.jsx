@@ -7,6 +7,7 @@ export {Loader} from './Loader';
 export {ProtectedRoute} from "./ProtectedRoute";
 export {ImagePicker} from "./ImagePicker";
 export {NotAllowed} from "./NotAllowed";
+export {Paragraphe} from "./Paragraphe";
 
 
 /** Export all components from here  */
