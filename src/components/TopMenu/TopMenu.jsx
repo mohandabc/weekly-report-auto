@@ -36,7 +36,7 @@ export const TopMenu = ({ onSelect, activeKey, ...props }) => {
 
   return (
     <div className={`fixed top-0 z-50 w-full dark:bg-black`}>
-    <Navbar {...props}>
+    <Navbar appearance={`${darkMode ? "subtle": "default"}`} {...props}>
       <Navbar.Brand>
         <img style={{ width: 120, height: 28.24 }} src={logo} alt="Logo" />
       </Navbar.Brand>
@@ -71,8 +71,9 @@ export const TopMenu = ({ onSelect, activeKey, ...props }) => {
           <Nav.Item eventKey="8">Contact</Nav.Item>
         </Nav.Menu>
       </Nav>
+      
       { // if user is signed in show logout button and darkmode preference button
-      user ? (
+      user && (
         <>
           <Nav pullRight>
             <Nav.Item as={Link} to="/logout">
@@ -81,26 +82,26 @@ export const TopMenu = ({ onSelect, activeKey, ...props }) => {
             </Nav.Item>
           </Nav>
 
-          <Nav pullRight>
-              <IconButton
-                onClick={() => toggleDarkMode()}
-                className="my-2"
-                appearance="link">
-                  
-                {darkMode?(
-                  <img className="h-6" src={lightModeIcon} alt="..."/>
-                ):
-                (
-                  <img className="h-6" src={darkModeIcon} alt="..."/>
-                )
-                }
-              </IconButton>
-
-          </Nav>
+          
         </>
-      ) : (
-        <></>
       )}
+
+        <Nav pullRight>
+            <IconButton
+              onClick={() => toggleDarkMode()}
+              className="my-2"
+              appearance="link">
+                
+              {darkMode?(
+                <img className="h-6" src={lightModeIcon} alt="..."/>
+              ):
+              (
+                <img className="h-6" src={darkModeIcon} alt="..."/>
+              )
+              }
+            </IconButton>
+        </Nav>
+
     </Navbar>
     </div>
   );
