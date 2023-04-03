@@ -307,3 +307,19 @@ export const decrypt = (salt, encoded) => {
 };
 
   
+export const singleTablePage = () =>{
+  
+} 
+  
+export const twoTablesPage = () =>{
+
+} 
+  
+export const threeTablePage = () =>{
+
+} 
+  
+export const statsTablePage = () =>{
+  // for table that dont have headers like Data Recovery Stats
+
+} 

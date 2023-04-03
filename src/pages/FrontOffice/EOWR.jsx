@@ -5,7 +5,6 @@ import {generateEOWR} from '../../services/EOWReportPdf';
 
 import { ActionButton, ReportInputScreen, Chart, ImagePicker, Table, Paragraphe} from '../../components';
 
-// import {generateDailyReport} from '../../services/dailyPdfGenBO';
 import { getData } from '../../api/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS} from '../../constants/constants';
 import { API_URL } from '../../constants/URI';
@@ -36,9 +35,12 @@ export const EOWR = () => {
                             table_data:[{'name':'lehin','value':10, 'date':'2023-03-29'}, {'name':'siklab','value':9, 'date':'2023-03-29'}]
                         } || {});
                         
+            // set paragraphes to recovered data if possible
             setParagraphes({'p-1' : '', 'p-2':'', 'p-3':''});
         });
     }
+
+    // Logging data
     useEffect(()=>{
         console.log({EOWRData})
         console.log({paragraphes})
