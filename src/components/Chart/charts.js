@@ -134,6 +134,7 @@ export class PieChart extends Chart
         chartTitle.marginBottom = 30;
         
         // Add data
+        chart.exporting.menu = new am4core.ExportMenu();
         chart.data = data;
         return chart;
       }
@@ -204,6 +205,7 @@ export class BarChart extends Chart
         chartTitle.marginBottom = 30;
 
         // Add data
+        chart.exporting.menu = new am4core.ExportMenu();
         chart.data = data;
         return chart;
       }
@@ -262,8 +264,8 @@ export class ClusteredBarChart extends Chart
             return series;
         }
 
+        chart.exporting.menu = new am4core.ExportMenu();
         chart.data = adaptedData;
-
         params.series.forEach(serie => {
             createSeries(serie, serie);
         });
