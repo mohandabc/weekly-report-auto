@@ -1,24 +1,15 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 
-
-
 import {generateEOWR} from '../../services/EOWReportPdf';
-
-
-import {useRecoilValue} from 'recoil';
-import {darkModeState} from '../../shared/globalState';
 
 import { ActionButton, ReportInputScreen, Chart, ImagePicker, Table, Paragraphe} from '../../components';
 
-// import {generateDailyReport} from '../../services/dailyPdfGenBO';
 import { getData } from '../../api/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS} from '../../constants/constants';
 import { API_URL } from '../../constants/URI';
-import { TopMenu } from '../../components/TopMenu';
 
 export const EOWR = () => {
-    const darkMode = useRecoilValue(darkModeState);
     const [EOWRData, setEOWRData] = useState({});
     const [chartsToPrint, setChartsToPrint] = useState([]);
     const [images, setImages] = useState({});
@@ -44,9 +35,12 @@ export const EOWR = () => {
                             table_data:[{'name':'lehin','value':10, 'date':'2023-03-29'}, {'name':'siklab','value':9, 'date':'2023-03-29'}]
                         } || {});
                         
+            // set paragraphes to recovered data if possible
             setParagraphes({'p-1' : '', 'p-2':'', 'p-3':''});
         });
     }
+
+    // Logging data
     useEffect(()=>{
         console.log({EOWRData})
         console.log({paragraphes})
@@ -74,7 +68,6 @@ export const EOWR = () => {
     
     return (
         <div className="App">
-            <TopMenu appearance={`${darkMode ? "subtle": "default"}`}/>
             <ReportInputScreen 
                     title="End Of Well Report"
                     configBarAction = {getEowrData} 

@@ -4,18 +4,14 @@
  ***********************************************************************************************/
 
 import React, { useEffect, useState } from "react";
-import { TopMenu } from "../../components/TopMenu";
 import { Loader } from "../../components/Loader";
 import { Uploader } from "rsuite";
 import { SelectPicker } from "rsuite";
-import { useRecoilValue } from "recoil";
 import "./styles.css";
-import { darkModeState } from "../../shared/globalState";
 import { getData } from "../../api/api";
 import { API_URL, BACK_URL} from '../../constants/URI';
 
 export const DataUploader = () => {
-  const darkMode = useRecoilValue(darkModeState);
 
   const [well, setWell] = useState(0);
   const [msg, setMsg] = useState(0);
@@ -78,9 +74,7 @@ export const DataUploader = () => {
         <div
           className={`fixed top-0 z-30 w-full dark:bg-black`}
         >
-          <TopMenu
-            appearance={`${darkMode ? "subtle": "default"}`}
-          />
+
         </div>
         <header
           className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl items-center justify-center`}

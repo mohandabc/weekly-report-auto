@@ -2,14 +2,10 @@
  * TODO: IMPLEMENT THE FRONTOFFICE REPORTS GENERATORS*
  *****************************************************/
 
-import { TopMenu } from "../../components/TopMenu";
 import React from "react";
-import { useRecoilValue } from "recoil";
-import { darkModeState } from "../../shared/globalState";
 import { ReportCard } from "../../components/ReportCard";
 
 export const FrontOffice = () => {
-  const darkMode = useRecoilValue(darkModeState);
 
   return (
     <div className="App">
@@ -19,9 +15,6 @@ export const FrontOffice = () => {
         <div
           className={`sticky top-0 z-30 w-full dark:bg-black`}
         >
-          <TopMenu
-            appearance={`${darkMode ? "subtle": "default"}`}
-          />
         </div>
 
         <div className="py-5 my-20">
