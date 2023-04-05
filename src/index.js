@@ -18,6 +18,7 @@ import {
 import { BoDailyPage, BoWeeklyPage } from "./pages/BackOffice";
 import { ProtectedRoute } from "./components";
 import { AuthProvider } from "./api/useAuth";
+import { TopMenu } from "./components/TopMenu";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -26,6 +27,7 @@ root.render(
     <RecoilRoot>
       <BrowserRouter>
         <AuthProvider>
+        <TopMenu/>
           <Routes>
             <Route path="/" element={<ProtectedRoute><MainPage /></ProtectedRoute>} />
             <Route path="/login" element={<LoginPage />} />

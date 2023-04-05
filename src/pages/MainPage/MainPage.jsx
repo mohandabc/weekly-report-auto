@@ -1,13 +1,9 @@
-import { TopMenu } from "../../components/TopMenu";
 import React, { useState } from "react";
 import { useAuth } from "../../api/useAuth";
-import { useRecoilValue } from "recoil";
-import { darkModeState } from "../../shared/globalState";
 import { Chart} from '../../components';
 import "./mainPage.css";
 
 export const MainPage = () => {
-  const darkMode = useRecoilValue(darkModeState);
   const { user } = useAuth();
   const [testData, setTestData] = useState({})
   const [testData2, setTestData2] = useState({})
@@ -44,7 +40,6 @@ export const MainPage = () => {
   return (
     <>
       <div className={`sticky top-0 z-30 w-full dark:bg-black`}>
-        <TopMenu appearance={`${darkMode ? "subtle": "default"}`}/>
       </div>
       <header className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}>
         <div className="flex sticky top-40 justify-center items-center">

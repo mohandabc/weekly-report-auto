@@ -1,6 +1,5 @@
 import "./react-tabs.css";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { TopMenu } from "../TopMenu";
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { darkModeState } from "../../shared/globalState";
@@ -26,7 +25,6 @@ export const DeliverableInputScreen  = ({ title, configBarAction, options }) => 
   return (
     <div className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}>
       <div className={`fixed top-0 z-50 w-full dark:bg-black`}>
-        <TopMenu appearance={`${darkMode ? "subtle": "default"}`}/>
       </div>
 
       <header className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl items-center`}>

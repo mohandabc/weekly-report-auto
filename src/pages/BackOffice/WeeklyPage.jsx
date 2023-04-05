@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
-import {useRecoilState,  useRecoilValue,  useSetRecoilState} from 'recoil';
-import {chartsToPrintState, dateStartEndState, weeklyDataState ,loaderIsHidden, darkModeState} from '../../shared/globalState';
+import {useRecoilState, useSetRecoilState} from 'recoil';
+import {chartsToPrintState, dateStartEndState, weeklyDataState ,loaderIsHidden} from '../../shared/globalState';
 
 import { ActionButton, Chart, ReportInputScreen , Table} from '../../components';
 
@@ -9,10 +9,8 @@ import {generateWeeklyReport} from '../../services/weeklyPdfGenBO';
 import { getData } from '../../api/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS } from '../../constants/constants';
 import { API_URL } from '../../constants/URI';
-import { TopMenu } from '../../components/TopMenu';
 
 export const BoWeeklyPage = () => {
-    const darkMode = useRecoilValue(darkModeState);
     const [chartsToPrint, setChartsToPrint] = useRecoilState(chartsToPrintState);
     const [weeklyData, setWeeklyData] = useRecoilState(weeklyDataState);
     const [range, setRange] = useRecoilState(dateStartEndState);
@@ -56,7 +54,6 @@ export const BoWeeklyPage = () => {
      
     return (
         <div className="App">
-            <TopMenu appearance={`${darkMode ? "subtle": "default"}`}/>
             <ReportInputScreen 
                 title = "Back Office Weekly Report" 
                 configBarAction={getWeeklyData}
