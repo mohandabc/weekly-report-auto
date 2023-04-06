@@ -25,7 +25,7 @@ export const EOWR = () => {
 
     const getEowrData = (params) => {
         // API call to get data
-        const url = 'reports/eowr/data';
+        const url = 'api/reports/eowr';
         getData(API_URL, url, params)
         .then(res=> {
             let data = res.result;
@@ -36,7 +36,7 @@ export const EOWR = () => {
                         } || {});
                         
             // set paragraphes to recovered data if possible
-            setParagraphes({'p-1' : '', 'p-2':'', 'p-3':''});
+            setParagraphes({'p-0' : '', 'p-1':'', 'p-2':'', 'p-3':""});
         });
     }
 
@@ -64,7 +64,7 @@ export const EOWR = () => {
         setChartsToPrint(chartsIds);
     }, [])
 
-    const EOWR_CONFIG_BAR_OPTIONS = {...DEFAULT_CONFIG_BAR_OPTIONS, well:true}
+    const EOWR_CONFIG_BAR_OPTIONS = {...DEFAULT_CONFIG_BAR_OPTIONS, well:true, datePicker:false}
     
     return (
         <div className="App">
@@ -84,50 +84,64 @@ export const EOWR = () => {
                     </ActionButton>
                 </div>
 
+                <span className='text-xl'>I. Global overview</span>
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-                <ImagePicker id="image-picker-1" title="Well Architecture" setImages = {setImages} ></ImagePicker>
-                <ImagePicker id="image-picker-2" title="Well Location Map" setImages = {setImages} ></ImagePicker>
-                <ImagePicker id="image-picker-3" title="Well Schematics" setImages = {setImages} ></ImagePicker>
-
-                <Table title = "Rig Time Performance" id = {getDivId('table')} tableData = {EOWRData['table_data']}/>
-
-                <Chart title = "Progress chart" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
-                <Chart title = "Progress chart with cost" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
-                  
-                <Table title = "Time Distribution" id = {getDivId('table')} tableData = {EOWRData['table_data']}/>
-
-                <Chart title = "Well Activity" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
-                <Chart title = "Time Distribution per phase" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Bar"/>
-                <Chart title = "PT vs NPT" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
-                <Chart title = "NPT vs Section" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Bar"/>
-
-                <Chart title = "PT vs Category" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
-                <Chart title = "PT vs Sub-Category" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
-                <Chart title = "PT Details" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
-                <Chart title = "PT vs Service companies" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
-                <Chart title = "PT Down Hole Prombles" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
-
-                <Table title = "Drilling connection Time KPI's" id = {getDivId('table')} tableData = {EOWRData['table_data']}/>
-                <Table title = "Tripping connection Time KPI's" id = {getDivId('table')} tableData = {EOWRData['table_data']}/>
-                
-                <Chart title = "Activity Well Breakdown" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
-
-                <Table title = "Hole Section" id = {getDivId('table')} tableData = {EOWRData['table_data']}/>
-
-                <Chart title = "Activity Breakdown For " id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
-
-                <Paragraphe id="p-1" title = "Operation Summary  Results" text={paragraphes['p-1']} onSave={handleParagrapheSave}></Paragraphe>
-                <Paragraphe id="p-2" title="Operation Summary  Results" text={paragraphes['p-2']} onSave={handleParagrapheSave}></Paragraphe>
-
-                <ImagePicker id="image-picker-4" title="Ream Back Ream Interval" setImages = {setImages} ></ImagePicker>
-
-                <Table title = "Section overview" id = {getDivId('table')} tableData = {EOWRData['table_data']}/>
-
-                <Chart title = "Activity Breakdown For " id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
+                    <ImagePicker id="image-picker-0" title="Well Information" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id="image-picker-1" title="Well Architecture" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id="image-picker-2" title="Well Location Map" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id="image-picker-3" title="Well Schematics" setImages = {setImages} ></ImagePicker>
                 </section>
 
+                <span className='text-xl'>II. Time Activity Breakdown</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-                   
+                    <Table title = "Rig Time Performance" id = {getDivId('table')} tableData = {EOWRData['rig_performance']}/>
+
+                    {/* <Chart title = "Progress chart" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
+                    <Chart title = "Progress chart with cost" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/> */}
+
+                    <ImagePicker id="image-picker-4" title = "Progress chart" setImages={setImages} />
+                    <ImagePicker id="image-picker-5" title = "Progress chart with cost" setImages={setImages} />
+                    
+                    <Table title = "Time Distribution" id = {getDivId('table')} tableData = {EOWRData['time_distribution']}/>
+
+                    <Chart title = "Well Activity" id = {getDivId('chart')} chartData = {EOWRData['well_activity']} chartType="Pie"/>
+                    <Chart title = "Time Distribution per phase" id = {getDivId('chart')} chartData = {EOWRData['time_dist_per_phase']} chartType="Bar"/>
+                </section>
+
+                <span className='text-xl'>III. NPT Analysis</span>
+                <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
+                    <Chart title = "PT vs NPT" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
+                    <Chart title = "NPT vs Section" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Bar"/>
+
+                    <Chart title = "PT vs Category" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
+                    <Chart title = "PT vs Sub-Category" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
+                    <Chart title = "PT Details" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
+                    <Chart title = "PT vs Service companies" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
+                    <Chart title = "PT Down Hole Prombles" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
+                </section>
+
+                <span className='text-xl'>IV. Drilling & Tripping connection time KPI's</span>
+                <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
+                    <Table title = "Drilling connection Time KPI's" id = {getDivId('table')} tableData = {EOWRData['table_data']}/>
+                    <Table title = "Tripping connection Time KPI's" id = {getDivId('table')} tableData = {EOWRData['table_data']}/>
+                </section>
+
+                <span className='text-xl'>V. Real Time Impact & Prevention</span>
+                <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >  
+                    <Paragraphe id="p-0" title = "High Value Interventions"  text = {paragraphes['p-0']} onSave={handleParagrapheSave}/>
+                    <Paragraphe id="p-1" title = "Prevention & Mitigation plan"  text = {paragraphes['p-1']} onSave={handleParagrapheSave}/>
+                </section>
+
+                <span className='text-xl'>VI. Section Summary</span>
+                <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
+                    {
+                        EOWRData['section_summary']?.map(section=>
+                            <>
+                            <Table title = "Section overview" id = {getDivId('table')} tableData = {EOWRData['table_data']}/>
+                            <Paragraphe id="p-2" title = "Operation Summary  Results" text={section['description']} onSave={handleParagrapheSave}></Paragraphe>
+                            </>
+                        )
+                    }  
                 </section>
                 
             </div>

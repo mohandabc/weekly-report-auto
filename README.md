@@ -16,7 +16,7 @@ Builds the app for production to the `build` folder.\
 
 ## Use Docker
 
-### `docker build --build-arg HTTP_PROXY=http://10.111.66.213:9999 . -t reporting-image`
+### `docker build --build-arg HTTP_PROXY=http://10.111.66.213:9999 --build-arg HTTPS_PROXY=http://10.111.66.213:9999 . -t reporting-image`
 
 Builds a docker image. The build step is done inside the container, that's why we pass proxy to the build command.
 Then, the built app will be copied to the nginx folder inside the container and use the nginx.config file.
