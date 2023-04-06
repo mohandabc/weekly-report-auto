@@ -102,43 +102,59 @@ class Chart
     }
 }
 
-export class PieChart extends Chart
-{   
-    buildChart(data, container, title, options){
-        
-        let params = {}
-        if (data?.length > 0){
-        params = {
-            category : Object.keys(data[0])[0],
-            value : Object.keys(data[0])[1]
+export class PieChart extends Chart {
+    buildChart(data, container, title, options) {
+        let params = {};
+        if (data?.length > 0) {
+          params = {
+            category: Object.keys(data[0])[0],
+            value: Object.keys(data[0])[1],
+          };
         }
+        if (data === undefined || params === {}) {
+          return;
         }
-        if (data === undefined || params === {}){
-            return;
-        }
-        
+      
         let chart = am4core.create(container, am4charts.PieChart);
-    
+      
         // Create pie series
         let series = chart.series.push(new am4charts.PieSeries());
         series.dataFields.value = params?.value;
         series.dataFields.category = params?.category;
-        series.labels.template.fill = options['label-color'];
-        series.slices.template.stroke = options['stroke-color'];
-        series.slices.template.lak = options['stroke-color'];
-
+      
+        series.ticks.template.disabled = true;
+        series.labels.template.disabled = false; // false: visible
+        series.alignLabels = false;
+        series.labels.template.text = '{value.formatNumber("#.#")}';
+        series.labels.template.fontSize = 16;
+        series.labels.template.radius = am4core.percent(-50);
+        series.labels.template.padding(0, 0, 0, 0);
+        series.labels.template.fill = am4core.color('black');
+      
+        console.log(options)
+          
+        // Set the tooltip to show the category and value of each slice
+        series.slices.template.tooltipText = "{category}: {value.formatNumber('#.#')}";
+        series.tooltip.dy = -15; // Set dy to 5 pixels
+        series.pointerOrientation = "vertical";
+      
         var chartTitle = chart.titles.create();
         chartTitle.text = title;
         chartTitle.fill = options["title-color"];
         chartTitle.fontSize = 24;
-        chartTitle.marginBottom = 30;
-        
+        chartTitle.marginBottom = 10;
         // Add data
-        chart.exporting.menu = new am4core.ExportMenu();
         chart.data = data;
+      
+        // Create and configure a legend
+        let legend = new am4charts.Legend();
+        legend.position = "top";
+        chart.legend = legend;
+
+        chart.exporting.menu = new am4core.ExportMenu();
         return chart;
       }
-}
+  }
 
 export class BarChart extends Chart
 {

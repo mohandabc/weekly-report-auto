@@ -45,7 +45,7 @@ export const ImagePicker = ({id, title, setImages}) => {
       )}
       <label
         htmlFor={id}
-        className="w-full h-64 border-dashed border-2 border-gray-400 rounded-lg flex flex-col items-center justify-center cursor-pointer"
+        className="w-full h-120 border-dashed border-2 border-gray-400 rounded-lg flex flex-col items-center justify-center cursor-pointer"
       >
         {selectedImage ? (
           <img src={selectedImage} alt="Selected" className="h-full w-full object-cover rounded-lg" />

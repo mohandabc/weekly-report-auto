@@ -110,7 +110,7 @@ export const EOWR = () => {
 
                 <span className='text-xl'>III. NPT Analysis</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-                    <Chart title = "PT vs NPT" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
+                    <Chart title = "PT vs NPT" id = {getDivId('chart')} chartData = {EOWRData['pt_vs_npt']} chartType="Pie"/>
                     <Chart title = "NPT vs Section" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Bar"/>
 
                     <Chart title = "PT vs Category" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
