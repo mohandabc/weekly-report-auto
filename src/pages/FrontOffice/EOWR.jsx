@@ -114,7 +114,7 @@ export const EOWR = () => {
                     <Chart title = "NPT vs Section / This chart needs a stacked chart" id = {getDivId('chart')}/>
 
                     <Chart title = "PT vs Category" id = {getDivId('chart')} chartData = {EOWRData['npt_categories']} chartType="Pie"/>
-                    <Chart title = "PT vs Sub-Category" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
+                    <Chart title = "PT vs Sub-Category" id = {getDivId('chart')} chartData = {EOWRData['npt_subcategories']} chartType="Pie"/>
                     <Chart title = "PT Details" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
                     <Chart title = "PT vs Service companies" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
                     <Chart title = "PT Down Hole Prombles" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
