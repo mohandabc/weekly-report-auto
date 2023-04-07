@@ -1,6 +1,5 @@
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
-import * as am4plugins_sliceGrouper from "@amcharts/amcharts4/plugins/sliceGrouper";
 import { nest } from 'd3-collection';
 
 class Chart 
@@ -174,10 +173,10 @@ export class PieChart extends Chart {
           }
 
         function sortData(data) {
-        data.sort(function(a, b) {
-            return b.value - a.value;
-        });
-        return data;
+            if (Array.isArray(data)) data.sort(function(a, b) {
+                return b.value - a.value;
+            });
+            return data;
         }
       }
   }

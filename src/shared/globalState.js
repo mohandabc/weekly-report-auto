@@ -36,7 +36,7 @@ export const loaderIsHidden = atom({
 
 export const darkModeState = atom({
   key: "darkMode",
-  default: Cookies.get('darkMode') || true,
+  default: Cookies.get('darkMode')==='true' || false,
 });
 
 export const files = atom({
