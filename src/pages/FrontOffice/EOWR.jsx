@@ -73,8 +73,11 @@ export const EOWR = () => {
                     configBarAction = {getEowrData} 
                     options = {EOWR_CONFIG_BAR_OPTIONS}>
             </ReportInputScreen>
-           
-            <div id="result-section" className={`bg-slate-300 dark:bg-zinc-900 ${Object.keys(EOWRData).length === 0? "hidden":""}`}>
+
+           {Object.keys(EOWRData).length === 0?
+           <></>
+           :
+            <div id="result-section" className={`bg-slate-300 dark:bg-zinc-900`}>
                 <div className='flex flex-row-reverse sticky top-14 px-10 py-4  z-40'>
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
@@ -110,14 +113,14 @@ export const EOWR = () => {
 
                 <span className='text-xl'>III. NPT Analysis</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-                    <Chart title = "PT vs NPT" id = {getDivId('chart')} chartData = {EOWRData['pt_vs_npt']} chartType="Pie"/>
-                    <Chart title = "NPT vs Section / This chart needs a stacked chart" id = {getDivId('chart')}/>
-
-                    <Chart title = "PT vs Category" id = {getDivId('chart')} chartData = {EOWRData['npt_categories']} chartType="Pie"/>
-                    <Chart title = "PT vs Sub-Category" id = {getDivId('chart')} chartData = {EOWRData['npt_subcategories']} chartType="Pie"/>
-                    <Chart title = "PT Details" id = {getDivId('chart')} chartData = {EOWRData['npt_details']} chartType="Pie"/>
-                    <Chart title = "PT vs Service companies" id = {getDivId('chart')} chartData = {EOWRData['npt_companies']} chartType="Pie"/>
-                    <Chart title = "PT Down Hole Prombles" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
+                    <Chart title = "PT vs NPT" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['pt_vs_npt']} chartType="Pie"/>
+                    {/* TODO : below instruction is skipped and needs to be implemented */}
+                    <Chart title = "NPT vs Section / This chart needs a stacked chart" id = {getDivId('chart')}/> 
+                    <Chart title = "PT vs Category" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_categories']} chartType="Pie"/>
+                    <Chart title = "PT vs Sub-Category" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_subcategories']} chartType="Pie"/>
+                    <Chart title = "PT Details" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_details']} chartType="Pie"/>
+                    <Chart title = "PT vs Service companies" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_companies']} chartType="Pie"/>
+                    <Chart title = "PT Down Hole Problems" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_downhole']} chartType="Pie"/>
                 </section>
 
                 <span className='text-xl'>IV. Drilling & Tripping connection time KPI's</span>
@@ -145,6 +148,8 @@ export const EOWR = () => {
                 </section>
                 
             </div>
+           }
+
         </div>
     );
 }
