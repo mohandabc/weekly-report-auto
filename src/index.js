@@ -27,21 +27,19 @@ root.render(
     <RecoilRoot>
       <BrowserRouter>
         <AuthProvider>
-        <TopMenu/>
           <Routes>
-            <Route path="/" element={<ProtectedRoute><MainPage /></ProtectedRoute>} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/back-office" element={<ProtectedRoute><BackOffice /></ProtectedRoute>} />
-            <Route path="/front-office" element={<ProtectedRoute><FrontOffice /></ProtectedRoute>} />
-            <Route path="/weeklyBo" element={<ProtectedRoute><BoWeeklyPage /></ProtectedRoute>} />
-            <Route path="/dailyBo" element={<ProtectedRoute><BoDailyPage /></ProtectedRoute>} />
-            <Route path="/eowr" element={<ProtectedRoute><EOWR /></ProtectedRoute>} />
-            <Route path="/run" element={<ProtectedRoute><RunDeliverable /></ProtectedRoute>} />
-            <Route path="/data" element={<ProtectedRoute><DataUploader /></ProtectedRoute>} />
-            <Route path="/logout" element={<ProtectedRoute><LogoutPage /></ProtectedRoute>} />
-            <Route path="*" element={<LoginPage />} />
+            <Route path="/" element={<ProtectedRoute><TopMenu /><MainPage /></ProtectedRoute>} />
+            <Route path="/back-office" element={<ProtectedRoute><TopMenu /><BackOffice /></ProtectedRoute>} />
+            <Route path="/front-office" element={<ProtectedRoute><TopMenu /><FrontOffice /></ProtectedRoute>} />
+            <Route path="/weeklyBo" element={<ProtectedRoute><TopMenu /><BoWeeklyPage /></ProtectedRoute>} />
+            <Route path="/dailyBo" element={<ProtectedRoute><TopMenu /><BoDailyPage /></ProtectedRoute>} />
+            <Route path="/eowr" element={<ProtectedRoute><TopMenu /><EOWR /></ProtectedRoute>} />
+            <Route path="/run" element={<ProtectedRoute><TopMenu /><RunDeliverable /></ProtectedRoute>} />
+            <Route path="/data" element={<ProtectedRoute><TopMenu /><DataUploader /></ProtectedRoute>} />
+            <Route path="/logout" element={<ProtectedRoute><TopMenu /><LogoutPage /></ProtectedRoute>} />
 
-            {/* Add other rouetes for other pages */}
+            {/* No top menu needed here in login page */}
+            <Route path="*" element={<LoginPage />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
