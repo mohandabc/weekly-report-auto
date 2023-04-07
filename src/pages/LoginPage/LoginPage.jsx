@@ -64,7 +64,7 @@ export const LoginPage = () => {
         )}
 
         <div
-          className={`flex sticky rounded-xl bg-gray-200 w-3/12 h-5/6 items-center justify-center transform transition-all duration-500 ease-out ${
+          className={`flex sticky rounded-xl bg-gray-200 xl:w-1/4 h-5/6 items-center justify-center transform transition-all duration-500 ease-out ${
             loginfailed ? "animate-shake" : ""
           }
           ${animation ? "scale-100" : "scale-0"}`}
