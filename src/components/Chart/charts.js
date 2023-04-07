@@ -105,6 +105,7 @@ class Chart
 
 export class PieChart extends Chart {
     buildChart(data, container, title, options) {
+        data = sortData(data);
         let params = {};
         if (data?.length > 0) {
           params = {
@@ -117,25 +118,36 @@ export class PieChart extends Chart {
         }
       
         let chart = am4core.create(container, am4charts.PieChart);
+        chart.innerRadius = am4core.percent(40);
+        
         let series = chart.series.push(new am4charts.PieSeries());
         series.dataFields.value = params?.value;
         series.dataFields.category = params?.category;
-      
         series.ticks.template.disabled = true;
         series.alignLabels = false;
         series.labels.template.text = '[bold]{value.formatNumber("#.#")}';
-        series.labels.template.fontSize = 16;
-        series.labels.template.radius = am4core.percent(-50);
+        series.labels.template.radius = am4core.percent(-25);
         series.labels.template.padding(0, 0, 0, 0);
-        series.labels.template.fill = am4core.color('black');
+        series.labels.template.fill = am4core.color('white');
         series.ticks.template.events.on("ready", hideSmall);
         series.ticks.template.events.on("visibilitychanged", hideSmall);
         series.labels.template.events.on("ready", hideSmall);
         series.labels.template.events.on("visibilitychanged", hideSmall);
-        // Set the tooltip to show the category and value of each slice
         series.slices.template.tooltipText = "{category}: {value.formatNumber('#.#')}%";
-    
-        var chartTitle = chart.titles.create();
+        series.slices.template.stroke = am4core.color("#fff");
+        series.slices.template.strokeWidth = 2;
+        series.slices.template.strokeOpacity = 1;
+        series.slices.template.cursorOverStyle = [
+            {
+              "property": "cursor",
+              "value": "pointer"
+            }
+          ];
+
+        let shadow = series.slices.template.filters.push(new am4core.DropShadowFilter);
+        shadow.opacity = 0.1;
+
+        let chartTitle = chart.titles.create();
         chartTitle.text = title;
         chartTitle.fill = options["title-color"];
         chartTitle.fontSize = 24;
@@ -143,10 +155,14 @@ export class PieChart extends Chart {
         // Add data
         chart.data = data;
       
-        // Create and configure a legend
         let legend = new am4charts.Legend();
-        legend.position = "top";
+        legend.position = "right";
+        legend.labels.template.fontSize = 11;
+        legend.valueLabels.template.fontSize = 11;
         chart.legend = legend;
+
+        chart.exporting.menu = new am4core.ExportMenu();
+        return chart;
 
         function hideSmall(ev) {
             if (ev.target.dataItem && (ev.target.dataItem.values.value.percent < 1.5)) {
@@ -156,8 +172,13 @@ export class PieChart extends Chart {
               ev.target.show();
             }
           }
-        chart.exporting.menu = new am4core.ExportMenu();
-        return chart;
+
+        function sortData(data) {
+        data.sort(function(a, b) {
+            return b.value - a.value;
+        });
+        return data;
+        }
       }
   }
 
