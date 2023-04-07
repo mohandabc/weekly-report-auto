@@ -1,5 +1,6 @@
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
+import * as am4plugins_sliceGrouper from "@amcharts/amcharts4/plugins/sliceGrouper";
 import { nest } from 'd3-collection';
 
 class Chart 
@@ -116,28 +117,24 @@ export class PieChart extends Chart {
         }
       
         let chart = am4core.create(container, am4charts.PieChart);
-      
-        // Create pie series
         let series = chart.series.push(new am4charts.PieSeries());
         series.dataFields.value = params?.value;
         series.dataFields.category = params?.category;
       
         series.ticks.template.disabled = true;
-        series.labels.template.disabled = false; // false: visible
         series.alignLabels = false;
-        series.labels.template.text = '{value.formatNumber("#.#")}';
+        series.labels.template.text = '[bold]{value.formatNumber("#.#")}';
         series.labels.template.fontSize = 16;
         series.labels.template.radius = am4core.percent(-50);
         series.labels.template.padding(0, 0, 0, 0);
         series.labels.template.fill = am4core.color('black');
-      
-        console.log(options)
-          
+        series.ticks.template.events.on("ready", hideSmall);
+        series.ticks.template.events.on("visibilitychanged", hideSmall);
+        series.labels.template.events.on("ready", hideSmall);
+        series.labels.template.events.on("visibilitychanged", hideSmall);
         // Set the tooltip to show the category and value of each slice
-        series.slices.template.tooltipText = "{category}: {value.formatNumber('#.#')}";
-        series.tooltip.dy = -15; // Set dy to 5 pixels
-        series.pointerOrientation = "vertical";
-      
+        series.slices.template.tooltipText = "{category}: {value.formatNumber('#.#')}%";
+    
         var chartTitle = chart.titles.create();
         chartTitle.text = title;
         chartTitle.fill = options["title-color"];
@@ -151,6 +148,14 @@ export class PieChart extends Chart {
         legend.position = "top";
         chart.legend = legend;
 
+        function hideSmall(ev) {
+            if (ev.target.dataItem && (ev.target.dataItem.values.value.percent < 1.5)) {
+              ev.target.hide();
+            }
+            else {
+              ev.target.show();
+            }
+          }
         chart.exporting.menu = new am4core.ExportMenu();
         return chart;
       }
