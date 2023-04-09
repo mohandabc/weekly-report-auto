@@ -63,10 +63,10 @@ export const MainPage = () => {
       <section id="stats" className="h-full pt-10 bg-gradient-to-b from-cyan-900 to-blue-900 dark:from-black dark:to-indigo-400 bg-cover bg-center hidden">
   
                 <section id="main" className={`grid grid-col-1 xl:grid-cols-3 gap-4 place-items-top px-2  pb-4`} >
-                    <Chart title = "Pending Quality Tickets" id = {getDivId('chart')} chartData = {testData} chartType="Pie" dashboard/>
+                    {/* <Chart title = "Pending Quality Tickets" id = {getDivId('chart')} chartData = {testData} chartType="Pie" dashboard/>
                     <Chart title = "Resolved Quality Tickets" id = {getDivId('chart')} chartData = {testData} chartType="Pie" dashboard/>
                     <Chart title = "Pending Quality Channels" id = {getDivId('chart')} chartData = {testData} chartType="Bar" dashboard/>
-                    <Chart title = "Resolved Quality Channels" id = {getDivId('chart')} chartData = {testData2} chartType="ClusterBar" dashboard/>
+                    <Chart title = "Resolved Quality Channels" id = {getDivId('chart')} chartData = {testData2} chartType="ClusterBar" dashboard/> */}
                 </section>
            
       </section>
