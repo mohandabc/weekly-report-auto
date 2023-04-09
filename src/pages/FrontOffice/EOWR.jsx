@@ -105,10 +105,10 @@ export const EOWR = () => {
                     <ImagePicker id="image-picker-4" title = "Progress chart" setImages={setImages} />
                     <ImagePicker id="image-picker-5" title = "Progress chart with cost" setImages={setImages} />
                     
-                    <Table title = "Time Distribution" id = {getDivId('table')} tableData = {EOWRData['time_distribution']}/>
+                    <Table title = "Time Distribution" id = {getDivId('table')} tableData = {EOWRData['time_distribution']['time_distribution']}/>
 
                     <Chart title = "Well Activity" id = {getDivId('chart')} chartData = {EOWRData['well_activity']} chartType="Pie"/>
-                    <Chart title = "Time Distribution per phase" id = {getDivId('chart')} chartData = {EOWRData['time_dist_per_phase']} chartType="Bar"/>
+                    <Chart title = "Time Distribution per phase" id = {getDivId('chart')} chartData = {EOWRData['time_distribution']['time_dist_per_phase']} chartType="Bar"/>
                 </section>
 
                 <span className='text-xl'>III. NPT Analysis</span>
