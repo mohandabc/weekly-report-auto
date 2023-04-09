@@ -173,10 +173,12 @@ export class PieChart extends Chart {
           }
 
         function sortData(data) {
-            if (Array.isArray(data)) data.sort(function(a, b) {
-                return b.value - a.value;
+            const sortedData = [...data];
+            sortedData.sort(function(a, b) {
+                let value = Object.keys(data[0])[1];
+                return b[value] - a[value];
             });
-            return data;
+            return sortedData;
         }
       }
   }
@@ -357,6 +359,62 @@ export class ClusteredBarChart extends Chart
         chartTitle.fill = options["title-color"];
         chartTitle.marginBottom = 30;
 
+
+    }
+}
+
+export class StackedBarChart extends Chart
+{
+    buildChart(data, container, title, options){
+        var chart = am4core.create(container, am4charts.XYChart);
+        chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+        chart.data = data
+        var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+
+        categoryAxis.dataFields.category = "category";
+        categoryAxis.renderer.grid.template.location = 0;
+
+
+        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.renderer.inside = true;
+        valueAxis.renderer.labels.template.disabled = true;
+        valueAxis.min = 0;
+
+        // Create series
+        function createSeries(field, name, color) {
+        
+        // Set up series
+        var series = chart.series.push(new am4charts.ColumnSeries());
+        series.name = name;
+        series.dataFields.valueY = field;
+        series.dataFields.categoryX = "category";
+        series.sequencedInterpolation = true;
+        
+        // Make it stacked
+        series.stacked = true;
+        
+        // Configure columns
+        series.columns.template.tooltipText = "[bold]{name}[/]\n[font-size:14px]{categoryX}: {valueY}";
+        
+        // Add label
+        var labelBullet = series.bullets.push(new am4charts.LabelBullet());
+        labelBullet.label.text = "[bold]{valueY}";
+        labelBullet.locationY = 0.5;
+        labelBullet.label.hideOversized = true;
+        labelBullet.label.fill = "#FFFFFF";
+        
+        return series;
+        }
+
+        createSeries("value1", "PT");
+        createSeries("value2", "NPT");
+
+
+        var chartTitle = chart.titles.create();
+        chartTitle.text = title;
+        chartTitle.fontSize = 24;
+        chartTitle.fill = options["title-color"];
+        chartTitle.marginBottom = 30;
 
     }
 }

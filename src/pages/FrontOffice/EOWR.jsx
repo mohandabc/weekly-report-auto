@@ -115,7 +115,7 @@ export const EOWR = () => {
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
                     <Chart title = "PT vs NPT" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['pt_vs_npt']} chartType="Pie"/>
                     {/* TODO : below instruction is skipped and needs to be implemented */}
-                    <Chart title = "NPT vs Section / This chart needs a stacked chart" id = {getDivId('chart')}/> 
+                    <Chart title = "NPT vs Section" id = {getDivId('chart')} chartData = {EOWRData['npt_sections']} chartType="Stacked"/> 
                     <Chart title = "PT vs Category" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_categories']} chartType="Pie"/>
                     <Chart title = "PT vs Sub-Category" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_subcategories']} chartType="Pie"/>
                     <Chart title = "PT Details" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_details']} chartType="Pie"/>
