@@ -436,7 +436,7 @@ export class DateAxes extends Chart
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         dateAxis.renderer.minGridDistance = 50;
         
-        function createAxisAndSeries(field1, field2, name1, name2, opposite, inversed, color1, color2) {
+        function createAxisAndSeries(field1, field2, name1, name2, opposite, inversed, color1, color2, axisTitle) {
           color1=am4core.color(color1).rgb;
           color1.a=0.6;
           color2=am4core.color(color2).rgb;
@@ -478,15 +478,21 @@ export class DateAxes extends Chart
           valueAxis.renderer.labels.template.fill = "#000";
           valueAxis.renderer.opposite = opposite;
           valueAxis.renderer.inversed = inversed;
-          valueAxis.unit = "Unit";
+          valueAxis.title.text = axisTitle;
         }
         
-        createAxisAndSeries("cummul_depth","drilling_end", "Realised Depth (m)", "Planned Depth (m)", true, true, "#FF0000", "#0000FF");
-        createAxisAndSeries("cummul_cost", "planned_cost", "Cummul Cost (KDA)", "Planned Cost (KDA)", false, false, "#FFA500", "#00FF00");
+        createAxisAndSeries("cummul_depth","drilling_end", "Realised Depth (m)", "Planned Depth (m)", false, true, "#FF0000", "#0000FF", "Meters");
+        createAxisAndSeries("cummul_cost", "planned_cost", "Cummul Cost (KDA)", "Planned Cost (KDA)", true, false, "#FFA500", "#00FF00", "KDA");
 
         chart.legend = new am4charts.Legend();
         chart.cursor = new am4charts.XYCursor();
 
+        var chartTitle = chart.titles.create();
+        chartTitle.text = title;
+        chartTitle.fontSize = 24;
+        chartTitle.fill = options["title-color"];
+        chartTitle.marginBottom = 30;
+        
         function parseDate(dateString) {
             return new Date(dateString);
           }
