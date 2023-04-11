@@ -103,8 +103,9 @@ export const EOWR = () => {
                     <Chart title = "Progress chart with cost" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/> */}
 
                     {/* <ImagePicker id="image-picker-4" title = "Progress chart" setImages={setImages} /> */}
-                    <Chart title = "Progress Chart" id = {getDivId('chart')} chartData = {EOWRData['progress_charts']} chartType="DateAxes"/> 
-                    <ImagePicker id="image-picker-5" title = "Progress chart with cost" setImages={setImages} />
+                    <Chart title = "Progress Chart" id = {getDivId('chart')} chartData = {EOWRData['progress_chart']} chartType="DateAxes"/> 
+                    <Chart title = "Progress Chart / DOL" id = {getDivId('chart')} chartData = {EOWRData['progress_chart_dol']} chartType="DateAxes"/> 
+                    {/* <ImagePicker id="image-picker-5" title = "Progress chart with cost" setImages={setImages} /> */}
                     
                     <Table title = "Time Distribution" id = {getDivId('table')} tableData = {EOWRData['time_distribution']['time_distribution']}/>
 
