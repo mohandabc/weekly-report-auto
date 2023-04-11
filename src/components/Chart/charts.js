@@ -363,6 +363,8 @@ export class ClusteredBarChart extends Chart
     }
 }
 
+// Customized Charts for just one case
+
 export class StackedBarChart extends Chart
 {
     buildChart(data, container, title, options){
@@ -437,48 +439,65 @@ export class DateAxes extends Chart
         dateAxis.renderer.minGridDistance = 50;
         
         function createAxisAndSeries(field1, field2, name1, name2, opposite, inversed, color1, color2, axisTitle) {
-          color1=am4core.color(color1).rgb;
-          color1.a=0.6;
-          color2=am4core.color(color2).rgb;
-          color2.a=0.6;
-          var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-          if(chart.yAxes.indexOf(valueAxis) != 0){
-              valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
-          }
-          
-          var series = chart.series.push(new am4charts.LineSeries());
-          series.dataFields.valueY = field1;
-          series.dataFields.dateX = "update_date";
-          series.strokeWidth = 2;
-          series.yAxis = valueAxis;
-          series.name = name1;
-          series.tooltipText = "{name}: [bold]{valueY}[/]";
-          series.tensionX = 0.8;
-          series.showOnInit = true;
-          series.stroke = color1;
-          series.tooltip.getFillFromObject = false;
-          series.tooltip.background.fill = color1;
+            color1=am4core.color(color1).rgb;
+            color1.a=0.6;
+            color2=am4core.color(color2).rgb;
+            color2.a=0.6;
+            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            if(chart.yAxes.indexOf(valueAxis) != 0){
+                valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
+            }
+            
+            var series1 = chart.series.push(new am4charts.LineSeries());
+            series1.dataFields.valueY = field1;
+            series1.dataFields.dateX = "update_date";
+            series1.strokeWidth = 2;
+            series1.yAxis = valueAxis;
+            series1.name = name1;
+            series1.tooltipText = "{name}: [bold]{valueY}[/]";
+            series1.tensionX = 0.8;
+            series1.showOnInit = true;
+            series1.stroke = color1;
+            series1.tooltip.getFillFromObject = false;
+            series1.tooltip.background.fill = color1;
 
-          var series = chart.series.push(new am4charts.LineSeries());
-          series.dataFields.valueY = field2;
-          series.dataFields.dateX = "update_date";
-          series.strokeWidth = 2;
-          series.yAxis = valueAxis;
-          series.name = name2;
-          series.tooltipText = "{name}: [bold]{valueY}[/]";
-          series.tensionX = 0.8;
-          series.showOnInit = true;
-          series.stroke = color2;
-          series.tooltip.getFillFromObject = false;
-          series.tooltip.background.fill = color2;
-          
-          valueAxis.renderer.line.strokeOpacity = 1;
-          valueAxis.renderer.line.strokeWidth = 1;
-          valueAxis.renderer.line.stroke = "#000";
-          valueAxis.renderer.labels.template.fill = "#000";
-          valueAxis.renderer.opposite = opposite;
-          valueAxis.renderer.inversed = inversed;
-          valueAxis.title.text = axisTitle;
+            var series2 = chart.series.push(new am4charts.LineSeries());
+            series2.dataFields.valueY = field2;
+            series2.dataFields.dateX = "update_date";
+            series2.strokeWidth = 2;
+            series2.yAxis = valueAxis;
+            series2.name = name2;
+            series2.tooltipText = "{name}: [bold]{valueY}[/]";
+            series2.tensionX = 0.8;
+            series2.showOnInit = true;
+            series2.stroke = color2;
+            series2.tooltip.getFillFromObject = false;
+            series2.tooltip.background.fill = color2;
+            
+            valueAxis.strictMinMax = false;
+            var minValue = Infinity;
+            var maxValue = -Infinity;
+            for (var i = 0; i < newData.length; i++) {
+                var value1 = newData[i]?.[field1];
+                var value2 = newData[i]?.[field2];
+
+                if (typeof value2 === 'number' && value2 !== undefined && !isNaN(value2)) {
+                    minValue = Math.floor(Math.min(minValue, value1, value2));
+                    maxValue = Math.ceil(Math.max(maxValue, value1, value2));
+                    
+                }
+              }
+            console.log(minValue, maxValue);
+            valueAxis.min = minValue
+            valueAxis.max = maxValue
+
+            valueAxis.renderer.line.strokeOpacity = 1;
+            valueAxis.renderer.line.strokeWidth = 1;
+            valueAxis.renderer.line.stroke = "#000";
+            valueAxis.renderer.labels.template.fill = "#000";
+            valueAxis.renderer.opposite = opposite;
+            valueAxis.renderer.inversed = inversed;
+            valueAxis.title.text = axisTitle;
         }
         
         createAxisAndSeries("cummul_depth","drilling_end", "Realised Depth (m)", "Planned Depth (m)", false, true, "#FF0000", "#0000FF", "Meters");
