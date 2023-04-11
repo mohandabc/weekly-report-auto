@@ -428,22 +428,19 @@ export class DateAxes extends Chart
               update_date: parseDate(obj.update_date)
             };
           });
-          // Create chart instance
-          var chart = am4core.create(container, am4charts.XYChart);
+
+        var chart = am4core.create(container, am4charts.XYChart);
           
-          // Increase contrast by taking evey second color
-          chart.colors.step = 2;
-          
-          // Add data
-        console.log(newData)
         chart.data = newData
         
-        // Create axes
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         dateAxis.renderer.minGridDistance = 50;
         
-        // Create series
-        function createAxisAndSeries(field1, field2, name1, name2, opposite, inversed) {
+        function createAxisAndSeries(field1, field2, name1, name2, opposite, inversed, color1, color2) {
+          color1=am4core.color(color1).rgb;
+          color1.a=0.6;
+          color2=am4core.color(color2).rgb;
+          color2.a=0.6;
           var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
           if(chart.yAxes.indexOf(valueAxis) != 0){
               valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
@@ -458,6 +455,9 @@ export class DateAxes extends Chart
           series.tooltipText = "{name}: [bold]{valueY}[/]";
           series.tensionX = 0.8;
           series.showOnInit = true;
+          series.stroke = color1;
+          series.tooltip.getFillFromObject = false;
+          series.tooltip.background.fill = color1;
 
           var series = chart.series.push(new am4charts.LineSeries());
           series.dataFields.valueY = field2;
@@ -468,24 +468,23 @@ export class DateAxes extends Chart
           series.tooltipText = "{name}: [bold]{valueY}[/]";
           series.tensionX = 0.8;
           series.showOnInit = true;
+          series.stroke = color2;
+          series.tooltip.getFillFromObject = false;
+          series.tooltip.background.fill = color2;
           
           valueAxis.renderer.line.strokeOpacity = 1;
-          valueAxis.renderer.line.strokeWidth = 2;
-          valueAxis.renderer.line.stroke = series.stroke;
-          valueAxis.renderer.labels.template.fill = series.stroke;
+          valueAxis.renderer.line.strokeWidth = 1;
+          valueAxis.renderer.line.stroke = "#000";
+          valueAxis.renderer.labels.template.fill = "#000";
           valueAxis.renderer.opposite = opposite;
           valueAxis.renderer.inversed = inversed;
+          valueAxis.unit = "Unit";
         }
         
-        createAxisAndSeries("cummul_depth","drilling_end", "Realised Depth", "Planned Depth", true, true);
-        // createAxisAndSeries("drilling_end", "Planned Depth", true, true);
-        createAxisAndSeries("cummul_cost", "planned_cost", "Cummul Cost", "Planned Cost", false, false);
-        // createAxisAndSeries("planned_cost", "Planned Cost", false, false);
-        
-        // Add legend
+        createAxisAndSeries("cummul_depth","drilling_end", "Realised Depth (m)", "Planned Depth (m)", true, true, "#FF0000", "#0000FF");
+        createAxisAndSeries("cummul_cost", "planned_cost", "Cummul Cost (KDA)", "Planned Cost (KDA)", false, false, "#FFA500", "#00FF00");
+
         chart.legend = new am4charts.Legend();
-        
-        // Add cursor
         chart.cursor = new am4charts.XYCursor();
 
         function parseDate(dateString) {
