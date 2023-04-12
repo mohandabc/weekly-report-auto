@@ -424,18 +424,13 @@ export class StackedBarChart extends Chart
 export class DateAxes extends Chart
 {
     buildChart(data, container, title, options){
-        const newData = data.map(obj => {
-            return {
-              ...obj,
-              update_date: parseDate(obj.update_date)
-            };
-          });
-
-        var chart = am4core.create(container, am4charts.XYChart);
-          
-        chart.data = newData
+        let chart = am4core.create(container, am4charts.XYChart);
+        chart.data = data.map(({ update_date, ...obj }) => ({
+            ...obj,
+            update_date: parseDate(update_date)
+            }));
         
-        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+        let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         dateAxis.renderer.minGridDistance = 50;
         
         function createAxisAndSeries(field1, field2, name1, name2, opposite, inversed, color1, color2, axisTitle) {
@@ -443,12 +438,12 @@ export class DateAxes extends Chart
             color1.a=0.6;
             color2=am4core.color(color2).rgb;
             color2.a=0.6;
-            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
             if(chart.yAxes.indexOf(valueAxis) != 0){
                 valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
             }
             
-            var series1 = chart.series.push(new am4charts.LineSeries());
+            let series1 = chart.series.push(new am4charts.LineSeries());
             series1.dataFields.valueY = field1;
             series1.dataFields.dateX = "update_date";
             series1.strokeWidth = 2.5;
@@ -461,7 +456,7 @@ export class DateAxes extends Chart
             series1.tooltip.getFillFromObject = false;
             series1.tooltip.background.fill = color1;
 
-            var series2 = chart.series.push(new am4charts.LineSeries());
+            let series2 = chart.series.push(new am4charts.LineSeries());
             series2.dataFields.valueY = field2;
             series2.dataFields.dateX = "update_date";
             series2.strokeWidth = 2.5;
@@ -475,11 +470,12 @@ export class DateAxes extends Chart
             series2.tooltip.background.fill = color2;
             
             valueAxis.strictMinMax = false;
-            var minValue = Infinity;
-            var maxValue = -Infinity;
-            for (var i = 0; i < newData.length; i++) {
-                var value1 = newData[i]?.[field1];
-                var value2 = newData[i]?.[field2];
+            let minValue = Infinity;
+            let maxValue = -Infinity;
+            let dataLength = chart.data.length;
+            for (let i = 0; i < dataLength; i++) {
+                let value1 = chart.data[i]?.[field1];
+                let value2 = chart.data[i]?.[field2];
 
                 if (typeof value2 === 'number' && value2 !== undefined && !isNaN(value2)) {
                     minValue = Math.floor(Math.min(minValue, value1, value2));
@@ -505,7 +501,7 @@ export class DateAxes extends Chart
         chart.legend = new am4charts.Legend();
         chart.cursor = new am4charts.XYCursor();
 
-        var chartTitle = chart.titles.create();
+        let chartTitle = chart.titles.create();
         chartTitle.text = title;
         chartTitle.fontSize = 24;
         chartTitle.fill = options["title-color"];
