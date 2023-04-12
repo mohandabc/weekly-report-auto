@@ -451,7 +451,7 @@ export class DateAxes extends Chart
             var series1 = chart.series.push(new am4charts.LineSeries());
             series1.dataFields.valueY = field1;
             series1.dataFields.dateX = "update_date";
-            series1.strokeWidth = 2;
+            series1.strokeWidth = 2.5;
             series1.yAxis = valueAxis;
             series1.name = name1;
             series1.tooltipText = "{name}: [bold]{valueY}[/]";
@@ -464,7 +464,7 @@ export class DateAxes extends Chart
             var series2 = chart.series.push(new am4charts.LineSeries());
             series2.dataFields.valueY = field2;
             series2.dataFields.dateX = "update_date";
-            series2.strokeWidth = 2;
+            series2.strokeWidth = 2.5;
             series2.yAxis = valueAxis;
             series2.name = name2;
             series2.tooltipText = "{name}: [bold]{valueY}[/]";
@@ -487,7 +487,6 @@ export class DateAxes extends Chart
                     
                 }
               }
-            console.log(minValue, maxValue);
             valueAxis.min = minValue
             valueAxis.max = maxValue
 
