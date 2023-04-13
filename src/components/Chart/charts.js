@@ -132,7 +132,7 @@ export class PieChart extends Chart {
         series.ticks.template.events.on("visibilitychanged", hideSmall);
         series.labels.template.events.on("ready", hideSmall);
         series.labels.template.events.on("visibilitychanged", hideSmall);
-        series.slices.template.tooltipText = "{category}: {value.formatNumber('#.#')}%";
+        series.slices.template.tooltipText = "{category}: {value.formatNumber('#.#')}";
         series.slices.template.stroke = am4core.color("#fff");
         series.slices.template.strokeWidth = 2;
         series.slices.template.strokeOpacity = 1;
@@ -218,19 +218,17 @@ export class BarChart extends Chart
             var label = axis.renderer.labels.template;
             var rangeTemplate = axis.axisRanges.template;
             var rangeLabel = rangeTemplate.label;
+            rangeLabel.fontSize = 14;
+            label.fontSize = 14;
             if (cellWidth < label.maxWidth) {
                 rangeLabel.rotation = -35;
                 rangeLabel.dy = 45;
-                rangeLabel.fontSize = 14;
                 label.rotation = -35;
-                label.fontSize = 14;
                 label.horizontalCenter = 'right';
             } else {
                 rangeLabel.rotation = 0;
                 rangeLabel.dy = 35;
-                rangeLabel.fontSize = 14;
                 label.rotation = 0;
-                label.fontSize = 14;
                 label.horizontalCenter = 'middle';
             }
         });
@@ -389,11 +387,37 @@ export class StackedBarChart extends Chart
         var chart = am4core.create(container, am4charts.XYChart);
         chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
         chart.data = data
+        console.log(data)
         var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
 
         categoryAxis.dataFields.category = "category";
         categoryAxis.renderer.grid.template.location = 0;
-
+        categoryAxis.renderer.minGridDistance = 30;
+        let label = categoryAxis.renderer.labels.template;
+        label.wrap = false;
+        label.truncate = false;
+        label.maxWidth = 200;
+        label.fontSize = 14;
+        categoryAxis.events.on('sizechanged', function (ev) {
+            let axis = ev.target;
+            var cellWidth = axis.pixelWidth / (axis.endIndex - axis.startIndex);
+            var label = axis.renderer.labels.template;
+            var rangeTemplate = axis.axisRanges.template;
+            var rangeLabel = rangeTemplate.label;
+            rangeLabel.fontSize = 14;
+            label.fontSize = 14;
+            if (cellWidth < label.maxWidth) {
+                rangeLabel.rotation = -35;
+                rangeLabel.dy = 45;
+                label.rotation = -35;
+                label.horizontalCenter = 'right';
+            } else {
+                rangeLabel.rotation = 0;
+                rangeLabel.dy = 35;
+                label.rotation = 0;
+                label.horizontalCenter = 'middle';
+            }
+        });
 
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
         valueAxis.renderer.inside = true;
