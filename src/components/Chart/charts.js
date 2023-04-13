@@ -105,6 +105,7 @@ class Chart
 export class PieChart extends Chart {
     buildChart(data, container, title, options) {
         /**
+         * Please respect the following structure and labes names : [{category:?, value:?}...]
             // Example data format:
                 [
                     {
@@ -205,6 +206,7 @@ export class BarChart extends Chart
 {
     buildChart(data, container, title, options){
         /**
+         * Please respect the following structure and labes names : [{category:?, value:?}...]
             // Example data format:
                 const data = [
                                 {
@@ -310,6 +312,7 @@ export class ClusteredBarChart extends Chart
 {
     buildChart(data, container, title, options){
         /**
+         * Please respect the following structure and labes names : [{type:?, name:?, count:?}...]
         // Example data format:
             const data = [
                             {
@@ -436,12 +439,11 @@ export class ClusteredBarChart extends Chart
     }
 }
 
-// Customized Charts for just one case
-
 export class StackedBarChart extends Chart
 {
     buildChart(data, container, title, options){
         /**
+         * * Please respect the following structure and labes names : [{category:?, value1:?, value2:?}...]
             // Example data format:
                 const data = [
                                 {   
@@ -540,10 +542,12 @@ export class StackedBarChart extends Chart
     }
 }
 
+// Customized Charts for just one case
+
 export class DateAxes extends Chart
 {
     buildChart(data, container, title, options){
-                /**
+        /**
             // This chart is customized to display just one case :
             data = [
                         {
