@@ -104,6 +104,24 @@ class Chart
 
 export class PieChart extends Chart {
     buildChart(data, container, title, options) {
+        /**
+            // Example data format:
+                [
+                    {
+                        "category": "NPT Contractor",
+                        "value": 0.375
+                    },
+                    {
+                        "category": "NPT  Service Companies",
+                        "value": 1.375
+                    },
+                    {
+                        "category": "NPT Sonatrach",
+                        "value": 0.666666666666667
+                    }
+                ...
+                ]
+        */
         data = sortData(data);
         let params = {};
         if (data?.length > 0) {
@@ -186,6 +204,24 @@ export class PieChart extends Chart {
 export class BarChart extends Chart
 {
     buildChart(data, container, title, options){
+        /**
+            // Example data format:
+                const data = [
+                                {
+                                    "category": "26\"",
+                                    "value": 12.38
+                                },
+                                {
+                                    "category": "Inter Phase 26\" - 16\"",
+                                    "value": 7.35
+                                },
+                                {
+                                    "category": "16\"",
+                                    "value": 5.43
+                                }
+                            ...
+                            ]
+        */
         let params = {}
         if (data?.length > 0){
             params = {
@@ -273,6 +309,27 @@ export class BarChart extends Chart
 export class ClusteredBarChart extends Chart
 {
     buildChart(data, container, title, options){
+        /**
+        // Example data format:
+            const data = [
+                            {
+                                "type": "Data Recovery", 
+                                "name": "MLU Cabin Issue", 
+                                "count": 1
+                            },
+                            {
+                                "type": "Data Recovery",
+                                "name": "MLU Released", 
+                                "count": 1
+                            },
+                            {
+                                "type": "Data Recovery",
+                                "name": "MLU-Rig Box Connectivity",
+                                 "count": 1
+                            }
+                        ...
+                        ]
+        */
         if (data === undefined){
             return
         }
@@ -384,10 +441,30 @@ export class ClusteredBarChart extends Chart
 export class StackedBarChart extends Chart
 {
     buildChart(data, container, title, options){
+        /**
+            // Example data format:
+                const data = [
+                                {   
+                                    "category": "26\"",
+                                    "value1": 5.43, 
+                                    "value2": 4.77
+                                },
+                                {
+                                    "category": "Inter Phase 26\" - 16\"", 
+                                    "value1": 3.07, 
+                                    "value2": 0.18
+                                },
+                                {
+                                    "category": "16\"",
+                                     "value1": 4.07,
+                                      "value2": 0.06
+                                },
+                            ...
+                            ]
+        */
         var chart = am4core.create(container, am4charts.XYChart);
         chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
         chart.data = data
-        console.log(data)
         var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
 
         categoryAxis.dataFields.category = "category";
@@ -466,6 +543,32 @@ export class StackedBarChart extends Chart
 export class DateAxes extends Chart
 {
     buildChart(data, container, title, options){
+                /**
+            // This chart is customized to display just one case :
+            data = [
+                        {
+                            "update_date": "2023-01-08",
+                            "cummul_cost": 138.56,
+                            "cummul_depth": 18,
+                            "planned_cost": 1601,
+                            "drilling_end": 230
+                        },
+                        {
+                            "update_date": "2023-01-09",
+                            "cummul_cost": 145.732,
+                            "cummul_depth": 59,
+                            "planned_cost": 1601
+                        },
+                        {
+                            "update_date": "2023-01-10",
+                            "cummul_cost": 153.035,
+                            "cummul_depth": 120.999999999516,
+                            "planned_cost": 1601,
+                            "drilling_end": 230
+                        },
+                    ...
+                    ]
+        */
         let chart = am4core.create(container, am4charts.XYChart);
         chart.data = data.map(({ update_date, ...obj }) => ({
             ...obj,
