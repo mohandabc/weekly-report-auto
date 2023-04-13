@@ -200,19 +200,39 @@ export class BarChart extends Chart
         let chart = am4core.create(container, am4charts.XYChart);
     
         // Create axes
-
         var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
         categoryAxis.dataFields.category = params?.category;
         categoryAxis.renderer.grid.template.location = 0;
         categoryAxis.renderer.minGridDistance = 30;
-
-        categoryAxis.renderer.labels.template.fill = options["label-color"];
-        categoryAxis.renderer.labels.template.adapter.add("dy", function(dy, target) {
-        if (target.dataItem && data.length >= 8 && target.dataItem.index % 2 !== 0 ) {
-            //if there are too much data, alternate the positions of names of bars
-            return dy + 25;
-        }
-        return dy;
+    
+        categoryAxis.renderer.labels.template.fill = options['label-color'];
+    
+        let label = categoryAxis.renderer.labels.template;
+        label.wrap = false;
+        label.truncate = false;
+        label.maxWidth = 200;
+        label.fontSize = 14;
+        categoryAxis.events.on('sizechanged', function (ev) {
+            let axis = ev.target;
+            var cellWidth = axis.pixelWidth / (axis.endIndex - axis.startIndex);
+            var label = axis.renderer.labels.template;
+            var rangeTemplate = axis.axisRanges.template;
+            var rangeLabel = rangeTemplate.label;
+            if (cellWidth < label.maxWidth) {
+                rangeLabel.rotation = -35;
+                rangeLabel.dy = 45;
+                rangeLabel.fontSize = 14;
+                label.rotation = -35;
+                label.fontSize = 14;
+                label.horizontalCenter = 'right';
+            } else {
+                rangeLabel.rotation = 0;
+                rangeLabel.dy = 35;
+                rangeLabel.fontSize = 14;
+                label.rotation = 0;
+                label.fontSize = 14;
+                label.horizontalCenter = 'middle';
+            }
         });
 
         // eslint-disable-next-line
@@ -220,38 +240,36 @@ export class BarChart extends Chart
         valueAxis.extraMax = 0.1;
         valueAxis.stroke = options['stroke-color'];
         valueAxis.renderer.grid.template.stroke = options['stroke-color'];
-
-
+    
         // Create series
         var series = chart.series.push(new am4charts.ColumnSeries());
         series.dataFields.valueY = params?.value;
         series.dataFields.categoryX = params?.category;
         series.name = params?.value;
-        series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
-        series.columns.template.fillOpacity = .8;
-
-        var bullet = series.bullets.push(new am4charts.LabelBullet())
-            bullet.interactionsEnabled = false
-            bullet.dy = -15;
-            bullet.label.text = '[bold]{valueY}';
-            bullet.label.fill = am4core.color(options['value-color']);
-        
-
+        series.columns.template.tooltipText = '{categoryX}: [bold]{valueY}[/]';
+        series.columns.template.fillOpacity = 0.8;
+    
+        var bullet = series.bullets.push(new am4charts.LabelBullet());
+        bullet.interactionsEnabled = false;
+        bullet.dy = -15;
+        bullet.label.text = '[bold]{valueY}';
+        bullet.label.fill = am4core.color(options['value-color']);
+    
         var columnTemplate = series.columns.template;
         columnTemplate.strokeWidth = 2;
         columnTemplate.strokeOpacity = 1;
     
         var chartTitle = chart.titles.create();
         chartTitle.text = title;
-        chartTitle.fill = options["title-color"];
+        chartTitle.fill = options['title-color'];
         chartTitle.fontSize = 24;
         chartTitle.marginBottom = 30;
-
+    
         // Add data
         chart.exporting.menu = new am4core.ExportMenu();
         chart.data = data;
         return chart;
-      }
+    }
 }
 
 export class ClusteredBarChart extends Chart
@@ -469,23 +487,6 @@ export class DateAxes extends Chart
             series2.tooltip.getFillFromObject = false;
             series2.tooltip.background.fill = color2;
             
-            valueAxis.strictMinMax = false;
-            let minValue = Infinity;
-            let maxValue = -Infinity;
-            let dataLength = chart.data.length;
-            for (let i = 0; i < dataLength; i++) {
-                let value1 = chart.data[i]?.[field1];
-                let value2 = chart.data[i]?.[field2];
-
-                if (typeof value2 === 'number' && value2 !== undefined && !isNaN(value2)) {
-                    minValue = Math.floor(Math.min(minValue, value1, value2));
-                    maxValue = Math.ceil(Math.max(maxValue, value1, value2));
-                    
-                }
-              }
-            valueAxis.min = minValue
-            valueAxis.max = maxValue
-
             valueAxis.renderer.line.strokeOpacity = 1;
             valueAxis.renderer.line.strokeWidth = 1;
             valueAxis.renderer.line.stroke = "#000";
