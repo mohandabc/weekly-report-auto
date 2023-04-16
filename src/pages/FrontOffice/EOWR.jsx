@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import {generateEOWR} from '../../services/EOWReportPdf';
 
-import { ActionButton, ReportInputScreen, Chart, ImagePicker, Table, Paragraphe} from '../../components';
+import { ActionButton, ReportInputScreen, Chart, ImagePicker, Table, Paragraphe, MultiTable} from '../../components';
 
 import { getData } from '../../api/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS} from '../../constants/constants';
@@ -77,7 +77,7 @@ export const EOWR = () => {
            {Object.keys(EOWRData).length === 0?
            <></>
            :
-            <div id="result-section" className={`bg-slate-300 dark:bg-zinc-900`}>
+           <div id="result-section" className={`bg-slate-300 dark:bg-zinc-900`}>
                 <div className='flex flex-row-reverse sticky top-14 px-10 py-4  z-40'>
                     <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
@@ -127,8 +127,9 @@ export const EOWR = () => {
 
                 <span className='text-xl'>IV. Drilling & Tripping connection time KPI's</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
+                    <MultiTable title = "Tripping In and connection Time KPI’s " id = {getDivId('table')} tableData = {EOWRData['tripping_connection_time']['rih']}/>
+                    <MultiTable title = "Tripping out and connection Time KPI’s" id = {getDivId('table')} tableData = {EOWRData['tripping_connection_time']['pooh']}/>
                     <Table title = "Drilling connection Time KPI's" id = {getDivId('table')} tableData = {EOWRData['table_data']}/>
-                    <Table title = "Tripping connection Time KPI's" id = {getDivId('table')} tableData = {EOWRData['table_data']}/>
                 </section>
 
                 <span className='text-xl'>V. Real Time Impact & Prevention</span>

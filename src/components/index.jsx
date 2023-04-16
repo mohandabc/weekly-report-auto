@@ -8,6 +8,7 @@ export {ProtectedRoute} from "./ProtectedRoute";
 export {ImagePicker} from "./ImagePicker";
 export {NotAllowed} from "./NotAllowed";
 export {Paragraphe} from "./Paragraphe";
+export {MultiTable} from "./MultiTable";
 
 
 /** Export all components from here  */
