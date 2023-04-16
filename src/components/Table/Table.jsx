@@ -42,7 +42,7 @@ export const Table = ({title, id, tableData})=>{
                             </td>)
                         }
                     </tr> :
-                    <tr className={`${index%2===0?"":darkMode ? "bg-stone-700" : "bg-slate-200"}`} key={index}>
+                    <tr className={`${index%2===0?"":darkMode ? "bg-stone-500" : "bg-slate-200"}`} key={index}>
                     {
                         Object.entries(row).map((item, index) => 
                         <td key={index} className="px-auto py-2.5 text-center text-black">

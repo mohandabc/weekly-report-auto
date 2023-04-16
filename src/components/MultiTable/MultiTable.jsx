@@ -71,7 +71,7 @@ export const MultiTable = ({title, id, tableData})=>{
             </tr>
           ) : (
             <tr
-              className={`${index % 2 === 0 ? "" : darkMode ? "bg-stone-700" : "bg-slate-200"}`}
+              className={`${index % 2 === 0 ? "" : darkMode ? "bg-stone-500" : "bg-slate-200"}`}
               key={index}
             >
               {Object.entries(row).map((item, index) => (
