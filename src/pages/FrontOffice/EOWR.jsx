@@ -40,10 +40,7 @@ export const EOWR = () => {
         });
     }
 
-    // Logging data
     useEffect(()=>{
-        console.log({EOWRData})
-        console.log({paragraphes})
 
     })
 
@@ -65,7 +62,25 @@ export const EOWR = () => {
     }, [])
 
     const EOWR_CONFIG_BAR_OPTIONS = {...DEFAULT_CONFIG_BAR_OPTIONS, well:true, datePicker:false}
+
+    if (Object.keys(EOWRData).length !==0) {
+        console.log({EOWRData})
+        console.log({paragraphes})
+        // This processing is to prepare the data with some additional formatting
+        let array1 = EOWRData['connection_details']['drill_time'];
+        let array2 = EOWRData['connection_details']['on_bottom'];
     
+        for (let i = 1; i < array1.length; i++) {
+        let phase = array1[i].Phase;
+        if (phase) {
+            let matchingObj = array2.find(obj => obj.Phase === phase);
+            if (matchingObj) {
+            array1[i]['On Bottom'] = matchingObj['On Bottom'];
+            }
+        }
+        }
+    }
+
     return (
         <div className="App">
             <ReportInputScreen 
@@ -126,10 +141,12 @@ export const EOWR = () => {
                 </section>
 
                 <span className='text-xl'>IV. Drilling & Tripping connection time KPI's</span>
+                <section className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
+                    <MultiTable title = "Drilling connection Time KPI's" id = {getDivId('table')} tableData = {EOWRData['connection_details']['drill_time']}/>
+                </section>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-                    <MultiTable title = "Tripping In and connection Time KPI’s " id = {getDivId('table')} tableData = {EOWRData['tripping_connection_time']['rih']}/>
-                    <MultiTable title = "Tripping out and connection Time KPI’s" id = {getDivId('table')} tableData = {EOWRData['tripping_connection_time']['pooh']}/>
-                    <Table title = "Drilling connection Time KPI's" id = {getDivId('table')} tableData = {EOWRData['table_data']}/>
+                    <MultiTable title = "Tripping In and connection Time KPI’s " id = {getDivId('table')} tableData = {EOWRData['connection_details']['tripping_time']['rih']}/>
+                    <MultiTable title = "Tripping out and connection Time KPI’s" id = {getDivId('table')} tableData = {EOWRData['connection_details']['tripping_time']['pooh']}/>
                 </section>
 
                 <span className='text-xl'>V. Real Time Impact & Prevention</span>
@@ -140,14 +157,14 @@ export const EOWR = () => {
 
                 <span className='text-xl'>VI. Section Summary</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-                    {
-                        EOWRData['section_summary']?.map(section=>
-                            <>
-                            <Table title = "Section overview" id = {getDivId('table')} tableData = {EOWRData['table_data']}/>
-                            <Paragraphe id="p-2" title = "Operation Summary  Results" text={section['description']} onSave={handleParagrapheSave}></Paragraphe>
-                            </>
-                        )
-                    }  
+                {
+                    EOWRData['section_summary']?.map((section, index) => (
+                        <React.Fragment key={`section-${index}`}>
+                        <Table title="Section overview" id={getDivId('table')} tableData={EOWRData['table_data']} />
+                        <Paragraphe id="p-2" title="Operation Summary Results" text={section['description']} onSave={handleParagrapheSave} />
+                        </React.Fragment>
+                    ))
+                }
                 </section>
                 
             </div>

@@ -65,7 +65,7 @@ export const MultiTable = ({title, id, tableData})=>{
               className={`${index % 2 === 0 ? "" : darkMode ? "bg-stone-500" : "bg-slate-200"}`}
               key={index}
             >
-              <td colSpan="3" className="px-auto py-2.5 text-center text-white bg-stone-600">
+              <td colSpan={Object.keys(tableData[1]).length} className="px-auto py-2.5 text-center text-white bg-stone-600">
                 {row.title}
               </td>
             </tr>

@@ -117,7 +117,9 @@ export const ReportInputScreen = ({ title, configBarAction, options }) => {
                 : "opacity-0 translate-y-12"
             }`}
       >
-        {inputScreenContent}
+        {inputScreenContent.map((item, index) => (
+          <div key={index}>{item}</div>
+        ))}
       </div>
       <div className={`flex items-center justify-center mt-6 md:mt-10 duration-1000 relative transform transition-all ease-out md:pb-8
             ${
