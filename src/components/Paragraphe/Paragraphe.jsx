@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import './scrollbar.css'
 export const Paragraphe = (props) => {
   const [text, setText] = useState(props.text);
   const [editing, setEditing] = useState(false);
@@ -36,7 +36,8 @@ export const Paragraphe = (props) => {
     {editing ? (
       <div className="flex flex-col items-center">
         <textarea
-          className="border border-gray-400 rounded w-full mt-4 h-80 px-2 py-1 resize-none focus:outline-none focus:ring focus:ring-gray-400 focus:border-transparent bg-gradient-to-r from-slate-400 to-slate-300 text-black"
+          className="border border-gray-400 rounded w-full mt-4 h-80 px-2 py-1 resize-none focus:outline-none focus:ring focus:ring-gray-400 focus:border-transparent 
+          bg-gradient-to-r from-slate-400 to-slate-300 text-black scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-300 focus:border-transparent"
           value={text}
           onChange={handleTextChange}
         />
