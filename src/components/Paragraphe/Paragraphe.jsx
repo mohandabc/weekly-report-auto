@@ -36,7 +36,7 @@ export const Paragraphe = (props) => {
     {editing ? (
       <div>
         <textarea
-          className="border border-gray-400 rounded w-full mt-4"
+          className="border border-gray-400 rounded w-full mt-4 h-80"
           value={text}
           onChange={handleTextChange}
         />
@@ -54,7 +54,7 @@ export const Paragraphe = (props) => {
         </button>
       </div>
     ) : (
-      <p className="mt-4">{text}</p>
+      <p className="mt-4">{text.split('\n').map((line, index) => <React.Fragment key={index}>{line}<br/></React.Fragment>)}</p>
     )}
   </div>
 );
