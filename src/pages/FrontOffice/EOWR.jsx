@@ -169,8 +169,8 @@ export const EOWR = () => {
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >  
                     <Table title = "Drilling Events Captured" id = {getDivId('table')} tableData = {EOWRData['table_data']} size={'big'}/>
                     <Table title = "Drilling Events Caused NPT" id = {getDivId('table')} tableData = {EOWRData['table_data']} size={'big'}/>
-                    <Chart title = "Drilling Event Category" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
-                    <Chart title = "Drilling Event Sub-Category " id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
+                    <Chart title = "Drilling Event Category" id = {getDivId('chart')} chartData = {EOWRData['drilling_events']['events_categories']} chartType="Pie"/>
+                    <Chart title = "Drilling Event Sub-Category " id = {getDivId('chart')} chartData = {EOWRData['drilling_events']['events_subcategories']} chartType="Pie"/>
                 </section>
                 <span className='text-xl px-4'>IX. Ream & Back Ream</span>
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
@@ -181,7 +181,7 @@ export const EOWR = () => {
                 </section>
                 <span className='text-xl px-4'>X. Bit Record</span>
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-                    <ImagePicker id="image-picker-0" title="Ream & Back Ream 1" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id="image-picker-0" title="Bit Record" setImages = {setImages} ></ImagePicker>
                 </section>
             </div>
            }
