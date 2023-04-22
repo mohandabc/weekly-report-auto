@@ -101,7 +101,7 @@ export const EOWR = () => {
                     </ActionButton>
                 </div>
 
-                <span className='text-xl'>I. Global overview</span>
+                <span className='text-xl px-4'>I. Global overview</span>
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
                     <ImagePicker id="image-picker-0" title="Well Information" setImages = {setImages} ></ImagePicker>
                     <ImagePicker id="image-picker-1" title="Well Architecture" setImages = {setImages} ></ImagePicker>
@@ -109,7 +109,7 @@ export const EOWR = () => {
                     <ImagePicker id="image-picker-3" title="Well Schematics" setImages = {setImages} ></ImagePicker>
                 </section>
 
-                <span className='text-xl'>II. Time Activity Breakdown</span>
+                <span className='text-xl px-4'>II. Time Activity Breakdown</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4 align-bottom`} >
                     <Table title = "Rig Time Performance" id = {getDivId('table')} tableData = {EOWRData['rig_performance']} size={'big'}/>
                     <Table title = "Time Distribution" id = {getDivId('table')} tableData = {EOWRData['time_distribution']['time_distribution']}/>
@@ -127,7 +127,7 @@ export const EOWR = () => {
                     <Chart title = "Time Distribution per phase" id = {getDivId('chart')} chartData = {EOWRData['time_distribution']['time_dist_per_phase']} chartType="Bar"/>
                 </section>
 
-                <span className='text-xl'>III. NPT Analysis</span>
+                <span className='text-xl px-4'>III. NPT Analysis</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
                     <Chart title = "PT vs NPT" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['pt_vs_npt']} chartType="Pie"/>
                     {/* TODO : below instruction is skipped and needs to be implemented */}
@@ -139,7 +139,7 @@ export const EOWR = () => {
                     <Chart title = "NPT Down Hole Problems" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_downhole']} chartType="Pie"/>
                 </section>
 
-                <span className='text-xl'>IV. Drilling & Tripping connection time KPI's</span>
+                <span className='text-xl px-4'>IV. Drilling & Tripping connection time KPI's</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
                     <MultiTable title = "Drilling connection Time KPI's" id = {getDivId('table')} tableData = {EOWRData['connection_details']['drill_time']}/>
                 </section>
@@ -148,13 +148,13 @@ export const EOWR = () => {
                     <MultiTable title = "Tripping out and connection Time KPI’s" id = {getDivId('table')} tableData = {EOWRData['connection_details']['tripping_time']['pooh']}/>
                 </section>
 
-                <span className='text-xl'>V. Real Time Impact & Prevention</span>
+                <span className='text-xl px-4'>V. Real Time Impact & Prevention</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >  
                     <Paragraphe id="p-0" title = "High Value Interventions"  text = {paragraphes['p-0']} onSave={handleParagrapheSave}/>
                     <Paragraphe id="p-1" title = "Prevention & Mitigation plan"  text = {paragraphes['p-1']} onSave={handleParagrapheSave}/>
                 </section>
 
-                <span className='text-xl'>VI. Section Summary</span>
+                <span className='text-xl px-4'>VI. Section Summary</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
                 {
                     EOWRData['section_summary']?.map((section, index) => (
@@ -165,12 +165,23 @@ export const EOWR = () => {
                     ))
                 }
                 </section>
-                <span className='text-xl'>VII. Appendix</span>
+                <span className='text-xl px-4'>VIII. Appendix</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >  
                     <Table title = "Drilling Events Captured" id = {getDivId('table')} tableData = {EOWRData['table_data']} size={'big'}/>
                     <Table title = "Drilling Events Caused NPT" id = {getDivId('table')} tableData = {EOWRData['table_data']} size={'big'}/>
                     <Chart title = "Drilling Event Category" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
                     <Chart title = "Drilling Event Sub-Category " id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
+                </section>
+                <span className='text-xl px-4'>IX. Ream & Back Ream</span>
+                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
+                    <ImagePicker id="image-picker-0" title="Ream & Back Ream 1" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id="image-picker-1" title="Ream & Back Ream 2" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id="image-picker-2" title="Ream & Back Ream 3" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id="image-picker-3" title="Ream & Back Ream 4" setImages = {setImages} ></ImagePicker>
+                </section>
+                <span className='text-xl px-4'>X. Bit Record</span>
+                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
+                    <ImagePicker id="image-picker-0" title="Ream & Back Ream 1" setImages = {setImages} ></ImagePicker>
                 </section>
             </div>
            }
