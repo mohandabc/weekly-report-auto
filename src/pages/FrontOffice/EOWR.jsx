@@ -41,7 +41,8 @@ export const EOWR = () => {
     }
 
     useEffect(()=>{
-
+        console.log({EOWRData})
+        console.log({paragraphes})
     })
 
     let chartsIds = [];
@@ -64,8 +65,6 @@ export const EOWR = () => {
     const EOWR_CONFIG_BAR_OPTIONS = {...DEFAULT_CONFIG_BAR_OPTIONS, well:true, datePicker:false}
 
     if (Object.keys(EOWRData).length !==0) {
-        console.log({EOWRData})
-        console.log({paragraphes})
         // This processing is to prepare the data with some additional formatting
         let array1 = EOWRData['connection_details']['drill_time'];
         let array2 = EOWRData['connection_details']['on_bottom'];
@@ -112,7 +111,7 @@ export const EOWR = () => {
 
                 <span className='text-xl'>II. Time Activity Breakdown</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-                    <Table title = "Rig Time Performance" id = {getDivId('table')} tableData = {EOWRData['rig_performance']}/>
+                    <Table title = "Rig Time Performance" id = {getDivId('table')} tableData = {EOWRData['rig_performance']} size={'big'}/>
                     <Table title = "Time Distribution" id = {getDivId('table')} tableData = {EOWRData['time_distribution']['time_distribution']}/>
 
                     {/* <Chart title = "Progress chart" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
@@ -157,16 +156,15 @@ export const EOWR = () => {
 
                 <span className='text-xl'>VI. Section Summary</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-  {
-    EOWRData['section_summary']?.map((section, index) => (
-      <React.Fragment key={`section-${index}`}>
-        <Tabular title="Section Overview" id={getDivId('table')} tableData={Object.entries(section).map(([key, value]) => ({ [key]: value }))} />
-        <Paragraphe id="p-2" title="Operation Summary Results" text={section['description']} onSave={handleParagrapheSave} />
-      </React.Fragment>
-    ))
-  }
-</section>
-                
+                {
+                    EOWRData['section_summary']?.map((section, index) => (
+                    <React.Fragment key={`section-${index}`}>
+                        <Tabular title="Section Overview" id={getDivId('table')} tableData={Object.entries(section).map(([key, value]) => ({ [key]: value }))} columns={3}/>
+                        <Paragraphe id="p-2" title="Operation Summary Results" text={section['description']} onSave={handleParagrapheSave} />
+                    </React.Fragment>
+                    ))
+                }
+                </section>
             </div>
            }
 

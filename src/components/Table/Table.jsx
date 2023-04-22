@@ -2,7 +2,7 @@ import React from "react";
 import { useRecoilValue } from "recoil";
 import { darkModeState } from "../../shared/globalState";
 
-export const Table = ({title, id, tableData})=>{
+export const Table = ({title, id, tableData, size='small'})=>{
     const darkMode = useRecoilValue(darkModeState);
     return (
         <div  className={`min-h-120 rounded-lg py-3 px-2 bg-stone-100 dark:bg-stone-400 shadow w-full`}>
@@ -31,11 +31,11 @@ export const Table = ({title, id, tableData})=>{
                 {/* {tableData?.map(row => <tr>{Object.entries(row).map(cell) => <td>{cell}</td>}</tr>} */}
                 {
                     tableData.map((row, index) => 
-                    title === "Data Quality" || title === "Data Loss" || title === "Data Recovery" ?
+                    size==='big' ?
                     <tr className={`${index%2===0?"":darkMode ? "bg-stone-500" : "bg-slate-200"}`} key={index}>
                         {
                             Object.entries(row).map((item, index) => 
-                            <td key={index} className="px-20 py-20 text-center text-black">
+                            <td key={index} className="px-16 py-16 text-center text-black">
                                 <h3>{
                                     item[1]
                                 }</h3>

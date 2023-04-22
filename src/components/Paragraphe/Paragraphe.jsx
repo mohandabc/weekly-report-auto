@@ -23,13 +23,15 @@ export const Paragraphe = (props) => {
   };
 
   return (
-    <div className="border border-gray-400 rounded p-4">
+  <div className={`min-h-120 rounded-lg p-6 bg-stone-100 dark:bg-stone-400 shadow w-full`}>
     <div className="flex justify-between items-center">
-      <h2 className="text-lg font-medium">{props.title}</h2>
+    <caption className="text-center font-normal mb-8 text-black text-3xl" align="center">
+          {props.title}
+        </caption>
       <button
         className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full border-2 border-purple-600 w-1/6"
         onClick={handleEditClick}
-      >
+        >
         Edit
       </button>
     </div>
@@ -40,18 +42,18 @@ export const Paragraphe = (props) => {
           bg-gradient-to-r from-slate-400 to-slate-300 text-black scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-300 focus:border-transparent"
           value={text}
           onChange={handleTextChange}
-        />
+          />
         <div className="flex justify-between mt-4 w-full">
           <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full border-2 border-green-600 w-1/6 mx-2"
             onClick={handleSaveClick}
-          >
+            >
             Save
           </button>
           <button
             className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full border-2 border-gray-600 w-1/6 mx-2"
             onClick={handleCancelClick}
-          >
+            >
             Cancel
           </button>
         </div>
@@ -60,7 +62,7 @@ export const Paragraphe = (props) => {
       <p className="mt-4 whitespace-pre-wrap">
         {text.toLowerCase().includes("conclusion")
           ? text.split(/(Conclusion)/i).map((t, i) => (
-              <React.Fragment key={i}>
+            <React.Fragment key={i}>
                 {t.toLowerCase() === "conclusion" ? (
                   <u>
                     <b>
@@ -69,10 +71,10 @@ export const Paragraphe = (props) => {
                   </u>
                 ) : (
                   t
-                )}
+                  )}
               </React.Fragment>
             ))
-          : text}
+            : text}
       </p>
     )}
   </div>

@@ -2,15 +2,40 @@ import React from "react";
 import { useRecoilValue } from "recoil";
 import { darkModeState } from "../../shared/globalState";
 
-export const Tabular = ({ title, id, tableData }) => {
-  // Filter out the "description" object from the table data
+export const Tabular = ({ title, id, tableData, columns}) => {
+    /**
+     * @dataformat
+     * Please to respect this data format :
+     * @example
+      [
+          {
+              "Hole Section": "26\"",
+              "Inclination In": 0,
+              "Drilling Hours": 0,
+              "Start Date": "2022-12-02 23:00:00",
+              "Inclination Out": 4,
+              "Circulation Hours": 0,
+              "End Date": "2022-12-22 16:30:00",
+              "Azimute In": 0,
+              "ROP WOC": 0,
+              "Depth From": 0,
+              "Azimute Out": 0,
+              "TVD In": 0,
+              "Depth To": 555,
+              "Casing Size": "18.625in",
+              "TVD Out": 554.55,
+              "Metrage": 555,
+              "Casing Shoe": 554,
+              "Mud Weight": "1.05"
+          }
+        ...
+        ]
+     */
   const filteredTableData = tableData.filter((item) => !item.hasOwnProperty("description"));
 
   const tableRows = [];
-
-  // Split the filtered table data into rows of 6 items each
-  for (let i = 0; i < filteredTableData.length; i += 3) {
-    const row = filteredTableData.slice(i, i + 3);
+  for (let i = 0; i < filteredTableData.length; i += columns) {
+    const row = filteredTableData.slice(i, i + columns);
     tableRows.push(row);
   }
 
