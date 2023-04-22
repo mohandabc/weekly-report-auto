@@ -35,7 +35,7 @@ export const MultiTable = ({title, id, tableData})=>{
   {tableData === undefined ? (
     <></>
   ) : (
-    <table id={id.toString()} className="mx-auto table-auto border-collapse border-2 border-slate-900">
+    <table id={id.toString()} className="mx-auto table-auto border-collapse border-2 border-slate-900 w-2/3">
       {title !== undefined ? (
         <caption className="text-center font-normal mb-8 text-black text-3xl" align="top">
           {title}

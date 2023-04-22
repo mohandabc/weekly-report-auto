@@ -32,7 +32,7 @@ export const EOWR = () => {
             setEOWRData({well:params['wid'],
                             ...data, 
                             chart_data:[{'category': 'good', 'value':2}, {'category': 'bad', 'value':5}],
-                            table_data:[{'name':'lehin','value':10, 'date':'2023-03-29'}, {'name':'siklab','value':9, 'date':'2023-03-29'}]
+                            table_data:[{'name':'Test','value':10, 'date':'2023-03-29'}, {'name':'Test','value':9, 'date':'2023-03-29'}]
                         } || {});
                         
             // set paragraphes to recovered data if possible
@@ -110,7 +110,7 @@ export const EOWR = () => {
                 </section>
 
                 <span className='text-xl'>II. Time Activity Breakdown</span>
-                <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
+                <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4 align-bottom`} >
                     <Table title = "Rig Time Performance" id = {getDivId('table')} tableData = {EOWRData['rig_performance']} size={'big'}/>
                     <Table title = "Time Distribution" id = {getDivId('table')} tableData = {EOWRData['time_distribution']['time_distribution']}/>
 
@@ -164,6 +164,13 @@ export const EOWR = () => {
                     </React.Fragment>
                     ))
                 }
+                </section>
+                <span className='text-xl'>VII. Appendix</span>
+                <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >  
+                    <Table title = "Drilling Events Captured" id = {getDivId('table')} tableData = {EOWRData['table_data']} size={'big'}/>
+                    <Table title = "Drilling Events Caused NPT" id = {getDivId('table')} tableData = {EOWRData['table_data']} size={'big'}/>
+                    <Chart title = "Drilling Event Category" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
+                    <Chart title = "Drilling Event Sub-Category " id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
                 </section>
             </div>
            }
