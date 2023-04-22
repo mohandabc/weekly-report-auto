@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import {generateEOWR} from '../../services/EOWReportPdf';
 
-import { ActionButton, ReportInputScreen, Chart, ImagePicker, Table, Paragraphe, MultiTable} from '../../components';
+import { ActionButton, ReportInputScreen, Chart, ImagePicker, Table, Paragraphe, MultiTable, Tabular} from '../../components';
 
 import { getData } from '../../api/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS} from '../../constants/constants';
@@ -157,15 +157,15 @@ export const EOWR = () => {
 
                 <span className='text-xl'>VI. Section Summary</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-                {
-                    EOWRData['section_summary']?.map((section, index) => (
-                        <React.Fragment key={`section-${index}`}>
-                        <Table title="Section overview" id={getDivId('table')} tableData={EOWRData['table_data']} />
-                        <Paragraphe id="p-2" title="Operation Summary Results" text={section['description']} onSave={handleParagrapheSave} />
-                        </React.Fragment>
-                    ))
-                }
-                </section>
+  {
+    EOWRData['section_summary']?.map((section, index) => (
+      <React.Fragment key={`section-${index}`}>
+        <Tabular title="Section Overview" id={getDivId('table')} tableData={Object.entries(section).map(([key, value]) => ({ [key]: value }))} />
+        <Paragraphe id="p-2" title="Operation Summary Results" text={section['description']} onSave={handleParagrapheSave} />
+      </React.Fragment>
+    ))
+  }
+</section>
                 
             </div>
            }

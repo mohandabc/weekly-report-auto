@@ -57,7 +57,23 @@ export const Paragraphe = (props) => {
         </div>
       </div>
     ) : (
-      <p className="mt-4 whitespace-pre-wrap">{text}</p>
+      <p className="mt-4 whitespace-pre-wrap">
+        {text.toLowerCase().includes("conclusion")
+          ? text.split(/(Conclusion)/i).map((t, i) => (
+              <React.Fragment key={i}>
+                {t.toLowerCase() === "conclusion" ? (
+                  <u>
+                    <b>
+                      <span>{t}</span>
+                    </b>
+                  </u>
+                ) : (
+                  t
+                )}
+              </React.Fragment>
+            ))
+          : text}
+      </p>
     )}
   </div>
 );
