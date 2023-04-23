@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
+import {useSetRecoilState} from 'recoil';
 
 import {generateEOWR} from '../../services/EOWReportPdf';
 
@@ -8,12 +9,14 @@ import { ActionButton, ReportInputScreen, Chart, ImagePicker, Table, Paragraphe,
 import { getData } from '../../api/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS} from '../../constants/constants';
 import { API_URL } from '../../constants/URI';
+import { loaderIsHidden } from '../../shared/globalState';
 
 export const EOWR = () => {
     const [EOWRData, setEOWRData] = useState({});
     const [chartsToPrint, setChartsToPrint] = useState([]);
     const [images, setImages] = useState({});
     const [paragraphes, setParagraphes] = useState({})
+    const setIsHidden = useSetRecoilState(loaderIsHidden);
 
     const handleParagrapheSave = (id, text)=>{
         setParagraphes(current=>{
@@ -25,6 +28,7 @@ export const EOWR = () => {
 
     const getEowrData = (params) => {
         // API call to get data
+        setIsHidden(false);
         const url = 'api/reports/eowr';
         getData(API_URL, url, params)
         .then(res=> {
@@ -37,6 +41,7 @@ export const EOWR = () => {
                         
             // set paragraphes to recovered data if possible
             setParagraphes({'p-0' : '', 'p-1':'', 'p-2':'', 'p-3':""});
+            setIsHidden(true);
         });
     }
 
