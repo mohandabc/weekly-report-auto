@@ -35,7 +35,7 @@ export const MultiTable = ({title, id, tableData})=>{
   {tableData === undefined ? (
     <></>
   ) : (
-    <table id={id.toString()} className="mx-auto table-auto border-collapse border-2 border-slate-900 w-2/3">
+    <table id={id.toString()} className="mx-auto table-auto border-collapse border-2 border-slate-900 w-auto px-5">
       {title !== undefined ? (
         <caption className="text-center font-normal mb-8 text-black text-3xl" align="top">
           {title}
@@ -75,7 +75,7 @@ export const MultiTable = ({title, id, tableData})=>{
               key={index}
             >
               {Object.entries(row).map((item, index) => (
-                <td key={index} className="px-auto py-2.5 text-center text-black">
+                <td key={index} className={`px-auto py-2.5 text-center text-black ${item[1]==='Low'?'bg-red-100':item[1]==='Medium'?'bg-red-300':item[1]==='Major'?'bg-red-500':''}`}>
                   {item[1]}
                 </td>
               ))}

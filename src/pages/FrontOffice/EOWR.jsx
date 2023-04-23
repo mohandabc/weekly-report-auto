@@ -41,8 +41,7 @@ export const EOWR = () => {
     }
 
     useEffect(()=>{
-        console.log({EOWRData})
-        console.log({paragraphes})
+
     })
 
     let chartsIds = [];
@@ -65,6 +64,8 @@ export const EOWR = () => {
     const EOWR_CONFIG_BAR_OPTIONS = {...DEFAULT_CONFIG_BAR_OPTIONS, well:true, datePicker:false}
 
     if (Object.keys(EOWRData).length !==0) {
+        console.log({EOWRData})
+        console.log({paragraphes})
         // This processing is to prepare the data with some additional formatting
         let array1 = EOWRData['connection_details']['drill_time'];
         let array2 = EOWRData['connection_details']['on_bottom'];
@@ -166,9 +167,13 @@ export const EOWR = () => {
                 }
                 </section>
                 <span className='text-xl px-4'>VIII. Appendix</span>
+                <section className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
+                    <MultiTable title = "Drilling Events Captured" id = {getDivId('table')} tableData = {EOWRData['drilling_events_kpi']['events_kpi_res']}/>
+                </section>
+                <section className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
+                    <MultiTable title = "Drilling Events Caused NPT" id = {getDivId('table')} tableData = {EOWRData['table_data']}/>
+                </section>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >  
-                    <Table title = "Drilling Events Captured" id = {getDivId('table')} tableData = {EOWRData['table_data']} size={'big'}/>
-                    <Table title = "Drilling Events Caused NPT" id = {getDivId('table')} tableData = {EOWRData['table_data']} size={'big'}/>
                     <Chart title = "Drilling Event Category" id = {getDivId('chart')} chartData = {EOWRData['drilling_events']['events_categories']} chartType="Pie"/>
                     <Chart title = "Drilling Event Sub-Category " id = {getDivId('chart')} chartData = {EOWRData['drilling_events']['events_subcategories']} chartType="Pie"/>
                 </section>
