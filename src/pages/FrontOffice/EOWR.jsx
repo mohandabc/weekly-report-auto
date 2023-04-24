@@ -108,11 +108,11 @@ export const EOWR = () => {
                 </div>
 
                 <span className='text-xl px-4'>I. Global overview</span>
-                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-                    <ImagePicker id="image-picker-0" title="Well Information" setImages = {setImages} ></ImagePicker>
-                    <ImagePicker id="image-picker-1" title="Well Architecture" setImages = {setImages} ></ImagePicker>
-                    <ImagePicker id="image-picker-2" title="Well Location Map" setImages = {setImages} ></ImagePicker>
-                    <ImagePicker id="image-picker-3" title="Well Schematics" setImages = {setImages} ></ImagePicker>
+                <section id="main" className={`align-middle grid grid-col-2 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`} >
+                    <ImagePicker id="image-picker-0" title="1 - Well Information" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id="image-picker-1" title="2 - Well Architecture" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id="image-picker-2" title="3 - Well Location Map" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id="image-picker-3" title="4 - Well Schematics" setImages = {setImages} ></ImagePicker>
                 </section>
 
                 <span className='text-xl px-4'>II. Time Activity Breakdown</span>
@@ -176,22 +176,22 @@ export const EOWR = () => {
                     <MultiTable title = "Drilling Events Captured" id = {getDivId('table')} tableData = {EOWRData['drilling_events_kpi']['events_kpi_res']}/>
                 </section>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
-                    <MultiTable title = "Drilling Events Caused NPT" id = {getDivId('table')} tableData = {EOWRData['table_data']}/>
+                    <MultiTable title = "Drilling Events Caused NPT" id = {getDivId('table')} tableData = {EOWRData['drilling_events_kpi']['events_caused_npt_res']}/>
                 </section>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >  
-                    <Chart title = "Drilling Event Category" id = {getDivId('chart')} chartData = {EOWRData['drilling_events']['events_categories']} chartType="Pie"/>
-                    <Chart title = "Drilling Event Sub-Category " id = {getDivId('chart')} chartData = {EOWRData['drilling_events']['events_subcategories']} chartType="Pie"/>
+                    <Chart title = "Drilling Events Category" id = {getDivId('chart')} chartData = {EOWRData['drilling_events']['events_categories']} chartType="Pie"/>
+                    <Chart title = "Drilling Events Sub-Category " id = {getDivId('chart')} chartData = {EOWRData['drilling_events']['events_subcategories']} chartType="Pie"/>
                 </section>
                 <span className='text-xl px-4'>IX. Ream & Back Ream</span>
-                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-                    <ImagePicker id="image-picker-0" title="Ream & Back Ream 1" setImages = {setImages} ></ImagePicker>
-                    <ImagePicker id="image-picker-1" title="Ream & Back Ream 2" setImages = {setImages} ></ImagePicker>
-                    <ImagePicker id="image-picker-2" title="Ream & Back Ream 3" setImages = {setImages} ></ImagePicker>
-                    <ImagePicker id="image-picker-3" title="Ream & Back Ream 4" setImages = {setImages} ></ImagePicker>
+                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`} >
+                    <ImagePicker id="image-picker-4" title="1 - Ream & Back Ream" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id="image-picker-5" title="2 - Ream & Back Ream" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id="image-picker-6" title="3 - Ream & Back Ream" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id="image-picker-7" title="4 - Ream & Back Ream" setImages = {setImages} ></ImagePicker>
                 </section>
                 <span className='text-xl px-4'>X. Bit Record</span>
-                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-                    <ImagePicker id="image-picker-0" title="Bit Record" setImages = {setImages} ></ImagePicker>
+                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
+                    <ImagePicker id="image-picker-8" title="Bit Record" setImages = {setImages} ></ImagePicker>
                 </section>
             </div>
            }
