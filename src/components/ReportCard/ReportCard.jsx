@@ -22,14 +22,8 @@ export const ReportCard = ({ to, title, description, notReady }) => {
         style={{ textDecoration: "none", color: "#000" }}
       >
         <div
-          className={`${
-            notReady ? "bg-gray-400" : "bg-gray-200"
-          } text-black dark:${
-            notReady ? "bg-stone-200" : "bg-stone-800"
-          } dark:text-white h-60 w-full p-4 
-        text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out ${
-          notReady ? "" : "hover:scale-105 hover:shadow-lg"
-        } position:relative z-0`}
+          className={`${notReady?"bg-gray-400":"bg-gray-200"} text-black dark:${notReady?"bg-stone-800":"bg-stone-700"} dark:text-white h-60 w-full p-4 
+          text-center rounded-lg shadow-md mb-3 transform transition duration-200 ease-out ${notReady?"":"hover:scale-105 hover:shadow-lg"} position:relative z-0`}
         >
           <h3 className="text-lg font-semibold">{title}</h3>
           <p className="text-sm mt-2">{description}</p>
