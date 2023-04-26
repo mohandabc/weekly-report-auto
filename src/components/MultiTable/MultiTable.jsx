@@ -75,7 +75,7 @@ export const MultiTable = ({title, id, tableData})=>{
               key={index}
             >
               {Object.entries(row).map((item, index) => (
-                <td key={index} className={`px-auto py-2.5 text-center text-black ${item[1]==='Low'?'bg-red-100':item[1]==='Medium'?'bg-red-300':item[1]==='Major'?'bg-red-500':''}`}>
+                <td key={index} className={`px-auto py-2.5 text-center text-black ${item[1]==='Low'?'bg-red-100':item[1]==='Medium'?'bg-red-200':item[1]==='Major'?'bg-red-300':''}`}>
                   {item[1]}
                 </td>
               ))}

@@ -33,11 +33,7 @@ export const EOWR = () => {
         getData(API_URL, url, params)
         .then(res=> {
             let data = res.result;
-            setEOWRData({well:params['wid'],
-                            ...data, 
-                            chart_data:[{'category': 'good', 'value':2}, {'category': 'bad', 'value':5}],
-                            table_data:[{'name':'Test','value':10, 'date':'2023-03-29'}, {'name':'Test','value':9, 'date':'2023-03-29'}]
-                        } || {});
+            setEOWRData({...data} || {});
                         
             // set paragraphes to recovered data if possible
             setParagraphes({'p-0' : '', 'p-1':'', 'p-2':'', 'p-3':""});
@@ -72,17 +68,21 @@ export const EOWR = () => {
         console.log({EOWRData})
         console.log({paragraphes})
         // This processing is to prepare the data with some additional formatting
-        let array1 = EOWRData['connection_details']['drill_time'];
-        let array2 = EOWRData['connection_details']['on_bottom'];
-    
-        for (let i = 1; i < array1.length; i++) {
-        let phase = array1[i].Phase;
-        if (phase) {
-            let matchingObj = array2.find(obj => obj.Phase === phase);
-            if (matchingObj) {
-            array1[i]['On Bottom'] = matchingObj['On Bottom'];
+        let array1 = EOWRData?.connection_details?.drill_time;
+        let array2 = EOWRData?.connection_details?.on_bottom;
+        
+        if (array1 && array2) {
+            for (let i = 1; i < array1.length; i++) {
+                let phase = array1[i].Phase;
+                if (phase) {
+                    let matchingObj = array2.find(obj => obj.Phase === phase);
+                    if (matchingObj) {
+                        array1[i]['On Bottom'] = matchingObj['On Bottom'];
+                    }
+                }
             }
-        }
+        } else {
+            console.log("drill_time or on_bottom is undefined")
         }
     }
 
@@ -174,15 +174,15 @@ export const EOWR = () => {
                 }
                 </section>
                 <span className='text-xl px-4'>VIII. Appendix</span>
+                <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >  
+                    <Chart title = "Drilling Events Category" id = {getDivId('chart')} chartData = {EOWRData['drilling_events']['events_categories']} chartType="Pie"/>
+                    <Chart title = "Drilling Events Sub-Category " id = {getDivId('chart')} chartData = {EOWRData['drilling_events']['events_subcategories']} chartType="Pie"/>
+                </section>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
                     <MultiTable title = "Drilling Events Captured" id = {getDivId('table')} tableData = {EOWRData['drilling_events_kpi']['events_kpi_res']}/>
                 </section>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
                     <MultiTable title = "Drilling Events Caused NPT" id = {getDivId('table')} tableData = {EOWRData['drilling_events_kpi']['events_caused_npt_res']}/>
-                </section>
-                <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >  
-                    <Chart title = "Drilling Events Category" id = {getDivId('chart')} chartData = {EOWRData['drilling_events']['events_categories']} chartType="Pie"/>
-                    <Chart title = "Drilling Events Sub-Category " id = {getDivId('chart')} chartData = {EOWRData['drilling_events']['events_subcategories']} chartType="Pie"/>
                 </section>
                 <span className='text-xl px-4'>IX. Ream & Back Ream</span>
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`} >
