@@ -80,16 +80,16 @@ export const BoDailyPage = () => {
 
                     <Table title = "Extra Jobs" id = {getDivId('table')} tableData = {dailyData['extra_jobs']}/>
                     <Table title = "Reservoir Tickets" id = {getDivId('table')} tableData = {dailyData['reservoir_tickets']}/>
-                    <Table title = "Data Quality" id = {getDivId('table')} tableData = {dailyData['data_quality']}/>
+                    <Table title = "Data Quality" id = {getDivId('table')} tableData = {dailyData['data_quality']} size={'big'}/>
                 </section>
 
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
                     <Chart title = "Pending Quality Tickets" id = {getDivId('chart')} chartData = {dailyData['pending_Q_tickets']} chartType="ClusterBar"/>
                     <Chart title = "Resolved Quality Tickets-Channels" id = {getDivId('chart')} chartData = {dailyData['resolved_Q_tickets_channels']} chartType="ClusterBar"/>
-                    <Table title = "Data Loss" id = {getDivId('table')} tableData = {dailyData['data_loss']}/>
+                    <Table title = "Data Loss" id = {getDivId('table')} tableData = {dailyData['data_loss']} size={'big'}/>
                     <Chart title = "Resolved Loss Tickets-Gap" id = {getDivId('chart')} chartData = {dailyData['data_loss_ticket_gap']} chartType="ClusterBar"/>
                     <Chart title = "Resolved Loss Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['data_loss_ticket_byRootCause']} chartType="ClusterBar"/>
-                    <Table title = "Data Recovery" id = {getDivId('table')} tableData = {dailyData['data_recovery']}/>
+                    <Table title = "Data Recovery" id = {getDivId('table')} tableData = {dailyData['data_recovery']} size="big"/>
                     <Chart title = "Resolved Recovery Tickets-Gap" id = {getDivId('chart')} chartData = {dailyData['data_recovery_ticket_gap']} chartType="ClusterBar"/>
                     <Chart title = "Resolved Recovery Tickets By RootCause" id = {getDivId('chart')} chartData = {dailyData['data_recovery_ticket_byRootCause']} chartType="ClusterBar"/>
                     <Table title = "Deployements And Interventions" id = {getDivId('table')} tableData = {dailyData['deployements_and_interventions']}/>

@@ -1,0 +1,1 @@
+export {Tabular} from './Tabular';

@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState} from 'react';
 import { useRecoilValue } from "recoil";
-import { BarChart, PieChart, ClusteredBarChart } from './charts';
+import { BarChart, PieChart, ClusteredBarChart, StackedBarChart, DateAxes } from './charts';
 import { darkModeState } from "../../shared/globalState";
 import gear from '../../assets/gear.svg';
 
@@ -41,8 +41,13 @@ export const Chart = ({title, id, chartData, chartType, dashboard}) => {
       chart = new BarChart(chartData, divID, title, options).chart; 
     }
     if(type === "ClusterBar"){
-      // eslint-disable-next-line
       chart = new ClusteredBarChart(chartData, divID, title, options).chart; 
+    }
+    if(type === "Stacked"){
+      chart = new StackedBarChart(chartData, divID, title, options).chart; 
+    }
+    if(type === "DateAxes"){
+      chart = new DateAxes(chartData, divID, title, options).chart; 
     }
   });
 

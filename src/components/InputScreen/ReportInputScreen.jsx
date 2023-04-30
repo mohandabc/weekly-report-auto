@@ -90,60 +90,62 @@ export const ReportInputScreen = ({ title, configBarAction, options }) => {
     
   
     return (
-      <div className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}>
-          
-       
-          <header className={`flex flex-col h-72 bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl justify-center items-center`}>
-              <div className="absolute mt-56 z-50">
-                <Loader></Loader>
-              </div>
-              <div className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 w-1/4 h-1/3 duration-1000 transform transition-all ease-out ${
-                                animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}`}>
+      <div className={`flex flex-col bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}>
+  <header className={`flex flex-col bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl justify-center items-center`}>
 
-                <div className="flex justify-center items-center">
-                  <div className="py-9">
-                    <h1 className={`text-zinc-500 dark:text-black text-3xl text-center delay-200 duration-1000 relative transform transition-all ease-out
-                      ${
-                        // hiding components when they first appear and then applying a translate effect gradually
-                        animation
-                          ? "opacity-100 translate-y-0"
-                          : "opacity-0 translate-y-12"
-                      }`}>
-                      {title}
-                    </h1>
-                  </div>
-                </div>
-
-                <div className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
-                      ${
-                        // hiding components when they first appear and then applying a translate effect gradually
-                        animation
-                          ? "opacity-100 translate-y-0"
-                          : "opacity-0 translate-y-12"
-                      }`}
-                >
-                  
-                 {inputScreenContent}
-                </div>
-                <div
-                  className={`flex items-center justify-center m-11 duration-1000 relative transform transition-all ease-out
-                      ${
-                        // hiding components when they first appear and then applying a translate effect gradually
-                        animation
-                          ? "opacity-100 translate-y-0"
-                          : "opacity-0 translate-y-12"
-                      }`}
-                >
-                  <ActionButton
-                    className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base py-2 px-4 rounded "
-                    text="Submit"
-                    action={configBarAction}
-                    args={[params]}
-                  ></ActionButton>
-                </div>
-              </div>
-        </header>
+    <div className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 w-full max-w-md duration-1000 transform transition-all ease-out ${
+      animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}`}
+    >
+      <div className="flex justify-center items-center">
+        <div className="py-2 md:py-9">
+          <h1 className={`text-zinc-500 dark:text-black text-xl md:text-2xl text-center delay-200 duration-1000 relative transform transition-all ease-out
+            ${
+              // hiding components when they first appear and then applying a translate effect gradually
+              animation
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-12"
+            }`}>
+            {title}
+          </h1>
+        </div>
       </div>
+      <div className={`flex flex-wrap items-center justify-center duration-1000 relative transform transition-all ease-out
+            ${
+              // hiding components when they first appear and then applying a translate effect gradually
+              animation
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-12"
+            }`}
+      >
+        {inputScreenContent.map((item, index) => (
+          <div key={index}>{item}</div>
+        ))}
+      </div>
+      <div className={`flex items-center justify-center mt-6 md:mt-10 duration-1000 relative transform transition-all ease-out md:pb-8
+            ${
+              // hiding components when they first appear and then applying a translate effect gradually
+              animation
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-12"
+            }`}
+      >
+        <ActionButton
+          className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base md:text-sm py-2 px-4 rounded"
+          text="Submit"
+          action={configBarAction}
+          args={[params]}
+        ></ActionButton>
+      </div>
+      <div className="relative">
+  <div className="absolute z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:pt-20">
+    <Loader></Loader>
+  </div>
+</div>
+
+
+    </div>
+  </header>
+</div>
     );
   };
   
