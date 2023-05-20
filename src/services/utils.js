@@ -13,6 +13,40 @@ import {SMARTEST_LOGO,SONATRACH_LOGO} from '../constants/logos'
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { LASTPAGE, TOPLEFT } from "../constants/backgrounds";
+const baseLayout = {
+    hLineWidth: function (i, node) {
+      return (i === 0 || i === node.table.body.length) ? 2 : 1;
+    },
+    vLineWidth: function (i, node) {
+      return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+    },
+    hLineColor: function (i, node) {
+      return (i === 0 || i === node.table.body.length) ? 'white' : 'white';
+    },
+    vLineColor: function (i, node) {
+      return (i === 0 || i === node.table.widths.length) ? 'white' : 'white';
+    },
+    fillColor: function (rowIndex) {
+      return (rowIndex>0) ? '#e6e6e6' : "#eeeeee";
+    },
+    paddingTop: function(i, node) { return 8; },
+    paddingBottom: function(i, node) { return 8; },
+  }
+const tablesLayouts = {
+  'simple':baseLayout,
+  'one_row': {...baseLayout, 
+    fillColor: function (rowIndex,node,  columnIndex) {
+      return (columnIndex%2===0) ? '#e6e6e6' : "#c00000";
+    },
+  },
+  'grouped':{...baseLayout,
+    fillColor: function (i, node) {
+      if('colSpan' in node.table.body[i][0]) return '#999999'
+      else return (i === 0) ? '#555555' : (i%2===0) ? '#e6e6e6' : "#eeeeee";
+    },
+  }
+}
+
 
 export const createDoc = (size, orientation, margin) =>{
   pdfMake.vfs = pdfFonts.pdfMake.vfs;
