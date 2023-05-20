@@ -48,6 +48,9 @@ const tablesLayouts = {
 }
 
 
+export const logError = (text) => {
+  alert(text);
+}
 export const createDoc = (size, orientation, margin) =>{
   pdfMake.vfs = pdfFonts.pdfMake.vfs;
   return {
