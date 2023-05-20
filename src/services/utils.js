@@ -248,7 +248,7 @@ export const pushTabToDoc = (doc, data, columns, widths) => {
   });
 }
 
-export const buildTableBody = (data, columns) => {
+export const buildTableBodyCustom = (data, columns) => {
   var body = [];
 
   body.push(columns);
@@ -278,7 +278,7 @@ export const table = (data, columns, widths) => {
             style: 'tableExample',
             widths: widths,
             headerRows: 1,
-            body: buildTableBody(data, columns)
+            body: buildTableBodyCustom(data, columns)
         },
         layout: {
           hLineWidth: function (i, node) {
