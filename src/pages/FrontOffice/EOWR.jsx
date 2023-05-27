@@ -88,6 +88,15 @@ export const EOWR = () => {
         }
     }
 
+    let items = {
+        p : 0,
+        img : 0,
+    }
+    const nextId = (item, newId=true) => {
+        let id = newId===true ? items[item] += 1 : items[item];
+        return item === 'img' ? `image-picker-${id}`  : `p-${id}`
+    }
+
     return (
         <div className="App">
             <ReportInputScreen 
@@ -111,10 +120,10 @@ export const EOWR = () => {
 
                 <span className='text-xl px-4'>I. Global overview</span>
                 <section id="main" className={`align-middle grid grid-col-2 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`} >
-                    <ImagePicker id="image-picker-0" title="1 - Well Information" setImages = {setImages} ></ImagePicker>
-                    <ImagePicker id="image-picker-1" title="2 - Well Architecture" setImages = {setImages} ></ImagePicker>
-                    <ImagePicker id="image-picker-2" title="3 - Well Location Map" setImages = {setImages} ></ImagePicker>
-                    <ImagePicker id="image-picker-3" title="4 - Well Schematics" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id={nextId('img')} title="1 - Well Information" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id={nextId('img')} title="2 - Well Architecture" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id={nextId('img')} title="3 - Well Location Map" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id={nextId('img')} title="4 - Well Schematics" setImages = {setImages} ></ImagePicker>
                 </section>
 
                 <span className='text-xl px-4'>II. Time Activity Breakdown</span>
@@ -125,10 +134,10 @@ export const EOWR = () => {
                     {/* <Chart title = "Progress chart" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/>
                     <Chart title = "Progress chart with cost" id = {getDivId('chart')} chartData = {EOWRData['chart_data']} chartType="Pie"/> */}
 
-                    {/* <ImagePicker id="image-picker-4" title = "Progress chart" setImages={setImages} /> */}
+                    {/* <ImagePicker id={nextId('img')} title = "Progress chart" setImages={setImages} /> */}
                     <Chart title = "Progress Chart - From Spud Date" id = {getDivId('chart')} chartData = {EOWRData['progress_chart']} chartType="DateAxes"/> 
                     <Chart title = "Progress Chart - From Launch Date" id = {getDivId('chart')} chartData = {EOWRData['progress_chart_dol']} chartType="DateAxes"/> 
-                    {/* <ImagePicker id="image-picker-5" title = "Progress chart with cost" setImages={setImages} /> */}
+                    {/* <ImagePicker id={nextId('img')} title = "Progress chart with cost" setImages={setImages} /> */}
                     
 
                     <Chart title = "Well Activity" id = {getDivId('chart')} chartData = {EOWRData['well_activity']} chartType="Pie"/>
@@ -160,8 +169,8 @@ export const EOWR = () => {
 
                 <span className='text-xl px-4'>V. Real Time Impact & Prevention</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >  
-                    <Paragraphe id="p-0" title = "High Value Interventions"  text = {paragraphes['p-0']} onSave={handleParagrapheSave}/>
-                    <Paragraphe id="p-1" title = "Prevention & Mitigation plan"  text = {paragraphes['p-1']} onSave={handleParagrapheSave}/>
+                    <Paragraphe id={nextId('p')} title = "High Value Interventions"  text = {paragraphes[nextId('p', false)]} onSave={handleParagrapheSave}/>
+                    <Paragraphe id={nextId('p')} title = "Prevention & Mitigation plan"  text = {paragraphes[nextId('p', false)]} onSave={handleParagrapheSave}/>
                 </section>
 
                 <span className='text-xl px-4'>VI. Section Summary</span>
@@ -169,11 +178,19 @@ export const EOWR = () => {
                 {
                     EOWRData['section_summary']?.map((section, index) => (
                     <React.Fragment key={`section-${index}`}>
-                        <Tabular title="Section Overview" id={getDivId('table')} tableData={Object.entries(section).map(([key, value]) => ({ [key]: value }))} columns={3}/>
-                        <Paragraphe id="p-2" title="Operation Summary Results" text={section['description']} onSave={handleParagrapheSave} />
+                        <Tabular title={`Section Overview (${section['Hole Section']})`} id={getDivId('table')} tableData={Object.entries(section).map(([key, value]) => ({ [key]: value }))} columns={3}/>
+                        <Paragraphe id={`p-no-need${index*100}`} title={`Operation Summary Results (${section['Hole Section']})`} text={section['description']} onSave={handleParagrapheSave} />
+                    {/* <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} > */}
+                        <ImagePicker id={nextId('img')} title={`Run Casing (Broomstick) (${section['Hole Section']})`} setImages = {setImages} ></ImagePicker>
+                        <ImagePicker id={nextId('img')} title={`Ream & Back Ream Interval (${section['Hole Section']})`} setImages = {setImages} ></ImagePicker>
+                    {/* </section> */}
                     </React.Fragment>
                     ))
                 }
+                </section>
+                <span className='text-xl px-4'>VII. Conclusion</span>
+                <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
+                    <Paragraphe id={nextId('p')} title = "Conclusion"  text = {paragraphes[nextId('p', false)]} onSave={handleParagrapheSave}/>
                 </section>
                 <span className='text-xl px-4'>VIII. Appendix</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >  
@@ -188,14 +205,20 @@ export const EOWR = () => {
                 </section>
                 <span className='text-xl px-4'>IX. Ream & Back Ream</span>
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`} >
-                    <ImagePicker id="image-picker-4" title="1 - Ream & Back Ream" setImages = {setImages} ></ImagePicker>
-                    <ImagePicker id="image-picker-5" title="2 - Ream & Back Ream" setImages = {setImages} ></ImagePicker>
-                    <ImagePicker id="image-picker-6" title="3 - Ream & Back Ream" setImages = {setImages} ></ImagePicker>
-                    <ImagePicker id="image-picker-7" title="4 - Ream & Back Ream" setImages = {setImages} ></ImagePicker>
+                {
+                    EOWRData['section_summary']?.map((section, index) => (
+                        <React.Fragment key={`section-${index}`}>
+                            <ImagePicker id={nextId('img')} title={`Ream & Back Ream (${section['Hole Section']})`} setImages = {setImages} ></ImagePicker>
+                            <ImagePicker id={nextId('img')} title={`Ream & Back Ream (${section['Hole Section']})`} setImages = {setImages} ></ImagePicker>
+                            <ImagePicker id={nextId('img')} title={`Ream & Back Ream (${section['Hole Section']})`} setImages = {setImages} ></ImagePicker>
+                            <ImagePicker id={nextId('img')} title={`Ream & Back Ream (${section['Hole Section']})`} setImages = {setImages} ></ImagePicker>
+                        </React.Fragment>
+                    ))
+                }
                 </section>
                 <span className='text-xl px-4'>X. Bit Record</span>
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
-                    <ImagePicker id="image-picker-8" title="Bit Record" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id={nextId('img')} title="Bit Record" setImages = {setImages} ></ImagePicker>
                 </section>
             </div>
            }
