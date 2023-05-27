@@ -42,6 +42,7 @@ export const EOWR = () => {
     }
 
     useEffect(()=>{
+        // console.log(EOWRData)
 
     })
 
@@ -59,14 +60,15 @@ export const EOWR = () => {
     }
 
     useEffect(()=>{
+        // console.log({images})
         setChartsToPrint(chartsIds);
-    }, [])
+    }, [EOWRData])
 
     const EOWR_CONFIG_BAR_OPTIONS = {...DEFAULT_CONFIG_BAR_OPTIONS, well:true, datePicker:false}
 
     if (Object.keys(EOWRData).length !==0) {
-        console.log({EOWRData})
-        console.log({paragraphes})
+        // console.log({EOWRData})
+        // console.log({paragraphes})
         // This processing is to prepare the data with some additional formatting
         let array1 = EOWRData?.connection_details?.drill_time;
         let array2 = EOWRData?.connection_details?.on_bottom;
@@ -82,7 +84,7 @@ export const EOWR = () => {
                 }
             }
         } else {
-            console.log("drill_time or on_bottom is undefined")
+            console.error("drill_time or on_bottom is undefined")
         }
     }
 

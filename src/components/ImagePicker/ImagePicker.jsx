@@ -50,7 +50,7 @@ export const ImagePicker = ({id, title, setImages}) => {
         {selectedImage ? (
           <img src={selectedImage} alt="Selected" className="h-full w-full object-cover rounded-lg" />
         ) : (
-          <span className="text-gray-400 font-medium">{title}</span>
+          <span className="text-gray-400 font-medium text-xl">{title}</span>
         )}
       </label>
       <input type="file" id={id} className="hidden" onChange={handleImageSelect} accept="image/*" />

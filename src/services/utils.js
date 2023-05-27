@@ -13,7 +13,44 @@ import {SMARTEST_LOGO,SONATRACH_LOGO} from '../constants/logos'
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { LASTPAGE, TOPLEFT } from "../constants/backgrounds";
+const baseLayout = {
+    hLineWidth: function (i, node) {
+      return (i === 0 || i === node.table.body.length) ? 2 : 1;
+    },
+    vLineWidth: function (i, node) {
+      return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+    },
+    hLineColor: function (i, node) {
+      return (i === 0 || i === node.table.body.length) ? 'white' : 'white';
+    },
+    vLineColor: function (i, node) {
+      return (i === 0 || i === node.table.widths.length) ? 'white' : 'white';
+    },
+    fillColor: function (rowIndex) {
+      return (rowIndex>0) ? '#e6e6e6' : "#eeeeee";
+    },
+    paddingTop: function(i, node) { return 8; },
+    paddingBottom: function(i, node) { return 8; },
+  }
+const tablesLayouts = {
+  'simple':baseLayout,
+  'one_row': {...baseLayout, 
+    fillColor: function (rowIndex,node,  columnIndex) {
+      return (columnIndex%2===0) ? '#e6e6e6' : "#c00000";
+    },
+  },
+  'grouped':{...baseLayout,
+    fillColor: function (i, node) {
+      if('colSpan' in node.table.body[i][0]) return '#999999'
+      else return (i === 0) ? '#555555' : (i%2===0) ? '#e6e6e6' : "#eeeeee";
+    },
+  }
+}
 
+
+export const logError = (text) => {
+  alert(text);
+}
 export const createDoc = (size, orientation, margin) =>{
   pdfMake.vfs = pdfFonts.pdfMake.vfs;
   return {
@@ -24,9 +61,182 @@ export const createDoc = (size, orientation, margin) =>{
   };
 }
 
+export const buildPageHeader = () =>{
+  return {
+    columns: [{
+        image: SMARTEST_LOGO,
+        absolutePosition: {x:30 ,y: 30},
+        width: 160
+        },{
+        image: SONATRACH_LOGO,
+        absolutePosition: {x:500 ,y: 10},
+        width: 50
+    }],
+    margin:[0,0,0,80]
+  };
+}
+export const buildPageFooter = (leftText, rightText) =>{
+  return {
+    columns: [{
+      text : leftText,
+      fontSize : 12,
+      alignment:'left',
+      color:'#090909',
+      bold: true,
+      absolutePosition: {x: 40, y: 800},
+        },{
+          text : rightText,
+          fontSize : 12,
+          margin:[0,0,25,0],
+          alignment:'left',
+          color:'#090909',
+          bold: true,absolutePosition: {x: 500,y: 800},
+        }],
+  };
+}
+export const buildTitle = (level, text, isTocItem=true) =>{
+  return {
+    text:text,
+    fontSize : level === 1 ? 18 : 14,
+    margin:level===1? [10, 0, 0, 10] : [20,0,0, 15],
+    color:'#c00000',
+    decoration: 'underline',
+    tocItem: isTocItem
+  }
+}
+export const buildChart = (chart, size) => {
+
+  if (chart === undefined) return null
+  return {
+    image:chart,
+    margin : [0,0,0,10],
+    width : size,
+    alignment:'center',
+  }
+}
+export const buildParagraph = (text, options = {fontSize:10, margin:[30,0,0,0], color:'#000'}) => {
+  return {
+    text:text,
+    fontSize : options.fontSize,
+    margin:options.margin,
+    color: options.color,
+  }
+}
+
+const computeTableColRowRatio = (length) =>{
+  if(length % 2 !== 0) return 1;
+
+  let PGCD = 2;
+  for(let i=2; i < length/2; i++){
+    if(length % i !== 0) continue;
+    if (length/i < i) return PGCD;
+    PGCD = i;
+  }
+}
+/**
+ * When we have an object of key values and we want to display them in a table
+ * we will create a table that has one row, or split the values to create
+ * a more compact table
+ * the split should be done dynamically depending on the number of elements
+ * @param {*} data data of table that consist of only one row, or an object of key values
+ */
+const buildOneRowTableBody = (data) =>{
+  if (data.length <= 0) return []
+  const keys = Object.keys(data[0]);
+  const values = Object.values(data[0]);
+  const ratio = computeTableColRowRatio(keys.length);
+
+  let tableBody = []
+  for(let i=0; i<keys.length; i+=ratio){
+    let row = []
+    for(let j=i; j < i+ratio; j++){
+      row.push(keys[j]);
+      row.push(values[j]);
+    }
+    tableBody.push(row);
+  }
+  return tableBody;
+}
+const getTableHeaders = (row) => {
+  return Object.keys(row)
+}
+const buildSimpleTableBody = (data) =>{
+  if (data.length <= 0) return []
+
+  let tableBody = []
+  const headers = getTableHeaders(data[0])
+  tableBody.push(headers)
+
+  data.forEach(row => {
+    tableBody.push(Object.values(row));
+  })
+  return tableBody;
+}
+
+const buildGroupedTableBody = (data) => {
+  if (data.length <= 1) return []
+  let tableBody = [];
+  const headers = getTableHeaders(data[1]);
+  tableBody.push(headers);
+
+  data.forEach(row => {
+    if(row.title !== undefined) tableBody.push([{'colSpan':headers.length, 'text':row.title, alignment : 'center'}]);
+    else tableBody.push(Object.values(row));
+  })
+  return tableBody;
+}
+export const buildTable = (data, type='simple') => {
+
+  const tableBuilders = {
+    'simple' : buildSimpleTableBody,
+    'one_row' : buildOneRowTableBody,
+    'grouped' : buildGroupedTableBody,
+  }
+
+  const table = {
+    width: 'auto',
+    table : {
+      headerRows:1,
+      body:tableBuilders[type](data)//type==='simple' ? buildSimpleTableBody(data) : buildOneRowTableBody(data),
+      },
+    layout: tablesLayouts[type]
+  }
+
+  return {
+    // A workaround to center tables
+    columns: [
+      { width: '*', text: '' },
+      table,
+      { width: '*', text: '' }
+    ],
+    margin:[0,0,0,20]
+  }
+
+}
+
+
+export const addElementToDoc = (doc, element, pageBreak = null) => {
+  if (element === null || element === undefined) return
+  doc.content.push({...element, pageBreak:pageBreak===null ? 'None':pageBreak});
+}
+
+export const createPage = (doc, content, report, pageNumber, totalPageNumber) =>{
+  let header = buildPageHeader()
+  let footer = buildPageFooter(`${report}`, `Page ${pageNumber} / ${totalPageNumber}`)
+
+  addElementToDoc(doc, header)
+
+  content.forEach(element => {
+    addElementToDoc(doc, element)
+  })
+  addElementToDoc(doc, footer, pageNumber===totalPageNumber?null:'after')
+}
+
 export const downloadPDF = (doc, title) =>{
   pdfMake.createPdf(doc).download(`${title}.pdf`);
 }
+
+// ------------------------------------------- OLD FUNCTION RELATED TO DAILY AND WEEKLY--------------------------
 
 export const pushTabToDoc = (doc, data, columns, widths) => {
   return doc.content.push({
@@ -38,7 +248,7 @@ export const pushTabToDoc = (doc, data, columns, widths) => {
   });
 }
 
-export const buildTableBody = (data, columns) => {
+export const buildTableBodyCustom = (data, columns) => {
   var body = [];
 
   body.push(columns);
@@ -68,7 +278,7 @@ export const table = (data, columns, widths) => {
             style: 'tableExample',
             widths: widths,
             headerRows: 1,
-            body: buildTableBody(data, columns)
+            body: buildTableBodyCustom(data, columns)
         },
         layout: {
           hLineWidth: function (i, node) {
