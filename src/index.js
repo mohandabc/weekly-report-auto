@@ -1,27 +1,48 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import reportWebVitals from './reportWebVitals';
-import { RecoilRoot } from 'recoil';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+import { RecoilRoot } from "recoil";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { BrowserRouter, Routes, Route,} from "react-router-dom";
+import {
+  MainPage,
+  BackOffice,
+  FrontOffice,
+  EOWR,
+  RunDeliverable,
+  DataUploader,
+  LoginPage,
+  LogoutPage
+} from "./pages";
+import { BoDailyPage, BoWeeklyPage } from "./pages/BackOffice";
+import { ProtectedRoute } from "./components";
+import { AuthProvider } from "./api/useAuth";
+import { TopMenu } from "./components/TopMenu";
 
-import {DailyPage, MainPage, WeeklyPage} from './pages';
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
+    {/* TODO: Dont forget to remove the strict mode when doployin because the strict mode renders everything twice */}
     <RecoilRoot>
       <BrowserRouter>
-      <Routes>
-        <Route index element={<MainPage />} />
-        <Route path="weekly" element={<WeeklyPage />}/>
-        <Route path="daily" element={<DailyPage />}/>
-          
-        {/* Add other rouetes for other pages */}
-      </Routes>
-    </BrowserRouter>
-      
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<ProtectedRoute><TopMenu /><MainPage /></ProtectedRoute>} />
+            <Route path="/back-office" element={<ProtectedRoute><TopMenu /><BackOffice /></ProtectedRoute>} />
+            <Route path="/front-office" element={<ProtectedRoute><TopMenu /><FrontOffice /></ProtectedRoute>} />
+            <Route path="/weeklyBo" element={<ProtectedRoute><TopMenu /><BoWeeklyPage /></ProtectedRoute>} />
+            <Route path="/dailyBo" element={<ProtectedRoute><TopMenu /><BoDailyPage /></ProtectedRoute>} />
+            <Route path="/eowr" element={<ProtectedRoute><TopMenu /><EOWR /></ProtectedRoute>} />
+            <Route path="/run" element={<ProtectedRoute><TopMenu /><RunDeliverable /></ProtectedRoute>} />
+            <Route path="/data" element={<ProtectedRoute><TopMenu /><DataUploader /></ProtectedRoute>} />
+            <Route path="/logout" element={<ProtectedRoute><TopMenu /><LogoutPage /></ProtectedRoute>} />
+
+            {/* No top menu needed here in login page */}
+            <Route path="*" element={<LoginPage />} />
+          </Routes>
+        </AuthProvider>
+      </BrowserRouter>
     </RecoilRoot>
   </React.StrictMode>
 );

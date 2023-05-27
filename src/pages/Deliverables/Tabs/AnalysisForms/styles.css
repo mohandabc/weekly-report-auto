@@ -1,0 +1,5 @@
+.rs-table-cell-content {
+    display: flex;
+    align-items: top;
+    justify-content: center;
+  }
