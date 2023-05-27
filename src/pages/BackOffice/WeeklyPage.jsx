@@ -38,7 +38,6 @@ export const BoWeeklyPage = () => {
         .then(res=> {
           let data = res.result;
           setWeeklyData(data || {});
-          console.log(data);
           setIsHidden(true);
         });
       }
@@ -83,7 +82,8 @@ export const BoWeeklyPage = () => {
                     <Chart title = "Resolved Quality Tickets" id = {getDivId('chart')} chartData = {weeklyData['resolved_quality']} chartType="ClusterBar"/>
                     <Chart title = "Pending Quality Channels" id = {getDivId('chart')} chartData = {weeklyData['pending_channels']} chartType="ClusterBar"/>
                     <Chart title = "Resolved Quality Channels" id = {getDivId('chart')} chartData = {weeklyData['resolved_channels']} chartType="ClusterBar"/>
-                    <Chart title = "Resolved Channels By Data Manager" id = {getDivId('chart')} chartData = {weeklyData['resolved_channels_by_user']} chartType="Bar"/>
+                    {/* <Chart title = "Resolved Channels By Data Manager" id = {getDivId('chart')} chartData = {weeklyData['resolved_channels_by_user']} chartType="Bar"/> */}
+                    <Chart title = "Resolved Channels By Data Manager" id = {getDivId('chart')} chartData = {weeklyData['resolved_by_DM']} chartType="ClusterBar"/>
                     <Chart title = "Helpdesk Tickets" id = {getDivId('chart')} chartData = {weeklyData['helpdesk_tickets']} chartType="ClusterBar"/>
                 </section>
                 <section className={`grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2  pb-4`} >

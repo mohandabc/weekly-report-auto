@@ -348,7 +348,7 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         
 
 
-        downloadPDF(doc, `EOWR_${EOWRData['well_name']}`);
+        downloadPDF(doc, `EOWR_${EOWRData.well}`);
     })
     
     
