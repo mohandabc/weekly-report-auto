@@ -61,7 +61,7 @@ export const createDoc = (size, orientation, margin) =>{
   };
 }
 
-export const buildPageHeader = () =>{
+export const buildPageHeader = (orientation) =>{
   return {
     columns: [{
         image: SMARTEST_LOGO,
@@ -69,39 +69,52 @@ export const buildPageHeader = () =>{
         width: 160
         },{
         image: SONATRACH_LOGO,
-        absolutePosition: {x:500 ,y: 10},
+        absolutePosition: {x:orientation==='portrait' ? 500 : 740 ,y: 10},
         width: 50
     }],
-    margin:[0,0,0,80]
+    margin:[0,0,0,70]
   };
 }
-export const buildPageFooter = (leftText, rightText) =>{
+export const buildPageFooter = (leftText, rightText, orientation) =>{
   return {
-    columns: [{
-      text : leftText,
-      fontSize : 12,
-      alignment:'left',
-      color:'#090909',
-      bold: true,
-      absolutePosition: {x: 40, y: 800},
-        },{
-          text : rightText,
-          fontSize : 12,
-          margin:[0,0,25,0],
-          alignment:'left',
-          color:'#090909',
-          bold: true,absolutePosition: {x: 500,y: 800},
-        }],
+    columns: [
+      {
+        text : leftText,
+        fontSize : 12,
+        alignment:'left',
+        color:'#090909',
+        bold: true,
+        absolutePosition: {x : 40, y: orientation==='portrait' ? 800 : 550 },
+      },{
+        text : rightText,
+        fontSize : 12,
+        alignment:'left',
+        color:'#090909',
+        bold: true,
+        absolutePosition: {x : orientation==='portrait' ? 500 : 740 , y : orientation==='portrait' ? 800 : 550 },
+      }],
   };
 }
-export const buildTitle = (level, text, isTocItem=true) =>{
+export const buildTitle = (level, text, isTocItem=true, styles = {}) =>{
+  const defaultStyles = {
+    fontSize:level === 1 ? 18 : level === 2 ? 14 : 12,
+    margin:level===1? [10, 0, 0, 10] : level === 2 ? [20,0,0, 15] : [0, 0, 0, 10],
+    color:'#c00000',
+    background:'',
+    decoration : 'underline', 
+    alignment:'left'
+  }
+  const _styles = {...defaultStyles, ...styles}
+
   return {
     text:text,
-    fontSize : level === 1 ? 18 : 14,
-    margin:level===1? [10, 0, 0, 10] : [20,0,0, 15],
-    color:'#c00000',
-    decoration: 'underline',
-    tocItem: isTocItem
+    fontSize : _styles.fontSize,
+    margin:_styles.margin,
+    color:_styles.color,
+    background : _styles.background,
+    decoration: _styles.decoration,
+    tocItem: isTocItem,
+    alignment :_styles.alignment
   }
 }
 export const buildChart = (chart, size) => {
@@ -114,12 +127,16 @@ export const buildChart = (chart, size) => {
     alignment:'center',
   }
 }
-export const buildParagraph = (text, options = {fontSize:10, margin:[30,0,0,0], color:'#000'}) => {
+export const buildParagraph = (text, styles={}) => {
+  const defaultStyles = {fontSize:10, margin:[30,0,30,20], color:'#000', alignment:'left'}
+  const _styles = {...defaultStyles, ...styles}
+
   return {
     text:text,
-    fontSize : options.fontSize,
-    margin:options.margin,
-    color: options.color,
+    fontSize : _styles.fontSize,
+    margin:_styles.margin,
+    color: _styles.color,
+    alignment : _styles.alignment
   }
 }
 
@@ -141,7 +158,6 @@ const computeTableColRowRatio = (length) =>{
  * @param {*} data data of table that consist of only one row, or an object of key values
  */
 const buildOneRowTableBody = (data) =>{
-  if (data.length <= 0) return []
   const keys = Object.keys(data[0]);
   const values = Object.values(data[0]);
   const ratio = computeTableColRowRatio(keys.length);
@@ -161,8 +177,6 @@ const getTableHeaders = (row) => {
   return Object.keys(row)
 }
 const buildSimpleTableBody = (data) =>{
-  if (data.length <= 0) return []
-
   let tableBody = []
   const headers = getTableHeaders(data[0])
   tableBody.push(headers)
@@ -174,18 +188,26 @@ const buildSimpleTableBody = (data) =>{
 }
 
 const buildGroupedTableBody = (data) => {
-  if (data.length <= 1) return []
   let tableBody = [];
   const headers = getTableHeaders(data[1]);
   tableBody.push(headers);
 
   data.forEach(row => {
-    if(row.title !== undefined) tableBody.push([{'colSpan':headers.length, 'text':row.title, alignment : 'center'}]);
-    else tableBody.push(Object.values(row));
+    if(row.title !== undefined) 
+      tableBody.push([{
+                    'colSpan':headers.length, 
+                    'text':row.title, 
+                    fontSize:12, 
+                    alignment : 'center'
+                  }]);
+    else 
+      tableBody.push(Object.values(row).map(cell=>({text:cell, fontSize:10})));
   })
   return tableBody;
 }
 export const buildTable = (data, type='simple') => {
+  if(data.length <= 0 || (data.length <= 1 && type==='grouped')) 
+    return buildParagraph('NO DATA', {fontSize:20, alignment:'center'})
 
   const tableBuilders = {
     'simple' : buildSimpleTableBody,
@@ -197,7 +219,7 @@ export const buildTable = (data, type='simple') => {
     width: 'auto',
     table : {
       headerRows:1,
-      body:tableBuilders[type](data)//type==='simple' ? buildSimpleTableBody(data) : buildOneRowTableBody(data),
+      body:tableBuilders[type](data)
       },
     layout: tablesLayouts[type]
   }
@@ -215,21 +237,21 @@ export const buildTable = (data, type='simple') => {
 }
 
 
-export const addElementToDoc = (doc, element, pageBreak = null) => {
+export const addElementToDoc = (doc, element, pageBreak = null, orientation) => {
   if (element === null || element === undefined) return
-  doc.content.push({...element, pageBreak:pageBreak===null ? 'None':pageBreak});
+  doc.content.push({...element, pageBreak:pageBreak===null ? 'None':pageBreak, pageOrientation:orientation});
 }
 
-export const createPage = (doc, content, report, pageNumber, totalPageNumber) =>{
-  let header = buildPageHeader()
-  let footer = buildPageFooter(`${report}`, `Page ${pageNumber} / ${totalPageNumber}`)
+export const createPage = (doc, content, report, pageNumber, totalPageNumber, orientation='portrait') =>{
+  let header = buildPageHeader(orientation)
+  let footer = buildPageFooter(`${report}`, `Page ${pageNumber} / ${totalPageNumber}`, orientation)
 
-  addElementToDoc(doc, header)
+  addElementToDoc(doc, header, pageNumber===1?null:'before', orientation)
 
   content.forEach(element => {
     addElementToDoc(doc, element)
   })
-  addElementToDoc(doc, footer, pageNumber===totalPageNumber?null:'after')
+  addElementToDoc(doc, footer, null)
 }
 
 export const downloadPDF = (doc, title) =>{
