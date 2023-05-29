@@ -12,6 +12,7 @@ import {SMARTEST_LOGO,SONATRACH_LOGO} from '../constants/logos'
 
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import mypdfFonts from "../fonts/vfs_fonts";
 import { LASTPAGE, TOPLEFT } from "../constants/backgrounds";
 const baseLayout = {
     hLineWidth: function (i, node) {
@@ -29,21 +30,27 @@ const baseLayout = {
     fillColor: function (rowIndex) {
       return (rowIndex>0) ? '#e6e6e6' : "#eeeeee";
     },
-    paddingTop: function(i, node) { return 8; },
-    paddingBottom: function(i, node) { return 8; },
+    paddingTop: function(i, node) { return 6; },
+    paddingBottom: function(i, node) { return 6; },
   }
 const tablesLayouts = {
   'simple':baseLayout,
+  
   'one_row': {...baseLayout, 
     fillColor: function (rowIndex,node,  columnIndex) {
-      return (columnIndex%2===0) ? '#e6e6e6' : "#c00000";
+      return (columnIndex%2===0) ? '#e6e6e6' : "#ff0000";
     },
+    hLineColor: function (i, node) {return '#000'},
+    vLineColor: function (i, node) {return '#000'},
   },
+
   'grouped':{...baseLayout,
     fillColor: function (i, node) {
       if('colSpan' in node.table.body[i][0]) return '#999999'
       else return (i === 0) ? '#555555' : (i%2===0) ? '#e6e6e6' : "#eeeeee";
     },
+    paddingTop: function(i, node) { return 4; },
+    paddingBottom: function(i, node) { return 4; },
   }
 }
 
@@ -52,12 +59,28 @@ export const logError = (text) => {
   alert(text);
 }
 export const createDoc = (size, orientation, margin) =>{
-  pdfMake.vfs = pdfFonts.pdfMake.vfs;
+  pdfMake.vfs = {...pdfFonts.pdfMake.vfs, ...mypdfFonts.pdfMake.vfs};
+  
+  pdfMake.fonts = {
+    Roboto: {
+      normal: 'Roboto-Regular.ttf',
+      bold: 'Roboto-Medium.ttf',
+      italics: 'Roboto-Italic.ttf',
+      bolditalics: 'Roboto-MediumItalic.ttf'
+    },
+    // THIS FONT (ARIAL) IS AVAILABLE BECAUSE I IMPORTED mypdfFonts
+    Arial: {
+      normal: 'ARIALN.TTF',
+      bold: 'ARIALNB.TTF',
+      italics: 'ARIALNI.TTF',
+      bolditalics: 'Arialnbi.ttf'
+    },
+  };
   return {
       pageSize: size,
       pageOrientation: orientation,
       pageMargins: margin,
-      content: [],  
+      content: [],
   };
 }
 
@@ -80,6 +103,7 @@ export const buildPageFooter = (leftText, rightText, orientation) =>{
     columns: [
       {
         text : leftText,
+        font:'Arial',
         fontSize : 12,
         alignment:'left',
         color:'#090909',
@@ -87,6 +111,7 @@ export const buildPageFooter = (leftText, rightText, orientation) =>{
         absolutePosition: {x : 40, y: orientation==='portrait' ? 800 : 550 },
       },{
         text : rightText,
+        font:'Arial',
         fontSize : 12,
         alignment:'left',
         color:'#090909',
@@ -97,24 +122,28 @@ export const buildPageFooter = (leftText, rightText, orientation) =>{
 }
 export const buildTitle = (level, text, isTocItem=true, styles = {}) =>{
   const defaultStyles = {
+    font:'Arial',
+    bold : level===1 ? true : false,
     fontSize:level === 1 ? 18 : level === 2 ? 14 : 12,
     margin:level===1? [10, 0, 0, 10] : level === 2 ? [20,0,0, 15] : [0, 0, 0, 10],
     color:'#c00000',
     background:'',
     decoration : 'underline', 
-    alignment:'left'
+    alignment:'left',
   }
   const _styles = {...defaultStyles, ...styles}
-
+  
   return {
     text:text,
+    font:_styles.font,
+    bold:_styles.bold,
     fontSize : _styles.fontSize,
     margin:_styles.margin,
     color:_styles.color,
     background : _styles.background,
     decoration: _styles.decoration,
+    alignment :_styles.alignment,
     tocItem: isTocItem,
-    alignment :_styles.alignment
   }
 }
 export const buildChart = (chart, size) => {
@@ -133,6 +162,7 @@ export const buildParagraph = (text, styles={}) => {
 
   return {
     text:text,
+    font:'Arial',
     fontSize : _styles.fontSize,
     margin:_styles.margin,
     color: _styles.color,
@@ -166,15 +196,15 @@ const buildOneRowTableBody = (data) =>{
   for(let i=0; i<keys.length; i+=ratio){
     let row = []
     for(let j=i; j < i+ratio; j++){
-      row.push(keys[j]);
-      row.push(values[j]);
+      row.push({text:keys[j], font:'Arial'});
+      row.push({text:values[j],font:'Arial', alignment:'center'});
     }
     tableBody.push(row);
   }
   return tableBody;
 }
 const getTableHeaders = (row) => {
-  return Object.keys(row)
+  return Object.keys(row).map(item => ({text:item, font:'Arial'}))
 }
 const buildSimpleTableBody = (data) =>{
   let tableBody = []
@@ -182,7 +212,7 @@ const buildSimpleTableBody = (data) =>{
   tableBody.push(headers)
 
   data.forEach(row => {
-    tableBody.push(Object.values(row));
+    tableBody.push(Object.values(row).map(item => ({text:item, font:'Arial'})));
   })
   return tableBody;
 }
@@ -190,22 +220,23 @@ const buildSimpleTableBody = (data) =>{
 const buildGroupedTableBody = (data) => {
   let tableBody = [];
   const headers = getTableHeaders(data[1]);
-  tableBody.push(headers);
+  tableBody.push(headers.map(title=>({text:title,fontSize:11})));
 
   data.forEach(row => {
     if(row.title !== undefined) 
       tableBody.push([{
                     'colSpan':headers.length, 
                     'text':row.title, 
-                    fontSize:12, 
+                    font:'Arial',
+                    fontSize:10, 
                     alignment : 'center'
                   }]);
     else 
-      tableBody.push(Object.values(row).map(cell=>({text:cell, fontSize:10})));
+      tableBody.push(Object.values(row).map(cell=>({text:cell, font:'Arial', fontSize:8})));
   })
   return tableBody;
 }
-export const buildTable = (data, type='simple') => {
+export const buildTable = (data, type='simple', customLayout = undefined) => {
   if(data.length <= 0 || (data.length <= 1 && type==='grouped')) 
     return buildParagraph('NO DATA', {fontSize:20, alignment:'center'})
 
@@ -221,7 +252,7 @@ export const buildTable = (data, type='simple') => {
       headerRows:1,
       body:tableBuilders[type](data)
       },
-    layout: tablesLayouts[type]
+    layout: {...tablesLayouts[type], ...customLayout}
   }
 
   return {

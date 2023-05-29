@@ -2,22 +2,83 @@
 // keep the functions in utils.js clean and standard. should work for any report not only weekly or daily...
 // 
 
-import {getChartByContainerId ,exportCharts, setupNewPage, createHeaderPage, createLastPage, addChartToPDF, createDoc, downloadPDF, createPage, buildTitle, buildChart, buildParagraph, logError, buildTable} from './utils';
-import {BACKGROUND,LASTPAGE,TOPLEFT} from '../constants/backgrounds'
+import {getChartByContainerId ,exportCharts, createDoc, downloadPDF, createPage, buildTitle, buildChart, buildParagraph, logError, buildTable} from './utils';
 
-let TOTAL_PAGES = 30;
-let p = 0;
-let img = 0;
+let TOTAL_PAGES = '--TOTAL-PAGES--';
 
-const nextId = (item) => {
-    let id = item === 'img' ? `image-picker-${img+=1}` : `p-${p+=1}`
-    console.log(id)
-    return id
+const colors = {
+    Low : "yellow",
+    Medium : "orange",
+    Major : "red",
+}
+
+const event_custom_layout ={
+    fillColor: function (i, node, j) {
+        if('colSpan' in node.table.body[i][0]) return '#999999'
+        const severity = node.table.body[i][j].text
+        if(['Low', 'Medium', 'Major'].includes(severity)) return colors[severity];
+        else return (i === 0) ? '#F05C40' : (i%2===0) ? '#e8e8e8' : "#eeeeee"
+    },
+    hLineColor: function (i, node) {
+    return '#F05C40';
+    },
+    vLineColor: function (i, node) {
+    return '#F05C40';
+    },
+}
+const team_members_layout = {
+    vLineColor: function (i, node, j) {
+        return (j>0 && i===1) ? '#000' : '#fff';
+    },
+    hLineColor: function (i, node) {
+    return i===1 ? '#000' : '#fff';
+    },
+}
+
+let items = {
+    p : 0,
+    img : 0,
+}
+
+const nextId = (item, newId=true) => {
+    let id = newId===true ? items[item] += 1 : items[item];
+    return item === 'img' ? `image-picker-${id}`  : `p-${id}`
+}
+
+const replaceTotalPages = (docContent, total) => {
+    docContent.forEach((item, i) =>{
+        if(!('columns' in item)) return;
+        if (item.columns.length <2) return;
+        if (!('text' in item.columns[1])) return;
+        item.columns[1].text = item.columns[1].text.replace('--TOTAL-PAGES--', total)
+    })
+}
+
+const buildTeamTable = (paragraph) => {
+    let [ose, teamLeaders] = paragraph.split('\n')
+    ose = ose.replace(',', '\nOSE : ')
+    teamLeaders= teamLeaders.replace(',', '\nTeam Leader : ')
+    const table = {
+        table : {
+        headerRows:1,
+        widths:[150, 300],
+        body:[
+                [{text : 'Prepared by', alignment:'left', font:'Arial', fontSize:16, colSpan:2}, {}],
+                [{}, {text:ose, font:'Arial', fontSize : 14, color: "#000000",fillColor:'#f3eeee', alignment : 'left'}],
+                [{}, {text:'filler', fontSize : 12, color: "#fff",fillColor:'#fff', alignment : 'left'}],
+                [{}, {text:teamLeaders, font:'Arial', fontSize : 14, color: "#000000",fillColor:'#f3eeee', alignment : 'left'}],
+            ],
+        },
+        layout:team_members_layout,
+    }
+      return table
+
 }
 
 export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
-    p = 0;
-    img=0;
+    items.p = 0
+    items.img = 0
+
     if(chartsToPrint.length === 0){
         logError('No chart found');
         return;
@@ -41,6 +102,7 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         columns: [
             {
                 text : WELL,
+                font:'Arial',
                 fontSize : 32,
                 absolutePosition: {y : 200},
                 alignment:'center',
@@ -48,6 +110,7 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
             },
             {
                 text : "RTOM End Of Well Report",
+                font:'Arial',
                 fontSize : 32,
                 absolutePosition: {y : 250},
                 alignment:'center',
@@ -56,6 +119,7 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
             },
             {
                 text : displayedDate,
+                font:'Arial',
                 fontSize : 28,
                 absolutePosition: {y:300},
                 alignment:'center',
@@ -72,11 +136,18 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
             },
             {
                 text:"REAL TIME OPERATIONS MANAGEMENT",
+                font:'Arial',
                 fontSize : 24,
                 background:"#c00000",
                 absolutePosition: {y:400},
                 alignment:'center',
                 color:'#ffffff',
+            },
+            {
+             columns: [  
+                buildTeamTable(paragraphes['team-members']),
+                ],
+                absolutePosition: {x:50, y:580},
             }
         ],
       }]
@@ -86,7 +157,7 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
     pageNumber += 1;
     pageContent = []
     pageContent.push(buildTitle(1, "TABLE OF CONTENT", false))
-    pageContent.push({toc: { title: null }, margin:[40,0,40,0]})
+    pageContent.push({toc: { title: null , font:'Arial'}, margin:[40,0,40,0]})
     createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES)
 
     // ----------------------------------------Well information----------------------------------------
@@ -181,16 +252,16 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         pageContent.push(buildTitle(2, "4. NPT VS Sub-category"));
         pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
         pageContent.push(buildTitle(2, "5. NPT Details"));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 500));
         createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
 
         // ---------------------------------------- NPT vs section && NPT vs category----------------------------------------
         pageNumber += 1;
         pageContent = [];
         pageContent.push(buildTitle(2, "6. NPT VS Service company"));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 500));
         pageContent.push(buildTitle(2, "7. NPT Down hole problems"));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 500));
         createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
         
         
@@ -201,15 +272,15 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
 
         if(EOWRData['connection_details']['drill_time'].length > 3){
             pageContent.push(buildTitle(1, "IV. Drilling & Tripping Connection Time KPI's"));
-            pageContent.push(buildTable(EOWRData['connection_details']['drill_time'], 'grouped'));
+            pageContent.push(buildTable(EOWRData['connection_details']['drill_time'], 'grouped', event_custom_layout));
         }
         if(EOWRData['connection_details']['tripping_time']['pooh'].length > 3){
             pageContent.push(buildTitle(2, "1. Tripping out and Connection Time KPI's"));
-            pageContent.push(buildTable(EOWRData['connection_details']['tripping_time']['pooh'], 'grouped'));
+            pageContent.push(buildTable(EOWRData['connection_details']['tripping_time']['pooh'], 'grouped', event_custom_layout));
         }
         if(EOWRData['connection_details']['tripping_time']['rih'].length > 3){
             pageContent.push(buildTitle(2, "2. Tripping In and Connection Time KPI's"));
-            pageContent.push(buildTable(EOWRData['connection_details']['tripping_time']['rih'], 'grouped'));
+            pageContent.push(buildTable(EOWRData['connection_details']['tripping_time']['rih'], 'grouped', event_custom_layout));
         }
 
         if(pageContent.length>0){ 
@@ -225,9 +296,18 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         pageContent = [];
         pageContent.push(buildTitle(1, "V. Real Time Impact & Prevention"));
         pageContent.push(buildTitle(2, "1. High Value Intervention"));
-        pageContent.push(buildParagraph(paragraphes[nextId('p')]));
-        pageContent.push(buildTitle(2, "2. Intervention and mitigation plan"));
-        pageContent.push(buildParagraph(paragraphes[nextId('p')]));
+
+        const NA_text = {
+            text:'N/A',
+            fontSize : 18,
+            alignment : 'center'
+        }
+        let p = paragraphes[nextId('p')] === '' ? NA_text : paragraphes[nextId('p', false)]
+        pageContent.push(buildParagraph(p));
+
+        pageContent.push(buildTitle(2, "2. Intervenion and mitigation plan"));
+        p = paragraphes[nextId('p')] === '' ? NA_text : paragraphes[nextId('p', false)]
+        pageContent.push(buildParagraph(p));
         
         createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
         
@@ -249,21 +329,24 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
             
             createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
             
-            pageNumber += 1;
-            pageContent = [];
-            pageContent.push(buildTitle(3, "Run Casing (Broomsticks)", false, title_3_style));
-            pageContent.push(buildChart(images[nextId('img')], 500))
-            
-            pageContent.push(buildTitle(3, "Ream & Back Ream Interval", false, title_3_style));
-            pageContent.push(buildChart(images[nextId('img')], 500))
-            
-            createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
+            const run_casing_img = images[nextId('img')];
+            const ream_backream_img = images[nextId('img')];
+            if (run_casing_img || ream_backream_img){
+                pageNumber += 1;
+                pageContent = [];
+                pageContent.push(buildTitle(3, "Run Casing (Broomsticks)", false, title_3_style));
+                pageContent.push(buildChart(run_casing_img, 500))
+                
+                pageContent.push(buildTitle(3, "Ream & Back Ream Interval", false, title_3_style));
+                pageContent.push(buildChart(ream_backream_img, 500))
+                
+                createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
+            }
             pageNumber += 1;
             pageContent = [];
             return null
         })
         
-        pageNumber += 1;
         pageContent = [];
         pageContent.push(buildTitle(1, "VII. Conclusion"));
         pageContent.push(buildParagraph(paragraphes[nextId('p')]));
@@ -274,7 +357,7 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         pageNumber += 1;
         pageContent = [];
         pageContent.push(buildTitle(1, "VIII. Appendix"));
-        pageContent.push(buildTitle(2, "1. Drilling Events Captured"));
+        pageContent.push(buildTitle(2, "1. Drilling Events Captured", false));
 
         /***this table can be very large, so we devide it manualy in order to keep track of page numbers
          * max number of lines is set to 12
@@ -283,72 +366,89 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
          * event caused npt is usually a small table (can fit in one page), so no need to do the same thing to it
          */
 
-        const n_lines_per_page = 12;
+        const n_lines_per_page = 20;
         const events_len = EOWRData['drilling_events_kpi']['events_kpi_res'].length;
         const events_caused_len = EOWRData['drilling_events_kpi']['events_caused_npt_res'].length;
         const  n_parts = Math.ceil(events_len / n_lines_per_page);
         const last_chunk_len = events_len % n_lines_per_page;
-        const put_in_same_page = (last_chunk_len + events_caused_len) <= 10;
+        const put_in_same_page = (last_chunk_len + events_caused_len) <= (n_lines_per_page - 2); //we leave 2 lines worth of space for the title
         
         for (let i = 0; i < n_parts; i += 1) {
-            pageContent.push(buildTable(EOWRData['drilling_events_kpi']['events_kpi_res'].slice(i*n_lines_per_page, i*n_lines_per_page + n_lines_per_page), 'grouped'));
+            pageContent.push(buildTable(EOWRData['drilling_events_kpi']['events_kpi_res'].slice(i*n_lines_per_page, i*n_lines_per_page + n_lines_per_page), 'grouped', event_custom_layout));
             
             if (i === (n_parts-1) && put_in_same_page){ //last part of data and there is enough space
-                pageContent.push(buildTitle(2, "2. Drilling Events Caused NPT"));
-                pageContent.push(buildTable(EOWRData['drilling_events_kpi']['events_caused_npt_res'], 'grouped'));
+                pageContent.push(buildTitle(2, "2. Drilling Events Caused NPT", false));
+                pageContent.push(buildTable(EOWRData['drilling_events_kpi']['events_caused_npt_res'], 'grouped', event_custom_layout));
             }
             createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
             pageNumber += 1;
             pageContent = [];
         }
         if(put_in_same_page === false){
-            pageContent.push(buildTitle(2, "2. Drilling Events Caused NPT"));
-            pageContent.push(buildTable(EOWRData['drilling_events_kpi']['events_caused_npt_res'], 'grouped'));
+            pageContent.push(buildTitle(2, "2. Drilling Events Caused NPT", false));
+            pageContent.push(buildTable(EOWRData['drilling_events_kpi']['events_caused_npt_res'], 'grouped', event_custom_layout));
             createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
+        }
+        else{
+            pageNumber -= 1;
         }
         
         pageNumber += 1;
         pageContent = [];
-        pageContent.push(buildTitle(2, "3. Drilling Events Category"));
+        pageContent.push(buildTitle(2, "3. Drilling Events Category", false));
         pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
         
-        pageContent.push(buildTitle(2, "4. Drilling Events Sub-category"));
+        pageContent.push(buildTitle(2, "4. Drilling Events Sub-category", false));
         pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
 
         createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
         
         // ---------------------------------------- Ream & back ream ----------------------------------------
         
-        pageNumber += 1;
+        
         pageContent = [];
-        pageContent.push(buildTitle(1, "IX. Ream & Back Ream"));
+        pageContent.push(buildTitle(1, "IX. Ream & Back Ream", false));
         EOWRData['section_summary']?.map((section, index)=> {
-            pageContent.push(buildTitle(3,`${section['Hole Section']}`));
+            
+            const ream_backream_img_1 = images[nextId('img')]
+            const ream_backream_img_2 = images[nextId('img')]
+            const ream_backream_img_3 = images[nextId('img')]
+            const ream_backream_img_4 = images[nextId('img')]
+            
+            if(ream_backream_img_1 || ream_backream_img_2){
+                pageContent.push(buildTitle(3,`${section['Hole Section']}`, false));
+                pageContent.push(buildChart(ream_backream_img_1, 500))
+                pageContent.push(buildChart(ream_backream_img_2, 500))
+                pageNumber += 1;
+                createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
+    
+                pageContent = [];
+            }
 
-            pageContent.push(buildChart(images[nextId('img')], 500))
-            pageContent.push(buildChart(images[nextId('img')], 500))
-            createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
+            if(ream_backream_img_3 || ream_backream_img_4){
+                pageContent.push(buildChart(ream_backream_img_3, 500))
+                pageContent.push(buildChart(ream_backream_img_4, 500))
+                pageNumber += 1;
+                createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
 
-            pageNumber += 1;
-            pageContent = [];
-            pageContent.push(buildChart(images[nextId('img')], 500))
-            pageContent.push(buildChart(images[nextId('img')], 500))
-            createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
+                pageContent = [];
+            }
             return null;
         })
         
         // ---------------------------------------- Ream & back ream ----------------------------------------
-        pageNumber += 1;
-        pageContent = [];
-        pageContent.push(buildTitle(1, "X. Bit Record"));
-        pageContent.push(buildChart(images[nextId('img')], 500))
-        createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES, "landscape");
+        const bit_record_img = images[nextId('img')]
+        if (bit_record_img){
+            pageNumber += 1;
+            pageContent = [];
+            pageContent.push(buildTitle(1, "X. Bit Record", false));
+            pageContent.push(buildChart(bit_record_img, 500))
+            createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES, "landscape");
+        }
 
+        replaceTotalPages(doc.content, pageNumber)
 
-        
-
-
-        downloadPDF(doc, `EOWR_${EOWRData.well}`);
+        downloadPDF(doc, `EOWR_${WELL}`);
     })
     
     
