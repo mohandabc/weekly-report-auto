@@ -36,13 +36,13 @@ export const EOWR = () => {
             setEOWRData({...data} || {});
                         
             // set paragraphes to recovered data if possible
-            setParagraphes({'p-0' : '', 'p-1':'', 'p-2':'', 'p-3':""});
+            setParagraphes({'p-0' : '', 'p-1':'', 'p-2':'', 'p-3':"", "team-members" : `OSE : [name 1], [name 2] \nTeam Leader : [name 1], [name 2]`});
             setIsHidden(true);
         });
     }
 
     useEffect(()=>{
-        // console.log(EOWRData)
+        // console.log(paragraphes)
 
     })
 
@@ -219,6 +219,9 @@ export const EOWR = () => {
                 <span className='text-xl px-4'>X. Bit Record</span>
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
                     <ImagePicker id={nextId('img')} title="Bit Record" setImages = {setImages} ></ImagePicker>
+                </section>
+                <section className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
+                    <Paragraphe id="team-members" title = "Team members"  text = {paragraphes['team-members']} onSave={handleParagrapheSave}/>
                 </section>
             </div>
            }
