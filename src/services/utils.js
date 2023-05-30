@@ -88,12 +88,12 @@ export const buildPageHeader = (orientation) =>{
   return {
     columns: [{
         image: SMARTEST_LOGO,
-        absolutePosition: {x:30 ,y: 30},
+        absolutePosition: {x:30 ,y: 20},
         width: 160
         },{
         image: SONATRACH_LOGO,
-        absolutePosition: {x:orientation==='portrait' ? 500 : 740 ,y: 10},
-        width: 50
+        absolutePosition: {x:orientation==='portrait' ? 410 : 660 ,y: 10},
+        width: 160
     }],
     margin:[0,0,0,70]
   };
@@ -223,7 +223,6 @@ const buildGroupedTableBody = (data) => {
   // Very important control to avoid a bug when we slice data in the wrong place
   let headerData = data[1]
   if(data[1].title !== undefined){
-    console.log('casssse')
     headerData = data[0]
   }
   const headers = getTableHeaders(headerData);
@@ -265,7 +264,6 @@ export const buildTable = (data, type='simple', customLayout = undefined, custom
   if(customWidths !== undefined){
     table.table['widths'] = customWidths
   }
-  console.log(table)
 
   return {
     // A workaround to center tables
