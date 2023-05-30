@@ -91,7 +91,8 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         return;
     }
 
-    let displayedDate = new Date().toLocaleDateString('en-us', {year:"numeric", month:"long"});
+    let end_of_well_date = new Date(EOWRData['end_of_well_date']) || new Date()
+    let displayedDate = end_of_well_date.toLocaleDateString('en-us', {year:"numeric", month:"long"});
     
     let doc = createDoc('A4', 'portrait', [15,20,0,10]);
 
@@ -275,7 +276,6 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         // ---------------------------------------- Drilling & Tripping Connection Time KPI's ----------------------------------------
         pageNumber += 1;
         pageContent = [];
-
         if(EOWRData['connection_details']['drill_time'].length > 3){
             pageContent.push(buildTitle(1, "IV. Drilling & Tripping Connection Time KPI's"));
             pageContent.push(buildTable(EOWRData['connection_details']['drill_time'], 'grouped', event_custom_layout));
