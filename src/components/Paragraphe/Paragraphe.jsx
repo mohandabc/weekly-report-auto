@@ -25,9 +25,9 @@ export const Paragraphe = (props) => {
   return (
   <div className={`min-h-120 rounded-lg p-6 bg-stone-100 dark:bg-stone-400 shadow w-full`}>
     <div className="flex justify-between items-center">
-    <caption className="text-center font-normal mb-8 text-black text-3xl" align="center">
+    <span className="text-center font-normal mb-8 text-black text-3xl" align="center">
           {props.title}
-        </caption>
+        </span>
       <button
         className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full border-2 border-purple-600 w-1/6"
         onClick={handleEditClick}
