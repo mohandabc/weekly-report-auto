@@ -56,17 +56,17 @@ const replaceTotalPages = (docContent, total) => {
 
 const buildTeamTable = (paragraph) => {
     let [ose, teamLeaders] = paragraph.split('\n')
-    ose = ose.replace(',', '\nOSE : ')
-    teamLeaders= teamLeaders.replace(',', '\nTeam Leader : ')
+    ose = ose.replace(/,/g, '\nOSE : ')
+    teamLeaders= teamLeaders.replace(/,/g, '\nTeam Leader : ')
     const table = {
         table : {
         headerRows:1,
         widths:[150, 300],
         body:[
                 [{text : 'Prepared by', alignment:'left', font:'Arial', fontSize:16, colSpan:2}, {}],
-                [{}, {text:ose, font:'Arial', fontSize : 14, color: "#000000",fillColor:'#f3eeee', alignment : 'left'}],
+                [{}, {text:ose, font:'Arial', fontSize : 14, color: "#F05C40",fillColor:'#f3eeee', alignment : 'left'}],
                 [{}, {text:'filler', fontSize : 12, color: "#fff",fillColor:'#fff', alignment : 'left'}],
-                [{}, {text:teamLeaders, font:'Arial', fontSize : 14, color: "#000000",fillColor:'#f3eeee', alignment : 'left'}],
+                [{}, {text:teamLeaders, font:'Arial', fontSize : 14, color: "#F05C40",fillColor:'#f3eeee', alignment : 'left'}],
             ],
         },
         layout:team_members_layout,
@@ -202,13 +202,19 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         pageContent = []
         pageContent.push(buildTitle(1, "II. Time Activity Breakdown"));
         pageContent.push(buildTitle(2, "1. Rig Time performance"));
-        pageContent.push(buildTable(EOWRData['rig_performance']));
+        pageContent.push(buildTable(EOWRData['rig_performance'], undefined, [150, 150, 100, 100]));
 
         const data = EOWRData['rig_performance'][0]
         if (data !== undefined){
-            let text = `[text need correction about gained/lost/npt] The drilling and well completion plan was estimated at ${data['Planned days']} days, and the well was completed over ${data['Actual days']} days. 
-            The total number of days lost is calculated at ${data['NPT']+data['Gained']} days, which represents (${(data['NPT']+data['Gained'])/data['Planned days']*100}%) of the 
-            planned well, where ${data['NPT']} days are confirmed as NPT and ${data['Gained']} days are considered as ILT (invisible lost time).`
+            const plan = data['Planned days']
+            const actual = data['Actual days']
+            const gainLoss = data['Gained']
+            const npt  = data['NPT']
+
+            let last_sentence = gainLoss < 0 ? ` and ${Math.abs(gainLoss)-npt} days are considered as ILT (invisible lost time)`:''
+            let text = `The drilling and well completion plan was estimated at ${plan} days, and the well was completed over ${actual} days. 
+            The total number of days ${gainLoss>0 ? 'gained' : 'lost'} is calculated at ${Math.abs(gainLoss)} days, which represents (${Math.abs(gainLoss)/plan*100}%) of the 
+            planned well, where ${npt} days are confirmed as NPT${last_sentence}.`
             pageContent.push(buildParagraph(text));
         }
         
@@ -317,7 +323,7 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         pageContent = [];
         pageContent.push(buildTitle(1, "VI. Section Summary"));
         EOWRData['section_summary']?.map((section, index)=> {
-            const title_3_style = {alignment:'center', color:'white', background:'orange', decoration:''}
+            const title_3_style = {alignment:'center', color:'#F05C40', bold:true, decoration:''}
             pageContent.push(buildTitle(2, `${index+1}. ${section['Hole Section']}`));
 
             pageContent.push(buildTitle(3, "Section Overview", false, title_3_style));
@@ -447,7 +453,7 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         }
 
         replaceTotalPages(doc.content, pageNumber)
-
+        
         downloadPDF(doc, `EOWR_${WELL}`);
     })
     

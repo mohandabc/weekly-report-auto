@@ -157,7 +157,7 @@ export const buildChart = (chart, size) => {
   }
 }
 export const buildParagraph = (text, styles={}) => {
-  const defaultStyles = {fontSize:10, margin:[30,0,30,20], color:'#000', alignment:'left'}
+  const defaultStyles = {fontSize:11, margin:[30,0,30,20], color:'#000', alignment:'left'}
   const _styles = {...defaultStyles, ...styles}
 
   return {
@@ -219,7 +219,14 @@ const buildSimpleTableBody = (data) =>{
 
 const buildGroupedTableBody = (data) => {
   let tableBody = [];
-  const headers = getTableHeaders(data[1]);
+
+  // Very important control to avoid a bug when we slice data in the wrong place
+  let headerData = data[1]
+  if(data[1].title !== undefined){
+    console.log('casssse')
+    headerData = data[0]
+  }
+  const headers = getTableHeaders(headerData);
   tableBody.push(headers.map(title=>({text:title,fontSize:11})));
 
   data.forEach(row => {
@@ -236,7 +243,7 @@ const buildGroupedTableBody = (data) => {
   })
   return tableBody;
 }
-export const buildTable = (data, type='simple', customLayout = undefined) => {
+export const buildTable = (data, type='simple', customLayout = undefined, customWidths=undefined) => {
   if(data.length <= 0 || (data.length <= 1 && type==='grouped')) 
     return buildParagraph('NO DATA', {fontSize:20, alignment:'center'})
 
@@ -246,14 +253,19 @@ export const buildTable = (data, type='simple', customLayout = undefined) => {
     'grouped' : buildGroupedTableBody,
   }
 
-  const table = {
+  let table = {
     width: 'auto',
     table : {
       headerRows:1,
+
       body:tableBuilders[type](data)
       },
     layout: {...tablesLayouts[type], ...customLayout}
   }
+  if(customWidths !== undefined){
+    table.table['widths'] = customWidths
+  }
+  console.log(table)
 
   return {
     // A workaround to center tables
