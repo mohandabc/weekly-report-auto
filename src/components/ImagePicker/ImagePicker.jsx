@@ -1,6 +1,7 @@
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 
-export const ImagePicker = ({id, title, setImages}) => {
+export const ImagePicker = ({ id, title, setImages, imageData}) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageSelect = (event) => {
@@ -26,6 +27,14 @@ export const ImagePicker = ({id, title, setImages}) => {
         return tmp;
     })
   };
+
+  useEffect(() => {
+    if (imageData) {
+        const base64Image = imageData;
+        const dataURL = `data:image/png;base64,${base64Image}`;
+      setSelectedImage(dataURL);
+    }
+  }, [imageData]);
 
   return (
     <div className="flex flex-col items-center justify-center relative">
