@@ -32,7 +32,12 @@ export const ImagePicker = ({ id, title, setImages, imageData}) => {
     if (imageData) {
         const base64Image = imageData;
         const dataURL = `data:image/png;base64,${base64Image}`;
-      setSelectedImage(dataURL);
+            setSelectedImage(dataURL);
+            setImages(current=>{
+                let tmp = current;
+                tmp[id] = dataURL;
+                return tmp;
+            })
     }
   }, [imageData]);
 
