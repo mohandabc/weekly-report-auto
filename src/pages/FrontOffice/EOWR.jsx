@@ -7,7 +7,7 @@ import {generateEOWR} from '../../services/EOWReportPdf';
 import { ActionButton, ReportInputScreen, Chart, ImagePicker, Table, Paragraphe, MultiTable, Tabular} from '../../components';
 
 import { getData } from '../../api/api';
-import { DEFAULT_CONFIG_BAR_OPTIONS} from '../../constants/constants';
+import { DEFAULT_CONFIG_BAR_OPTIONS, runCasingMap, rbrIMap, holeSectionMap} from '../../constants/constants';
 import { API_URL } from '../../constants/URI';
 import { loaderIsHidden } from '../../shared/globalState';
 
@@ -34,7 +34,6 @@ export const EOWR = () => {
         .then(res=> {
             let data = res.result;
             setEOWRData({...data} || {});
-                        
             // set paragraphes to recovered data if possible
             setParagraphes({'p-0' : '', 'p-1':'', 'p-2':'', 'p-3':"", "team-members" : `OSE : [name 1], [name 2] \nTeam Leader : [name 1], [name 2]`});
             setIsHidden(true);
@@ -122,10 +121,10 @@ export const EOWR = () => {
 
                 <span className='text-xl px-4'>I. Global overview</span>
                 <section id="main" className={`align-middle grid grid-col-2 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`} >
-                    <ImagePicker id={nextId('img')} title="1 - Well Information" setImages = {setImages} ></ImagePicker>
-                    <ImagePicker id={nextId('img')} title="2 - Well Architecture" setImages = {setImages} ></ImagePicker>
-                    <ImagePicker id={nextId('img')} title="3 - Well Location Map" setImages = {setImages} ></ImagePicker>
-                    <ImagePicker id={nextId('img')} title="4 - Well Schematics" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id={nextId('img')} title="1 - Well Information" setImages = {setImages} imageData={EOWRData['eowr_snags']['well_information']} ></ImagePicker>
+                    <ImagePicker id={nextId('img')} title="2 - Well Architecture" setImages = {setImages} imageData={EOWRData['eowr_snags']['well_architecture']}></ImagePicker>
+                    <ImagePicker id={nextId('img')} title="3 - Well Location Map" setImages = {setImages} imageData={EOWRData['eowr_snags']['well_location_map']}></ImagePicker>
+                    <ImagePicker id={nextId('img')} title="4 - Well Schematics" setImages = {setImages} imageData={EOWRData['eowr_snags']['well_schematics']}></ImagePicker>
                 </section>
 
                 <span className='text-xl px-4'>II. Time Activity Breakdown</span>
@@ -178,16 +177,19 @@ export const EOWR = () => {
                 <span className='text-xl px-4'>VI. Section Summary</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
                 {
-                    EOWRData['section_summary']?.map((section, index) => (
-                    <React.Fragment key={`section-${index}`}>
-                        <Tabular title={`Section Overview (${section['Hole Section']})`} id={getDivId('table')} tableData={Object.entries(section).map(([key, value]) => ({ [key]: value }))} columns={3}/>
-                        <Paragraphe id={`p-no-need${index*100}`} title={`Operation Summary Results (${section['Hole Section']})`} text={section['description']} onSave={handleParagrapheSave} />
-                    {/* <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} > */}
-                        <ImagePicker id={nextId('img')} title={`Run Casing (Broomstick) (${section['Hole Section']})`} setImages = {setImages} ></ImagePicker>
-                        <ImagePicker id={nextId('img')} title={`Ream & Back Ream Interval (${section['Hole Section']})`} setImages = {setImages} ></ImagePicker>
-                    {/* </section> */}
-                    </React.Fragment>
-                    ))
+                    EOWRData['section_summary']?.map((section, index) => {
+                        const hs = section['Hole Section'];
+                        const run_casing = runCasingMap[hs];
+                        const rbrI = rbrIMap[hs];
+                        return (
+                            <React.Fragment key={`section-${index}`}>
+                            <Tabular title={`Section Overview (${hs})`} id={getDivId('table')} tableData={Object.entries(section).map(([key, value]) => ({ [key]: value }))} columns={3} />
+                            <Paragraphe id={`p-no-need${index * 100}`} title={`Operation Summary Results (${hs})`} text={section['description']} onSave={handleParagrapheSave} />
+                            <ImagePicker id={nextId('img')} title={`Run Casing (Broomstick) (${hs})`} setImages={setImages} imageData={EOWRData['eowr_snags'][run_casing]} />
+                            <ImagePicker id={nextId('img')} title={`Ream & Back Ream Interval (${hs})`} setImages={setImages} imageData={EOWRData['eowr_snags'][rbrI]} />
+                            </React.Fragment>
+                        );
+                    })
                 }
                 </section>
                 <span className='text-xl px-4'>VII. Conclusion</span>
@@ -208,19 +210,29 @@ export const EOWR = () => {
                 <span className='text-xl px-4'>IX. Ream & Back Ream</span>
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`} >
                 {
-                    EOWRData['section_summary']?.map((section, index) => (
-                        <React.Fragment key={`section-${index}`}>
-                            <ImagePicker id={nextId('img')} title={`Ream & Back Ream (${section['Hole Section']})`} setImages = {setImages} ></ImagePicker>
-                            <ImagePicker id={nextId('img')} title={`Ream & Back Ream (${section['Hole Section']})`} setImages = {setImages} ></ImagePicker>
-                            <ImagePicker id={nextId('img')} title={`Ream & Back Ream (${section['Hole Section']})`} setImages = {setImages} ></ImagePicker>
-                            <ImagePicker id={nextId('img')} title={`Ream & Back Ream (${section['Hole Section']})`} setImages = {setImages} ></ImagePicker>
-                        </React.Fragment>
-                    ))
+                    EOWRData['section_summary']?.map((section, index) => {
+                        const holeSection = section['Hole Section'];
+                        const mapping = holeSectionMap[holeSection] || { imageKeys: [], count: 0 };
+                        const imageKeys = mapping.imageKeys;
+                        const imageCount = mapping.count;
+                      
+                        const imagePickers = Array.from(Array(imageCount), (_, i) => (
+                          <ImagePicker
+                            id={nextId('img')}
+                            title={`Ream & Back Ream (${holeSection})`}
+                            setImages={setImages}
+                            imageData={EOWRData['eowr_snags'][imageKeys[i]]}
+                            key={`imagepicker-${i}`}
+                          />
+                        ));
+                      
+                        return <React.Fragment key={`section-${index}`}>{imagePickers}</React.Fragment>;
+                      })
                 }
                 </section>
                 <span className='text-xl px-4'>X. Bit Record</span>
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
-                    <ImagePicker id={nextId('img')} title="Bit Record" setImages = {setImages} ></ImagePicker>
+                    <ImagePicker id={nextId('img')} title="Bit Record" setImages = {setImages} imageData={EOWRData['eowr_snags']['bit_record']}></ImagePicker>
                 </section>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
                     <Paragraphe id="team-members" title = "Team members"  text = {paragraphes['team-members']} onSave={handleParagrapheSave}/>

@@ -599,7 +599,7 @@ export class DateAxes extends Chart
             series1.yAxis = valueAxis;
             series1.name = name1;
             series1.tooltipText = "{name}: [bold]{valueY}[/]";
-            series1.tensionX = 0.8;
+            // series1.tensionX = 0.8;
             series1.showOnInit = true;
             series1.stroke = color1;
             series1.tooltip.getFillFromObject = false;
@@ -612,7 +612,7 @@ export class DateAxes extends Chart
             series2.yAxis = valueAxis;
             series2.name = name2;
             series2.tooltipText = "{name}: [bold]{valueY}[/]";
-            series2.tensionX = 0.8;
+            // series2.tensionX = 0.8;
             series2.showOnInit = true;
             series2.stroke = color2;
             series2.tooltip.getFillFromObject = false;
