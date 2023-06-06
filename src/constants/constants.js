@@ -72,10 +72,12 @@ export const predefinedRanges = [
 export const runCasingMap = {
   '36"': 'run_casing36',
   '26"': 'run_casing26',
+  '17"1/2': 'run_casing17',
   '16"': 'run_casing16',
   '12"1/4': 'run_casing12',
   '8"1/2': 'run_casing8',
   '6"': 'run_casing6',
+  '3"2/4': 'run_casing3',
 };
 export const rbrIMap = {
   '36"': 'ream_back_ream_interval36',
@@ -83,6 +85,7 @@ export const rbrIMap = {
   '16"': 'ream_back_ream_interval16',
   '12"1/4': 'ream_back_ream_interval12',
   '8"1/2': 'ream_back_ream_interval8',
+  '6"': 'ream_back_ream_interval6',
   '6"': 'ream_back_ream_interval6',
 };
 export const holeSectionMap = {
