@@ -232,7 +232,7 @@ export const EOWR = () => {
                 </section>
                 <span className='text-xl px-4'>X. Bit Record</span>
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
-                    <ImagePicker id={nextId('img')} title="Bit Record" setImages = {setImages} imageData={EOWRData['eowr_snags']['bit_recordd']}></ImagePicker>
+                    <ImagePicker id={nextId('img')} title="Bit Record" setImages = {setImages} imageData={EOWRData['eowr_snags']['bit_record']}></ImagePicker>
                 </section>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
                     <Paragraphe id="team-members" title = "Team members"  text = {paragraphes['team-members']} onSave={handleParagrapheSave}/>
