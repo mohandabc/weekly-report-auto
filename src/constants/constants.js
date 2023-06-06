@@ -77,7 +77,7 @@ export const runCasingMap = {
   '12"1/4': 'run_casing12',
   '8"1/2': 'run_casing8',
   '6"': 'run_casing6',
-  '3"2/4': 'run_casing3',
+  '3"3/4': 'run_casing3',
 };
 export const rbrIMap = {
   '36"': 'ream_back_ream_interval36',
@@ -87,7 +87,7 @@ export const rbrIMap = {
   '12"1/4': 'ream_back_ream_interval12',
   '8"1/2': 'ream_back_ream_interval8',
   '6"': 'ream_back_ream_interval6',
-  '3"2/4': 'ream_back_ream_interval3',
+  '3"3/4': 'ream_back_ream_interval3',
 };
 export const holeSectionMap = {
 '36"': {
@@ -118,7 +118,7 @@ export const holeSectionMap = {
   imageKeys: ['ream_back_ream_6_1', 'ream_back_ream_6_2', 'ream_back_ream_6_3', 'ream_back_ream_6_4'],
   count: 4,
 },
-'3"2/4': {
+'3"3/4': {
   imageKeys: ['ream_back_ream_3_1', 'ream_back_ream_3_2', 'ream_back_ream_3_3', 'ream_back_ream_3_4'],
   count: 4,
 },
