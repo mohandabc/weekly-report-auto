@@ -34,8 +34,12 @@ export const EOWR = () => {
         .then(res=> {
             let data = res.result;
             setEOWRData({...data} || {});
-            // set paragraphes to recovered data if possible
-            setParagraphes({'p-0' : '', 'p-1':'', 'p-2':'', 'p-3':"", "team-members" : `OSE : [name 1], [name 2] \nTeam Leader : [name 1], [name 2]`});
+            setParagraphes({
+            'p-1': data['eowr_snags']['high_value_interventions'],
+            'p-2': data['eowr_snags']['prevention_mitigation'],
+            'p-3': data['eowr_snags']['conclusion'],
+            'team-members': `OSE: [name 1], [name 2]\nTeam Leader: [name 1], [name 2]`
+            });
             setIsHidden(true);
         });
     }
