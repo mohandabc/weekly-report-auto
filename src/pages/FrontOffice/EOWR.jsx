@@ -35,9 +35,9 @@ export const EOWR = () => {
             let data = res.result;
             setEOWRData({...data} || {});
             setParagraphes({
-            'p-1': data['eowr_snags']['high_value_interventions'],
-            'p-2': data['eowr_snags']['prevention_mitigation'],
-            'p-3': data['eowr_snags']['conclusion'],
+            'p-1': cleanHTML(data['eowr_snags']['high_value_interventions']),
+            'p-2': cleanHTML(data['eowr_snags']['prevention_mitigation']),
+            'p-3': cleanHTML(data['eowr_snags']['conclusion']),
             'team-members': `OSE: [name 1], [name 2]\nTeam Leader: [name 1], [name 2]`
             });
             setIsHidden(true);
@@ -102,6 +102,14 @@ export const EOWR = () => {
         return item === 'img' ? `image-picker-${id}`  : `p-${id}`
     }
 
+    function cleanHTML(html) {
+        const parser = new DOMParser();
+        const tmp = parser.parseFromString(html, 'text/html');
+        const textContent = tmp.body.textContent || tmp.body.innerText;
+        const cleanedText = textContent.trim();
+        return cleanedText;
+      }
+      
     return (
         <div className="App">
             <ReportInputScreen 

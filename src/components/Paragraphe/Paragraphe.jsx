@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './scrollbar.css'
 export const Paragraphe = (props) => {
-  const [text, setText] = useState(cleanHTML(props.text));
+  const [text, setText] = useState(props.text);
   const [editing, setEditing] = useState(false);
 
   const handleEditClick = () => {
@@ -22,14 +22,6 @@ export const Paragraphe = (props) => {
     setText(event.target.value);
   };
 
-  function cleanHTML(html) {
-    const parser = new DOMParser();
-    const tmp = parser.parseFromString(html, 'text/html');
-    const textContent = tmp.body.textContent || tmp.body.innerText;
-    const cleanedText = textContent.trim();
-    return cleanedText;
-  }
-  
   return (
   <div className={`min-h-120 rounded-lg p-6 bg-stone-100 dark:bg-stone-400 shadow w-full`}>
     <div className="flex justify-between items-center">
