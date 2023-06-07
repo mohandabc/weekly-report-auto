@@ -20,3 +20,51 @@
 #go-down:hover {
     animation: none;
 }
+
+/* mainPage.css */
+
+/* Typing Animation */
+@keyframes typing {
+    from {
+      width: 0;
+    }
+  }
+  
+  .animate__animated {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+  }
+  
+  .animate__fadeInUp {
+    animation-name: fadeInUp;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 50%, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  
+  .animate__fadeInDown {
+    animation-name: fadeInDown;
+  }
+  
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translate3d(0, -50%, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  
+  /* Add more animations as needed */
+  
+  /* Rest of your CSS styles */
