@@ -220,8 +220,8 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         }
         
         pageContent.push(buildTitle(2, "2. Progress chart"));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 470));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 470));
         createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
         
         // ----------------------------------------Time Distribution && Well Activity----------------------------------------
@@ -230,45 +230,45 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         pageContent.push(buildTitle(2, "3. Time Distribution"));
         pageContent.push(buildTable(EOWRData['time_distribution']['time_distribution']));
         pageContent.push(buildTitle(2, "4. Well Activity"));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 470));
         createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
         
         // ----------------------------------------Time Distribution per phase && NPT analysis----------------------------------------
         pageNumber += 1;
         pageContent = [];
         pageContent.push(buildTitle(2, "5. Time Distribution per phase"));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 470));
         
         pageContent.push(buildTitle(1, "III. NPT Analysis"));
         pageContent.push(buildTitle(2, "1. PT VS NPT"));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 470));
         createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
         
         // ---------------------------------------- NPT vs section && NPT vs category----------------------------------------
         pageNumber += 1;
         pageContent = [];
         pageContent.push(buildTitle(2, "2. NPT VS Section"));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 470));
         pageContent.push(buildTitle(2, "3. NPT VS Category"));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 470));
         createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
         
         // ---------------------------------------- NPT vs section && NPT vs category----------------------------------------
         pageNumber += 1;
         pageContent = [];
         pageContent.push(buildTitle(2, "4. NPT VS Sub-category"));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 470));
         pageContent.push(buildTitle(2, "5. NPT Details"));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 500));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 400));
         createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
 
         // ---------------------------------------- NPT vs section && NPT vs category----------------------------------------
         pageNumber += 1;
         pageContent = [];
         pageContent.push(buildTitle(2, "6. NPT VS Service company"));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 500));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 400));
         pageContent.push(buildTitle(2, "7. NPT Down hole problems"));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 500));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 400));
         createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
         
         
@@ -341,10 +341,10 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
                 pageNumber += 1;
                 pageContent = [];
                 pageContent.push(buildTitle(3, "Run Casing (Broomsticks)", false, title_3_style));
-                pageContent.push(buildChart(run_casing_img, 500))
+                pageContent.push(buildChart(run_casing_img, 400))
                 
                 pageContent.push(buildTitle(3, "Ream & Back Ream Interval", false, title_3_style));
-                pageContent.push(buildChart(ream_backream_img, 500))
+                pageContent.push(buildChart(ream_backream_img, 400))
                 
                 createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
             }
@@ -402,10 +402,10 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         pageNumber += 1;
         pageContent = [];
         pageContent.push(buildTitle(2, "3. Drilling Events Category", false));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 470));
         
         pageContent.push(buildTitle(2, "4. Drilling Events Sub-category", false));
-        pageContent.push(buildChart(exportedCharts[chart_index+=1], 510));
+        pageContent.push(buildChart(exportedCharts[chart_index+=1], 470));
 
         createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
         

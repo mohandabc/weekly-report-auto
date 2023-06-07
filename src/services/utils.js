@@ -151,7 +151,7 @@ export const buildChart = (chart, size) => {
   if (chart === undefined) return null
   return {
     image:chart,
-    margin : [0,0,0,10],
+    margin : [0,0,5,10],
     width : size,
     alignment:'center',
   }
@@ -272,7 +272,7 @@ export const buildTable = (data, type='simple', customLayout = undefined, custom
       table,
       { width: '*', text: '' }
     ],
-    margin:[0,0,0,20]
+    margin:[0,0,15,20]
   }
 
 }
