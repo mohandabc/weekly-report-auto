@@ -380,11 +380,11 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         const put_in_same_page = (last_chunk_len + events_caused_len) <= (n_lines_per_page - 2); //we leave 2 lines worth of space for the title
         
         for (let i = 0; i < n_parts; i += 1) {
-            pageContent.push(buildTable(EOWRData['drilling_events_kpi']['events_kpi_res'].slice(i*n_lines_per_page, i*n_lines_per_page + n_lines_per_page), 'grouped', event_custom_layout));
+            pageContent.push(buildTable(EOWRData['drilling_events_kpi']['events_kpi_res'].slice(i*n_lines_per_page, i*n_lines_per_page + n_lines_per_page), 'grouped', event_custom_layout, [35,30,50,70,50,50,50,70,35]));
             
             if (i === (n_parts-1) && put_in_same_page){ //last part of data and there is enough space
                 pageContent.push(buildTitle(2, "2. Drilling Events Caused NPT", false));
-                pageContent.push(buildTable(EOWRData['drilling_events_kpi']['events_caused_npt_res'], 'grouped', event_custom_layout));
+                pageContent.push(buildTable(EOWRData['drilling_events_kpi']['events_caused_npt_res'], 'grouped', event_custom_layout, [35,30,50,50,40,40,55,50,60,35]));
             }
             createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
             pageNumber += 1;
@@ -392,7 +392,7 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         }
         if(put_in_same_page === false){
             pageContent.push(buildTitle(2, "2. Drilling Events Caused NPT", false));
-            pageContent.push(buildTable(EOWRData['drilling_events_kpi']['events_caused_npt_res'], 'grouped', event_custom_layout));
+            pageContent.push(buildTable(EOWRData['drilling_events_kpi']['events_caused_npt_res'], 'grouped', event_custom_layout, [35,30,50,50,40,40,55,50,60,35]));
             createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
         }
         else{
