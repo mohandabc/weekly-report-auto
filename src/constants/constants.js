@@ -106,7 +106,7 @@ export const holeSectionMap = {
   imageKeys: ['ream_back_ream_16_1', 'ream_back_ream_16_2', 'ream_back_ream_16_3', 'ream_back_ream_16_4'],
   count: 4,
 },
-'12"': {
+'12"1/4': {
   imageKeys: ['ream_back_ream_12_1', 'ream_back_ream_12_2', 'ream_back_ream_12_3', 'ream_back_ream_12_4'],
   count: 4,
 },
