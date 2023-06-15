@@ -45,7 +45,7 @@ export const Table = ({title, id, tableData, size='small'})=>{
                     <tr className={`${index%2 === 0 ? "" : (darkMode ? "bg-stone-500" : "bg-slate-200")} ${row['Phase'] === 'Total' ? 'bg-stone-700' : ''}`} key={index}>
                     {
                       Object.entries(row).map((item, index) => 
-                        <td key={index} className={`px-auto py-2.5 text-center ${row['Phase'] === 'Total' ? 'text-white dark:text-black' : 'text-black'}`}>
+                        <td key={index} className={`px-auto py-2.5 text-center ${row['Phase'] === 'Total' ? 'font-bold text-white dark:text-black' : 'text-black'}`}>
                           {
                             item[1]
                           }

@@ -183,7 +183,7 @@ export class PieChart extends Chart {
         return chart;
 
         function hideSmall(ev) {
-            if (ev.target.dataItem && (ev.target.dataItem.values.value.percent < 1.5)) {
+            if (ev.target.dataItem && (ev.target.dataItem.values.value.percent < 3)) {
               ev.target.hide();
             }
             else {
