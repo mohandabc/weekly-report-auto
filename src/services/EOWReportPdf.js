@@ -442,15 +442,19 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
             return null;
         })
         
-        // ---------------------------------------- Ream & back ream ----------------------------------------
-        const bit_record_img = images[nextId('img')]
-        if (bit_record_img){
+        // ---------------------------------------- Bit Record ----------------------------------------
+        const imagesToProcess = ['img', 'img', 'img', 'img'];
+        const pageContentTemplate = [buildTitle(1, "X. Bit Record", false)];
+        
+        imagesToProcess.forEach((imageType) => {
+          const bit_record_img = images[nextId(imageType)];
+          if (bit_record_img) {
             pageNumber += 1;
-            pageContent = [];
-            pageContent.push(buildTitle(1, "X. Bit Record", false));
-            pageContent.push(buildChart(bit_record_img, 500))
+            const pageContent = [...pageContentTemplate];
+            pageContent.push(buildChart(bit_record_img, 500));
             createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES, "landscape");
-        }
+          }
+        });
 
         replaceTotalPages(doc.content, pageNumber)
         
