@@ -255,12 +255,12 @@ export const buildTable = (data, type='simple', customLayout = undefined, custom
   let table = {
     width: 'auto',
     table : {
-      headerRows:1,
-
-      body:tableBuilders[type](data)
-      },
+      headerRows: 1,
+      body: tableBuilders[type](data).map(row => row.map(cell => ({ ...cell, alignment: 'center' })))
+    },
     layout: {...tablesLayouts[type], ...customLayout}
   }
+
   if(customWidths !== undefined){
     table.table['widths'] = customWidths
   }
@@ -272,11 +272,9 @@ export const buildTable = (data, type='simple', customLayout = undefined, custom
       table,
       { width: '*', text: '' }
     ],
-    margin:[0,0,15,20]
+    margin:[0, 0, 15, 20]
   }
-
 }
-
 
 export const addElementToDoc = (doc, element, pageBreak = null, orientation) => {
   if (element === null || element === undefined) return
