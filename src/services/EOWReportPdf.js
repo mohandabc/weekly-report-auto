@@ -55,25 +55,26 @@ const replaceTotalPages = (docContent, total) => {
 }
 
 const buildTeamTable = (paragraph) => {
-    let [ose, teamLeaders] = paragraph.split('\n')
-    ose = ose.replace(/,/g, '\nOSE : ')
-    teamLeaders= teamLeaders.replace(/,/g, '\nTeam Leader : ')
+    console.log(paragraph);
+    const employees = paragraph.split('\n');
+  
+    const formattedEmployees = employees.map(employee => employee.trim());
+    
     const table = {
-        table : {
-        headerRows:1,
-        widths:[150, 300],
-        body:[
-                [{text : 'Prepared by', alignment:'left', font:'Arial', fontSize:16, colSpan:2}, {}],
-                [{}, {text:ose, font:'Arial', fontSize : 14, color: "#F05C40",fillColor:'#f3eeee', alignment : 'left'}],
-                [{}, {text:'filler', fontSize : 12, color: "#fff",fillColor:'#fff', alignment : 'left'}],
-                [{}, {text:teamLeaders, font:'Arial', fontSize : 14, color: "#F05C40",fillColor:'#f3eeee', alignment : 'left'}],
-            ],
-        },
-        layout:team_members_layout,
-    }
-      return table
-
-}
+      table: {
+        headerRows: 1,
+        widths: [150, 300],
+        body: [
+          [{ text: 'Prepared by', alignment: 'left', font: 'Arial', fontSize: 16, colSpan: 2 }, {}],
+          ...formattedEmployees.map(employee => [{}, { text: employee, font: 'Arial', fontSize: 14, color: '#F05C40', fillColor: '#f3eeee', alignment: 'left' }])
+        ],
+      },
+      layout: team_members_layout,
+    };
+  
+    return table;
+  };
+  
 
 export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
     items.p = 0

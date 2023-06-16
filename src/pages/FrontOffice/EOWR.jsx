@@ -110,11 +110,11 @@ export const EOWR = () => {
         return cleanedText;
       }
       
-    function formatEmployees(data) {
-        const oseEmployees = data.ose.map(name => `${name}`).join(', ');
-        const tlEmployees = data.tl.map(name => `${name}`).join(', ');
-        return `OSE: ${oseEmployees}\nTeam Leader: ${tlEmployees}`;
-    }
+      function formatEmployees(data) {
+        const oseEmployees = data.ose.map(name => `OSE : ${name}`);
+        const tlEmployees = data.tl.map(name => `Team Leader : ${name}`);
+        return oseEmployees.concat(tlEmployees).join('\n');
+      }
 
     return (
         <div className="App">
