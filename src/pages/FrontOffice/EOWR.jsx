@@ -7,7 +7,7 @@ import {generateEOWR} from '../../services/EOWReportPdf';
 import { ActionButton, ReportInputScreen, Chart, ImagePicker, Table, Paragraphe, MultiTable, Tabular} from '../../components';
 
 import { getData } from '../../api/api';
-import { DEFAULT_CONFIG_BAR_OPTIONS, runCasingMap, rbrIMap, holeSectionMap} from '../../constants/constants';
+import { DEFAULT_CONFIG_BAR_OPTIONS, runCasingMap, rbrIMap, holeSectionMap, bitRecordData} from '../../constants/constants';
 import { API_URL } from '../../constants/URI';
 import { loaderIsHidden } from '../../shared/globalState';
 
@@ -243,8 +243,11 @@ export const EOWR = () => {
                 }
                 </section>
                 <span className='text-xl px-4'>X. Bit Record</span>
-                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
-                    <ImagePicker id={nextId('img')} title="Bit Record" setImages = {setImages} imageData={EOWRData['eowr_snags']['bit_record']}></ImagePicker>
+                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`}
+                >
+                {bitRecordData.map((record, index) => (
+                    <ImagePicker key={nextId('img')} id={nextId('img')} title={record.title} setImages={setImages} imageData={EOWRData['eowr_snags'][record.key]}></ImagePicker>
+                ))}
                 </section>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
                     <Paragraphe id="team-members" title = "Team members"  text = {paragraphes['team-members']} onSave={handleParagrapheSave}/>

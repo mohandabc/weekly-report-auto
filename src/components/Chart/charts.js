@@ -143,7 +143,7 @@ export class PieChart extends Chart {
         series.dataFields.category = params?.category;
         series.ticks.template.disabled = true;
         series.alignLabels = false;
-        series.labels.template.text = '[bold]{value.formatNumber("#.#")}';
+        series.labels.template.text = '[bold]{value.formatNumber("#.##")}';
         series.labels.template.radius = am4core.percent(-25);
         series.labels.template.padding(0, 0, 0, 0);
         series.labels.template.fill = am4core.color('white');
@@ -151,7 +151,7 @@ export class PieChart extends Chart {
         series.ticks.template.events.on("visibilitychanged", hideSmall);
         series.labels.template.events.on("ready", hideSmall);
         series.labels.template.events.on("visibilitychanged", hideSmall);
-        series.slices.template.tooltipText = "{category}: {value.formatNumber('#.#')}";
+        series.slices.template.tooltipText = "{category}: {value.formatNumber('#.##')}";
         series.slices.template.stroke = am4core.color("#fff");
         series.slices.template.strokeWidth = 2;
         series.slices.template.strokeOpacity = 1;
@@ -183,7 +183,7 @@ export class PieChart extends Chart {
         return chart;
 
         function hideSmall(ev) {
-            if (ev.target.dataItem && (ev.target.dataItem.values.value.percent < 1.5)) {
+            if (ev.target.dataItem && (ev.target.dataItem.values.value.percent < 3)) {
               ev.target.hide();
             }
             else {

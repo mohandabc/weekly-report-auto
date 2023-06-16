@@ -127,3 +127,10 @@ export const holeSectionMap = {
   count: 4,
 },
 };
+
+export const bitRecordData = [
+  { title: "Bit Record (1)", key: "bit_record_1" },
+  { title: "Bit Record (2)", key: "bit_record_2" },
+  { title: "Bit Record (3)", key: "bit_record_3" },
+  { title: "Bit Record (4)", key: "bit_record_4" }
+];
