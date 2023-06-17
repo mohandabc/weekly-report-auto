@@ -111,9 +111,13 @@ export const EOWR = () => {
       }
       
       function formatEmployees(data) {
-        const oseEmployees = data.ose.map(name => `OSE : ${name}`);
-        const tlEmployees = data.tl.map(name => `Team Leader : ${name}`);
-        return oseEmployees.concat(tlEmployees).join('\n');
+        const oseEmployees = data.ose.map(name =>`${name}`);
+        const tlEmployees = data.tl.map(name =>`${name}`);
+        
+        const oseOutput = `OSEs:\n${oseEmployees.join('\n')}`;
+        const tlOutput = `Team Leaders:\n${tlEmployees.join('\n')}`;
+        
+        return `${oseOutput}\n\n${tlOutput}`;
       }
 
     return (
