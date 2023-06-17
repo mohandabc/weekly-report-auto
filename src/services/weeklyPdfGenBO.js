@@ -8,6 +8,7 @@ import { BACKGROUND } from '../constants/backgrounds';
 import {getChartByContainerId ,exportCharts, setupNewPage, createHeaderPage, createLastPage, addChartToPDF, createDoc, downloadPDF} from './utils';
 
 export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
+  return new Promise((resolve, reject) => {
     if(chartsToPrint.length === 0){
       return;
     }
@@ -90,6 +91,10 @@ export const generateWeeklyReport = (chartsToPrint, weeklyData, range) =>{
           createLastPage(doc);
 
           downloadPDF(doc, `Weekly_report_${range}`);
+          resolve(); // Resolve the Promise when PDF generation is completed
+        }).catch(error => {
+            reject(error);
+        });
       });
   }
 

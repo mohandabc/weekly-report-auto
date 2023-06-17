@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import {useRecoilState, useSetRecoilState} from 'recoil';
 import {chartsToPrintState, dateStartEndState, dailyDataState ,loaderIsHidden} from '../../shared/globalState';
 
-import { ActionButton, Chart, ReportInputScreen, Table} from '../../components';
+import { Chart, PDFButton, ReportInputScreen, Table} from '../../components';
 
 import {generateDailyReport} from '../../services/dailyPdfGenBO';
 import { getData } from '../../api/api';
@@ -64,11 +64,11 @@ export const BoDailyPage = () => {
             </ReportInputScreen>
             <div id="result-section" className={`bg-slate-300 dark:bg-zinc-900 ${Object.keys(dailyData).length === 0? "hidden":""}`}>
                 <div className='flex flex-row-reverse sticky top-14 px-10 py-4  z-40'>
-                    <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
+                    <PDFButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
                                     action={generateDailyReport} 
                                     args={[chartsToPrint, dailyData, range]}>
-                    </ActionButton>
+                    </PDFButton>
                 </div>
 
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >

@@ -2,6 +2,7 @@ export {Chart} from './Chart';
 export {DeliverableInputScreen} from './InputScreen';
 export {ReportInputScreen} from './InputScreen';
 export {ActionButton} from './ActionButton';
+export {PDFButton} from './PDFButton';
 export {Table} from './Table';
 export {Loader} from './Loader';
 export {ProtectedRoute} from "./ProtectedRoute";

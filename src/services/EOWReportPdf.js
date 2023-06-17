@@ -82,6 +82,7 @@ const buildTeamTable = (text) => {
   };
 
 export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
+    return new Promise((resolve, reject) => {
     items.p = 0
     items.img = 0
 
@@ -465,6 +466,10 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         replaceTotalPages(doc.content, pageNumber)
         
         downloadPDF(doc, `EOWR_${WELL}`);
+        resolve(); // Resolve the Promise when PDF generation is completed
+    }).catch(error => {
+        reject(error);
+    });
     })
     
     

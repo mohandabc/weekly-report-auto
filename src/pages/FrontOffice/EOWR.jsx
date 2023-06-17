@@ -4,7 +4,7 @@ import {useSetRecoilState} from 'recoil';
 
 import {generateEOWR} from '../../services/EOWReportPdf';
 
-import { ActionButton, ReportInputScreen, Chart, ImagePicker, Table, Paragraphe, MultiTable, Tabular} from '../../components';
+import { ActionButton, ReportInputScreen, Chart, ImagePicker, Table, Paragraphe, MultiTable, Tabular, PDFButton} from '../../components';
 
 import { getData } from '../../api/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS, runCasingMap, rbrIMap, holeSectionMap, bitRecordData} from '../../constants/constants';
@@ -133,12 +133,12 @@ export const EOWR = () => {
            :
            <div id="result-section" className={`bg-slate-300 dark:bg-zinc-900`}>
                 <div className='flex flex-row-reverse sticky top-14 px-10 py-4  z-40'>
-                    <ActionButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
+                    <PDFButton className=" bg-green-500 hover:bg-green-700 text-black font-bold text-base py-2 px-4 rounded" 
                                     text="PDF" 
                                     action={generateEOWR} 
                                     args={[chartsToPrint, images, EOWRData, paragraphes]}
                                     >
-                    </ActionButton>
+                    </PDFButton>
                 </div>
 
                 <span className='text-xl px-4'>I. Global overview</span>
