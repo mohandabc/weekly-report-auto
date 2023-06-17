@@ -38,7 +38,7 @@ export const EOWR = () => {
             'p-1': cleanHTML(data['eowr_snags']['high_value_interventions']),
             'p-2': cleanHTML(data['eowr_snags']['prevention_mitigation']),
             'p-3': cleanHTML(data['eowr_snags']['conclusion']),
-            'team-members': `OSE: [name 1], [name 2]\nTeam Leader: [name 1], [name 2]`
+            'team-members': formatEmployees(data['eowr_snags']['team_members'])
             });
             setIsHidden(true);
         });
@@ -110,6 +110,16 @@ export const EOWR = () => {
         return cleanedText;
       }
       
+      function formatEmployees(data) {
+        const oseEmployees = data.ose.map(name =>`${name}`);
+        const tlEmployees = data.tl.map(name =>`${name}`);
+        
+        const oseOutput = `OSEs:\n${oseEmployees.join('\n')}`;
+        const tlOutput = `Team Leaders:\n${tlEmployees.join('\n')}`;
+        
+        return `${oseOutput}\n\n${tlOutput}`;
+      }
+
     return (
         <div className="App">
             <ReportInputScreen 

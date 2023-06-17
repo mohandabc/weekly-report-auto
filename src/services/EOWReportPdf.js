@@ -54,26 +54,32 @@ const replaceTotalPages = (docContent, total) => {
     })
 }
 
-const buildTeamTable = (paragraph) => {
-    let [ose, teamLeaders] = paragraph.split('\n')
-    ose = ose.replace(/,/g, '\nOSE : ')
-    teamLeaders= teamLeaders.replace(/,/g, '\nTeam Leader : ')
+const buildTeamTable = (text) => {
+    const lines = text.split('\n');
+    const oseIndex = lines.findIndex(line => line.trim() === 'OSEs:');
+    const tlIndex = lines.findIndex(line => line.trim() === 'Team Leaders:');
+  
+    const ose = lines.slice(oseIndex + 1, tlIndex).map(item => ({ text: item }));
+    const tl = lines.slice(tlIndex + 1).map(item => ({ text: item }));
+  
     const table = {
-        table : {
-        headerRows:1,
-        widths:[150, 300],
-        body:[
-                [{text : 'Prepared by', alignment:'left', font:'Arial', fontSize:16, colSpan:2}, {}],
-                [{}, {text:ose, font:'Arial', fontSize : 14, color: "#F05C40",fillColor:'#f3eeee', alignment : 'left'}],
-                [{}, {text:'filler', fontSize : 12, color: "#fff",fillColor:'#fff', alignment : 'left'}],
-                [{}, {text:teamLeaders, font:'Arial', fontSize : 14, color: "#F05C40",fillColor:'#f3eeee', alignment : 'left'}],
-            ],
-        },
-        layout:team_members_layout,
-    }
-      return table
-
-}
+      table: {
+        headerRows: 1,
+        widths: [150, 300],
+        body: [
+          [{ text: 'Prepared by', alignment: 'left', font: 'Arial', fontSize: 16, colSpan: 2 },{},],
+          [{}, {ul: ['OSEs:',{ ul: ose, font: 'Arial', fontSize: 14, color: '#F05C40', fillColor: '#f3eeee', alignment: 'left', bold: false }],
+            font: 'Arial', fontSize: 14, color: '#F05C40', fillColor: '#f3eeee', alignment: 'left', type: 'square', bold: true}],
+          [{}, { text: 'filler', fontSize: 12, color: '#fff', fillColor: '#fff', alignment: 'left' }],
+          [{}, {ul: ['Team Leaders:',{ ul: tl, font: 'Arial', fontSize: 14, color: '#F05C40', fillColor: '#f3eeee', alignment: 'left', bold: false }],
+            font: 'Arial', fontSize: 14, color: '#F05C40', fillColor: '#f3eeee', alignment: 'left', type: 'square', bold: true}],
+        ],
+      },
+      layout: team_members_layout,
+    };
+  
+    return table;
+  };
 
 export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
     items.p = 0
