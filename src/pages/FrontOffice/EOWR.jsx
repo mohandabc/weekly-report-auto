@@ -35,10 +35,10 @@ export const EOWR = () => {
             let data = res.result;
             setEOWRData({...data} || {});
             setParagraphes({
-            'p-1': cleanHTML(data['eowr_snags']['high_value_interventions']),
-            'p-2': cleanHTML(data['eowr_snags']['prevention_mitigation']),
-            'p-3': cleanHTML(data['eowr_snags']['conclusion']),
-            'team-members': formatEmployees(data['eowr_snags']['team_members'])
+                'p-1': cleanHTML(data['eowr_snags']['high_value_interventions']),
+                'p-2': cleanHTML(data['eowr_snags']['prevention_mitigation']),
+                'p-3': cleanHTML(data['eowr_snags']['conclusion']),
+                'team-members': formatEmployees(data['eowr_snags']['team_members']) || "Not specified"
             });
             setIsHidden(true);
         });
@@ -103,6 +103,10 @@ export const EOWR = () => {
     }
 
     function cleanHTML(html) {
+        if (!html) {
+          return "Not specified";
+        }
+        
         const parser = new DOMParser();
         const tmp = parser.parseFromString(html, 'text/html');
         const textContent = tmp.body.textContent || tmp.body.innerText;
@@ -111,12 +115,11 @@ export const EOWR = () => {
       }
       
       function formatEmployees(data) {
-        const oseEmployees = data.ose.map(name =>`${name}`);
-        const tlEmployees = data.tl.map(name =>`${name}`);
-        
+        const oseEmployees = data?.ose?.map(name => `${name}`) || ["Not specified"];
+        const tlEmployees = data?.tl?.map(name => `${name}`) || ["Not specified"];
         const oseOutput = `OSEs:\n${oseEmployees.join('\n')}`;
         const tlOutput = `Team Leaders:\n${tlEmployees.join('\n')}`;
-        
+      
         return `${oseOutput}\n\n${tlOutput}`;
       }
 
