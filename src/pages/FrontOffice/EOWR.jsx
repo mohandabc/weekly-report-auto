@@ -35,9 +35,9 @@ export const EOWR = () => {
             let data = res.result;
             setEOWRData({...data} || {});
             setParagraphes({
-                'p-1': cleanHTML(data['eowr_snags']['high_value_interventions']) || "Not specified",
-                'p-2': cleanHTML(data['eowr_snags']['prevention_mitigation']) || "Not specified",
-                'p-3': cleanHTML(data['eowr_snags']['conclusion']) || "Not specified",
+                'p-1': cleanHTML(data['eowr_snags']['high_value_interventions']),
+                'p-2': cleanHTML(data['eowr_snags']['prevention_mitigation']),
+                'p-3': cleanHTML(data['eowr_snags']['conclusion']),
                 'team-members': formatEmployees(data['eowr_snags']['team_members']) || "Not specified"
             });
             setIsHidden(true);
