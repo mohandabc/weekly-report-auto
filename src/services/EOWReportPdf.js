@@ -458,7 +458,7 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
           if (bit_record_img) {
             pageNumber += 1;
             const pageContent = [...pageContentTemplate];
-            pageContent.push(buildChart(bit_record_img, 500));
+            pageContent.push(buildChart(bit_record_img, 700));
             createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES, "landscape");
           }
         });
