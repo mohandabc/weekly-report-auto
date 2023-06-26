@@ -216,12 +216,12 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         if (data !== undefined){
             const plan = data['Planned days']
             const actual = data['Actual days']
-            const gainLoss = data['Gained']
+            const gainLoss = data['Gained'] || data['Loss']
             const npt  = data['NPT']
 
-            let last_sentence = gainLoss < 0 ? ` and ${Math.abs(gainLoss)-npt} days are considered as ILT (invisible lost time)`:''
+            let last_sentence = gainLoss < 0 && Math.abs(gainLoss)-npt > 0 ? ` and ${Math.abs(gainLoss)-npt} days are considered as ILT (invisible lost time)`:''
             let text = `The drilling and well completion plan was estimated at ${plan} days, and the well was completed over ${actual} days. 
-            The total number of days ${gainLoss>0 ? 'gained' : 'lost'} is calculated at ${Math.abs(gainLoss)} days, which represents (${Math.abs(gainLoss)/plan*100}%) of the 
+            The total number of days ${gainLoss>0 ? 'gained' : 'lost'} is calculated at ${Math.abs(gainLoss)} days, which represents (${(Math.abs(gainLoss)/plan*100).toFixed(2)}%) of the 
             planned well, where ${npt} days are confirmed as NPT${last_sentence}.`
             pageContent.push(buildParagraph(text));
         }
