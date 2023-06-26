@@ -291,17 +291,24 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
             pageContent.push(buildTitle(2, "1. Tripping out and Connection Time KPI's"));
             pageContent.push(buildTable(EOWRData['connection_details']['tripping_time']['pooh'], 'grouped', event_custom_layout));
         }
-        if(EOWRData['connection_details']['tripping_time']['rih'].length > 3){
-            pageContent.push(buildTitle(2, "2. Tripping In and Connection Time KPI's"));
-            pageContent.push(buildTable(EOWRData['connection_details']['tripping_time']['rih'], 'grouped', event_custom_layout));
-        }
-
         if(pageContent.length>0){ 
             createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
         }
         else{
             pageNumber -= 1
         }
+
+        pageNumber += 1;
+        pageContent = [];
+        if(EOWRData['connection_details']['tripping_time']['rih'].length > 3){
+            pageContent.push(buildTitle(2, "2. Tripping In and Connection Time KPI's"));
+            pageContent.push(buildTable(EOWRData['connection_details']['tripping_time']['rih'], 'grouped', event_custom_layout));
+            createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
+        }
+        else{
+            pageNumber -= 1;
+        }
+
         
         
         // ---------------------------------------- Real Time Impact & Prevention ----------------------------------------
@@ -348,10 +355,10 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
                 pageNumber += 1;
                 pageContent = [];
                 pageContent.push(buildTitle(3, "Run Casing (Broomsticks)", false, title_3_style));
-                pageContent.push(buildChart(run_casing_img, 400))
+                pageContent.push(buildChart(run_casing_img, 440))
                 
                 pageContent.push(buildTitle(3, "Ream & Back Ream Interval", false, title_3_style));
-                pageContent.push(buildChart(ream_backream_img, 400))
+                pageContent.push(buildChart(ream_backream_img, 440))
                 
                 createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
             }
@@ -422,44 +429,34 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         pageContent = [];
         pageContent.push(buildTitle(1, "IX. Ream & Back Ream", false));
         EOWRData['section_summary']?.map((section, index)=> {
-            
-            const ream_backream_img_1 = images[nextId('img')]
-            const ream_backream_img_2 = images[nextId('img')]
-            const ream_backream_img_3 = images[nextId('img')]
-            const ream_backream_img_4 = images[nextId('img')]
-            
-            if(ream_backream_img_1 || ream_backream_img_2){
-                pageContent.push(buildTitle(3,`${section['Hole Section']}`, false));
-                pageContent.push(buildChart(ream_backream_img_1, 500))
-                pageContent.push(buildChart(ream_backream_img_2, 500))
-                pageNumber += 1;
-                createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
-    
-                pageContent = [];
-            }
 
-            if(ream_backream_img_3 || ream_backream_img_4){
-                pageContent.push(buildChart(ream_backream_img_3, 500))
-                pageContent.push(buildChart(ream_backream_img_4, 500))
-                pageNumber += 1;
-                createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
+            const ream_backream_img_ids = [nextId('img'), nextId('img'), nextId('img'), nextId('img')];
 
-                pageContent = [];
-            }
+            pageContent.push(buildTitle(3,`${section['Hole Section']}`, false));
+            ream_backream_img_ids.forEach(id =>{
+                if(images[id]){
+                    pageNumber += 1;
+                    pageContent.push(buildChart(images[id], 480))
+                    createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
+                    pageContent = [];
+                }
+            })
+            
             return null;
         })
         
         // ---------------------------------------- Bit Record ----------------------------------------
         const imagesToProcess = ['img', 'img', 'img', 'img'];
-        const pageContentTemplate = [buildTitle(1, "X. Bit Record", false)];
         
+        pageContent = [];
+        pageContent.push(buildTitle(1, "X. Bit Record", false));
         imagesToProcess.forEach((imageType) => {
           const bit_record_img = images[nextId(imageType)];
           if (bit_record_img) {
             pageNumber += 1;
-            const pageContent = [...pageContentTemplate];
             pageContent.push(buildChart(bit_record_img, 700));
             createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES, "landscape");
+            pageContent = [];
           }
         });
 

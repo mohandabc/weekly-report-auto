@@ -259,7 +259,7 @@ export const EOWR = () => {
                 <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`}
                 >
                 {bitRecordData.map((record, index) => (
-                    <ImagePicker key={nextId('img')} id={nextId('img')} title={record.title} setImages={setImages} imageData={EOWRData['eowr_snags'][record.key]}></ImagePicker>
+                    <ImagePicker  id={nextId('img')} key={nextId('img', false)} title={record.title} setImages={setImages} imageData={EOWRData['eowr_snags'][record.key]}></ImagePicker>
                 ))}
                 </section>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`} >
