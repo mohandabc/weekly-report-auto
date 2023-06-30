@@ -337,11 +337,16 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         pageContent = [];
         pageContent.push(buildTitle(1, "VI. Section Summary"));
         EOWRData['section_summary']?.map((section, index)=> {
+            const {description, reference,  ...section_param} = section;
+            
+            const regex = /ST\d+/g;
+            const matches = reference.match(regex);
+            const sidetrack = (matches=== null) ? '' : matches[0]
+
             const title_3_style = {alignment:'center', color:'#F05C40', bold:true, decoration:''}
-            pageContent.push(buildTitle(2, `${index+1}. ${section['Hole Section']}`));
+            pageContent.push(buildTitle(2, `${index+1}. ${section['Hole Section']} ${sidetrack}`));
 
             pageContent.push(buildTitle(3, "Section Overview", false, title_3_style));
-            const {description, ...section_param} = section;
             pageContent.push(buildTable([section_param], 'one_row'));
             
             pageContent.push(buildTitle(3, "Operation summary & Results", false, title_3_style));
