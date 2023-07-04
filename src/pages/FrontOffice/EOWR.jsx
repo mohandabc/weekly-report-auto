@@ -214,10 +214,10 @@ export const EOWR = () => {
                         const sidetrack = (matches=== null) ? '' : matches[0]
 
                         // search in the snags sections the section that matches the phase and sidetrack of the current section summary
-                        const snags = EOWRData['eowr_snags']['sections'].find(s => (s.section === hs && s.SideTrack === sidetrack))
+                        const snags = EOWRData['eowr_snags']?.['sections']?.find(s => (s.section === hs && s.SideTrack === sidetrack))
 
-                        const casing_run_img = snags['run_casing']
-                        const ream_back_ream_interval_img = snags['ream_back_ream_interval']
+                        const casing_run_img = snags?.['run_casing']
+                        const ream_back_ream_interval_img = snags?.['ream_back_ream_interval']
                         
                         delete section['reference'];
                         return (
