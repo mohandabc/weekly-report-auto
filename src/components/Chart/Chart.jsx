@@ -4,7 +4,7 @@ import { BarChart, PieChart, ClusteredBarChart, StackedBarChart, DateAxes } from
 import { darkModeState } from "../../shared/globalState";
 import gear from '../../assets/gear.svg';
 
-export const Chart = ({title, id, chartData, chartType, dashboard}) => {
+export const Chart = ({title, id, chartData, chartType, height="500px"}) => {
   const divID = id.toString();
   const [type, setType] = useState(chartType);
   const darkMode = useRecoilValue(darkModeState);
@@ -27,13 +27,7 @@ export const Chart = ({title, id, chartData, chartType, dashboard}) => {
                     'stroke-color' : null,
                   };
     
-    if (dashboard){
-      options['title-color'] = darkMode ? "#fff" : "#fff";
-      options['label-color'] = "#fff";
-      options['value-color'] = darkMode ? "#fff" : "#fff";
-      options['stroke-color'] = "#fff";
-    }
-    
+   
     if(type === "Pie"){ 
       chart = new PieChart(chartData, divID, title, options).chart; 
     }
@@ -52,11 +46,9 @@ export const Chart = ({title, id, chartData, chartType, dashboard}) => {
   });
 
   return (
-        <div className={dashboard ? 
-                        `h-120 pb-5  rounded-lg w-full`
-                      :`h-120 pb-5 bg-stone-100 dark:bg-stone-400 rounded-lg shadow w-full`}>
+        <div className={`h-[${height}] pb-5 bg-stone-100 dark:bg-stone-400 rounded-lg shadow w-full`}>
               {
-                (type==='Pie' || type === 'Bar') && !dashboard ? 
+                (type==='Pie' || type === 'Bar') ? 
                 <div>
                   <img src={gear} onClick={changeType} className="px-2 py-2 w-10 hover:cursor-pointer hover:animate-spin" alt="..."></img>
                 </div>
@@ -64,7 +56,7 @@ export const Chart = ({title, id, chartData, chartType, dashboard}) => {
               }
               {(chartData === undefined || chartData.length === 0) ? 
                     <h3 className='text-black text-center mt-36'>No Data To Display for <span className='italic font-normal'>{title}</span></h3> 
-                  : <div className='inline-block mx-auto h-full w-full' id={divID}>
+                  : <div className='inline-block mx-auto h-full w-full pb-5' id={divID}>
                   
                   </div>}
                   

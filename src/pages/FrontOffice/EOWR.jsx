@@ -146,7 +146,7 @@ export const EOWR = () => {
                 </div>
 
                 <span className='text-xl px-4'>I. Global overview</span>
-                <section id="main" className={`align-middle grid grid-col-2 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`} >
+                <section className={`align-middle grid grid-col-2 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`} >
                     <ImagePicker id={nextId('img')} title="1 - Well Information" setImages = {setImages} imageData={EOWRData['eowr_snags']['well_information']} ></ImagePicker>
                     <ImagePicker id={nextId('img')} title="2 - Well Architecture" setImages = {setImages} imageData={EOWRData['eowr_snags']['well_architecture']}></ImagePicker>
                     <ImagePicker id={nextId('img')} title="3 - Well Location Map" setImages = {setImages} imageData={EOWRData['eowr_snags']['well_location_map']}></ImagePicker>
@@ -179,10 +179,10 @@ export const EOWR = () => {
                     <Chart title = "NPT vs Category" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_categories']} chartType="Pie"/>
                     <Chart title = "NPT vs Sub-Category" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_subcategories']} chartType="Pie"/>
                 </section>
-                <section id="main" className={`align-middle grid grid-col-3 xl:grid-cols-3 gap-4 place-items-top px-2 pb-4`} >
-                    <Chart title = "NPT Details" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_details']} chartType="Pie"/>
-                    <Chart title = "NPT vs Service companies" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_companies']} chartType="Pie"/>
-                    <Chart title = "NPT Down Hole Problems" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_downhole']} chartType="Pie"/>
+                <section className={`align-middle grid grid-col-3 xl:grid-cols-3 gap-4 place-items-top px-2 pb-4`} >
+                    <Chart title = "NPT Details" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_details']} chartType="Pie" height="600px"/>
+                    <Chart title = "NPT vs Service companies" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_companies']} chartType="Pie" height="600px"/>
+                    <Chart title = "NPT Down Hole Problems" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_downhole']} chartType="Pie" height="600px"/>
                 </section>
 
                 <span className='text-xl px-4'>IV. Drilling & Tripping connection time KPI's</span>

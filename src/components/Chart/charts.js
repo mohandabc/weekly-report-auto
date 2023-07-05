@@ -174,7 +174,7 @@ export class PieChart extends Chart {
         chart.data = data;
       
         let legend = new am4charts.Legend();
-        legend.position = "right";
+        legend.position = "bottom";
         legend.labels.template.fontSize = 11;
         legend.valueLabels.template.fontSize = 11;
         chart.legend = legend;
