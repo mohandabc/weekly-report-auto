@@ -87,12 +87,12 @@ export const createDoc = (size, orientation, margin) =>{
 export const buildPageHeader = (orientation) =>{
   return {
     columns: [{
-        image: SMARTEST_LOGO,
-        absolutePosition: {x:30 ,y: 20},
+        image: SONATRACH_LOGO,
+        absolutePosition: {x:30 ,y: 10},
         width: 160
         },{
-        image: SONATRACH_LOGO,
-        absolutePosition: {x:orientation==='portrait' ? 410 : 660 ,y: 10},
+        image: SMARTEST_LOGO,
+        absolutePosition: {x:orientation==='portrait' ? 410 : 660 ,y: 20},
         width: 160
     }],
     margin:[0,0,0,70]
@@ -146,13 +146,13 @@ export const buildTitle = (level, text, isTocItem=true, styles = {}) =>{
     tocItem: isTocItem,
   }
 }
-export const buildChart = (chart, size) => {
+export const buildChart = (chart, width, ratio=1) => {
 
   if (chart === undefined) return null
   return {
     image:chart,
     margin : [0,0,5,10],
-    width : size,
+    fit : [width, width*ratio],
     alignment:'center',
   }
 }
