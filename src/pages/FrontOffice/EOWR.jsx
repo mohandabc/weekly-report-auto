@@ -33,7 +33,6 @@ export const EOWR = () => {
         getData(API_URL, url, params)
         .then(res=> {
             let data = res.result;
-            console.log(data)
             setEOWRData({...data} || {});
             setParagraphes({
                 'p-1': cleanHTML(data['eowr_snags']['high_value_interventions']),
@@ -46,7 +45,7 @@ export const EOWR = () => {
     }
 
     useEffect(()=>{
-        // console.log(paragraphes)
+        console.log(EOWRData)
 
     })
 
@@ -180,9 +179,9 @@ export const EOWR = () => {
                     <Chart title = "NPT vs Sub-Category" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_subcategories']} chartType="Pie"/>
                 </section>
                 <section className={`align-middle grid grid-col-3 xl:grid-cols-3 gap-4 place-items-top px-2 pb-4`} >
-                    <Chart title = "NPT Details" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_details']} chartType="Pie" height="600px"/>
-                    <Chart title = "NPT vs Service companies" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_companies']} chartType="Pie" height="600px"/>
-                    <Chart title = "NPT Down Hole Problems" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_downhole']} chartType="Pie" height="600px"/>
+                    <Chart title = "NPT Details" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_details']} chartType="Pie" className="h-150"/>
+                    <Chart title = "NPT vs Service companies" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_companies']} chartType="Pie" className="h-150"/>
+                    <Chart title = "NPT Down Hole Problems" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_downhole']} chartType="Pie" className="h-150"/>
                 </section>
 
                 <span className='text-xl px-4'>IV. Drilling & Tripping connection time KPI's</span>
