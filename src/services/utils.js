@@ -87,12 +87,12 @@ export const createDoc = (size, orientation, margin) =>{
 export const buildPageHeader = (orientation) =>{
   return {
     columns: [{
-        image: SMARTEST_LOGO,
-        absolutePosition: {x:30 ,y: 20},
+        image: SONATRACH_LOGO,
+        absolutePosition: {x:30 ,y: 10},
         width: 160
         },{
-        image: SONATRACH_LOGO,
-        absolutePosition: {x:orientation==='portrait' ? 410 : 660 ,y: 10},
+        image: SMARTEST_LOGO,
+        absolutePosition: {x:orientation==='portrait' ? 410 : 660 ,y: 20},
         width: 160
     }],
     margin:[0,0,0,70]
@@ -125,7 +125,7 @@ export const buildTitle = (level, text, isTocItem=true, styles = {}) =>{
     font:'Arial',
     bold : level===1 ? true : false,
     fontSize:level === 1 ? 18 : level === 2 ? 14 : 12,
-    margin:level===1? [10, 0, 0, 10] : level === 2 ? [20,0,0, 15] : [0, 0, 0, 10],
+    margin:level===1? [10, 0, 0, 10] : level === 2 ? [20,0,0, 15] : [25, 0, 0, 10],
     color:'#c00000',
     background:'',
     decoration : 'underline', 
@@ -146,13 +146,13 @@ export const buildTitle = (level, text, isTocItem=true, styles = {}) =>{
     tocItem: isTocItem,
   }
 }
-export const buildChart = (chart, size) => {
+export const buildChart = (chart, width, ratio=1) => {
 
-  if (chart === undefined) return null
+  if (chart === undefined) return buildParagraph('N/A', {fontSize:18, alignment:'center', margin:[0, 50,0,0]})
   return {
     image:chart,
-    margin : [0,0,0,10],
-    width : size,
+    margin : [0,0,5,10],
+    fit : [width, width*ratio],
     alignment:'center',
   }
 }
@@ -221,9 +221,11 @@ const buildGroupedTableBody = (data) => {
   let tableBody = [];
 
   // Very important control to avoid a bug when we slice data in the wrong place
-  let headerData = data[1]
-  if(data[1].title !== undefined){
-    headerData = data[0]
+  let headerData = data[0]
+  if(data[0].title !== undefined){
+    if(data.length === 1) return tableBody;
+
+    headerData = data[1]
   }
   const headers = getTableHeaders(headerData);
   tableBody.push(headers.map(title=>({text:title,fontSize:11})));
@@ -243,8 +245,8 @@ const buildGroupedTableBody = (data) => {
   return tableBody;
 }
 export const buildTable = (data, type='simple', customLayout = undefined, customWidths=undefined) => {
-  if(data.length <= 0 || (data.length <= 1 && type==='grouped')) 
-    return buildParagraph('NO DATA', {fontSize:20, alignment:'center'})
+  if(data.length <= 0) 
+    return buildParagraph('N/A', {fontSize:18, alignment:'center', margin:[0, 50,0,0]})
 
   const tableBuilders = {
     'simple' : buildSimpleTableBody,
@@ -255,12 +257,12 @@ export const buildTable = (data, type='simple', customLayout = undefined, custom
   let table = {
     width: 'auto',
     table : {
-      headerRows:1,
-
-      body:tableBuilders[type](data)
-      },
+      headerRows: 1,
+      body: tableBuilders[type](data).map(row => row.map(cell => ({ ...cell, alignment: 'center' })))
+    },
     layout: {...tablesLayouts[type], ...customLayout}
   }
+
   if(customWidths !== undefined){
     table.table['widths'] = customWidths
   }
@@ -272,11 +274,9 @@ export const buildTable = (data, type='simple', customLayout = undefined, custom
       table,
       { width: '*', text: '' }
     ],
-    margin:[0,0,0,20]
+    margin:[0, 0, 15, 20]
   }
-
 }
-
 
 export const addElementToDoc = (doc, element, pageBreak = null, orientation) => {
   if (element === null || element === undefined) return

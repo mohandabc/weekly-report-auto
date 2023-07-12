@@ -67,3 +67,70 @@ export const predefinedRanges = [
     placement: 'left'
   },
 ];
+
+// End Of well Report constants
+export const runCasingMap = {
+  '36"': 'run_casing36',
+  '26"': 'run_casing26',
+  '17"1/2': 'run_casing17',
+  '16"': 'run_casing16',
+  '12"1/4': 'run_casing12',
+  '8"1/2': 'run_casing8',
+  '6"': 'run_casing6',
+  '3"3/4': 'run_casing3',
+};
+export const rbrIMap = {
+  '36"': 'ream_back_ream_interval36',
+  '26"': 'ream_back_ream_interval26',
+  '17"1/2': 'ream_back_ream_interval17',
+  '16"': 'ream_back_ream_interval16',
+  '12"1/4': 'ream_back_ream_interval12',
+  '8"1/2': 'ream_back_ream_interval8',
+  '6"': 'ream_back_ream_interval6',
+  '3"3/4': 'ream_back_ream_interval3',
+};
+export const holeSectionMap = {
+'36"': {
+  imageKeys: ['ream_back_ream_36_1', 'ream_back_ream_36_2', 'ream_back_ream_36_3', 'ream_back_ream_36_4'],
+  count: 4,
+},
+'26"': {
+  imageKeys: ['ream_back_ream_26_1', 'ream_back_ream_26_2', 'ream_back_ream_26_3', 'ream_back_ream_26_4'],
+  count: 4,
+},
+'17"1/2': {
+  imageKeys: ['ream_back_ream_17_1', 'ream_back_ream_17_2', 'ream_back_ream_17_3', 'ream_back_ream_17_4'],
+  count: 4,
+},
+'16"': {
+  imageKeys: ['ream_back_ream_16_1', 'ream_back_ream_16_2', 'ream_back_ream_16_3', 'ream_back_ream_16_4'],
+  count: 4,
+},
+'12"1/4': {
+  imageKeys: ['ream_back_ream_12_1', 'ream_back_ream_12_2', 'ream_back_ream_12_3', 'ream_back_ream_12_4'],
+  count: 4,
+},
+'8"1/2': {
+  imageKeys: ['ream_back_ream_8_1', 'ream_back_ream_8_2', 'ream_back_ream_8_3', 'ream_back_ream_8_4'],
+  count: 4,
+},
+'6"': {
+  imageKeys: ['ream_back_ream_6_1', 'ream_back_ream_6_2', 'ream_back_ream_6_3', 'ream_back_ream_6_4'],
+  count: 4,
+},
+'3"3/4': {
+  imageKeys: ['ream_back_ream_3_1', 'ream_back_ream_3_2', 'ream_back_ream_3_3', 'ream_back_ream_3_4'],
+  count: 4,
+},
+'Completion': {
+  imageKeys: ['ream_back_ream_completion_1', 'ream_back_ream_completion_2', 'ream_back_ream_completion_3', 'ream_back_ream_completion_4'],
+  count: 4,
+},
+};
+
+export const bitRecordData = [
+  { title: "Bit Record (1)", key: "bit_record_1" },
+  { title: "Bit Record (2)", key: "bit_record_2" },
+  { title: "Bit Record (3)", key: "bit_record_3" },
+  { title: "Bit Record (4)", key: "bit_record_4" }
+];

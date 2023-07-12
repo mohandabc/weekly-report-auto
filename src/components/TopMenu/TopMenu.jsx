@@ -57,14 +57,14 @@ export const TopMenu = ({ onSelect, activeKey, ...props }) => {
             Front-Office Reports
           </Nav.Item>
         </Nav.Menu>
-        <Nav.Menu title="Deliverables">
+        {/* <Nav.Menu title="Deliverables">
           <Nav.Item as={Link} to="/run" eventKey="4">
             Run Deliverable
           </Nav.Item>
           <Nav.Item as={Link} to="/data" eventKey="5">
             Data Uploader
           </Nav.Item>
-        </Nav.Menu>
+        </Nav.Menu> */}
         <Nav.Menu title="About">
           <Nav.Item eventKey="6">Company</Nav.Item>
           <Nav.Item eventKey="7">Team</Nav.Item>

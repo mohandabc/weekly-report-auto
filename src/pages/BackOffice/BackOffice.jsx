@@ -28,12 +28,12 @@ export const BackOffice = () => {
                 title="BO Weekly Report" 
                 description="Automatically Generate a back office weekly report for a specific week"
               />
-              <ReportCard 
+              {/* <ReportCard 
                 to=""
                 title="BO Monthly Report" 
                 description="Automatically Generate a back office monthly report for a specific week"
                 notReady
-              />
+              /> */}
         </div>
         
       </header>

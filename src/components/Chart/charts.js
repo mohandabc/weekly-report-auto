@@ -105,7 +105,7 @@ class Chart
 export class PieChart extends Chart {
     buildChart(data, container, title, options) {
         /**
-         * Please respect the following structure and labes names : [{category:?, value:?}...]
+         * Please respect the following structure and labels names : [{category:?, value:?}...]
             // Example data format:
                 [
                     {
@@ -143,7 +143,7 @@ export class PieChart extends Chart {
         series.dataFields.category = params?.category;
         series.ticks.template.disabled = true;
         series.alignLabels = false;
-        series.labels.template.text = '[bold]{value.formatNumber("#.#")}';
+        series.labels.template.text = '[bold]{value.formatNumber("#.##")}';
         series.labels.template.radius = am4core.percent(-25);
         series.labels.template.padding(0, 0, 0, 0);
         series.labels.template.fill = am4core.color('white');
@@ -151,7 +151,7 @@ export class PieChart extends Chart {
         series.ticks.template.events.on("visibilitychanged", hideSmall);
         series.labels.template.events.on("ready", hideSmall);
         series.labels.template.events.on("visibilitychanged", hideSmall);
-        series.slices.template.tooltipText = "{category}: {value.formatNumber('#.#')}";
+        series.slices.template.tooltipText = "{category}: {value.formatNumber('#.##')}";
         series.slices.template.stroke = am4core.color("#fff");
         series.slices.template.strokeWidth = 2;
         series.slices.template.strokeOpacity = 1;
@@ -174,16 +174,17 @@ export class PieChart extends Chart {
         chart.data = data;
       
         let legend = new am4charts.Legend();
-        legend.position = "right";
+        legend.position = "bottom";
         legend.labels.template.fontSize = 11;
         legend.valueLabels.template.fontSize = 11;
         chart.legend = legend;
+        chart.legend.valueLabels.template.text = `{value.formatNumber('#.##')} ({value.percent.formatNumber('#.##')}%)`;
 
         chart.exporting.menu = new am4core.ExportMenu();
         return chart;
 
         function hideSmall(ev) {
-            if (ev.target.dataItem && (ev.target.dataItem.values.value.percent < 1.5)) {
+            if (ev.target.dataItem && (ev.target.dataItem.values.value.percent < 3)) {
               ev.target.hide();
             }
             else {
@@ -512,6 +513,9 @@ export class StackedBarChart extends Chart
         series.dataFields.valueY = field;
         series.dataFields.categoryX = "category";
         series.sequencedInterpolation = true;
+        if(color){
+            series.fill = color;
+        }
         
         // Make it stacked
         series.stacked = true;
@@ -523,14 +527,15 @@ export class StackedBarChart extends Chart
         var labelBullet = series.bullets.push(new am4charts.LabelBullet());
         labelBullet.label.text = "[bold]{valueY}";
         labelBullet.locationY = 0.5;
+        // labelBullet.locationX = name==='PT' ? 0.3 : 0.7;
         labelBullet.label.hideOversized = true;
-        labelBullet.label.fill = "#FFFFFF";
+        labelBullet.label.fill = "#FFF" //series.fill;
         
         return series;
         }
 
         createSeries("value1", "PT");
-        createSeries("value2", "NPT");
+        createSeries("value2", "NPT", "#587FBD");
 
 
         var chartTitle = chart.titles.create();
@@ -539,6 +544,15 @@ export class StackedBarChart extends Chart
         chartTitle.fill = options["title-color"];
         chartTitle.marginBottom = 30;
 
+        let legend = new am4charts.Legend();
+        legend.position = "bottom";
+        legend.labels.template.fontSize = 11;
+        legend.valueLabels.template.fontSize = 11;
+        chart.legend = legend;
+
+        chart.exporting.menu = new am4core.ExportMenu();
+
+        return chart;
     }
 }
 
@@ -599,7 +613,7 @@ export class DateAxes extends Chart
             series1.yAxis = valueAxis;
             series1.name = name1;
             series1.tooltipText = "{name}: [bold]{valueY}[/]";
-            series1.tensionX = 0.8;
+            // series1.tensionX = 0.8;
             series1.showOnInit = true;
             series1.stroke = color1;
             series1.tooltip.getFillFromObject = false;
@@ -612,7 +626,7 @@ export class DateAxes extends Chart
             series2.yAxis = valueAxis;
             series2.name = name2;
             series2.tooltipText = "{name}: [bold]{valueY}[/]";
-            series2.tensionX = 0.8;
+            // series2.tensionX = 0.8;
             series2.showOnInit = true;
             series2.stroke = color2;
             series2.tooltip.getFillFromObject = false;

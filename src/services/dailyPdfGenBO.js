@@ -8,6 +8,7 @@ import { BACKGROUND } from '../constants/backgrounds';
 import {getChartByContainerId ,exportCharts, setupNewPage, createHeaderPage, createStatsTablePage, createLastPage, addChartToPDF, createDoc, downloadPDF} from './utils';
 
 export const generateDailyReport = (chartsToPrint, dailyData, range) =>{
+  return new Promise((resolve, reject) => {
     if(chartsToPrint.length === 0){
       return;
     }
@@ -25,7 +26,7 @@ export const generateDailyReport = (chartsToPrint, dailyData, range) =>{
           var doc=createDoc('A4', 'landscape', [15,20,0,10]) 
 
           var displayedDate=new Date(range.split(" - ")[0]);
-          displayedDate.setDate(displayedDate.getDate()+1);
+          displayedDate.setDate(displayedDate.getDate());
           displayedDate=displayedDate.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"});
 
           const headerOptions = {
@@ -91,7 +92,10 @@ export const generateDailyReport = (chartsToPrint, dailyData, range) =>{
           createLastPage(doc);
 
           downloadPDF(doc, `Daily_report_${range}`)
-
+          resolve(); // Resolve the Promise when PDF generation is completed
+        }).catch(error => {
+            reject(error);
+        });
       });
   }
 

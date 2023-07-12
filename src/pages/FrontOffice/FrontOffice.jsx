@@ -29,7 +29,7 @@ export const FrontOffice = () => {
                 title="End Of Well Report (EOWR)" 
                 description="Automatically Generate End of Well Report"
               />
-            <ReportCard 
+            {/* <ReportCard 
                 to=""
                 title="FO Daily Report" 
                 description="Automatically Generate a front office daily report for a specific day"
@@ -46,7 +46,7 @@ export const FrontOffice = () => {
                 title="FO Monthly Report" 
                 description="Automatically Generate a front office weekly report for a specific month"
                 notReady
-              />
+              /> */}
          </div>
          
       </header>

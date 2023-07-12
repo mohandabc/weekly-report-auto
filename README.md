@@ -1,7 +1,3 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 ## Available Scripts
 
 In the project directory, you can run:
@@ -14,24 +10,29 @@ Runs the app in the development mode.\
 
 Builds the app for production to the `build` folder.\
 
-## Use Docker
+## Use Docker to deploy
 
-### `docker build --build-arg HTTP_PROXY=http://10.111.66.213:9999 --build-arg HTTPS_PROXY=http://10.111.66.213:9999 . -t reporting-image`
+- First build the react app with `npm run build`
+- Then run `docker build -t <reporting-image-name> . ` command to build the docker image.
+- If you want to deploy in the same machine where the image is build, skip to `Run container` step.
 
-Builds a docker image. The build step is done inside the container, that's why we pass proxy to the build command.
-Then, the built app will be copied to the nginx folder inside the container and use the nginx.config file.
+- ### Save docker image to a file
 
-### `docker save -o name.tar image_name`
+If the image needs to be transfered to another machine, you can save it to a .tar file with :
+`docker save -o filename.tar <reporting-image-name>`
 
-Save the image to a file in order to transfer it to the deployement machine
+- ### Load docker image from a file
 
-### `docker laod -i name.tar`
+You can load the image saved previously to another machine using :
+`docker laod -i filename.tar`
+after that you can use the `<reporting-image-name>` image to run a container
 
-Loads the image from tar file to docker in deployement machine
+- ### Run a container
 
-### `docker run --name reporting -p 3000:3000 -d reporting-image`
+To run a new container with an image use:
+`docker run --name <container-name> -p 3000:3000 -d <reporting-image-name>`
 
-Runs the image in a container. To expose port 80 instead use -p 80:3000 instead
+To expose port 80 instead use `-p 80:3000`.
 
 ## Add new fonts to pdfmake
 
@@ -41,17 +42,17 @@ In order to add new fonts to pdf make (default is roboto), follow these steps :
 
 - run this command
 
-### `node ./node_modules/pdfmake/build-vfs.js "./src/fonts/" "./src/fonts/vfs_fonts.js"`
+`node ./node_modules/pdfmake/build-vfs.js "./src/fonts/" "./src/fonts/vfs_fonts.js"`
 
 - This will create a compiled version of the fonts
 
-- import the custom fonts
+- In the js project, import the custom fonts
 
-### `import mypdfFonts from "../fonts/vfs_fonts";`
+`import mypdfFonts from "../fonts/vfs_fonts";`
 
 - add them the the default fonts of pdfmake
 
-### `pdfMake.vfs = {...pdfFonts.pdfMake.vfs, ...mypdfFonts.pdfMake.vfs};`
+`pdfMake.vfs = {...pdfFonts.pdfMake.vfs, ...mypdfFonts.pdfMake.vfs};`
 
 ### create fonts names
 
