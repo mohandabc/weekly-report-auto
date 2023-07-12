@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 const colors = require('tailwindcss/colors')
 module.exports = {
+  mode:'jit',
   darkMode:'class',
   content: [
     './src/**/*.{js,jsx,ts,tsx}',],
@@ -22,6 +23,7 @@ module.exports = {
       },
       height:{
         120 : '30rem',
+        150 : '40rem',
       },
       minHeight:{
         120 : '30rem'
