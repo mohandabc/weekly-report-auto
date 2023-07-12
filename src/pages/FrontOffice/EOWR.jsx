@@ -80,6 +80,8 @@ export const EOWR = () => {
                     let matchingObj = array2.find(obj => obj.Phase === phase);
                     if (matchingObj) {
                         array1[i]['On Bottom'] = matchingObj['On Bottom'];
+                    }else{
+                        array1[i]['On Bottom'] = '-'
                     }
                 }
             }
