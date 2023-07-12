@@ -45,7 +45,7 @@ export const EOWR = () => {
     }
 
     useEffect(()=>{
-        // console.log(paragraphes)
+        console.log(EOWRData)
 
     })
 
@@ -145,7 +145,7 @@ export const EOWR = () => {
                 </div>
 
                 <span className='text-xl px-4'>I. Global overview</span>
-                <section id="main" className={`align-middle grid grid-col-2 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`} >
+                <section className={`align-middle grid grid-col-2 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`} >
                     <ImagePicker id={nextId('img')} title="1 - Well Information" setImages = {setImages} imageData={EOWRData['eowr_snags']['well_information']} ></ImagePicker>
                     <ImagePicker id={nextId('img')} title="2 - Well Architecture" setImages = {setImages} imageData={EOWRData['eowr_snags']['well_architecture']}></ImagePicker>
                     <ImagePicker id={nextId('img')} title="3 - Well Location Map" setImages = {setImages} imageData={EOWRData['eowr_snags']['well_location_map']}></ImagePicker>
@@ -178,10 +178,10 @@ export const EOWR = () => {
                     <Chart title = "NPT vs Category" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_categories']} chartType="Pie"/>
                     <Chart title = "NPT vs Sub-Category" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_subcategories']} chartType="Pie"/>
                 </section>
-                <section id="main" className={`align-middle grid grid-col-3 xl:grid-cols-3 gap-4 place-items-top px-2 pb-4`} >
-                    <Chart title = "NPT Details" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_details']} chartType="Pie"/>
-                    <Chart title = "NPT vs Service companies" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_companies']} chartType="Pie"/>
-                    <Chart title = "NPT Down Hole Problems" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_downhole']} chartType="Pie"/>
+                <section className={`align-middle grid grid-col-3 xl:grid-cols-3 gap-4 place-items-top px-2 pb-4`} >
+                    <Chart title = "NPT Details" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_details']} chartType="Pie" className="h-150"/>
+                    <Chart title = "NPT vs Service companies" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_companies']} chartType="Pie" className="h-150"/>
+                    <Chart title = "NPT Down Hole Problems" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_downhole']} chartType="Pie" className="h-150"/>
                 </section>
 
                 <span className='text-xl px-4'>IV. Drilling & Tripping connection time KPI's</span>
@@ -202,16 +202,29 @@ export const EOWR = () => {
                 <span className='text-xl px-4'>VI. Section Summary</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
                 {
-                    EOWRData['section_summary']?.map((section, index) => {
+                    EOWRData['section_summary']?.map((sct, index) => {
+                        let section = {...sct};
                         const hs = section['Hole Section'];
-                        const run_casing = runCasingMap[hs];
-                        const rbrI = rbrIMap[hs];
+
+                        // search if the reference of section summary has a ST pattern
+                        const section_reference = section['reference']
+                        const regex = /ST\d+/g;
+                        const matches = section_reference.match(regex);
+                        const sidetrack = (matches=== null) ? '' : matches[0]
+
+                        // search in the snags sections the section that matches the phase and sidetrack of the current section summary
+                        const snags = EOWRData['eowr_snags']?.['sections']?.find(s => (s.section === hs && s.SideTrack === sidetrack))
+
+                        const casing_run_img = snags?.['run_casing']
+                        const ream_back_ream_interval_img = snags?.['ream_back_ream_interval']
+                        
+                        delete section['reference'];
                         return (
                             <React.Fragment key={`section-${index}`}>
                             <Tabular title={`Section Overview (${hs})`} id={getDivId('table')} tableData={Object.entries(section).map(([key, value]) => ({ [key]: value }))} columns={3} />
                             <Paragraphe id={`p-no-need${index * 100}`} title={`Operation Summary Results (${hs})`} text={section['description']} onSave={handleParagrapheSave} />
-                            <ImagePicker id={nextId('img')} title={`Run Casing (Broomstick) (${hs})`} setImages={setImages} imageData={EOWRData['eowr_snags'][run_casing]} />
-                            <ImagePicker id={nextId('img')} title={`Ream & Back Ream Interval (${hs})`} setImages={setImages} imageData={EOWRData['eowr_snags'][rbrI]} />
+                            <ImagePicker id={nextId('img')} title={`Run Casing (Broomstick) (${hs})`} setImages={setImages} imageData={casing_run_img} />
+                            <ImagePicker id={nextId('img')} title={`Ream & Back Ream Interval (${hs})`} setImages={setImages} imageData={ream_back_ream_interval_img} />
                             </React.Fragment>
                         );
                     })
@@ -233,21 +246,22 @@ export const EOWR = () => {
                     <MultiTable title = "Drilling Events Caused NPT" id = {getDivId('table')} tableData = {EOWRData['drilling_events_kpi']['events_caused_npt_res']}/>
                 </section>
                 <span className='text-xl px-4'>IX. Ream & Back Ream</span>
-                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`} >
+                <section className={`align-middle grid grid-col-1 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`} >
                 {
-                    EOWRData['section_summary']?.map((section, index) => {
-                        const holeSection = section['Hole Section'];
+                    EOWRData['eowr_snags']['sections']?.map((section, index) => {
+                        const holeSection = section['section']
+                        const st = section['SideTrack']
                         const mapping = holeSectionMap[holeSection] || { imageKeys: [], count: 0 };
-                        const imageKeys = mapping.imageKeys;
+                        const imageKeys = ['ream_back_ream_1', 'ream_back_ream_2', 'ream_back_ream_3', 'ream_back_ream_4'];
                         const imageCount = mapping.count;
                       
                         const imagePickers = Array.from(Array(imageCount), (_, i) => (
                           <ImagePicker
                             id={nextId('img')}
-                            title={`Ream & Back Ream (${holeSection})`}
+                            title={`Ream & Back Ream (${holeSection} ${st})`}
                             setImages={setImages}
-                            imageData={EOWRData['eowr_snags'][imageKeys[i]]}
-                            key={`imagepicker-${i}`}
+                            imageData={section[imageKeys[i]]}
+                            key={nextId('img', false)}
                           />
                         ));
                       
@@ -256,7 +270,7 @@ export const EOWR = () => {
                 }
                 </section>
                 <span className='text-xl px-4'>X. Bit Record</span>
-                <section id="main" className={`align-middle grid grid-col-1 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`}
+                <section className={`align-middle grid grid-col-1 xl:grid-cols-4 gap-4 place-items-top px-2 pb-4`}
                 >
                 {bitRecordData.map((record, index) => (
                     <ImagePicker  id={nextId('img')} key={nextId('img', false)} title={record.title} setImages={setImages} imageData={EOWRData['eowr_snags'][record.key]}></ImagePicker>

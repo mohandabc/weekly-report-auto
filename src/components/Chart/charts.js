@@ -105,7 +105,7 @@ class Chart
 export class PieChart extends Chart {
     buildChart(data, container, title, options) {
         /**
-         * Please respect the following structure and labes names : [{category:?, value:?}...]
+         * Please respect the following structure and labels names : [{category:?, value:?}...]
             // Example data format:
                 [
                     {
@@ -174,10 +174,11 @@ export class PieChart extends Chart {
         chart.data = data;
       
         let legend = new am4charts.Legend();
-        legend.position = "right";
+        legend.position = "bottom";
         legend.labels.template.fontSize = 11;
         legend.valueLabels.template.fontSize = 11;
         chart.legend = legend;
+        chart.legend.valueLabels.template.text = `{value.formatNumber('#.##')} ({value.percent.formatNumber('#.##')}%)`;
 
         chart.exporting.menu = new am4core.ExportMenu();
         return chart;
@@ -512,6 +513,9 @@ export class StackedBarChart extends Chart
         series.dataFields.valueY = field;
         series.dataFields.categoryX = "category";
         series.sequencedInterpolation = true;
+        if(color){
+            series.fill = color;
+        }
         
         // Make it stacked
         series.stacked = true;
@@ -523,14 +527,15 @@ export class StackedBarChart extends Chart
         var labelBullet = series.bullets.push(new am4charts.LabelBullet());
         labelBullet.label.text = "[bold]{valueY}";
         labelBullet.locationY = 0.5;
+        // labelBullet.locationX = name==='PT' ? 0.3 : 0.7;
         labelBullet.label.hideOversized = true;
-        labelBullet.label.fill = "#FFFFFF";
+        labelBullet.label.fill = "#FFF" //series.fill;
         
         return series;
         }
 
         createSeries("value1", "PT");
-        createSeries("value2", "NPT");
+        createSeries("value2", "NPT", "#587FBD");
 
 
         var chartTitle = chart.titles.create();
@@ -539,6 +544,15 @@ export class StackedBarChart extends Chart
         chartTitle.fill = options["title-color"];
         chartTitle.marginBottom = 30;
 
+        let legend = new am4charts.Legend();
+        legend.position = "bottom";
+        legend.labels.template.fontSize = 11;
+        legend.valueLabels.template.fontSize = 11;
+        chart.legend = legend;
+
+        chart.exporting.menu = new am4core.ExportMenu();
+
+        return chart;
     }
 }
 

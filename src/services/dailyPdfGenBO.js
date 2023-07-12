@@ -26,7 +26,7 @@ export const generateDailyReport = (chartsToPrint, dailyData, range) =>{
           var doc=createDoc('A4', 'landscape', [15,20,0,10]) 
 
           var displayedDate=new Date(range.split(" - ")[0]);
-          displayedDate.setDate(displayedDate.getDate()+1);
+          displayedDate.setDate(displayedDate.getDate());
           displayedDate=displayedDate.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"});
 
           const headerOptions = {
