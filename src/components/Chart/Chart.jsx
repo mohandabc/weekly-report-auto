@@ -4,7 +4,7 @@ import { BarChart, PieChart, ClusteredBarChart, StackedBarChart, DateAxes } from
 import { darkModeState } from "../../shared/globalState";
 import gear from '../../assets/gear.svg';
 
-export const Chart = ({title, id, chartData, chartType, height="500px"}) => {
+export const Chart = ({title, id, chartData, chartType, className="h-120"}) => {
   const divID = id.toString();
   const [type, setType] = useState(chartType);
   const darkMode = useRecoilValue(darkModeState);
@@ -46,7 +46,7 @@ export const Chart = ({title, id, chartData, chartType, height="500px"}) => {
   });
 
   return (
-        <div className={`h-[${height}] pb-5 bg-stone-100 dark:bg-stone-400 rounded-lg shadow w-full`}>
+        <div className={`${className} pb-5 bg-stone-100 dark:bg-stone-400 rounded-lg shadow w-full`}>
               {
                 (type==='Pie' || type === 'Bar') ? 
                 <div>
