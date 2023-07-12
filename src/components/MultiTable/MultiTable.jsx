@@ -52,8 +52,8 @@ export const MultiTable = ({title, id, tableData})=>{
               </th>
             ))
           ) : (
-            <th>
-              <h2>No Data To Display</h2>
+            <th className="w-96 text-black bg-white">
+              <h2>N/A</h2>
             </th>
           )}
         </tr>
