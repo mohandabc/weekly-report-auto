@@ -299,6 +299,11 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
             if (drill_time_len + trip_in_len > max_lines){
                 pageContent.push(buildTable(EOWRData['connection_details']['tripping_time']['rih'].slice(0, trip_in_part_1_len), 'grouped', event_custom_layout));
             }
+            else
+            {
+                pageContent.push(buildTable(EOWRData['connection_details']['tripping_time']['rih'].slice(0, trip_in_part_1_len), 'grouped', event_custom_layout));
+
+            }
         }
         if(pageContent.length>0){ 
             createPage(doc, pageContent, `${WELL} - End Of Well Report`, pageNumber, TOTAL_PAGES);
