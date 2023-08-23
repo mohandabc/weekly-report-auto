@@ -9,10 +9,13 @@ import "./styles.css";
 
 const { Column, HeaderCell, Cell } = Table;
 
-function minutesToTime(minutes) {
+function minutesToTime(seconds) {
   const date = new Date();
-  date.setMinutes(Math.floor(minutes));
-  date.setSeconds((minutes % 1) * 60);
+  date.setMinutes(Math.floor(seconds/60));
+  date.setSeconds(seconds % 60);
+  console.log(Math.floor(seconds/60))
+  console.log(seconds % 60)
+  console.log(date)
   return date;
 }
 
@@ -23,8 +26,9 @@ function formatDateString(dateString) {
   let day = ("0" + date.getDate()).slice(-2);
   let hours = ("0" + date.getHours()).slice(-2);
   let minutes = ("0" + date.getMinutes()).slice(-2);
+  let seconds = ("0" + date.getSeconds()).slice(-2);
   let formattedDateString =
-    day + "-" + month + "-" + year + " " + hours + ":" + minutes;
+    day + "-" + month + "-" + year + " " + hours + ":" + minutes + ":" + seconds;
   return formattedDateString;
 }
 
