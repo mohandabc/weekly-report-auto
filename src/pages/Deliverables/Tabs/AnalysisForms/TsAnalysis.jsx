@@ -219,12 +219,12 @@ export const TsAnalysis = (TsAnalysisData) => {
             <EditableCell dataKey="date_to" onChange={handleChange} />
           </Column>
 
-          <Column width={90}>
+          <Column width={80}>
             <HeaderCell>Depth from</HeaderCell>
             <EditableCell dataKey="depth_from" onChange={handleChange} />
           </Column>
 
-          <Column width={80}>
+          <Column width={70}>
             <HeaderCell>Depth to</HeaderCell>
             <EditableCell dataKey="depth_to" onChange={handleChange} />
           </Column>
@@ -234,9 +234,14 @@ export const TsAnalysis = (TsAnalysisData) => {
             <EditableCell dataKey="connection_time" onChange={handleChange} />
           </Column>
 
-          <Column width={120}>
-            <HeaderCell>Tripping Speed</HeaderCell>
-            <EditableCell dataKey="tripping_speed" onChange={handleChange} />
+          <Column width={70}>
+            <HeaderCell>Gross Speed</HeaderCell>
+            <EditableCell dataKey="gross_speed" onChange={handleChange} />
+          </Column>
+
+          <Column width={70}>
+            <HeaderCell>Net Speed</HeaderCell>
+            <EditableCell dataKey="net_speed" onChange={handleChange} />
           </Column>
 
           <Column width={72}>
