@@ -5,7 +5,7 @@ import { DateRangePicker } from "rsuite";
 import { dateStartEndState} from "../../../shared/globalState";
 import { useRecoilValue} from "recoil";
 import { SelectPicker } from "rsuite";
-import { BACK_URL } from "../../../constants/URI";
+import { API_URL, BACK_URL } from "../../../constants/URI";
 import { getData } from "../../../api/api";
 import { TsAnalysis } from "./AnalysisForms/TsAnalysis";
 import "./styles.css";
@@ -27,8 +27,13 @@ export const TrippingSpeed = () => {
     new Date(dateStartEnd.split(" - ")[1]),
   ]);
   const [data, setData] = useState(0);
+
   const [well, setWell] = useState(0);
+  const [wellsplaceholder, setWellsplaceholder] = useState(0);
+
   const [rig, setRig] = useState(0);
+  const [rigsplaceholder, setRigsplaceholder] = useState(0);
+
   const [rotarySys, setRotarySys] = useState(0);
   const [phase, setPhase] = useState(0);
   const [lastCSG, setLastCSG] = useState(0);
@@ -79,7 +84,22 @@ export const TrippingSpeed = () => {
 
   useEffect(() => {
     setAnimation(true);
+    populateWellRigPickers();
   },[]);
+
+  useEffect(() => {
+    if (well) {
+      const rig = rigsplaceholder.find(rig => rig.value === well);
+      if (rig) setRig(rig.value);
+    }
+  }, [well]);
+  
+  useEffect(() => {
+    if (rig) {
+      const well = wellsplaceholder.find(well => well.value === rig);
+      if (well) setWell(well.value);
+    }
+  }, [rig]);
 
   const processInput = (params) => {
     /***************************************************************************
@@ -92,6 +112,18 @@ export const TrippingSpeed = () => {
       console.log("Returned Results : ", res);
     });
   };
+
+  function populateWellRigPickers() {
+    const path = 'api/reports/getwells';
+      getData(API_URL, path, params)
+      .then(res=> {
+        console.log(res.result)
+        let wells = res.result['wells'].map((item) => ({ label: item['well'], value: item['wid'] }));
+        let rigs = res.result['wells'].map((item) => ({ label: item['rig'], value: item['wid'] }));
+        setWellsplaceholder(wells || []);
+        setRigsplaceholder(rigs || []);
+      });
+  }
 
   return (
     <>
@@ -132,14 +164,18 @@ export const TrippingSpeed = () => {
             <SelectPicker
               onChange={setWell}
               placeholder="Well"
-              data={data_placeHolder}
+              loading={wellsplaceholder ? false : true}
+              data={wellsplaceholder || []}
               style={styles.wide}
+              value={well}
             />
             <SelectPicker
               onChange={setRig}
               placeholder="Rig"
-              data={data_placeHolder}
+              loading={rigsplaceholder ? false : true}
+              data={rigsplaceholder || []}
               style={styles.wide}
+              value={rig}
             />
             <SelectPicker
               onChange={setRotarySys}

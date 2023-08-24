@@ -100,18 +100,21 @@ export const ReamBream = () => {
             placeholder="Well"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Phase"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
           <SelectPicker
             onChange={setNpt}
             placeholder="NPT"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
           <DateRangePicker
             value={dateRangeValue}
@@ -121,6 +124,7 @@ export const ReamBream = () => {
               width: 250,
               margin: 10,
             }}
+            disabled
           />
         </div>
         <div
@@ -137,6 +141,7 @@ export const ReamBream = () => {
             text="Submit"
             action={processInput}
             args={[params]}
+            disabled
           ></ActionButton>
         </div>
       </div>
