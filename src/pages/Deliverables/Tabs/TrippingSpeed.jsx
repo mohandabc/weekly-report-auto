@@ -4,7 +4,7 @@ import { ActionButton } from "../../../components";
 import { DateRangePicker } from "rsuite";
 import { dateStartEndState} from "../../../shared/globalState";
 import { useRecoilValue} from "recoil";
-import { SelectPicker } from "rsuite";
+import { SelectPicker, Input, InputGroup, Tooltip, Whisper } from "rsuite";
 import { API_URL, BACK_URL } from "../../../constants/URI";
 import { getData } from "../../../api/api";
 import { TsAnalysis } from "./AnalysisForms/TsAnalysis";
@@ -18,6 +18,101 @@ const data_placeHolder = [
   // Test populating data
   "TEST-1",
   "TEST-2",
+].map((item) => ({ label: item, value: item }));
+
+const rotarySys_placeHolder = [
+  "Top Drive",
+  "Kelly",
+].map((item) => ({ label: item, value: item }));
+
+const TrippingType_placeHolder = [
+  "RIH",
+  "POOH",
+].map((item) => ({ label: item, value: item }));
+
+const tripReason_placeHolder = [
+    "Pick Up",
+    "Run Back",
+    "Drilling",
+    "Wiper Trip",
+    "Scraping",
+    "Completion",
+    "Clean Out",
+    "Coring",
+    "TD",
+    "BHA",
+    "Slow ROP",
+    "Logging",
+    "DST",
+    "Fishing",
+    "DPRB",
+    "Cement Plug",
+    "Safety String",
+    "Milling",
+].map((item) => ({ label: item, value: item }));
+
+const lastCSG_placeHolder = [
+    '30"',
+    '18" 5/8',
+    '13" 3/8',
+    '9" 5/8',
+    '7"',
+    '4" 1/2',
+].map((item) => ({ label: item, value: item }));
+
+const drillString_placeHolder = [
+    '5"',
+    '5" 1/2',
+    '3"',
+    '3" 1/2'
+].map((item) => ({ label: item, value: item }));
+
+const casedHole_placeHolder = [
+    'Cased',
+    'Open',
+].map((item) => ({ label: item, value: item }));
+
+const phase_placeHolder = [
+    '12"1/4',
+    '16"',
+    '17"1/2',
+    '22"',
+    '26"',
+    '28"',
+    '30"',
+    '3"3/4',
+    '3"3/4',
+    '36"',
+    '4"1/2',
+    '4" 3/4',
+    '6"',
+    '8"1/2',
+    '8.375"',
+    'Completion',
+    'Decompletion',
+    'Drill Out CMT',
+    'Flat Time',
+    'Inter Phase 12"1/4 - 8"1/2',
+    'Inter Phase 16" - 12"1/4',
+    'Inter Phase 17"1/2 - 12"1/4',
+    'Inter Phase 22" - 16"',
+    'Inter Phase 22" - 17 1/2"',
+    'Inter Phase 24" - 16"',
+    'Inter Phase 26" - 16"',
+    'Inter Phase 26" - 17"1/2',
+    'Inter Phase 28" - 22"',
+    'Inter Phase 28" - 24"',
+    'Inter Phase 28" - 26"',
+    'Inter Phase 30" - 28"',
+    'Inter Phase 36" - 26"',
+    'Inter Phase 36" - 28"',
+    'Inter Phase 36" - 30"',
+    'Inter Phase 6"- 3"3/4',
+    'Inter Phase 6"- 4"3/4',
+    'Inter Phase 8"1/2 - 6"',
+    'Recertification',
+    'Rig Move',
+    'Workover',
 ].map((item) => ({ label: item, value: item }));
 
 export const TrippingSpeed = () => {
@@ -180,13 +275,13 @@ export const TrippingSpeed = () => {
             <SelectPicker
               onChange={setRotarySys}
               placeholder="Rotary System"
-              data={data_placeHolder}
+              data={rotarySys_placeHolder}
               style={styles.wide}
             />
             <SelectPicker
               onChange={setPhase}
               placeholder="Phase"
-              data={data_placeHolder}
+              data={phase_placeHolder}
               style={styles.wide}
             />
           </div>
@@ -202,27 +297,32 @@ export const TrippingSpeed = () => {
             <SelectPicker
               onChange={setLastCSG}
               placeholder="Last CSG Shoe [m]"
-              data={data_placeHolder}
+              data={lastCSG_placeHolder}
               style={styles.wide}
             />
             <SelectPicker
               onChange={setTrippingType}
               placeholder="Tripping Type"
-              data={data_placeHolder}
+              data={TrippingType_placeHolder}
               style={styles.wide}
             />
             <SelectPicker
               onChange={setTripReason}
               placeholder="Trip reason"
-              data={data_placeHolder}
+              data={tripReason_placeHolder}
               style={styles.wide}
             />
-            <SelectPicker
-              onChange={setTripNumber}
-              placeholder="Trip number"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
+            <Whisper placement="top" speaker={<Tooltip>The Trip Number is automatically calculated. Do not skip trips !</Tooltip>}>
+            <span>
+              <SelectPicker
+                onChange={setTripNumber}
+                placeholder="Trip number"
+                data={data_placeHolder}
+                style={styles.wide}
+                disabled
+              />
+              </span>
+            </Whisper>
           </div>
           <div
             className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
@@ -236,27 +336,28 @@ export const TrippingSpeed = () => {
             <SelectPicker
               onChange={setCasedHole}
               placeholder="Cased Hole/Open Hole"
-              data={data_placeHolder}
+              data={casedHole_placeHolder}
               style={styles.wide}
             />
             <SelectPicker
               onChange={setDrillString}
               placeholder="Drill String Size"
-              data={data_placeHolder}
+              data={drillString_placeHolder}
               style={styles.wide}
             />
-            <SelectPicker
+            <Input
               onChange={setBHAname}
               placeholder="BHA Name"
               data={data_placeHolder}
               style={styles.wide}
             />
-            <SelectPicker
-              onChange={setBenchmarkTS}
-              placeholder="Benchmark (Tripping Speed [m/h])"
+            <InputGroup style={styles.wide}>
+              <Input onChange={setBenchmarkTS}
+              placeholder="Benchmark (Tripping Speed)"
               data={data_placeHolder}
-              style={styles.wide}
-            />
+              />
+              <InputGroup.Addon>m/h</InputGroup.Addon>
+            </InputGroup>
           </div>
           <div
             className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
@@ -267,18 +368,29 @@ export const TrippingSpeed = () => {
                   : "opacity-0 translate-y-12"
               }`}
           >
-            <SelectPicker
+            <InputGroup style={styles.wide}>
+            <Input
               onChange={setBenchmarkCT}
-              placeholder="Benchmark (Connection Time [min])"
+              placeholder="Benchmark (Connection Time)"
               data={data_placeHolder}
-              style={styles.wide}
             />
-            <SelectPicker
-              onChange={setThreshold}
-              placeholder="Threshold [T]"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
+            <InputGroup.Addon>min</InputGroup.Addon>
+            </InputGroup>
+
+            <Whisper placement="top" speaker={<Tooltip>The Threshold is automatically calculated for the main time.</Tooltip>}>
+              <span>
+                <InputGroup style={styles.wide}>
+                  <Input
+                    onChange={setThreshold}
+                    placeholder="Threshold"
+                    data={data_placeHolder}
+                    disabled
+                  />
+                  <InputGroup.Addon>T</InputGroup.Addon>
+                </InputGroup>
+              </span>
+            </Whisper>
+
             <DateRangePicker
               value={dateRangeValue}
               onChange={setDateRangeValue}
