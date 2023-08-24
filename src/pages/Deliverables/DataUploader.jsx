@@ -61,7 +61,7 @@ export const DataUploader = () => {
     const path = 'api/reports/getwells';
       getData(API_URL, path, params)
       .then(res=> {
-        let data = res.result['wells'].map((item) => ({ label: item['well'], value: item['wid'] }));
+        let data = res.result['wells'].map((item) => ({ label: item['well'], value: item['well'] }));
         setWellsplaceholder(data || []);
       });
   }

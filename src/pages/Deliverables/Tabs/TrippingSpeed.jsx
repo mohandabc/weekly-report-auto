@@ -124,9 +124,11 @@ export const TrippingSpeed = () => {
   const [data, setData] = useState(0);
 
   const [well, setWell] = useState(0);
+  const [wellname, setWellName] = useState(0);
   const [wellsplaceholder, setWellsplaceholder] = useState(0);
 
   const [rig, setRig] = useState(0);
+  const [rigname, setRigName] = useState(0);
   const [rigsplaceholder, setRigsplaceholder] = useState(0);
 
   const [rotarySys, setRotarySys] = useState(0);
@@ -143,8 +145,8 @@ export const TrippingSpeed = () => {
   const [threshold, setThreshold] = useState(0);
 
   const params = {
-    well: well,
-    rig: rig,
+    well: wellname,
+    rig: rigname,
     rotarySys: rotarySys,
     phase: phase,
     lastCSG: lastCSG,
@@ -185,14 +187,17 @@ export const TrippingSpeed = () => {
   useEffect(() => {
     if (well) {
       const rig = rigsplaceholder.find(rig => rig.value === well);
-      if (rig) setRig(rig.value);
+      if (rig) {setRig(rig.value);
+        setRigName(rig.label)}
     }
   }, [well]);
   
   useEffect(() => {
     if (rig) {
       const well = wellsplaceholder.find(well => well.value === rig);
-      if (well) setWell(well.value);
+      if (well) {
+                  setWell(well.value);
+                  setWellName(well.label)}
     }
   }, [rig]);
 
@@ -212,7 +217,6 @@ export const TrippingSpeed = () => {
     const path = 'api/reports/getwells';
       getData(API_URL, path, params)
       .then(res=> {
-        console.log(res.result)
         let wells = res.result['wells'].map((item) => ({ label: item['well'], value: item['wid'] }));
         let rigs = res.result['wells'].map((item) => ({ label: item['rig'], value: item['wid'] }));
         setWellsplaceholder(wells || []);
