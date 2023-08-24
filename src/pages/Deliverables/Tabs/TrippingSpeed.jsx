@@ -116,11 +116,7 @@ const phase_placeHolder = [
 ].map((item) => ({ label: item, value: item }));
 
 export const TrippingSpeed = () => {
-  const dateStartEnd = useRecoilValue(dateStartEndState);
-  const [dateRangeValue, setDateRangeValue] = React.useState([
-    new Date(dateStartEnd.split(" - ")[0]),
-    new Date(dateStartEnd.split(" - ")[1]),
-  ]);
+  const [dateRangeValue, setDateRangeValue] = React.useState([new Date(),new Date()]);
   const [data, setData] = useState(0);
 
   const [well, setWell] = useState(0);
@@ -159,23 +155,8 @@ export const TrippingSpeed = () => {
     benchmarkTS: benchmarkTS,
     benchmarkCT: benchmarkCT,
     threshold: threshold,
-    dateRangeValue:
-      formatDate(dateRangeValue[0]) + " - " + formatDate(dateRangeValue[1]),
-    // files: uploaderValue,
+    dateRangeValue:[dateRangeValue[0],dateRangeValue[1]],
   };
-
-  function formatDate(date) {
-    if (date)
-      return [
-        padTo2Digits(date.getMonth() + 1),
-        padTo2Digits(date.getDate()),
-        date.getFullYear(),
-      ].join("/");
-  }
-
-  function padTo2Digits(num) {
-    return num.toString().padStart(2, "0");
-  }
 
   const [animation, setAnimation] = useState(false);
 
@@ -398,7 +379,7 @@ export const TrippingSpeed = () => {
             <DateRangePicker
               value={dateRangeValue}
               onChange={setDateRangeValue}
-              format="dd-MM-yyyy"
+              format="dd-MM-yyyy HH:mm:ss"
               style={{
                 width: 520,
                 margin: 10,
