@@ -291,6 +291,18 @@ export const TsAnalysis = (TsAnalysisData) => {
             <b>Well :</b> {TsAnalysisData.TsAnalysisData.well}
           </div>
           <div>
+            <b>Rotary System :</b> {TsAnalysisData.TsAnalysisData.trip_information.rotary_system}
+          </div>
+          <div>
+            <b>Phase : </b> {TsAnalysisData.TsAnalysisData.phase}
+          </div>
+          <div>
+            <b>Trip Type : </b> {TsAnalysisData.TsAnalysisData.trip_information.trip_type}
+          </div>
+          <div>
+            <b>Trip Reason : </b> {TsAnalysisData.TsAnalysisData.trip_information.trip_reason}
+          </div>
+          <div>
             <b>Trip Number : </b> {TsAnalysisData.TsAnalysisData.trip_number}
           </div>
         </div>
@@ -299,8 +311,20 @@ export const TsAnalysis = (TsAnalysisData) => {
             <b>CSG Size : </b> {TsAnalysisData.TsAnalysisData.csg_size}
           </div>
           <div>
-            <b>Drill Pipe Size : </b>
+            <b>Drill String Size : </b>
             {TsAnalysisData.TsAnalysisData.drill_pipe_size}
+          </div>
+          <div>
+            <b>Hole : </b> {TsAnalysisData.TsAnalysisData.trip_information.hole_type}
+          </div>
+          <div>
+            <b>BHA Name : </b> {TsAnalysisData.TsAnalysisData.bha}
+          </div>
+          <div>
+            <b>Benchmark (TS) : </b> {}
+          </div>
+          <div>
+            <b>Benchmark (CT) : </b> {}
           </div>
         </div>
       </div>
