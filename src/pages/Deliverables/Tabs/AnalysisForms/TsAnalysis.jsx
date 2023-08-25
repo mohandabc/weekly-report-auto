@@ -185,6 +185,10 @@ export const TsAnalysis = (TsAnalysisData) => {
   React.useEffect(() => {
     setAnimation(true);
   },[]);
+  
+  React.useEffect(() => {
+    setdefData(TsAnalysisData.TsAnalysisData.standline);
+  }, [TsAnalysisData.TsAnalysisData.standline]);
 
   return showTstab ? (
     <TrippingSpeed options={DELIVERABLE_CONFIG_BAR_OPTIONS}></TrippingSpeed>

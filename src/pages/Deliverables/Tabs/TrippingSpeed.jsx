@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import { ActionButton } from "../../../components";
+import { ActionButton, PaginationComp } from "../../../components";
 import { DateRangePicker } from "rsuite";
-import { dateStartEndState} from "../../../shared/globalState";
-import { useRecoilValue} from "recoil";
+import { Pagination } from 'rsuite';
 import { SelectPicker, Input, InputGroup, Tooltip, Whisper } from "rsuite";
 import { API_URL, BACK_URL } from "../../../constants/URI";
 import { getData } from "../../../api/api";
@@ -216,11 +215,7 @@ export const TrippingSpeed = () => {
   return (
     <>
       {data ? (
-          <div
-            className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto`}
-          >
-                <TsAnalysis TsAnalysisData={data["ts_analysis"]} doc_id={data["_id"]}></TsAnalysis>
-          </div>
+          <PaginationComp data = {data}></PaginationComp>
       ) : (
         <div
           className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto}`}

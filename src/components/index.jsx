@@ -9,6 +9,7 @@ export {ProtectedRoute} from "./ProtectedRoute";
 export {ImagePicker} from "./ImagePicker";
 export {NotAllowed} from "./NotAllowed";
 export {Paragraphe} from "./Paragraphe";
+export {PaginationComp} from "./PaginationComp";
 export {MultiTable} from "./MultiTable";
 export {Tabular} from "./Tabular";
 
