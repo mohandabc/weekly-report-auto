@@ -293,12 +293,17 @@ export const TrippingSpeed = () => {
               data={lastCSG_placeHolder}
               style={styles.wide}
             />
-            <SelectPicker
-              onChange={setTrippingType}
-              placeholder="Tripping Type"
-              data={TrippingType_placeHolder}
-              style={styles.wide}
-            />
+            <Whisper placement="top" speaker={<Tooltip>The Trip Type is automatically set !</Tooltip>}>
+              <span>
+                <SelectPicker
+                  onChange={setTrippingType}
+                  placeholder="Tripping Type"
+                  data={TrippingType_placeHolder}
+                  style={styles.wide}
+                  disabled
+                />
+              </span>
+            </Whisper>
             <SelectPicker
               onChange={setTripReason}
               placeholder="Trip reason"
