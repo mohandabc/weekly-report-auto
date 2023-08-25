@@ -140,6 +140,8 @@ export const TrippingSpeed = () => {
   const [benchmarkCT, setBenchmarkCT] = useState(0);
   const [threshold, setThreshold] = useState(0);
 
+  const [msg, setMsg] = useState(0);
+
   const params = {
     well: wellname,
     rig: rigname,
@@ -189,7 +191,13 @@ export const TrippingSpeed = () => {
     console.log("Params from TrippingSpeed : ", params);
     const path = "TrippingSpeed/";
     getData(BACK_URL, path, params).then((res) => {
-      setData(res);
+      if (!('error' in res)) {
+        setData(res);
+      } else {
+        setMsg({
+          msg: res['error'],
+        })
+      }
       console.log("Returned Results : ", res);
     });
   };
@@ -396,11 +404,17 @@ export const TrippingSpeed = () => {
               }`}
           >
             <ActionButton
-              className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base my-7 py-2 px-4 rounded "
+              className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base mt-7 py-2 px-4 rounded "
               text="Submit"
               action={processInput}
               args={[params]}
             ></ActionButton>
+            
+          </div>
+          <div class="flex justify-center items-center">
+              <div class="text-sm text-red-500 my-4">
+                {msg["msg"]}
+              </div>
           </div>
         </div>
       )}
