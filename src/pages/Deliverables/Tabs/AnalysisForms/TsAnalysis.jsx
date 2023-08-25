@@ -13,9 +13,6 @@ function minutesToTime(seconds) {
   const date = new Date();
   date.setMinutes(Math.floor(seconds/60));
   date.setSeconds(seconds % 60);
-  console.log(Math.floor(seconds/60))
-  console.log(seconds % 60)
-  console.log(date)
   return date;
 }
 
@@ -124,18 +121,18 @@ const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
 };
 
 export const TsAnalysis = (TsAnalysisData) => {
-  const [limit, setLimit] = React.useState(10);
-  const [page, setPage] = React.useState(1);
+  // const [limit, setLimit] = React.useState(10);
+  // const [page, setPage] = React.useState(1);
   const [defData, setdefData] = React.useState(
     TsAnalysisData.TsAnalysisData.standline
   );
   const [showTstab, setShowTstab] = React.useState(false);
 
-  const data = defData.filter((v, i) => {
-    const start = limit * (page - 1);
-    const end = start + limit;
-    return i >= start && i < end;
-  });
+  // const data = defData.filter((v, i) => {
+  //   const start = limit * (page - 1);
+  //   const end = start + limit;
+  //   return i >= start && i < end;
+  // });
 
   const handleChange = (standNum, key, value) => {
     const nextData = Object.assign([], defData);
@@ -149,10 +146,10 @@ export const TsAnalysis = (TsAnalysisData) => {
     setdefData(nextData);
   };
 
-  const handleChangeLimit = (dataKey) => {
-    setPage(1);
-    setLimit(dataKey);
-  };
+  // const handleChangeLimit = (dataKey) => {
+  //   setPage(1);
+  //   setLimit(dataKey);
+  // };
 
   const handleDeleteClick = () => {
     deleteDoc(BACK_URL, "TrippingSpeed/deleteDoc/", TsAnalysisData.doc_id).then(
@@ -185,7 +182,7 @@ export const TsAnalysis = (TsAnalysisData) => {
   React.useEffect(() => {
     setAnimation(true);
   },[]);
-  
+
   React.useEffect(() => {
     setdefData(TsAnalysisData.TsAnalysisData.standline);
   }, [TsAnalysisData.TsAnalysisData.standline]);
@@ -207,7 +204,7 @@ export const TsAnalysis = (TsAnalysisData) => {
           padding={100}
           height={342}
           width={1000}
-          data={data}
+          data={defData}
         >
           <Column width={50}>
             <HeaderCell>N</HeaderCell>
@@ -263,7 +260,7 @@ export const TsAnalysis = (TsAnalysisData) => {
             <ActionCell dataKey="standNum" onClick={handleEditState} />
           </Column>
         </Table>
-        <div className="px-5">
+        {/* <div className="px-5">
           <Pagination
             prev
             next
@@ -281,7 +278,7 @@ export const TsAnalysis = (TsAnalysisData) => {
             onChangePage={setPage}
             onChangeLimit={handleChangeLimit}
           />
-        </div>
+        </div> */}
       </div>
       <div
         className={`text-zinc-500 dark:text-black flex justify-between delay-200 duration-1000 transition-all ease-out ${
