@@ -286,51 +286,61 @@ export const TsAnalysis = (TsAnalysisData) => {
           animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
         }`}
       >
-        <div className="float-left p-2 text-sm">
-          <div>
-            <b>Well :</b> {TsAnalysisData.TsAnalysisData.well}
+      <div className="grid grid-cols-4 gap-20 mt-5 mx-auto px-10 bg-gray-100 rounded-lg">
+        <div className="text-sm">
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">Well :</b> {TsAnalysisData.TsAnalysisData.well}
           </div>
-          <div>
-            <b>Rotary System :</b> {TsAnalysisData.TsAnalysisData.trip_information.rotary_system}
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">Rotary System :</b>{" "}
+            {TsAnalysisData.TsAnalysisData.trip_information.rotary_system}
           </div>
-          <div>
-            <b>Phase : </b> {TsAnalysisData.TsAnalysisData.phase}
-          </div>
-          <div>
-            <b>Trip Type : </b> {TsAnalysisData.TsAnalysisData.trip_information.trip_type}
-          </div>
-          <div>
-            <b>Trip Reason : </b> {TsAnalysisData.TsAnalysisData.trip_information.trip_reason}
-          </div>
-          <div>
-            <b>Trip Number : </b> {TsAnalysisData.TsAnalysisData.trip_number}
+          <div className="py-2 text-gray-700">
+            <b className="text-gray-900">Phase : </b> {TsAnalysisData.TsAnalysisData.phase}
           </div>
         </div>
-        <div className="float-right p-2 text-sm">
-          <div>
-            <b>CSG Size : </b> {TsAnalysisData.TsAnalysisData.csg_size}
+        <div className="text-sm">
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">Trip Type : </b>{" "}
+            {TsAnalysisData.TsAnalysisData.trip_information.trip_type}
           </div>
-          <div>
-            <b>Drill String Size : </b>
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">Trip Reason : </b>{" "}
+            {TsAnalysisData.TsAnalysisData.trip_information.trip_reason}
+          </div>
+          <div className="py-2 text-gray-700">
+            <b className="text-gray-900">Trip Number : </b> {TsAnalysisData.TsAnalysisData.trip_number}
+          </div>
+        </div>
+        <div className="text-sm">
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">CSG Size : </b> {TsAnalysisData.TsAnalysisData.csg_size}
+          </div>
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">Drill String Size : </b>{" "}
             {TsAnalysisData.TsAnalysisData.drill_pipe_size}
           </div>
-          <div>
-            <b>Hole : </b> {TsAnalysisData.TsAnalysisData.trip_information.hole_type}
+          <div className="py-2 text-gray-700">
+            <b className="text-gray-900">Hole : </b>{" "}
+            {TsAnalysisData.TsAnalysisData.trip_information.hole_type}
           </div>
-          <div>
-            <b>BHA Name : </b> {TsAnalysisData.TsAnalysisData.bha}
+        </div>
+        <div className="text-sm">
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">BHA Name : </b> {TsAnalysisData.TsAnalysisData.bha}
           </div>
-          <div>
-            <b>Benchmark (TS) : </b> {}
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">Benchmark (TS) : </b> {}
           </div>
-          <div>
-            <b>Benchmark (CT) : </b> {}
+          <div className="py-2 text-gray-700">
+            <b className="text-gray-900">Benchmark (CT) : </b> {}
           </div>
         </div>
       </div>
+      </div>
       <div>
         <div
-          className={`flex justify-center my-4 delay-200 duration-1000 transition-all ease-out ${
+          className={`flex justify-center mt-6 delay-200 duration-1000 transition-all ease-out ${
             // hiding components when they first appear and then applying a translate effect gradually
             animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}
@@ -342,18 +352,11 @@ export const TsAnalysis = (TsAnalysisData) => {
           >
             Cancel
           </Button>
-          <Button color="blue" appearance="primary" className="mx-4" onClick={handleSaveClick}>
-            Save
-          </Button>
-        </div>
-        <div
-          className={`flex justify-center delay-200 duration-1000 transition-all ease-out ${
-            // hiding components when they first appear and then applying a translate effect gradually
-            animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-          }`}
-        >
           <Button color="red" appearance="primary" onClick={handleDeleteClick}>
             Delete Analysis
+          </Button>
+          <Button color="blue" appearance="primary" className="mx-4" onClick={handleSaveClick}>
+            Save
           </Button>
         </div>
       </div>
