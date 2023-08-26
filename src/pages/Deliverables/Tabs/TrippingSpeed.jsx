@@ -83,7 +83,6 @@ const phase_placeHolder = [
   '28"',
   '30"',
   '3"3/4',
-  '3"3/4',
   '36"',
   '4"1/2',
   '4" 3/4',
@@ -148,6 +147,7 @@ export const TrippingSpeed = () => {
   const [threshold, setThreshold] = useState(0);
 
   const [msg, setMsg] = useState(0);
+  const [msg2, setMsg2] = useState(0);
 
   const params = {
     well: wellname,
@@ -199,20 +199,32 @@ export const TrippingSpeed = () => {
      * TODO: FURTHER PROCESSING , SEND PARAMS TO WHATEVER THE OTHER SIDE IS ;) *
      ***************************************************************************/
     console.log("Params from TrippingSpeed : ", params);
-    setLoadingValue(true);
-    const path = "TrippingSpeed/";
-    getData(BACK_URL, path, params).then((res) => {
-      if (!("error" in res)) {
-        setData(res);
+    let zeroFields = Object.keys(params).filter(
+      (key) =>
+        ![
+          "TrippingType",
+          "tripNumber",
+          "threshold",
+          "benchmarkTS",
+          "benchmarkCT",
+        ].includes(key) && params[key] === 0
+    );
+    if (zeroFields.length > 0) {
+      setMsg({ msg: `Please complete all required fields before proceeding` });
+      setMsg2({ msg: ` ${zeroFields.join(", ")}` });
+    } else {
+      setLoadingValue(true);
+      getData(BACK_URL, "TrippingSpeed/", params).then((res) => {
+        if (!("error" in res)) {
+          setData(res);
+        } else {
+          setMsg2({});
+          setMsg({ msg: res["error"] });
+        }
         setLoadingValue(false);
-      } else {
-        setMsg({
-          msg: res["error"],
-        });
-        setLoadingValue(false);
-      }
-      console.log("Returned Results : ", res);
-    });
+        console.log("Returned Results : ", res);
+      });
+    }
   };
 
   function populateWellRigPickers() {
@@ -428,6 +440,7 @@ export const TrippingSpeed = () => {
                     onChange={setBenchmarkTS}
                     placeholder="Benchmark (Tripping Speed)"
                     data={data_placeHolder}
+                    disabled
                   />
                   <InputGroup.Addon>m/h</InputGroup.Addon>
                 </InputGroup>
@@ -451,6 +464,7 @@ export const TrippingSpeed = () => {
                     onChange={setBenchmarkCT}
                     placeholder="Benchmark (Connection Time)"
                     data={data_placeHolder}
+                    disabled
                   />
                   <InputGroup.Addon>min</InputGroup.Addon>
                 </InputGroup>
@@ -529,7 +543,14 @@ export const TrippingSpeed = () => {
             </div>
           </Form>
           <div class="flex justify-center items-center">
-            <div class="text-sm text-red-500 my-4">{msg["msg"]}</div>
+            <div class="flex-col items-center mb-6">
+              <div class="text-center text-sm text-red-500 mt-4 mb-2">
+                {msg["msg"]}
+              </div>
+              <div class="text-center text-sm text-red-500 my-2">
+                <strong>{msg2["msg"]}</strong>
+              </div>
+            </div>
           </div>
         </div>
       )}
