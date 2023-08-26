@@ -123,7 +123,7 @@ export const TrippingSpeed = () => {
     new Date(),
     new Date(),
   ]);
-  const [data, setData] = useState(0);
+  const [data, setData] = useState([]);
 
   const [well, setWell] = useState(0);
   const [wellname, setWellName] = useState(0);
@@ -243,10 +243,18 @@ export const TrippingSpeed = () => {
     });
   }
 
+  const resetStates = () => {
+    setDateRangeValue([new Date(), new Date()]);
+    setData([]);
+    setWell(0);
+    setRig(0);
+    setMsg(0);
+    setMsg2(0);
+  };
   return (
     <>
-      {data ? (
-        <PaginationComp data={data}></PaginationComp>
+      {((data.length)!==0) ? (
+        <PaginationComp data={data} resetStates={resetStates}></PaginationComp>
       ) : (
         <div
           className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto}`}

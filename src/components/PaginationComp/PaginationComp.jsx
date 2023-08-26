@@ -4,7 +4,7 @@ import { TsAnalysis } from '../../pages/Deliverables/Tabs/AnalysisForms/TsAnalys
 
 const ITEMS_PER_PAGE = 1;
 
-export const PaginationComp = ({ data }) => {
+export const PaginationComp = ({ data, resetStates}) => {
   const [activePage, setActivePage] = useState(1);
 
   const handleSelect = (eventKey) => {
@@ -19,7 +19,12 @@ export const PaginationComp = ({ data }) => {
     <>
       <div className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto`}>
         {paginatedData.map((item) => (
-          <TsAnalysis TsAnalysisData={item["ts_analysis"]} doc_id={item["_id"]}></TsAnalysis>
+          <TsAnalysis
+          key={item["_id"]}
+          TsAnalysisData={item["ts_analysis"]}
+          doc_id={item["_id"]}
+          resetStates={resetStates}
+        ></TsAnalysis>
         ))}
         <div className="flex justify-center">
           <Pagination

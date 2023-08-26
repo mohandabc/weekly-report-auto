@@ -120,11 +120,11 @@ const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
   );
 };
 
-export const TsAnalysis = (TsAnalysisData) => {
+export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id}) => {
   // const [limit, setLimit] = React.useState(10);
   // const [page, setPage] = React.useState(1);
   const [defData, setdefData] = React.useState(
-    TsAnalysisData.TsAnalysisData.standline
+    TsAnalysisData.standline
   );
   const [showTstab, setShowTstab] = React.useState(false);
 
@@ -152,28 +152,30 @@ export const TsAnalysis = (TsAnalysisData) => {
   // };
 
   const handleDeleteClick = () => {
-    deleteDoc(BACK_URL, "TrippingSpeed/deleteDoc/", TsAnalysisData.doc_id).then(
+    deleteDoc(BACK_URL, "TrippingSpeed/deleteDoc/", doc_id).then(
       (res) => {
         if ("msg" in res && res.status === 200) {
           setShowTstab(true);
           alert("Document deleted successfully");
         }
       }
-    );
-  };
+      );
+    resetStates();
+    };
 
   const handleSaveClick = () => {
     const updatedData = defData.map(object => {
       const { status, ...otherFields } = object;
       return otherFields;
     });
-    TsAnalysisData.TsAnalysisData['standline'] = updatedData;
+    TsAnalysisData['standline'] = updatedData;
     console.log("The document that is going to be updated with its new data : ",
-    {"document_id":TsAnalysisData.doc_id, "params" : TsAnalysisData.TsAnalysisData});
+    {"document_id":TsAnalysisData.doc_id, "params" : TsAnalysisData});
     alert("Save button function isn't implemented yet !, an update function should be implemented in the back side first !");
   };
 
   const handleCancelClick = () => {
+    resetStates();
     setShowTstab(true);
   };
 
@@ -184,8 +186,8 @@ export const TsAnalysis = (TsAnalysisData) => {
   },[]);
 
   React.useEffect(() => {
-    setdefData(TsAnalysisData.TsAnalysisData.standline);
-  }, [TsAnalysisData.TsAnalysisData.standline]);
+    setdefData(TsAnalysisData.standline);
+  }, [TsAnalysisData.standline]);
 
   return showTstab ? (
     <TrippingSpeed options={DELIVERABLE_CONFIG_BAR_OPTIONS}></TrippingSpeed>
@@ -271,7 +273,7 @@ export const TsAnalysis = (TsAnalysisData) => {
             maxButtons={5}
             size="xs"
             layout={["total", "-", "limit", "|", "pager", "skip"]}
-            total={TsAnalysisData.TsAnalysisData.standline.length}
+            total={TsAnalysisData.standline.length}
             limitOptions={[10, 20, 30]}
             limit={limit}
             activePage={page}
@@ -289,45 +291,45 @@ export const TsAnalysis = (TsAnalysisData) => {
       <div className="grid grid-cols-4 gap-20 mt-5 mx-auto px-10 bg-gray-100 rounded-lg">
         <div className="text-sm">
           <div className="pt-2 text-gray-700">
-            <b className="text-gray-900">Well :</b> {TsAnalysisData.TsAnalysisData.well}
+            <b className="text-gray-900">Well :</b> {TsAnalysisData.well}
           </div>
           <div className="pt-2 text-gray-700">
             <b className="text-gray-900">Rotary System :</b>{" "}
-            {TsAnalysisData.TsAnalysisData.trip_information.rotary_system}
+            {TsAnalysisData.trip_information.rotary_system}
           </div>
           <div className="py-2 text-gray-700">
-            <b className="text-gray-900">Phase : </b> {TsAnalysisData.TsAnalysisData.phase}
+            <b className="text-gray-900">Phase : </b> {TsAnalysisData.phase}
           </div>
         </div>
         <div className="text-sm">
           <div className="pt-2 text-gray-700">
             <b className="text-gray-900">Trip Type : </b>{" "}
-            {TsAnalysisData.TsAnalysisData.trip_information.trip_type}
+            {TsAnalysisData.trip_information.trip_type}
           </div>
           <div className="pt-2 text-gray-700">
             <b className="text-gray-900">Trip Reason : </b>{" "}
-            {TsAnalysisData.TsAnalysisData.trip_information.trip_reason}
+            {TsAnalysisData.trip_information.trip_reason}
           </div>
           <div className="py-2 text-gray-700">
-            <b className="text-gray-900">Trip Number : </b> {TsAnalysisData.TsAnalysisData.trip_number}
+            <b className="text-gray-900">Trip Number : </b> {TsAnalysisData.trip_number}
           </div>
         </div>
         <div className="text-sm">
           <div className="pt-2 text-gray-700">
-            <b className="text-gray-900">CSG Size : </b> {TsAnalysisData.TsAnalysisData.csg_size}
+            <b className="text-gray-900">CSG Size : </b> {TsAnalysisData.csg_size}
           </div>
           <div className="pt-2 text-gray-700">
             <b className="text-gray-900">Drill String Size : </b>{" "}
-            {TsAnalysisData.TsAnalysisData.drill_pipe_size}
+            {TsAnalysisData.drill_pipe_size}
           </div>
           <div className="py-2 text-gray-700">
             <b className="text-gray-900">Hole : </b>{" "}
-            {TsAnalysisData.TsAnalysisData.trip_information.hole_type}
+            {TsAnalysisData.trip_information.hole_type}
           </div>
         </div>
         <div className="text-sm">
           <div className="pt-2 text-gray-700">
-            <b className="text-gray-900">BHA Name : </b> {TsAnalysisData.TsAnalysisData.bha}
+            <b className="text-gray-900">BHA Name : </b> {TsAnalysisData.bha}
           </div>
           <div className="pt-2 text-gray-700">
             <b className="text-gray-900">Benchmark (TS) : </b> {}
