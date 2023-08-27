@@ -117,7 +117,7 @@ const phase_placeHolder = [
 ].map((item) => ({ label: item, value: item }));
 
 export const TrippingSpeed = () => {
-  const [formValue, setFormValue] = React.useState({
+  const formValueInit = React.useState({
     well: undefined,
     rig: undefined,
     rotarySys: undefined,
@@ -134,6 +134,7 @@ export const TrippingSpeed = () => {
     threshold: undefined,
     dateRangeValue: undefined,
   });
+  const [formValue, setFormValue] = formValueInit
   const formRef = React.useRef();
   const schemStringType = Schema.Types.StringType().isRequired(
     "This field is required."
@@ -255,6 +256,7 @@ export const TrippingSpeed = () => {
   const resetStates = (newMsg) => {
     setDateRangeValue([new Date(), new Date()]);
     setData([]);
+    setFormValue(formValueInit[0]);
     setMsg(newMsg);
   };
   return (
