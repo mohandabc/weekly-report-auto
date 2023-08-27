@@ -2,9 +2,7 @@ import {React, useState} from "react";
 import { Loader } from "../../../components";
 import "./styles.css";
 
-
-
-export const BitRecord = () => {
+export const BackLog = () => {
     const [animation, setAnimation] = useState(false);
   return (
     <>
