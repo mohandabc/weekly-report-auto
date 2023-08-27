@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { PaginationComp } from "../../../components";
 import { DateRangePicker } from "rsuite";
-import { Form } from "rsuite";
+import { Form, Schema } from "rsuite";
 import {
   SelectPicker,
   Input,
@@ -117,6 +117,28 @@ const phase_placeHolder = [
 ].map((item) => ({ label: item, value: item }));
 
 export const TrippingSpeed = () => {
+  const [formValue, setFormValue] = React.useState({});
+  const formRef = React.useRef();
+  const schemStringType = Schema.Types.StringType().isRequired("This field is required.");
+  const schemNumberType = Schema.Types.NumberType().isRequired("This field is required.");
+  const model = Schema.Model({
+    well: schemNumberType,
+    rig: schemNumberType,
+    rotarySys: schemStringType,
+    phase: schemStringType,
+    lastCSG: schemStringType,
+    // TrippingType: schemStringType,
+    tripReason: schemStringType,
+    tripNumber: schemNumberType,
+    casedHole: schemStringType,
+    drillString: schemStringType,
+    BHAname: schemStringType,
+    benchmarkTS: schemStringType,
+    benchmarkCT: schemStringType,
+    threshold: schemStringType,
+    dateRangeValue: Schema.Types.ArrayType().isRequired("This field is required."),
+  });
+
   const [loadingValue, setLoadingValue] = React.useState(false);
 
   const [dateRangeValue, setDateRangeValue] = React.useState([
@@ -125,47 +147,13 @@ export const TrippingSpeed = () => {
   ]);
   const [data, setData] = useState([]);
 
-  const [well, setWell] = useState(0);
-  const [wellname, setWellName] = useState(0);
   const [wellsplaceholder, setWellsplaceholder] = useState(0);
-
-  const [rig, setRig] = useState(0);
-  const [rigname, setRigName] = useState(0);
   const [rigsplaceholder, setRigsplaceholder] = useState(0);
 
-  const [rotarySys, setRotarySys] = useState(0);
-  const [phase, setPhase] = useState(0);
-  const [lastCSG, setLastCSG] = useState(0);
-  const [TrippingType, setTrippingType] = useState(0);
-  const [tripReason, setTripReason] = useState(0);
-  const [tripNumber, setTripNumber] = useState(0);
-  const [casedHole, setCasedHole] = useState(0);
-  const [drillString, setDrillString] = useState(0);
-  const [BHAname, setBHAname] = useState(0);
-  const [benchmarkTS, setBenchmarkTS] = useState(0);
-  const [benchmarkCT, setBenchmarkCT] = useState(0);
-  const [threshold, setThreshold] = useState(0);
+  const [BHAname, setBHAname] = useState('');
 
   const [msg, setMsg] = useState(0);
   const [msg2, setMsg2] = useState(0);
-
-  const params = {
-    well: wellname,
-    rig: rigname,
-    rotarySys: rotarySys,
-    phase: phase,
-    lastCSG: lastCSG,
-    TrippingType: TrippingType,
-    tripReason: tripReason,
-    tripNumber: tripNumber,
-    casedHole: casedHole,
-    drillString: drillString,
-    BHAname: BHAname,
-    benchmarkTS: benchmarkTS,
-    benchmarkCT: benchmarkCT,
-    threshold: threshold,
-    dateRangeValue: [dateRangeValue[0], dateRangeValue[1]],
-  };
 
   const [animation, setAnimation] = useState(false);
 
@@ -174,32 +162,16 @@ export const TrippingSpeed = () => {
     populateWellRigPickers();
   }, []);
 
-  useEffect(() => {
-    if (well) {
-      const rig = rigsplaceholder.find((rig) => rig.value === well);
-      if (rig) {
-        setRig(rig.value);
-        setRigName(rig.label);
-      }
-    }
-  }, [well]);
-
-  useEffect(() => {
-    if (rig) {
-      const well = wellsplaceholder.find((well) => well.value === rig);
-      if (well) {
-        setWell(well.value);
-        setWellName(well.label);
-      }
-    }
-  }, [rig]);
-
   const processInput = () => {
+    formValue['well']=wellsplaceholder.find((well) => well.value === formValue['well']).label
+    formValue['rig']=rigsplaceholder.find((rig) => rig.value === formValue['rig']).label
+    formValue['dateRangeValue']=dateRangeValue
+    console.log(formValue)
     /***************************************************************************
      * TODO: FURTHER PROCESSING , SEND PARAMS TO WHATEVER THE OTHER SIDE IS ;) *
      ***************************************************************************/
-    console.log("Params from TrippingSpeed : ", params);
-    let zeroFields = Object.keys(params).filter(
+    // console.log("Params from TrippingSpeed : ", params);
+    let zeroFields = Object.keys(formValue).filter(
       (key) =>
         ![
           "TrippingType",
@@ -207,14 +179,14 @@ export const TrippingSpeed = () => {
           "threshold",
           "benchmarkTS",
           "benchmarkCT",
-        ].includes(key) && params[key] === 0
+        ].includes(key) && formValue[key] === undefined
     );
     if (zeroFields.length > 0) {
       setMsg({ msg: `Please complete all required fields before proceeding`, color: "text-red-500"});
       setMsg2({ msg: ` ${zeroFields.join(", ")}`, color: "text-red-500"});
     } else {
       setLoadingValue(true);
-      getData(BACK_URL, "TrippingSpeed/", params).then((res) => {
+      getData(BACK_URL, "TrippingSpeed/", formValue).then((res) => {
         if (!("error" in res)) {
           setData(res);
         } else {
@@ -229,7 +201,7 @@ export const TrippingSpeed = () => {
 
   function populateWellRigPickers() {
     const path = "api/reports/getwells";
-    getData(API_URL, path, params).then((res) => {
+    getData(API_URL, path, formValue).then((res) => {
       let wells = res.result["wells"].map((item) => ({
         label: item["well"],
         value: item["wid"],
@@ -243,11 +215,27 @@ export const TrippingSpeed = () => {
     });
   }
 
+  function WellRigConnection(event) {
+    const well = wellsplaceholder.find((well) => well.value === event);
+    if (well) {
+      setFormValue((prevState) => ({
+        ...prevState,
+        'well': well.value
+      }));
+    }
+
+    const rig = rigsplaceholder.find((rig) => rig.value === event);
+    if (rig) {
+      setFormValue((prevState) => ({
+        ...prevState,
+        'rig': rig.value
+      }));
+    }
+  }
+
   const resetStates = (newMsg, newMsg2) => {
     setDateRangeValue([new Date(), new Date()]);
     setData([]);
-    setWell(0);
-    setRig(0);
     setMsg(newMsg);
     setMsg2(newMsg2);
   };
@@ -274,7 +262,30 @@ export const TrippingSpeed = () => {
               </h1>
             </div>
           </div>
-          <Form onSubmit={processInput}>
+
+          <Form onSubmit={processInput}
+              ref={formRef}
+              model={model}
+              formValue={formValue}
+              onChange={(formValue) => setFormValue(formValue)}
+              onCheck={() =>
+                setFormValue({well: formValue['well'],
+                  rig: formValue['rig'],
+                  rotarySys: formValue['rotarySys'],
+                  phase: formValue['phase'],
+                  lastCSG: formValue['lastCSG'],
+                  TrippingType: formValue['TrippingType'],
+                  tripReason: formValue['tripReason'],
+                  tripNumber: formValue['tripNumber'],
+                  casedHole: formValue['casedHole'],
+                  drillString: formValue['drillString'],
+                  BHAname: formValue['BHAname'],
+                  benchmarkTS: formValue['benchmarkTS'],
+                  benchmarkCT: formValue['benchmarkCT'],
+                  threshold: formValue['threshold'],
+                  dateRangeValue: formValue['dateRangeValue'],})
+              }
+            >
             <div
               className={`flex duration-1000 relative transform transition-all ease-out
               ${
@@ -287,32 +298,30 @@ export const TrippingSpeed = () => {
               <Form.Group controlId="well" style={styles.wide}>
                 <Form.Control
                   accepter={SelectPicker}
-                  name="SelectPicker"
-                  onChange={setWell}
+                  name="well"
+                  onChange={WellRigConnection}
                   placeholder="Well"
                   loading={wellsplaceholder ? false : true}
                   data={wellsplaceholder || []}
                   style={styles.wide}
-                  value={well}
                 />
               </Form.Group>
               <Form.Group controlId="rig" style={styles.wide}>
                 <Form.Control
                   accepter={SelectPicker}
-                  name="SelectPicker"
-                  onChange={setRig}
+                  name="rig"
+                  onChange={WellRigConnection}
                   placeholder="Rig"
                   loading={rigsplaceholder ? false : true}
                   data={rigsplaceholder || []}
                   style={styles.wide}
-                  value={rig}
                 />
               </Form.Group>
               <Form.Group controlId="rotarySys" style={styles.wide}>
                 <Form.Control
                   accepter={SelectPicker}
-                  name="SelectPicker"
-                  onChange={setRotarySys}
+                  name="rotarySys"
+                  // onChange={setRotarySys}
                   placeholder="Rotary System"
                   data={rotarySys_placeHolder}
                   style={styles.wide}
@@ -321,8 +330,8 @@ export const TrippingSpeed = () => {
               <Form.Group controlId="phase" style={styles.wide}>
                 <Form.Control
                   accepter={SelectPicker}
-                  name="SelectPicker"
-                  onChange={setPhase}
+                  name="phase"
+                  // onChange={setPhase}
                   placeholder="Phase"
                   data={phase_placeHolder}
                   style={styles.wide}
@@ -341,8 +350,8 @@ export const TrippingSpeed = () => {
               <Form.Group controlId="lastCSG" style={styles.wide}>
                 <Form.Control
                   accepter={SelectPicker}
-                  name="SelectPicker"
-                  onChange={setLastCSG}
+                  name="lastCSG"
+                  // onChange={setLastCSG}
                   placeholder="Last CSG Shoe [m]"
                   data={lastCSG_placeHolder}
                   style={styles.wide}
@@ -358,8 +367,8 @@ export const TrippingSpeed = () => {
                   <span>
                     <Form.Control
                       accepter={SelectPicker}
-                      name="SelectPicker"
-                      onChange={setTrippingType}
+                      name="TrippingType"
+                      // onChange={setTrippingType}
                       placeholder="Tripping Type"
                       data={TrippingType_placeHolder}
                       style={styles.wide}
@@ -371,8 +380,8 @@ export const TrippingSpeed = () => {
               <Form.Group controlId="tripReason" style={styles.wide}>
                 <Form.Control
                   accepter={SelectPicker}
-                  name="SelectPicker"
-                  onChange={setTripReason}
+                  name="tripReason"
+                  // onChange={setTripReason}
                   placeholder="Trip reason"
                   data={tripReason_placeHolder}
                   style={styles.wide}
@@ -391,8 +400,8 @@ export const TrippingSpeed = () => {
                   <span>
                     <Form.Control
                       accepter={SelectPicker}
-                      name="SelectPicker"
-                      onChange={setTripNumber}
+                      name="trip_number"
+                      // onChange={setTripNumber}
                       placeholder="Trip number"
                       data={data_placeHolder}
                       style={styles.wide}
@@ -414,8 +423,8 @@ export const TrippingSpeed = () => {
               <Form.Group controlId="casedHole" style={styles.wide}>
                 <Form.Control
                   accepter={SelectPicker}
-                  name="SelectPicker"
-                  onChange={setCasedHole}
+                  name="casedHole"
+                  // onChange={setCasedHole}
                   placeholder="Cased Hole/Open Hole"
                   data={casedHole_placeHolder}
                   style={styles.wide}
@@ -424,19 +433,22 @@ export const TrippingSpeed = () => {
               <Form.Group controlId="drillString" style={styles.wide}>
                 <Form.Control
                   accepter={SelectPicker}
-                  name="SelectPicker"
-                  onChange={setDrillString}
+                  name="drillString"
+                  // onChange={setDrillString}
                   placeholder="Drill String Size"
                   data={drillString_placeHolder}
                   style={styles.wide}
                 />
               </Form.Group>
               <Form.Group controlId="BHAname" style={styles.wide}>
-                <Input
+                <Form.Control
+                  accepter={Input}
+                  name="BHAname"
                   onChange={setBHAname}
                   placeholder="BHA Name"
                   data={data_placeHolder}
                   style={styles.wide}
+                  value={BHAname}
                 />
               </Form.Group>
               <Form.Group
@@ -445,7 +457,8 @@ export const TrippingSpeed = () => {
               >
                 <InputGroup style={styles.wide}>
                   <Input
-                    onChange={setBenchmarkTS}
+                    name='BenchmarkTS'
+                    // onChange={setBenchmarkTS}
                     placeholder="Benchmark (Tripping Speed)"
                     data={data_placeHolder}
                     disabled
@@ -469,7 +482,8 @@ export const TrippingSpeed = () => {
               >
                 <InputGroup style={styles.wide}>
                   <Input
-                    onChange={setBenchmarkCT}
+                    name='BenchmarkCT'
+                    // onChange={setBenchmarkCT}
                     placeholder="Benchmark (Connection Time)"
                     data={data_placeHolder}
                     disabled
@@ -491,7 +505,8 @@ export const TrippingSpeed = () => {
                   <span>
                     <InputGroup style={styles.wide}>
                       <Input
-                        onChange={setThreshold}
+                        name='threshold'
+                        // onChange={setThreshold}
                         placeholder="Threshold"
                         data={data_placeHolder}
                         disabled
@@ -502,11 +517,15 @@ export const TrippingSpeed = () => {
                 </Whisper>
               </Form.Group>
 
-              <Form.Group controlId="daterange">
+              <Form.Group controlId="dateRangeValue">
                 <DateRangePicker
+                  name='dateRangeValue'
                   value={dateRangeValue}
-                  onChange={setDateRangeValue}
-                  format="dd-MM-yyyy HH:mm:ss"
+                  onChange={(event)=>{setDateRangeValue(event);setFormValue((prevState) => ({
+                    ...prevState,
+                    'dateRangeValue': dateRangeValue
+                  }));}}
+                  format="dd/MM/yyyy HH:mm:ss"
                   style={{
                     width: 520,
                     marginLeft: 10,
@@ -524,7 +543,7 @@ export const TrippingSpeed = () => {
                 : "opacity-0 translate-y-12"
             }`}
             >
-              <Form.Group controlId="well">
+              <Form.Group controlId="button">
                 <Button
                   appearance="primary"
                   type="submit"
@@ -541,21 +560,15 @@ export const TrippingSpeed = () => {
                 >
                   Submit
                 </Button>
-                {/* <ActionButton
-              className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base py-2 px-4 rounded "
-              text="Submit"
-              action={processInput}
-              args={[params]}
-            ></ActionButton> */}
               </Form.Group>
             </div>
           </Form>
-          <div class="flex justify-center items-center">
-            <div class="flex-col items-center mb-6">
-              <div class={`text-center text-sm ${msg["color"]} mt-4 mb-2`}>
+          <div className="flex justify-center items-center">
+            <div className="flex-col items-center mb-6">
+              <div className={`text-center text-sm ${msg["color"]} mt-4 mb-2`}>
                 {msg["msg"]}
               </div>
-              <div class={`text-center text-sm ${msg2["color"]} my-2`}>
+              <div className={`text-center text-sm ${msg2["color"]} my-2`}>
                 <strong>{msg2["msg"]}</strong>
               </div>
             </div>
