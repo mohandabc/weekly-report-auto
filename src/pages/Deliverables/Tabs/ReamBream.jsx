@@ -137,7 +137,7 @@ export const ReamBream = () => {
                     }`}
         >
           <ActionButton
-            className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base my-7 py-2 px-4 rounded "
+            className="bg-gray-400 hover:bg-gray-500 text-black font-bold text-base my-7 py-2 px-4 rounded"
             text="Submit"
             action={processInput}
             args={[params]}
