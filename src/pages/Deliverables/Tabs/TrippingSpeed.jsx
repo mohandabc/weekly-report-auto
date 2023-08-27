@@ -149,16 +149,14 @@ export const TrippingSpeed = () => {
     lastCSG: schemStringType,
     // TrippingType: schemStringType,
     tripReason: schemStringType,
-    tripNumber: schemNumberType,
+    // tripNumber: schemNumberType,
     casedHole: schemStringType,
     drillString: schemStringType,
     BHAname: schemStringType,
-    benchmarkTS: schemStringType,
-    benchmarkCT: schemStringType,
-    threshold: schemStringType,
-    dateRangeValue: Schema.Types.ArrayType().isRequired(
-      "This field is required."
-    ),
+    // benchmarkTS: schemStringType,
+    // benchmarkCT: schemStringType,
+    // threshold: schemStringType,
+    // dateRangeValue: Schema.Types.ArrayType().isRequired("This field is required."),
   });
 
   const [loadingValue, setLoadingValue] = React.useState(false);
@@ -298,16 +296,16 @@ export const TrippingSpeed = () => {
                 rotarySys: formValue["rotarySys"],
                 phase: formValue["phase"],
                 lastCSG: formValue["lastCSG"],
-                TrippingType: formValue["TrippingType"],
+                // TrippingType: formValue["TrippingType"],
                 tripReason: formValue["tripReason"],
-                tripNumber: formValue["tripNumber"],
+                // tripNumber: formValue["tripNumber"],
                 casedHole: formValue["casedHole"],
                 drillString: formValue["drillString"],
                 BHAname: formValue["BHAname"],
-                benchmarkTS: formValue["benchmarkTS"],
-                benchmarkCT: formValue["benchmarkCT"],
-                threshold: formValue["threshold"],
-                dateRangeValue: formValue["dateRangeValue"],
+                // benchmarkTS: formValue["benchmarkTS"],
+                // benchmarkCT: formValue["benchmarkCT"],
+                // threshold: formValue["threshold"],
+                // dateRangeValue: formValue["dateRangeValue"],
               })
             }
           >
