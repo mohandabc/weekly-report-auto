@@ -210,8 +210,8 @@ export const TrippingSpeed = () => {
         ].includes(key) && params[key] === 0
     );
     if (zeroFields.length > 0) {
-      setMsg({ msg: `Please complete all required fields before proceeding` });
-      setMsg2({ msg: ` ${zeroFields.join(", ")}` });
+      setMsg({ msg: `Please complete all required fields before proceeding`, color: "text-red-500"});
+      setMsg2({ msg: ` ${zeroFields.join(", ")}`, color: "text-red-500"});
     } else {
       setLoadingValue(true);
       getData(BACK_URL, "TrippingSpeed/", params).then((res) => {
@@ -219,7 +219,7 @@ export const TrippingSpeed = () => {
           setData(res);
         } else {
           setMsg2({});
-          setMsg({ msg: res["error"] });
+          setMsg({ msg: res["error"], color: "text-red-500"});
         }
         setLoadingValue(false);
         console.log("Returned Results : ", res);
@@ -243,13 +243,13 @@ export const TrippingSpeed = () => {
     });
   }
 
-  const resetStates = () => {
+  const resetStates = (newMsg, newMsg2) => {
     setDateRangeValue([new Date(), new Date()]);
     setData([]);
     setWell(0);
     setRig(0);
-    setMsg(0);
-    setMsg2(0);
+    setMsg(newMsg);
+    setMsg2(newMsg2);
   };
   return (
     <>
@@ -552,10 +552,10 @@ export const TrippingSpeed = () => {
           </Form>
           <div class="flex justify-center items-center">
             <div class="flex-col items-center mb-6">
-              <div class="text-center text-sm text-red-500 mt-4 mb-2">
+              <div class={`text-center text-sm ${msg["color"]} mt-4 mb-2`}>
                 {msg["msg"]}
               </div>
-              <div class="text-center text-sm text-red-500 my-2">
+              <div class={`text-center text-sm ${msg2["color"]} my-2`}>
                 <strong>{msg2["msg"]}</strong>
               </div>
             </div>

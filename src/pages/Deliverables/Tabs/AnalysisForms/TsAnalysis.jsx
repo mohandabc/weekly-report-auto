@@ -156,11 +156,11 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id}) => {
       (res) => {
         if ("msg" in res && res.status === 200) {
           setShowTstab(true);
+          resetStates({msg: 'Document deleted successfully', color: "text-green-500"},{});
           alert("Document deleted successfully");
         }
       }
       );
-    resetStates();
     };
 
   const handleSaveClick = () => {
@@ -175,7 +175,7 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id}) => {
   };
 
   const handleCancelClick = () => {
-    resetStates();
+    resetStates({},{});
     setShowTstab(true);
   };
 
