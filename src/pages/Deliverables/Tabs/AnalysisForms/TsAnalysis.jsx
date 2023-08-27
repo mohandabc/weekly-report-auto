@@ -174,6 +174,10 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id}) => {
     alert("Save button function isn't implemented yet !, an update function should be implemented in the back side first !");
   };
 
+  const handleDisplayReportClick = () => {
+    alert("Reports aren't implemented yet !");
+  };
+
   const handleCancelClick = () => {
     resetStates({},{});
     setShowTstab(true);
@@ -356,6 +360,9 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id}) => {
           </Button>
           <Button color="red" appearance="primary" onClick={handleDeleteClick}>
             Delete Analysis
+          </Button>
+          <Button color="green" appearance="primary" className="ml-4" onClick={handleDisplayReportClick}>
+            Display Report
           </Button>
           <Button color="blue" appearance="primary" className="mx-4" onClick={handleSaveClick}>
             Save

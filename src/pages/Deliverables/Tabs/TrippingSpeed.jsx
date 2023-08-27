@@ -480,7 +480,7 @@ export const TrippingSpeed = () => {
                 controlId="BenchmarkTS"
                 style={{ marginTop: 6, marginLeft: 10 }}
               >
-                <InputGroup style={styles.wide}>
+                <InputGroup disabled style={styles.wide}>
                   <Input
                     name="BenchmarkTS"
                     // onChange={setBenchmarkTS}
@@ -501,17 +501,16 @@ export const TrippingSpeed = () => {
                 : "opacity-0 translate-y-12"
             }`}
             >
-              <Form.Group
+              <Form.Group 
                 controlId="BenchmarkCT"
                 style={{ marginTop: 6, marginLeft: 10 }}
               >
-                <InputGroup style={styles.wide}>
+                <InputGroup disabled style={styles.wide}>
                   <Input
                     name="BenchmarkCT"
                     // onChange={setBenchmarkCT}
                     placeholder="Benchmark (Connection Time)"
                     data={data_placeHolder}
-                    disabled
                   />
                   <InputGroup.Addon>min</InputGroup.Addon>
                 </InputGroup>
@@ -528,7 +527,7 @@ export const TrippingSpeed = () => {
                   }
                 >
                   <span>
-                    <InputGroup style={styles.wide}>
+                    <InputGroup disabled style={styles.wide}>
                       <Input
                         name="threshold"
                         // onChange={setThreshold}
