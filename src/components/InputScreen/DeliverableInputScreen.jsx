@@ -45,7 +45,7 @@ export const DeliverableInputScreen  = ({ title, configBarAction, options }) => 
                 <Tab>Tripping Speed</Tab>
                 <Tab>Drilling State</Tab>
                 <Tab>Ream-Back Ream</Tab>
-                <Tab>Back Log</Tab>
+                <Tab>Backlog</Tab>
               </TabList>
 
               <TabPanel>

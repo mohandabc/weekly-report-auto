@@ -33,13 +33,15 @@ export const BackLog = () => {
       const url = new URL('fetchDeliverables/', BACK_URL);
       url.searchParams.set('page',`${pagination.pageIndex}`,);
       url.searchParams.set('size', `${pagination.pageSize}`);
-      const filtersWithoutAnalysis = columnFilters.map((filter) => ({
+      url.searchParams.set('filters', JSON.stringify(columnFilters.map((filter) => ({
         ...filter,
         id: filter.id.replace("analysis.", ""),
-      }));
-      url.searchParams.set('filters', JSON.stringify(filtersWithoutAnalysis ?? []));
+      })) ?? []));
       url.searchParams.set('globalFilter', globalFilter ?? '');
-      url.searchParams.set('sorting', JSON.stringify(sorting ?? []));
+      url.searchParams.set('sorting', JSON.stringify(sorting.map((filter) => ({
+        ...filter,
+        id: filter.id.replace("analysis.", ""),
+      })) ?? []));
 
       try {
         const response = await fetch(url.href);
@@ -114,7 +116,7 @@ export const BackLog = () => {
                   : "opacity-0 translate-y-12"
               }`}
             >
-              Deliverables Back Log
+              Deliverables Backlog
             </h1>
           </div>
         </div>
