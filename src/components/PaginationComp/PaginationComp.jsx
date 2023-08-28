@@ -4,7 +4,7 @@ import { TsAnalysis } from '../../pages/Deliverables/Tabs/AnalysisForms/TsAnalys
 
 const ITEMS_PER_PAGE = 1;
 
-export const PaginationComp = ({ data, resetStates}) => {
+export const PaginationComp = ({ data, resetStates, ParentComponent, parentStr}) => {
   const [activePage, setActivePage] = useState(1);
 
   const handleSelect = (eventKey) => {
@@ -24,6 +24,8 @@ export const PaginationComp = ({ data, resetStates}) => {
           TsAnalysisData={item["ts_analysis"]}
           doc_id={item["_id"]}
           resetStates={resetStates}
+          ParentComponent={ParentComponent}
+          parentStr={parentStr}
         ></TsAnalysis>
         ))}
         <div className="flex justify-center">

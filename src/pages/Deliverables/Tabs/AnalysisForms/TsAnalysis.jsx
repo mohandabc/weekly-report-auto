@@ -1,7 +1,7 @@
 import React from "react";
 import { Table, Button, Checkbox, Pagination } from "rsuite";
 import { DatePicker } from "rsuite";
-import { TrippingSpeed } from "../..";
+import { BackLog, TrippingSpeed } from "../..";
 import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../../../constants/constants";
 import { BACK_URL } from "../../../../constants/URI";
 import { deleteDoc } from "../../../../api/api";
@@ -120,13 +120,13 @@ const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
   );
 };
 
-export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id}) => {
+export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent, parentStr}) => {
   // const [limit, setLimit] = React.useState(10);
   // const [page, setPage] = React.useState(1);
   const [defData, setdefData] = React.useState(
     TsAnalysisData.standline
   );
-  const [showTstab, setShowTstab] = React.useState(false);
+  const [showParent, setShowParent] = React.useState(false);
 
   // const data = defData.filter((v, i) => {
   //   const start = limit * (page - 1);
@@ -155,8 +155,8 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id}) => {
     deleteDoc(BACK_URL, "TrippingSpeed/deleteDoc/", doc_id).then(
       (res) => {
         if ("msg" in res && res.status === 200) {
-          setShowTstab(true);
-          resetStates({msg: 'Document deleted successfully', color: "text-green-500"},{});
+          setShowParent(true);
+          resetStates({msg: 'Document deleted successfully', color: "text-green-500"});
           alert("Document deleted successfully");
         }
       }
@@ -179,8 +179,9 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id}) => {
   };
 
   const handleCancelClick = () => {
-    resetStates({},{});
-    setShowTstab(true);
+    console.log(parentStr);
+    resetStates({});
+    setShowParent(true);
   };
 
   const [animation, setAnimation] = React.useState(false);
@@ -193,8 +194,8 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id}) => {
     setdefData(TsAnalysisData.standline);
   }, [TsAnalysisData.standline]);
 
-  return showTstab ? (
-    <TrippingSpeed options={DELIVERABLE_CONFIG_BAR_OPTIONS}></TrippingSpeed>
+  return showParent ? (
+    <ParentComponent options={DELIVERABLE_CONFIG_BAR_OPTIONS}></ParentComponent>
   ) : (
     <div className="py-4 px-4">
       <div

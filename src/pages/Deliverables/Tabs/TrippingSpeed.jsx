@@ -256,13 +256,14 @@ export const TrippingSpeed = () => {
   const resetStates = (newMsg) => {
     setDateRangeValue([new Date(), new Date()]);
     setData([]);
-    setFormValue(formValueInit[0]);
+    setFormValue([formValueInit]);
     setMsg(newMsg);
   };
+
   return (
     <>
       {data.length !== 0 ? (
-        <PaginationComp data={data} resetStates={resetStates}></PaginationComp>
+        <PaginationComp data={data} resetStates={resetStates} ParentComponent={TrippingSpeed} parentStr='TrippingSpeed'></PaginationComp>
       ) : (
         <div
           className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto ${
