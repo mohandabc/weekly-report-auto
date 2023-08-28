@@ -23,7 +23,6 @@ export const BackLog = () => {
   const [animation, setAnimation] = useState(false);
 
   useEffect(() => {
-    console.log(pagination)
     const fetchData = async () => {
       if (!data.length) {
         setIsLoading(true);
@@ -34,14 +33,17 @@ export const BackLog = () => {
       const url = new URL('fetchDeliverables/', BACK_URL);
       url.searchParams.set('page',`${pagination.pageIndex}`,);
       url.searchParams.set('size', `${pagination.pageSize}`);
-      url.searchParams.set('filters', JSON.stringify(columnFilters ?? []));
+      const filtersWithoutAnalysis = columnFilters.map((filter) => ({
+        ...filter,
+        id: filter.id.replace("analysis.", ""),
+      }));
+      url.searchParams.set('filters', JSON.stringify(filtersWithoutAnalysis ?? []));
       url.searchParams.set('globalFilter', globalFilter ?? '');
       url.searchParams.set('sorting', JSON.stringify(sorting ?? []));
 
       try {
         const response = await fetch(url.href);
         const json = await response.json();
-        console.log(json.items)
         setData(json.items);
         setAnimation(true)
         setRowCount(json.total);
