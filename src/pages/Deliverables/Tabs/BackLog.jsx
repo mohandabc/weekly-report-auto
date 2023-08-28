@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Loader } from "../../../components";
 import { BACK_URL } from "../../../constants/URI";
 import { MaterialReactTable } from "material-react-table";
+import { getData } from "../../../api/api";
+import { TsAnalysis } from "./AnalysisForms/TsAnalysis";
 
 export const BackLog = () => {
   //data and fetching state
@@ -19,6 +21,9 @@ export const BackLog = () => {
     pageIndex: 0,
     pageSize: 5,
   });
+
+  const [tsAnalysisData, setTsAnalysisData] = useState(null);
+  const [docId, setDocId] = useState(null);
 
   const [animation, setAnimation] = useState(false);
 
@@ -95,18 +100,32 @@ export const BackLog = () => {
         accessorKey: "analysis.analysis_type",
         size: 200,
               },
-    ],
-    []
-  );
-
-  return (
-    <>
+            ],
+            []
+            );
+            
+            function getTSanalysisRecord(id) {
+    const path = `TrippingSpeed/getDoc/${id}`;
+      getData(BACK_URL, path, id)
+      .then(res=> {
+        console.log(res);
+        setTsAnalysisData(res.ts_analysis);
+        setDocId(res._id);
+      });
+    }
+    return (
+      <>
+      {(tsAnalysisData)?
+      <div className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto`}>
+      <TsAnalysis key={docId} TsAnalysisData={tsAnalysisData} doc_id={docId}/>
+      </div>:
+      <>
       <div className="absolute mt-56 z-50">
         <Loader></Loader>
       </div>
       <div
         className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto}`}
-      >
+        >
         <div className="flex justify-center items-center">
           <div className="py-9">
             <h1
@@ -156,9 +175,20 @@ export const BackLog = () => {
               showProgressBars: isRefetching,
               sorting,
             }}
+            muiTableBodyRowProps={({ row }) => ({
+              onClick: (event) => {
+                getTSanalysisRecord(row.id)
+              },
+              sx: {
+                cursor: 'pointer',
+              },
+            })}
           />
         </div>
       </div>
+      </>
+      }
+      
     </>
   );
 };
