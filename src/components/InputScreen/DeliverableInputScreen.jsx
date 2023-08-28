@@ -33,7 +33,7 @@ export const DeliverableInputScreen  = ({ title, configBarAction, options }) => 
             animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}>
             <Tabs
-              defaultIndex="1"
+              defaultIndex={1}
               selectedTabClassName={`${
                 darkMode
                   ? "react-tabs__tab--selecteddark"
