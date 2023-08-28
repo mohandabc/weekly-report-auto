@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { Loader } from "../../../components";
-import { getData } from "../../../api/api";
 import { BACK_URL } from "../../../constants/URI";
 import { MaterialReactTable } from "material-react-table";
 
@@ -24,6 +23,7 @@ export const BackLog = () => {
   const [animation, setAnimation] = useState(false);
 
   useEffect(() => {
+    console.log(pagination)
     const fetchData = async () => {
       if (!data.length) {
         setIsLoading(true);
@@ -32,10 +32,7 @@ export const BackLog = () => {
       }
 
       const url = new URL('fetchDeliverables/', BACK_URL);
-      url.searchParams.set(
-        'start',
-        `${pagination.pageIndex * pagination.pageSize}`,
-      );
+      url.searchParams.set('page',`${pagination.pageIndex}`,);
       url.searchParams.set('size', `${pagination.pageSize}`);
       url.searchParams.set('filters', JSON.stringify(columnFilters ?? []));
       url.searchParams.set('globalFilter', globalFilter ?? '');
@@ -44,10 +41,10 @@ export const BackLog = () => {
       try {
         const response = await fetch(url.href);
         const json = await response.json();
-        console.log(json)
-        setData(json);
+        console.log(json.items)
+        setData(json.items);
         setAnimation(true)
-        // setRowCount(json.meta.totalRowCount);
+        setRowCount(json.total);
       } catch (error) {
         setIsError(true);
         console.error(error);
@@ -71,6 +68,11 @@ export const BackLog = () => {
       {
         header: "Well",
         accessorKey: "analysis.well",
+        size: 200,
+      },
+      {
+        header: "Trip Type",
+        accessorKey: "analysis.trip_information.trip_type",
         size: 200,
       },
       {
@@ -122,36 +124,25 @@ export const BackLog = () => {
           <MaterialReactTable
             columns={columns}
             data={data}
-            enableColumnActions={true}
-            enableColumnFilters={true}
-            enablePagination={true}
-            enableSorting={true}
-            enableBottomToolbar={true}
-            enableTopToolbar={true}
-            muiTableBodyRowProps={{ hover: true }}
-            muiTableProps={{
-              sx: {
-                border: "1px solid rgba(81, 81, 81, 1)",
-              },
-            }}
-            muiTableHeadCellProps={{
-              sx: {
-                border: "1px solid rgba(81, 81, 81, 1)",
-              },
-            }}
-            muiTableBodyCellProps={{
-              sx: {
-                border: "1px solid rgba(81, 81, 81, 1)",
-              },
-            }}
-            initialState={{
-              density: "compact",
-              expanded: true,
-              pagination: { pageIndex: 0, pageSize: 10 },
-              showColumnFilters: true,
-              sorting: [{ id: "analysis.create_date", desc: false }],
-            }}
+            getRowId={(row) => row.phoneNumber}
+            initialState={{ density: "compact",showColumnFilters: true }}
+            manualFiltering
+            manualPagination
+            manualSorting
+            muiToolbarAlertBannerProps={
+              isError
+                ? {
+                    color: 'error',
+                    children: 'Error loading data',
+                  }
+                : undefined
+            }
             enableDensityToggle={false}
+            onColumnFiltersChange={setColumnFilters}
+            onGlobalFilterChange={setGlobalFilter}
+            onPaginationChange={setPagination}
+            onSortingChange={setSorting}
+            rowCount={rowCount}
             state={{
               columnFilters,
               globalFilter,
