@@ -71,28 +71,28 @@ export const BackLog = () => {
         header: "Well",
         accessorKey: "analysis.well",
         size: 200,
-      },
+              },
       {
         header: "Trip Type",
         accessorKey: "analysis.trip_information.trip_type",
         size: 200,
-      },
+              },
       {
         header: "Phase",
         accessorKey: "analysis.phase",
         size: 200,
-      },
+              },
       {
         header: "Create Date",
         accessorKey: "analysis.create_date",
         type: 'date',
         size: 200,
-      },
+              },
       {
         header: "Report Type",
         accessorKey: "analysis.analysis_type",
         size: 200,
-      },
+              },
     ],
     []
   );
@@ -126,7 +126,7 @@ export const BackLog = () => {
           <MaterialReactTable
             columns={columns}
             data={data}
-            getRowId={(row) => row.phoneNumber}
+            getRowId={(row) => row._id}
             initialState={{ density: "compact",showColumnFilters: true }}
             manualFiltering
             manualPagination
