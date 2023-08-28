@@ -114,24 +114,28 @@ export const DrillingState = () => {
             placeholder="Well"
             style={styles.wide}
             data={data_placeHolder}
+            disabled
           />
           <SelectPicker
             onChange={setRig}
             placeholder="Rig"
             style={styles.wide}
             data={data_placeHolder}
+            disabled
           />
           <SelectPicker
             onChange={setRotarySys}
             placeholder="Rotary System"
             style={styles.wide}
             data={data_placeHolder}
+            disabled
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Phase"
             style={styles.wide}
             data={data_placeHolder}
+            disabled
           />
         </div>
         <div
@@ -148,24 +152,28 @@ export const DrillingState = () => {
             placeholder="Last CSG Shoe [m]"
             style={styles.wide}
             data={data_placeHolder}
+            disabled
           />
           <SelectPicker
             onChange={setRunNum}
             placeholder="Run number"
             style={styles.wide}
             data={data_placeHolder}
+            disabled
           />
           <SelectPicker
             onChange={setDrillString}
             placeholder="Drill String Size"
             style={styles.wide}
             data={data_placeHolder}
+            disabled
           />
           <SelectPicker
             onChange={setBHAname}
             placeholder="BHA Name"
             style={styles.wide}
             data={data_placeHolder}
+            disabled
           />
         </div>
         <div
@@ -182,12 +190,14 @@ export const DrillingState = () => {
             placeholder="Benchmark (Connection Time [min])"
             style={styles.wide}
             data={data_placeHolder}
+            disabled
           />
           <SelectPicker
             onChange={setThreshold}
             placeholder="Threshold [T]"
             style={styles.wide}
             data={data_placeHolder}
+            disabled
           />
           <DateRangePicker
             value={dateRangeValue}
@@ -197,6 +207,7 @@ export const DrillingState = () => {
               width: 520,
               margin: 10,
             }}
+            disabled
           />
         </div>
         <div
@@ -209,10 +220,11 @@ export const DrillingState = () => {
                     }`}
         >
           <ActionButton
-            className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base my-7 py-2 px-4 rounded "
+            className="bg-gray-400 hover:bg-gray-500 text-black font-bold text-base my-7 py-2 px-4 rounded"
             text="Submit"
             action={processInput}
             args={[params]}
+            disabled
           ></ActionButton>
         </div>
       </div>

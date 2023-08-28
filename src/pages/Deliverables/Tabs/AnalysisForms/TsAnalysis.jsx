@@ -1,7 +1,7 @@
 import React from "react";
 import { Table, Button, Checkbox, Pagination } from "rsuite";
 import { DatePicker } from "rsuite";
-import { TrippingSpeed } from "../..";
+import { BackLog, TrippingSpeed } from "../..";
 import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../../../constants/constants";
 import { BACK_URL } from "../../../../constants/URI";
 import { deleteDoc } from "../../../../api/api";
@@ -9,10 +9,10 @@ import "./styles.css";
 
 const { Column, HeaderCell, Cell } = Table;
 
-function minutesToTime(minutes) {
+function minutesToTime(seconds) {
   const date = new Date();
-  date.setMinutes(Math.floor(minutes));
-  date.setSeconds((minutes % 1) * 60);
+  date.setMinutes(Math.floor(seconds/60));
+  date.setSeconds(seconds % 60);
   return date;
 }
 
@@ -23,8 +23,9 @@ function formatDateString(dateString) {
   let day = ("0" + date.getDate()).slice(-2);
   let hours = ("0" + date.getHours()).slice(-2);
   let minutes = ("0" + date.getMinutes()).slice(-2);
+  let seconds = ("0" + date.getSeconds()).slice(-2);
   let formattedDateString =
-    day + "-" + month + "-" + year + " " + hours + ":" + minutes;
+    day + "-" + month + "-" + year + " " + hours + ":" + minutes + ":" + seconds;
   return formattedDateString;
 }
 
@@ -119,19 +120,19 @@ const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
   );
 };
 
-export const TsAnalysis = (TsAnalysisData) => {
-  const [limit, setLimit] = React.useState(10);
-  const [page, setPage] = React.useState(1);
+export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent, parentStr}) => {
+  // const [limit, setLimit] = React.useState(10);
+  // const [page, setPage] = React.useState(1);
   const [defData, setdefData] = React.useState(
-    TsAnalysisData.TsAnalysisData.standline
+    TsAnalysisData.standline
   );
-  const [showTstab, setShowTstab] = React.useState(false);
+  const [showParent, setShowParent] = React.useState(false);
 
-  const data = defData.filter((v, i) => {
-    const start = limit * (page - 1);
-    const end = start + limit;
-    return i >= start && i < end;
-  });
+  // const data = defData.filter((v, i) => {
+  //   const start = limit * (page - 1);
+  //   const end = start + limit;
+  //   return i >= start && i < end;
+  // });
 
   const handleChange = (standNum, key, value) => {
     const nextData = Object.assign([], defData);
@@ -145,35 +146,42 @@ export const TsAnalysis = (TsAnalysisData) => {
     setdefData(nextData);
   };
 
-  const handleChangeLimit = (dataKey) => {
-    setPage(1);
-    setLimit(dataKey);
-  };
+  // const handleChangeLimit = (dataKey) => {
+  //   setPage(1);
+  //   setLimit(dataKey);
+  // };
 
   const handleDeleteClick = () => {
-    deleteDoc(BACK_URL, "TrippingSpeed/deleteDoc/", TsAnalysisData.doc_id).then(
+    deleteDoc(BACK_URL, "TrippingSpeed/deleteDoc/", doc_id).then(
       (res) => {
         if ("msg" in res && res.status === 200) {
-          setShowTstab(true);
+          setShowParent(true);
+          resetStates({msg: 'Document deleted successfully', color: "text-green-500"});
           alert("Document deleted successfully");
         }
       }
-    );
-  };
+      );
+    };
 
   const handleSaveClick = () => {
     const updatedData = defData.map(object => {
       const { status, ...otherFields } = object;
       return otherFields;
     });
-    TsAnalysisData.TsAnalysisData['standline'] = updatedData;
+    TsAnalysisData['standline'] = updatedData;
     console.log("The document that is going to be updated with its new data : ",
-    {"document_id":TsAnalysisData.doc_id, "params" : TsAnalysisData.TsAnalysisData});
+    {"document_id":TsAnalysisData.doc_id, "params" : TsAnalysisData});
     alert("Save button function isn't implemented yet !, an update function should be implemented in the back side first !");
   };
 
+  const handleDisplayReportClick = () => {
+    alert("Reports aren't implemented yet !");
+  };
+
   const handleCancelClick = () => {
-    setShowTstab(true);
+    console.log(parentStr);
+    resetStates({});
+    setShowParent(true);
   };
 
   const [animation, setAnimation] = React.useState(false);
@@ -182,8 +190,12 @@ export const TsAnalysis = (TsAnalysisData) => {
     setAnimation(true);
   },[]);
 
-  return showTstab ? (
-    <TrippingSpeed options={DELIVERABLE_CONFIG_BAR_OPTIONS}></TrippingSpeed>
+  React.useEffect(() => {
+    setdefData(TsAnalysisData.standline);
+  }, [TsAnalysisData.standline]);
+
+  return showParent ? (
+    <ParentComponent options={DELIVERABLE_CONFIG_BAR_OPTIONS}></ParentComponent>
   ) : (
     <div className="py-4 px-4">
       <div
@@ -199,7 +211,7 @@ export const TsAnalysis = (TsAnalysisData) => {
           padding={100}
           height={342}
           width={1000}
-          data={data}
+          data={defData}
         >
           <Column width={50}>
             <HeaderCell>N</HeaderCell>
@@ -215,12 +227,12 @@ export const TsAnalysis = (TsAnalysisData) => {
             <EditableCell dataKey="date_to" onChange={handleChange} />
           </Column>
 
-          <Column width={90}>
+          <Column width={80}>
             <HeaderCell>Depth from</HeaderCell>
             <EditableCell dataKey="depth_from" onChange={handleChange} />
           </Column>
 
-          <Column width={80}>
+          <Column width={70}>
             <HeaderCell>Depth to</HeaderCell>
             <EditableCell dataKey="depth_to" onChange={handleChange} />
           </Column>
@@ -230,9 +242,14 @@ export const TsAnalysis = (TsAnalysisData) => {
             <EditableCell dataKey="connection_time" onChange={handleChange} />
           </Column>
 
-          <Column width={120}>
-            <HeaderCell>Tripping Speed</HeaderCell>
-            <EditableCell dataKey="tripping_speed" onChange={handleChange} />
+          <Column width={70}>
+            <HeaderCell>Gross Speed</HeaderCell>
+            <EditableCell dataKey="gross_speed" onChange={handleChange} />
+          </Column>
+
+          <Column width={70}>
+            <HeaderCell>Net Speed</HeaderCell>
+            <EditableCell dataKey="net_speed" onChange={handleChange} />
           </Column>
 
           <Column width={72}>
@@ -250,7 +267,7 @@ export const TsAnalysis = (TsAnalysisData) => {
             <ActionCell dataKey="standNum" onClick={handleEditState} />
           </Column>
         </Table>
-        <div className="px-5">
+        {/* <div className="px-5">
           <Pagination
             prev
             next
@@ -261,14 +278,14 @@ export const TsAnalysis = (TsAnalysisData) => {
             maxButtons={5}
             size="xs"
             layout={["total", "-", "limit", "|", "pager", "skip"]}
-            total={TsAnalysisData.TsAnalysisData.standline.length}
+            total={TsAnalysisData.standline.length}
             limitOptions={[10, 20, 30]}
             limit={limit}
             activePage={page}
             onChangePage={setPage}
             onChangeLimit={handleChangeLimit}
           />
-        </div>
+        </div> */}
       </div>
       <div
         className={`text-zinc-500 dark:text-black flex justify-between delay-200 duration-1000 transition-all ease-out ${
@@ -276,27 +293,61 @@ export const TsAnalysis = (TsAnalysisData) => {
           animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
         }`}
       >
-        <div className="float-left p-2 text-sm">
-          <div>
-            <b>Well :</b> {TsAnalysisData.TsAnalysisData.well}
+      <div className="grid grid-cols-4 gap-20 mt-5 mx-auto px-10 bg-gray-100 rounded-lg">
+        <div className="text-sm">
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">Well :</b> {TsAnalysisData.well}
           </div>
-          <div>
-            <b>Trip Number : </b> {TsAnalysisData.TsAnalysisData.trip_number}
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">Rotary System :</b>{" "}
+            {TsAnalysisData.trip_information.rotary_system}
+          </div>
+          <div className="py-2 text-gray-700">
+            <b className="text-gray-900">Phase : </b> {TsAnalysisData.phase}
           </div>
         </div>
-        <div className="float-right p-2 text-sm">
-          <div>
-            <b>CSG Size : </b> {TsAnalysisData.TsAnalysisData.csg_size}
+        <div className="text-sm">
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">Trip Type : </b>{" "}
+            {TsAnalysisData.trip_information.trip_type}
           </div>
-          <div>
-            <b>Drill Pipe Size : </b>
-            {TsAnalysisData.TsAnalysisData.drill_pipe_size}
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">Trip Reason : </b>{" "}
+            {TsAnalysisData.trip_information.trip_reason}
+          </div>
+          <div className="py-2 text-gray-700">
+            <b className="text-gray-900">Trip Number : </b> {TsAnalysisData.trip_number}
+          </div>
+        </div>
+        <div className="text-sm">
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">CSG Size : </b> {TsAnalysisData.csg_size}
+          </div>
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">Drill String Size : </b>{" "}
+            {TsAnalysisData.drill_pipe_size}
+          </div>
+          <div className="py-2 text-gray-700">
+            <b className="text-gray-900">Hole : </b>{" "}
+            {TsAnalysisData.trip_information.hole_type}
+          </div>
+        </div>
+        <div className="text-sm">
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">BHA Name : </b> {TsAnalysisData.bha}
+          </div>
+          <div className="pt-2 text-gray-700">
+            <b className="text-gray-900">Benchmark (TS) : </b> {}
+          </div>
+          <div className="py-2 text-gray-700">
+            <b className="text-gray-900">Benchmark (CT) : </b> {}
           </div>
         </div>
       </div>
+      </div>
       <div>
         <div
-          className={`flex justify-center my-4 delay-200 duration-1000 transition-all ease-out ${
+          className={`flex justify-center mt-6 delay-200 duration-1000 transition-all ease-out ${
             // hiding components when they first appear and then applying a translate effect gradually
             animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}
@@ -308,18 +359,14 @@ export const TsAnalysis = (TsAnalysisData) => {
           >
             Cancel
           </Button>
-          <Button color="blue" appearance="primary" className="mx-4" onClick={handleSaveClick}>
-            Save
-          </Button>
-        </div>
-        <div
-          className={`flex justify-center delay-200 duration-1000 transition-all ease-out ${
-            // hiding components when they first appear and then applying a translate effect gradually
-            animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-          }`}
-        >
           <Button color="red" appearance="primary" onClick={handleDeleteClick}>
             Delete Analysis
+          </Button>
+          <Button color="green" appearance="primary" className="ml-4" onClick={handleDisplayReportClick}>
+            Display Report
+          </Button>
+          <Button color="blue" appearance="primary" className="mx-4" onClick={handleSaveClick}>
+            Save
           </Button>
         </div>
       </div>

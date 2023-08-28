@@ -100,18 +100,21 @@ export const ReamBream = () => {
             placeholder="Well"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
           <SelectPicker
             onChange={setPhase}
             placeholder="Phase"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
           <SelectPicker
             onChange={setNpt}
             placeholder="NPT"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
           <DateRangePicker
             value={dateRangeValue}
@@ -121,6 +124,7 @@ export const ReamBream = () => {
               width: 250,
               margin: 10,
             }}
+            disabled
           />
         </div>
         <div
@@ -133,10 +137,11 @@ export const ReamBream = () => {
                     }`}
         >
           <ActionButton
-            className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base my-7 py-2 px-4 rounded "
+            className="bg-gray-400 hover:bg-gray-500 text-black font-bold text-base my-7 py-2 px-4 rounded"
             text="Submit"
             action={processInput}
             args={[params]}
+            disabled
           ></ActionButton>
         </div>
       </div>

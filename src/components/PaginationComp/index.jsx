@@ -1,0 +1,1 @@
+export {PaginationComp} from './PaginationComp'
