@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { PaginationComp } from "../../../components";
 import { DateRangePicker } from "rsuite";
 import { Form, Schema } from "rsuite";
+import { useAuth } from "../../../api/useAuth";
+
 import {
   SelectPicker,
   Input,
@@ -117,6 +119,7 @@ const phase_placeHolder = [
 ].map((item) => ({ label: item, value: item }));
 
 export const TrippingSpeed = () => {
+  const { user } = useAuth();
   const formValueInit = React.useState({
     well: undefined,
     rig: undefined,
@@ -186,19 +189,20 @@ export const TrippingSpeed = () => {
   const processInput = () => {
     /***************************************************************************
      * TODO: FURTHER PROCESSING , SEND PARAMS TO WHATEVER THE OTHER SIDE IS ;) *
-     ***************************************************************************/
-    if (!formRef.current.check()) {
-      setShake(true);
-      setMsg({
-        msg: `Please complete all required fields before proceeding`,
-        color: "text-red-500",
+    ***************************************************************************/
+   if (!formRef.current.check()) {
+     setShake(true);
+     setMsg({
+       msg: `Please complete all required fields before proceeding`,
+       color: "text-red-500",
       });
       setTimeout(() => {
         setShake(false);
       }, 820);
       return;
     }
-
+    
+    formValue["created_by"] = user.name
     console.log("Params from TrippingSpeed : ", formValue);
     setLoadingValue(true);
     formValue["well"] = wellsplaceholder.find(

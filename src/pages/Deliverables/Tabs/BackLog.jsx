@@ -16,7 +16,9 @@ export const BackLog = () => {
   //table state
   const [columnFilters, setColumnFilters] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
-  const [sorting, setSorting] = useState([]);
+  const [sorting, setSorting] = useState([
+    { id: "analysis.create_date", desc: true },
+  ]);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 5,
@@ -88,27 +90,50 @@ export const BackLog = () => {
         header: "Well",
         accessorKey: "analysis.well",
         size: 200,
+        muiTableBodyCellProps: {
+          align: "center",
+        },
       },
       {
         header: "Trip Type",
         accessorKey: "analysis.trip_information.trip_type",
         size: 200,
+        muiTableBodyCellProps: {
+          align: "center",
+        },
       },
       {
         header: "Phase",
         accessorKey: "analysis.phase",
         size: 200,
+        muiTableBodyCellProps: {
+          align: "center",
+        },
       },
       {
         header: "Create Date",
         accessorKey: "analysis.create_date",
         type: "date",
         size: 200,
+        muiTableBodyCellProps: {
+          align: "center",
+        },
+      },
+      {
+        header: "Created By",
+        accessorKey: "analysis.created_by",
+        size: 200,
+        muiTableBodyCellProps: {
+          align: "center",
+        },
       },
       {
         header: "Report Type",
         accessorKey: "analysis.analysis_type",
         size: 200,
+        muiTableBodyCellProps: {
+          align: "center",
+        },
       },
     ],
     []
