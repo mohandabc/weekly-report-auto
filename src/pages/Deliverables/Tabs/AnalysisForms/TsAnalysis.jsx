@@ -223,7 +223,7 @@ export const TsAnalysis = ({
           animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
         }`}
       >
-        <div class="grid grid-cols-3 gap-20 my-3 px-10 mx-auto bg-gray-100 rounded-lg text-sm justify-items-center">
+        <div className="grid grid-cols-3 gap-20 my-3 px-10 mx-auto bg-gray-100 rounded-lg text-sm justify-items-center">
           <div className="pt-2 text-gray-700 text-center">
             <b className="text-gray-900">Created By : </b>{" "}
             {TsAnalysisData.created_by}

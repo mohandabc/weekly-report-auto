@@ -92,7 +92,7 @@ export const BackLog = () => {
       {
         header: "Well",
         accessorKey: "analysis.well",
-        size: 200,
+        size: 130,
         muiTableBodyCellProps: {
           align: "center",
         },
@@ -100,7 +100,7 @@ export const BackLog = () => {
       {
         header: "Trip Type",
         accessorKey: "analysis.trip_information.trip_type",
-        size: 200,
+        size: 130,
         muiTableBodyCellProps: {
           align: "center",
         },
@@ -108,7 +108,7 @@ export const BackLog = () => {
       {
         header: "Phase",
         accessorKey: "analysis.phase",
-        size: 200,
+        size: 130,
         muiTableBodyCellProps: {
           align: "center",
         },
