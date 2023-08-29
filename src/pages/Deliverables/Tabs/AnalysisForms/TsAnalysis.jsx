@@ -347,10 +347,7 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
       </div>
       <div>
         <div
-          className={`flex justify-center mt-6 delay-200 duration-1000 transition-all ease-out ${
-            // hiding components when they first appear and then applying a translate effect gradually
-            animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-          }`}
+          className={`flex justify-center mt-6`}
         >
           <Button
             appearance="default"

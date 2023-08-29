@@ -4,6 +4,8 @@ import { BACK_URL } from "../../../constants/URI";
 import { MaterialReactTable } from "material-react-table";
 import { getData } from "../../../api/api";
 import { TsAnalysis } from "./AnalysisForms/TsAnalysis";
+import { darkModeState } from "../../../shared/globalState";
+import { useRecoilValue } from "recoil";
 
 export const BackLog = () => {
   //data and fetching state
@@ -27,6 +29,7 @@ export const BackLog = () => {
   const [tsAnalysisData, setTsAnalysisData] = useState(null);
   const [docId, setDocId] = useState(null);
 
+  const darkMode = useRecoilValue(darkModeState);
   const [animation, setAnimation] = useState(false);
 
   useEffect(() => {
@@ -152,7 +155,7 @@ export const BackLog = () => {
     setGlobalFilter('')
   };
 
-  return (
+    return (
     <>
       {tsAnalysisData ? (
         <div
@@ -228,8 +231,8 @@ export const BackLog = () => {
                 }}
                 muiTableHeadCellProps={{
                   sx: {
-                    backgroundColor: "rgba(39, 73, 98, 0.3)",
-                    color: "rgba(55, 90, 112, 1)",
+                    backgroundColor: darkMode?"rgba(0, 0, 0, 0.4)":"rgba(39, 73, 98, 0.3)",
+                    color: darkMode?"rgba(28, 28, 26, 1)":"rgba(55, 90, 112, 1)",
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
@@ -240,20 +243,20 @@ export const BackLog = () => {
                     cursor: "pointer",
                     backgroundColor: (theme) =>
                       row.index % 2 !== 0
-                        ? "rgba(55, 90, 112, 0.15)"
-                        : "rgba(65, 100, 122, 0.1)",
+                        ? (darkMode?"rgba(28, 28, 26, 0.2)":"rgba(55, 90, 112, 0.15)")
+                        : (darkMode?"rgb(42, 44, 41, 0.2)":"rgba(65, 100, 122, 0.1)"),
                   },
                 })}
                 muiBottomToolbarProps={{
                   sx: {
-                    backgroundColor: "rgba(39, 73, 98, 0.3)",
-                    color: "rgba(55, 90, 112, 1)",
+                    backgroundColor: darkMode?"rgba(0, 0, 0, 0.4)":"rgba(39, 73, 98, 0.3)",
+                    color: darkMode?"rgba(28, 28, 26, 1)":"rgba(55, 90, 112, 1)",
                   },
                 }}
                 muiTopToolbarProps={{
                   sx: {
-                    backgroundColor: "rgba(39, 73, 98, 0.3)",
-                    color: "rgba(55, 90, 112, 1)",
+                    backgroundColor: darkMode?"rgba(0, 0, 0, 0.4)":"rgba(39, 73, 98, 0.3)",
+                    color: darkMode?"rgba(28, 28, 26, 1)":"rgba(55, 90, 112, 1)",
                   },
                 }}
               />
