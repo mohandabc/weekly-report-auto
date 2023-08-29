@@ -226,14 +226,36 @@ export const BackLog = () => {
                   showProgressBars: isRefetching,
                   sorting,
                 }}
+                muiTableHeadCellProps={{
+                  sx: {
+                    backgroundColor: "rgba(39, 73, 98, 0.3)",
+                    color: "rgba(55, 90, 112, 1)",
+                  },
+                }}
                 muiTableBodyRowProps={({ row }) => ({
                   onClick: (event) => {
                     getTSanalysisRecord(row.id);
                   },
                   sx: {
                     cursor: "pointer",
+                    backgroundColor: (theme) =>
+                      row.index % 2 !== 0
+                        ? "rgba(55, 90, 112, 0.15)"
+                        : "rgba(65, 100, 122, 0.1)",
                   },
                 })}
+                muiBottomToolbarProps={{
+                  sx: {
+                    backgroundColor: "rgba(39, 73, 98, 0.3)",
+                    color: "rgba(55, 90, 112, 1)",
+                  },
+                }}
+                muiTopToolbarProps={{
+                  sx: {
+                    backgroundColor: "rgba(39, 73, 98, 0.3)",
+                    color: "rgba(55, 90, 112, 1)",
+                  },
+                }}
               />
             </div>
           </div>
