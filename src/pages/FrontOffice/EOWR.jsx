@@ -45,9 +45,9 @@ export const EOWR = () => {
     }
 
     useEffect(()=>{
-        console.log(EOWRData)
-
-    })
+        const mainSection = document.getElementById('result-section');
+        mainSection?.scrollIntoView({behavior: "smooth"});
+    });
 
     let chartsIds = [];
 
