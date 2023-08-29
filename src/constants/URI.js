@@ -5,4 +5,4 @@ export const BACK_URL = 'http://10.171.59.167:8000/';
 
 export const db_80 = 'TeamSpace_Prod_2023'
 export const db_staging = 'prod_04_07_2023'
-export const db = db_80
+export const db = db_80 
