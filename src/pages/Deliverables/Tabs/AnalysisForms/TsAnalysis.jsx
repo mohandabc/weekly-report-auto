@@ -384,10 +384,10 @@ export const TsAnalysis = ({
               <b className="text-gray-900">BHA Name : </b> {TsAnalysisData.bha}
             </div>
             <div className="pt-2 text-gray-700">
-              <b className="text-gray-900">Benchmark (TS) : </b> {}
+              <b className="text-gray-900">Benchmark (TS) : </b> {TsAnalysisData.benchmarkTS}
             </div>
             <div className="py-2 text-gray-700">
-              <b className="text-gray-900">Benchmark (CT) : </b> {}
+              <b className="text-gray-900">Benchmark (CT) : </b> {TsAnalysisData.benchmarkCT}
             </div>
           </div>
         </div>
