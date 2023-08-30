@@ -4,6 +4,8 @@ import { BACK_URL } from "../../../constants/URI";
 import { MaterialReactTable } from "material-react-table";
 import { getData } from "../../../api/api";
 import { TsAnalysis } from "./AnalysisForms/TsAnalysis";
+import { darkModeState } from "../../../shared/globalState";
+import { useRecoilValue } from "recoil";
 
 export const BackLog = () => {
   //data and fetching state
@@ -16,7 +18,9 @@ export const BackLog = () => {
   //table state
   const [columnFilters, setColumnFilters] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
-  const [sorting, setSorting] = useState([]);
+  const [sorting, setSorting] = useState([
+    { id: "analysis.create_date", desc: true },
+  ]);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 5,
@@ -25,6 +29,7 @@ export const BackLog = () => {
   const [tsAnalysisData, setTsAnalysisData] = useState(null);
   const [docId, setDocId] = useState(null);
 
+  const darkMode = useRecoilValue(darkModeState);
   const [animation, setAnimation] = useState(false);
 
   useEffect(() => {
@@ -87,28 +92,51 @@ export const BackLog = () => {
       {
         header: "Well",
         accessorKey: "analysis.well",
-        size: 200,
+        size: 130,
+        muiTableBodyCellProps: {
+          align: "center",
+        },
       },
       {
         header: "Trip Type",
         accessorKey: "analysis.trip_information.trip_type",
-        size: 200,
+        size: 130,
+        muiTableBodyCellProps: {
+          align: "center",
+        },
       },
       {
         header: "Phase",
         accessorKey: "analysis.phase",
-        size: 200,
+        size: 130,
+        muiTableBodyCellProps: {
+          align: "center",
+        },
       },
       {
         header: "Create Date",
         accessorKey: "analysis.create_date",
         type: "date",
         size: 200,
+        muiTableBodyCellProps: {
+          align: "center",
+        },
+      },
+      {
+        header: "Created By",
+        accessorKey: "analysis.created_by",
+        size: 200,
+        muiTableBodyCellProps: {
+          align: "center",
+        },
       },
       {
         header: "Report Type",
         accessorKey: "analysis.analysis_type",
         size: 200,
+        muiTableBodyCellProps: {
+          align: "center",
+        },
       },
     ],
     []
@@ -127,7 +155,7 @@ export const BackLog = () => {
     setGlobalFilter('')
   };
 
-  return (
+    return (
     <>
       {tsAnalysisData ? (
         <div
@@ -201,14 +229,36 @@ export const BackLog = () => {
                   showProgressBars: isRefetching,
                   sorting,
                 }}
+                muiTableHeadCellProps={{
+                  sx: {
+                    backgroundColor: darkMode?"rgba(0, 0, 0, 0.4)":"rgba(39, 73, 98, 0.3)",
+                    color: darkMode?"rgba(28, 28, 26, 1)":"rgba(55, 90, 112, 1)",
+                  },
+                }}
                 muiTableBodyRowProps={({ row }) => ({
                   onClick: (event) => {
                     getTSanalysisRecord(row.id);
                   },
                   sx: {
                     cursor: "pointer",
+                    backgroundColor: (theme) =>
+                      row.index % 2 !== 0
+                        ? (darkMode?"rgba(28, 28, 26, 0.2)":"rgba(55, 90, 112, 0.15)")
+                        : (darkMode?"rgb(42, 44, 41, 0.2)":"rgba(65, 100, 122, 0.1)"),
                   },
                 })}
+                muiBottomToolbarProps={{
+                  sx: {
+                    backgroundColor: darkMode?"rgba(0, 0, 0, 0.4)":"rgba(39, 73, 98, 0.3)",
+                    color: darkMode?"rgba(28, 28, 26, 1)":"rgba(55, 90, 112, 1)",
+                  },
+                }}
+                muiTopToolbarProps={{
+                  sx: {
+                    backgroundColor: darkMode?"rgba(0, 0, 0, 0.4)":"rgba(39, 73, 98, 0.3)",
+                    color: darkMode?"rgba(28, 28, 26, 1)":"rgba(55, 90, 112, 1)",
+                  },
+                }}
               />
             </div>
           </div>
