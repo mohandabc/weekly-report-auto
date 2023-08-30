@@ -250,7 +250,7 @@ export const TsAnalysis = ({
           rowHeight={30}
           padding={100}
           height={342}
-          width={1000}
+          width={1070}
           data={defData}
         >
           <Column width={50}>
@@ -258,12 +258,12 @@ export const TsAnalysis = ({
             <EditableCell dataKey="standNum" onChange={handleChange} />
           </Column>
           <Column width={130}>
-            <HeaderCell>Start</HeaderCell>
+            <HeaderCell>Connection Start</HeaderCell>
             <EditableCell dataKey="date_from" onChange={handleChange} />
           </Column>
 
           <Column width={130}>
-            <HeaderCell>End</HeaderCell>
+            <HeaderCell>Connection End</HeaderCell>
             <EditableCell dataKey="date_to" onChange={handleChange} />
           </Column>
 
@@ -275,6 +275,11 @@ export const TsAnalysis = ({
           <Column width={70}>
             <HeaderCell>Depth to</HeaderCell>
             <EditableCell dataKey="depth_to" onChange={handleChange} />
+          </Column>
+
+          <Column width={70}>
+            <HeaderCell>Delta Depth</HeaderCell>
+            <EditableCell dataKey="delta_depth" onChange={handleChange} />
           </Column>
 
           <Column width={105}>
@@ -333,7 +338,7 @@ export const TsAnalysis = ({
           animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
         }`}
       >
-        <div className="grid grid-cols-4 gap-20 mt-3 mx-auto px-10 bg-gray-100 rounded-lg justify-items-center">
+        <div className="grid grid-cols-4 gap-14 mt-3 mx-auto px-10 bg-gray-100 rounded-lg justify-items-center">
           <div className="text-sm">
             <div className="pt-2 text-gray-700">
               <b className="text-gray-900">Well :</b> {TsAnalysisData.well}
