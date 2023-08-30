@@ -175,7 +175,10 @@ export const TrippingSpeed = () => {
   const [wellsplaceholder, setWellsplaceholder] = useState(0);
   const [rigsplaceholder, setRigsplaceholder] = useState(0);
 
-  const [BHAname, setBHAname] = useState("");
+  const [BHAname, setBHAname] = useState('');
+  const [drillString, setDrillString] = useState();
+  const [benchmarkTS, setBenchmarkTS] = useState('');
+  const [benchmarkCT, setBenchmarkCT] = useState('');
 
   const [msg, setMsg] = useState(0);
 
@@ -185,6 +188,16 @@ export const TrippingSpeed = () => {
     setAnimation(true);
     populateWellRigPickers();
   }, []);
+
+  useEffect(() => {
+    if (formValue['drillString'] == '5"' || formValue['drillString'] == '5" 1/2') {
+      setBenchmarkTS(500);
+      setBenchmarkCT(3);
+    } else if (formValue['drillString'] == '3"' || formValue['drillString'] == '3" 1/2') {
+        setBenchmarkTS(600);
+        setBenchmarkCT(2);
+    }
+  }, [drillString]);
 
   const processInput = () => {
     /***************************************************************************
@@ -203,6 +216,8 @@ export const TrippingSpeed = () => {
     }
     
     formValue["created_by"] = user.name
+    formValue["benchmarkTS"] = benchmarkTS
+    formValue["benchmarkCT"] = benchmarkCT
     console.log("Params from TrippingSpeed : ", formValue);
     setLoadingValue(true);
     formValue["well"] = wellsplaceholder.find(
@@ -259,6 +274,10 @@ export const TrippingSpeed = () => {
 
   const resetStates = (newMsg) => {
     setDateRangeValue([new Date(), new Date()]);
+    setBHAname();
+    setDrillString();
+    setBenchmarkTS('');
+    setBenchmarkCT('');
     setData([]);
     setFormValue([formValueInit]);
     setMsg(newMsg);
@@ -309,8 +328,8 @@ export const TrippingSpeed = () => {
                 casedHole: formValue["casedHole"],
                 drillString: formValue["drillString"],
                 BHAname: formValue["BHAname"],
-                // benchmarkTS: formValue["benchmarkTS"],
-                // benchmarkCT: formValue["benchmarkCT"],
+                benchmarkTS: formValue["benchmarkTS"],
+                benchmarkCT: formValue["benchmarkCT"],
                 // threshold: formValue["threshold"],
                 // dateRangeValue: formValue["dateRangeValue"],
               })
@@ -464,10 +483,11 @@ export const TrippingSpeed = () => {
                 <Form.Control
                   accepter={SelectPicker}
                   name="drillString"
-                  // onChange={setDrillString}
+                  onChange={setDrillString}
                   placeholder="Drill String Size"
                   data={drillString_placeHolder}
                   style={styles.wide}
+                  value={drillString}
                 />
               </Form.Group>
               <Form.Group controlId="BHAname" style={styles.wide}>
@@ -476,21 +496,19 @@ export const TrippingSpeed = () => {
                   name="BHAname"
                   onChange={setBHAname}
                   placeholder="BHA Name"
-                  data={data_placeHolder}
                   style={styles.wide}
                   value={BHAname}
                 />
               </Form.Group>
               <Form.Group
-                controlId="BenchmarkTS"
+                controlId="benchmarkTS"
                 style={{ marginTop: 6, marginLeft: 10 }}
               >
-                <InputGroup disabled style={styles.wide}>
+                <InputGroup style={styles.wide}>
                   <Input
-                    name="BenchmarkTS"
-                    // onChange={setBenchmarkTS}
+                    name="benchmarkTS"
                     placeholder="Benchmark (Tripping Speed)"
-                    data={data_placeHolder}
+                    value={benchmarkTS}
                     disabled
                   />
                   <InputGroup.Addon>m/h</InputGroup.Addon>
@@ -507,15 +525,15 @@ export const TrippingSpeed = () => {
             }`}
             >
               <Form.Group 
-                controlId="BenchmarkCT"
+                controlId="benchmarkCT"
                 style={{ marginTop: 6, marginLeft: 10 }}
               >
-                <InputGroup disabled style={styles.wide}>
+                <InputGroup style={styles.wide}>
                   <Input
-                    name="BenchmarkCT"
-                    // onChange={setBenchmarkCT}
+                    name="benchmarkCT"
                     placeholder="Benchmark (Connection Time)"
-                    data={data_placeHolder}
+                    value={benchmarkCT}
+                    disabled
                   />
                   <InputGroup.Addon>min</InputGroup.Addon>
                 </InputGroup>
