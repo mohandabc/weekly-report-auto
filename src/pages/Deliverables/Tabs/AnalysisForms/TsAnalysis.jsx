@@ -14,7 +14,7 @@ const { Column, HeaderCell, Cell } = Table;
 
 function minutesToTime(seconds) {
   const date = new Date();
-  date.setMinutes(Math.floor(seconds/60));
+  date.setMinutes(Math.floor(seconds / 60));
   date.setSeconds(seconds % 60);
   return date;
 }
@@ -28,7 +28,17 @@ function formatDateString(dateString) {
   let minutes = ("0" + date.getMinutes()).slice(-2);
   let seconds = ("0" + date.getSeconds()).slice(-2);
   let formattedDateString =
-    day + "-" + month + "-" + year + " " + hours + ":" + minutes + ":" + seconds;
+    day +
+    "-" +
+    month +
+    "-" +
+    year +
+    " " +
+    hours +
+    ":" +
+    minutes +
+    ":" +
+    seconds;
   return formattedDateString;
 }
 
@@ -123,13 +133,13 @@ const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
   );
 };
 
+
 export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent, parentStr}) => {
   const [TS_REPORT_DATA, setReportData] = useRecoilState(TSReportDataState);
+
   // const [limit, setLimit] = React.useState(10);
   // const [page, setPage] = React.useState(1);
-  const [defData, setdefData] = React.useState(
-    TsAnalysisData.standline
-  );
+  const [defData, setdefData] = React.useState(TsAnalysisData.standline);
   const [showParent, setShowParent] = React.useState(false);
 
   // const data = defData.filter((v, i) => {
@@ -156,26 +166,31 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
   // };
 
   const handleDeleteClick = () => {
-    deleteDoc(BACK_URL, "TrippingSpeed/deleteDoc/", doc_id).then(
-      (res) => {
-        if ("msg" in res && res.status === 200) {
-          setShowParent(true);
-          resetStates({msg: 'Document deleted successfully', color: "text-green-500"});
-          alert("Document deleted successfully");
-        }
+    deleteDoc(BACK_URL, "TrippingSpeed/deleteDoc/", doc_id).then((res) => {
+      if ("msg" in res && res.status === 200) {
+        setShowParent(true);
+        resetStates({
+          msg: "Document deleted successfully",
+          color: "text-green-500",
+        });
+        alert("Document deleted successfully");
       }
-      );
-    };
+    });
+  };
 
   const handleSaveClick = () => {
-    const updatedData = defData.map(object => {
+    const updatedData = defData.map((object) => {
       const { status, ...otherFields } = object;
       return otherFields;
     });
-    TsAnalysisData['standline'] = updatedData;
-    console.log("The document that is going to be updated with its new data : ",
-    {"document_id":TsAnalysisData.doc_id, "params" : TsAnalysisData});
-    alert("Save button function isn't implemented yet !, an update function should be implemented in the back side first !");
+    TsAnalysisData["standline"] = updatedData;
+    console.log(
+      "The document that is going to be updated with its new data : ",
+      { document_id: TsAnalysisData.doc_id, params: TsAnalysisData }
+    );
+    alert(
+      "Save button function isn't implemented yet !, an update function should be implemented in the back side first !"
+    );
   };
   
   const handleDisplayReportClick = () => {
@@ -193,7 +208,7 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
 
   React.useEffect(() => {
     setAnimation(true);
-  },[]);
+  }, []);
 
   React.useEffect(() => {
     setdefData(TsAnalysisData.standline);
@@ -202,7 +217,28 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
   return showParent ? (
     <ParentComponent options={DELIVERABLE_CONFIG_BAR_OPTIONS}></ParentComponent>
   ) : (
-    <div className="py-4 px-4">
+    <div className="pb-4 px-4">
+      <div
+        className={`text-zinc-500 dark:text-black flex justify-between delay-200 duration-1000 transition-all ease-out ${
+          // hiding components when they first appear and then applying a translate effect gradually
+          animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+        }`}
+      >
+        <div className="grid grid-cols-3 gap-20 my-3 px-10 mx-auto bg-gray-100 rounded-lg text-sm justify-items-center">
+          <div className="pt-2 text-gray-700 text-center">
+            <b className="text-gray-900">Created By : </b>{" "}
+            {TsAnalysisData.created_by}
+          </div>
+          <div className="pt-2 text-gray-700 text-center">
+            <b className="text-gray-900">Create Date : </b>{" "}
+            {TsAnalysisData.create_date}
+          </div>
+          <div className="py-2 text-gray-700 text-center">
+            <b className="text-gray-900">Analysis Type : </b>{" "}
+            {TsAnalysisData.analysis_type}
+          </div>
+        </div>
+      </div>
       <div
         className={`text-black duration-1000 transition-all ease-out ${
           // hiding components when they first appear and then applying a translate effect gradually
@@ -215,7 +251,7 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
           rowHeight={30}
           padding={100}
           height={342}
-          width={1000}
+          width={1070}
           data={defData}
         >
           <Column width={50}>
@@ -223,12 +259,12 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
             <EditableCell dataKey="standNum" onChange={handleChange} />
           </Column>
           <Column width={130}>
-            <HeaderCell>Start</HeaderCell>
+            <HeaderCell>Connection Start</HeaderCell>
             <EditableCell dataKey="date_from" onChange={handleChange} />
           </Column>
 
           <Column width={130}>
-            <HeaderCell>End</HeaderCell>
+            <HeaderCell>Connection End</HeaderCell>
             <EditableCell dataKey="date_to" onChange={handleChange} />
           </Column>
 
@@ -240,6 +276,11 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
           <Column width={70}>
             <HeaderCell>Depth to</HeaderCell>
             <EditableCell dataKey="depth_to" onChange={handleChange} />
+          </Column>
+
+          <Column width={70}>
+            <HeaderCell>Delta Depth</HeaderCell>
+            <EditableCell dataKey="delta_depth" onChange={handleChange} />
           </Column>
 
           <Column width={105}>
@@ -298,65 +339,62 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
           animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
         }`}
       >
-      <div className="grid grid-cols-4 gap-20 mt-5 mx-auto px-10 bg-gray-100 rounded-lg">
-        <div className="text-sm">
-          <div className="pt-2 text-gray-700">
-            <b className="text-gray-900">Well :</b> {TsAnalysisData.well}
+        <div className="grid grid-cols-4 gap-14 mt-3 mx-auto px-10 bg-gray-100 rounded-lg justify-items-center">
+          <div className="text-sm">
+            <div className="pt-2 text-gray-700">
+              <b className="text-gray-900">Well :</b> {TsAnalysisData.well}
+            </div>
+            <div className="pt-2 text-gray-700">
+              <b className="text-gray-900">Rotary System :</b>{" "}
+              {TsAnalysisData.trip_information.rotary_system}
+            </div>
+            <div className="py-2 text-gray-700">
+              <b className="text-gray-900">Phase : </b> {TsAnalysisData.phase}
+            </div>
           </div>
-          <div className="pt-2 text-gray-700">
-            <b className="text-gray-900">Rotary System :</b>{" "}
-            {TsAnalysisData.trip_information.rotary_system}
+          <div className="text-sm">
+            <div className="pt-2 text-gray-700">
+              <b className="text-gray-900">Trip Type : </b>{" "}
+              {TsAnalysisData.trip_information.trip_type}
+            </div>
+            <div className="pt-2 text-gray-700">
+              <b className="text-gray-900">Trip Reason : </b>{" "}
+              {TsAnalysisData.trip_information.trip_reason}
+            </div>
+            <div className="py-2 text-gray-700">
+              <b className="text-gray-900">Trip Number : </b>{" "}
+              {TsAnalysisData.trip_number}
+            </div>
           </div>
-          <div className="py-2 text-gray-700">
-            <b className="text-gray-900">Phase : </b> {TsAnalysisData.phase}
+          <div className="text-sm">
+            <div className="pt-2 text-gray-700">
+              <b className="text-gray-900">CSG Size : </b>{" "}
+              {TsAnalysisData.csg_size}
+            </div>
+            <div className="pt-2 text-gray-700">
+              <b className="text-gray-900">Drill String Size : </b>{" "}
+              {TsAnalysisData.drill_pipe_size}
+            </div>
+            <div className="py-2 text-gray-700">
+              <b className="text-gray-900">Hole : </b>{" "}
+              {TsAnalysisData.trip_information.hole_type}
+            </div>
+          </div>
+          <div className="text-sm">
+            <div className="pt-2 text-gray-700">
+              <b className="text-gray-900">BHA Name : </b> {TsAnalysisData.bha}
+            </div>
+            <div className="pt-2 text-gray-700">
+              <b className="text-gray-900">Benchmark (TS) : </b> {TsAnalysisData.benchmarkTS}
+            </div>
+            <div className="py-2 text-gray-700">
+              <b className="text-gray-900">Benchmark (CT) : </b> {TsAnalysisData.benchmarkCT}
+            </div>
           </div>
         </div>
-        <div className="text-sm">
-          <div className="pt-2 text-gray-700">
-            <b className="text-gray-900">Trip Type : </b>{" "}
-            {TsAnalysisData.trip_information.trip_type}
-          </div>
-          <div className="pt-2 text-gray-700">
-            <b className="text-gray-900">Trip Reason : </b>{" "}
-            {TsAnalysisData.trip_information.trip_reason}
-          </div>
-          <div className="py-2 text-gray-700">
-            <b className="text-gray-900">Trip Number : </b> {TsAnalysisData.trip_number}
-          </div>
-        </div>
-        <div className="text-sm">
-          <div className="pt-2 text-gray-700">
-            <b className="text-gray-900">CSG Size : </b> {TsAnalysisData.csg_size}
-          </div>
-          <div className="pt-2 text-gray-700">
-            <b className="text-gray-900">Drill String Size : </b>{" "}
-            {TsAnalysisData.drill_pipe_size}
-          </div>
-          <div className="py-2 text-gray-700">
-            <b className="text-gray-900">Hole : </b>{" "}
-            {TsAnalysisData.trip_information.hole_type}
-          </div>
-        </div>
-        <div className="text-sm">
-          <div className="pt-2 text-gray-700">
-            <b className="text-gray-900">BHA Name : </b> {TsAnalysisData.bha}
-          </div>
-          <div className="pt-2 text-gray-700">
-            <b className="text-gray-900">Benchmark (TS) : </b> {}
-          </div>
-          <div className="py-2 text-gray-700">
-            <b className="text-gray-900">Benchmark (CT) : </b> {}
-          </div>
-        </div>
-      </div>
       </div>
       <div>
-        <div
-          className={`flex justify-center mt-6 delay-200 duration-1000 transition-all ease-out ${
-            // hiding components when they first appear and then applying a translate effect gradually
-            animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-          }`}
-        >
+        <div className={`flex justify-center mt-4`}>
           <Button
             appearance="default"
             className="mx-4"
