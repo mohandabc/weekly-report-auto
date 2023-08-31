@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState} from 'react';
 import { useRecoilValue } from "recoil";
-import { BarChart, PieChart, ClusteredBarChart, StackedBarChart, DateAxes } from './charts';
+import { BarChart, PieChart, ClusteredBarChart, StackedBarChart, DateAxes, PartionedBarChart, ScatterChart, CombinedChart } from './charts';
 import { darkModeState } from "../../shared/globalState";
 import gear from '../../assets/gear.svg';
 
@@ -42,6 +42,15 @@ export const Chart = ({title, id, chartData, chartType, className="h-120"}) => {
     }
     if(type === "DateAxes"){
       chart = new DateAxes(chartData, divID, title, options).chart; 
+    }
+    if(type === "PartitionedBar"){
+      chart = new PartionedBarChart(chartData, divID, title, options).chart; 
+    }
+    if(type === "Scatter"){
+      chart = new ScatterChart(chartData, divID, title, options).chart; 
+    }
+    if(type === "Combined"){
+      chart = new CombinedChart(chartData, divID, title, options).chart; 
     }
   });
 

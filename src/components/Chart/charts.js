@@ -556,8 +556,286 @@ export class StackedBarChart extends Chart
     }
 }
 
+export class PartionedBarChart extends Chart
+{
+    buildChart(data, container, title, options){
+        /**
+         * * Please respect the following structure and labes names : [{part:?, category:?, value:?}...]
+            // Example data format:
+                const data = [{
+                                    shift: "Night",
+                                    stand: "stand 1",
+                                    speed: 2
+                                }, {
+                                    shift: "Night",
+                                    stand: "stand 2",
+                                    speed: 2.5
+                                },
+                            ]
+        */
+        let params = {};
+        if (data?.length > 0) {
+            params = {
+            part: Object.keys(data[0])[0],
+            category: Object.keys(data[0])[1],
+            value: Object.keys(data[0])[2],
+            };
+        }
+        if (data === undefined || params === {}) {
+            return;
+        }
+        var chart = am4core.create(container, am4charts.XYChart);
+        chart.data = data;
+
+        var xAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+        xAxis.dataFields.category = params.category;
+        xAxis.renderer.grid.template.location = 0;
+        xAxis.renderer.labels.template.fontSize = 10;
+        xAxis.renderer.minGridDistance = 10;
+        xAxis.title.text = "Stand Number";
+
+        var yAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        yAxis.title.text = "Connection Time (min)";
+
+
+        // Create series
+        var series = chart.series.push(new am4charts.ColumnSeries());
+        series.dataFields.valueY = params.value; // Use valueY for horizontal bar chart
+        series.dataFields.categoryX = params.category; // Use categoryX for horizontal bar chart
+        series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+        series.columns.template.strokeWidth = 0;
+        series.columns.template.adapter.add("fill", function(fill, target) {
+            if (target.dataItem) {
+                switch(target.dataItem.dataContext[params.part]) {
+                    case "Day":
+                        return chart.colors.getIndex(12);
+                    case "Night":
+                        return chart.colors.getIndex(2);
+                    default:break;
+                }
+            }
+            return fill;
+        });
+
+        var axisBreaks = {};
+        var legendData = [];
+
+        // Add ranges
+        function addRange(label, start, end, color) {
+            var range = xAxis.axisRanges.create(); // Use xAxis for horizontal bar chart
+            range.category = start;
+            range.endCategory = end;
+            range.label.text = label;
+            range.label.disabled = true;
+            range.label.fill = color;
+            range.label.location = 0;
+            range.label.dy = -220; // Adjust dy for horizontal bar chart
+            range.label.fontWeight = "bold";
+            range.label.fontSize = 12;
+            range.label.horizontalCenter = "left";
+            range.label.inside = true;
+
+            range.grid.stroke = am4core.color("#396478");
+            // range.grid.strokeOpacity = 0.1;
+            range.tick.length = 200;
+            range.tick.disabled = false;
+            // range.tick.strokeOpacity = 0.1;
+            range.tick.stroke = am4core.color("#396478");
+            range.tick.location = 0;
+
+            range.locations.category = 0;
+            var axisBreak = xAxis.axisBreaks.create(); // Use xAxis for horizontal bar chart
+            axisBreak.startCategory = start;
+            axisBreak.endCategory = end;
+            axisBreak.breakSize = 1;
+            axisBreak.fillShape.disabled = true;
+            axisBreak.startLine.disabled = true;
+            axisBreak.endLine.disabled = true;
+            axisBreaks[label] = axisBreak;
+
+            legendData.push({ name: label, fill: color });
+        }
+
+        addRange("Night", 'stand 1', "stand 5", chart.colors.getIndex(2));
+        addRange("Day", "stand 6", "stand 14", chart.colors.getIndex(12));
+
+        chart.cursor = new am4charts.XYCursor();
+
+        var chartTitle = chart.titles.create();
+        chartTitle.text = title;
+        chartTitle.fill = options['title-color'];
+        chartTitle.fontSize = 24;
+        chartTitle.marginBottom = 30;
+
+        var legend = new am4charts.Legend();
+        legend.position = "bottom"; // Change legend position to bottom for better alignment
+        legend.scrollable = true;
+        legend.align = "center"; // Align legend items to the center
+        legend.reverseOrder = true;
+
+        chart.legend = legend;
+        legend.data = legendData;
+
+        legend.itemContainers.template.events.on("toggled", function(event) {
+            var name = event.target.dataItem.dataContext.name;
+            var axisBreak = axisBreaks[name];
+            console.log(axisBreak)
+            if (event.target.isActive) {
+                axisBreak.animate({ property: "breakSize", to: 0 }, 1000, am4core.ease.cubicOut);
+                xAxis.dataItems.each(function(dataItem) {
+                    if (dataItem.dataContext[params.part] === name) {
+                        dataItem.hide(1000, 500);
+                    }
+                });
+                series.dataItems.each(function(dataItem) {
+                    if (dataItem.dataContext[params.part] === name) {
+                        dataItem.hide(1000, 0, 0, ["valueY"]);
+                    }
+                });
+            } else {
+                axisBreak.animate({ property: "breakSize", to: 1 }, 1000, am4core.ease.cubicOut);
+                xAxis.dataItems.each(function(dataItem) {
+                    if (dataItem.dataContext[params.part] === name) {
+                        dataItem.show(1000);
+                    }
+                });
+                series.dataItems.each(function(dataItem) {
+                    if (dataItem.dataContext[params.part] === name) {
+                        dataItem.show(1000, 0, ["valueY"]);
+                    }
+                });
+            }
+        });
+        return chart;
+    }
+}
+
+export class ScatterChart extends Chart
+{
+    buildChart(data, container, title, options){
+        let params = {};
+        if (data?.length > 0) {
+            params = {
+            xaxis: Object.keys(data[0])[0],
+            yaxis: Object.keys(data[0])[1],
+            };
+        }
+        if (data === undefined || params === {}) {
+            return;
+        }
+
+        var chart = am4core.create(container, am4charts.XYChart);
+        chart.data = data;
+        // Create axes
+
+        var valueAxisX = chart.xAxes.push(new am4charts.ValueAxis());
+        valueAxisX.title.text = 'Connection Time (min)';
+        valueAxisX.renderer.minGridDistance = 40;
+
+        // Create value axis
+        var valueAxisY = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxisY.title.text = 'Tripping Speed (m/h)';
+
+        // Create series
+        var lineSeries = chart.series.push(new am4charts.LineSeries());
+        lineSeries.dataFields.valueY = params.yaxis;
+        lineSeries.dataFields.valueX = params.xaxis;
+        lineSeries.strokeOpacity = 0;
+
+        // Add a bullet
+        var bullet = lineSeries.bullets.push(new am4charts.Bullet());
+
+        // Add a triangle to act as am arrow
+        var arrow = bullet.createChild(am4core.Container);
+        arrow.width = 12;
+        arrow.height = 12;
+
+        var line1 = arrow.createChild(am4core.Rectangle);
+        line1.width = 3; // Adjust the dimensions as needed
+        line1.height = 12;
+        line1.fill = chart.colors.getIndex(12);
+        line1.rotation = 45;
+        line1.horizontalCenter = "middle";
+        line1.verticalCenter = "middle";
+
+        // Second line of the cross
+        var line2 = arrow.createChild(am4core.Rectangle);
+        line2.width = 3; // Adjust the dimensions as needed
+        line2.height = 12;
+        line2.fill = chart.colors.getIndex(12);
+        line2.rotation = -45;
+        line2.horizontalCenter = "middle";
+        line2.verticalCenter = "middle";
+
+        var chartTitle = chart.titles.create();
+        chartTitle.text = title;
+        chartTitle.fill = options['title-color'];
+        chartTitle.fontSize = 24;
+        chartTitle.marginBottom = 30;
+
+        //scrollbars
+        chart.scrollbarX = new am4core.Scrollbar();
+        chart.scrollbarY = new am4core.Scrollbar();
+
+        return chart;
+    }
+}
 // Customized Charts for just one case
 
+export class CombinedChart extends Chart{
+    buildChart(data, container, title, options){
+        const THRESHOLD = 300;
+        let params = {};
+        if (data?.length > 0) {
+            params = {
+            part: Object.keys(data[0])[0],
+            category: Object.keys(data[0])[1],
+            value: Object.keys(data[0])[2],
+            value2: Object.keys(data[0])[3],
+            };
+        }
+        if (data === undefined || params === {}) {
+            return;
+        }
+
+
+        // var chart = am4core.create(container, am4charts.XYChart);
+        var chart = new PartionedBarChart(data, container, title, options).chart;
+        console.log(chart);
+        // chart.data = data;
+        var valueAxisY = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxisY.renderer.opposite = true;
+
+        var lineSeries = chart.series.push(new am4charts.LineSeries());
+        lineSeries.name = "Bit Depth (m)";
+        lineSeries.dataFields.valueY = params.value2;
+        lineSeries.dataFields.categoryX = params.category;
+        
+        lineSeries.stroke = am4core.color("#44fd00");
+        lineSeries.strokeWidth = 3;
+        lineSeries.propertyFields.strokeDasharray = "lineDash";
+        lineSeries.tooltip.label.textAlign = "middle";
+        lineSeries.yAxis = valueAxisY;
+
+        var thresholdGuideline = chart.yAxes.getIndex(0).axisRanges.create();
+        thresholdGuideline.value = THRESHOLD; // Adjust the threshold value
+        thresholdGuideline.grid.stroke = am4core.color("#FF0000"); // Line color
+        thresholdGuideline.grid.strokeOpacity = 0.7; // Line opacity
+        thresholdGuideline.grid.strokeWidth = 3;
+        thresholdGuideline.grid.strokeDasharray = "lineDash"; // Dashed line style
+        
+        var bullet = lineSeries.bullets.push(new am4charts.Bullet());
+        bullet.fill = am4core.color("#fdd400"); // tooltips grab fill from parent by default
+        bullet.tooltipText = "[#fff font-size: 15px]{name} in {categoryX}:\n[/][#fff font-size: 20px]{valueY}[/] [#fff]{additional}[/]"
+        var circle = bullet.createChild(am4core.Circle);
+        circle.radius = 4;
+        circle.fill = am4core.color("#fff");
+        circle.strokeWidth = 3;
+
+       
+        return chart;
+    }
+}
 export class DateAxes extends Chart
 {
     buildChart(data, container, title, options){
