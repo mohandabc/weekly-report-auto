@@ -6,6 +6,9 @@ import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../../../constants/constants"
 import { BACK_URL } from "../../../../constants/URI";
 import { deleteDoc } from "../../../../api/api";
 import "./styles.css";
+import { ActionButton } from "../../../../components";
+import { useRecoilState } from "recoil";
+import { TSReportDataState } from "../../../../shared/globalState";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -121,6 +124,7 @@ const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
 };
 
 export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent, parentStr}) => {
+  const [TS_REPORT_DATA, setReportData] = useRecoilState(TSReportDataState);
   // const [limit, setLimit] = React.useState(10);
   // const [page, setPage] = React.useState(1);
   const [defData, setdefData] = React.useState(
@@ -173,9 +177,10 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
     {"document_id":TsAnalysisData.doc_id, "params" : TsAnalysisData});
     alert("Save button function isn't implemented yet !, an update function should be implemented in the back side first !");
   };
-
+  
   const handleDisplayReportClick = () => {
-    alert("Reports aren't implemented yet !");
+    const dummyData = {};
+    setReportData(dummyData);
   };
 
   const handleCancelClick = () => {
@@ -362,9 +367,13 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
           <Button color="red" appearance="primary" onClick={handleDeleteClick}>
             Delete Analysis
           </Button>
-          <Button color="green" appearance="primary" className="ml-4" onClick={handleDisplayReportClick}>
+          <ActionButton 
+            text="DisplayReport"  
+            className="bg-green-500 ml-4 hover:bg-green-600 text-white text-base md:text-sm py-2 px-4 rounded" 
+            action={handleDisplayReportClick} 
+            args={[]}>
             Display Report
-          </Button>
+          </ActionButton>
           <Button color="blue" appearance="primary" className="mx-4" onClick={handleSaveClick}>
             Save
           </Button>
