@@ -591,11 +591,14 @@ export class PartionedBarChart extends Chart
         xAxis.dataFields.category = params.category;
         xAxis.renderer.grid.template.location = 0;
         xAxis.renderer.labels.template.fontSize = 10;
+        xAxis.renderer.labels.template.horizontalCenter = "right";
+        xAxis.renderer.labels.template.verticalCenter = "right";
+        xAxis.renderer.labels.template.rotation = -60;
         xAxis.renderer.minGridDistance = 10;
         xAxis.title.text = "Stand Number";
 
         var yAxis = chart.yAxes.push(new am4charts.ValueAxis());
-        yAxis.title.text = "Connection Time (min)";
+        yAxis.title.text = options.leftYaxisTitle;
 
 
         // Create series
@@ -656,8 +659,25 @@ export class PartionedBarChart extends Chart
             legendData.push({ name: label, fill: color });
         }
 
-        addRange("Night", 'stand 1', "stand 5", chart.colors.getIndex(2));
-        addRange("Day", "stand 6", "stand 14", chart.colors.getIndex(12));
+        let firstItem = data[0];
+        let i = 0;
+        const DataSize = data.length;
+        let currentItem = data[0];
+       
+        while (i<DataSize-1 && currentItem.shift === firstItem.shift) {
+            i+=1;
+            currentItem = data[i];
+        }
+        
+        const nightColor = chart.colors.getIndex(2);
+        const dayColor = chart.colors.getIndex(12);
+    
+        addRange(firstItem.shift, firstItem.stand, currentItem.stand, firstItem.shift === 'Night'?nightColor: dayColor);
+        if (i<DataSize-1){
+            firstItem = data[i+1];
+            currentItem = data[DataSize-1];
+            addRange(firstItem.shift, firstItem.stand, currentItem.stand, firstItem.shift === 'Night'?nightColor: dayColor);
+        }
 
         chart.cursor = new am4charts.XYCursor();
 
@@ -679,7 +699,7 @@ export class PartionedBarChart extends Chart
         legend.itemContainers.template.events.on("toggled", function(event) {
             var name = event.target.dataItem.dataContext.name;
             var axisBreak = axisBreaks[name];
-            console.log(axisBreak)
+            
             if (event.target.isActive) {
                 axisBreak.animate({ property: "breakSize", to: 0 }, 1000, am4core.ease.cubicOut);
                 xAxis.dataItems.each(function(dataItem) {
@@ -784,7 +804,7 @@ export class ScatterChart extends Chart
 
 export class CombinedChart extends Chart{
     buildChart(data, container, title, options){
-        const THRESHOLD = 300;
+        const THRESHOLD = 500;
         let params = {};
         if (data?.length > 0) {
             params = {
@@ -801,10 +821,11 @@ export class CombinedChart extends Chart{
 
         // var chart = am4core.create(container, am4charts.XYChart);
         var chart = new PartionedBarChart(data, container, title, options).chart;
-        console.log(chart);
+
         // chart.data = data;
         var valueAxisY = chart.yAxes.push(new am4charts.ValueAxis());
         valueAxisY.renderer.opposite = true;
+        valueAxisY.title.text = options.rightYaxisTitle;
 
         var lineSeries = chart.series.push(new am4charts.LineSeries());
         lineSeries.name = "Bit Depth (m)";
