@@ -812,7 +812,7 @@ export class ScatterChart extends Chart
 
 export class CombinedChart extends Chart{
     buildChart(data, container, title, options){
-        const THRESHOLD = 500;
+        const THRESHOLD = options.threshold;
         let params = {};
         if (data?.length > 0) {
             params = {

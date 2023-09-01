@@ -196,6 +196,8 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
   const handleDisplayReportClick = () => {
     // console.log('****',TsAnalysisData);
     let reportData = {};
+    reportData['TS_benchmark'] = TsAnalysisData.benchmarkTS;
+    
     reportData['tripping_connection'] = [{'category' : 'Tripping Time', 'value':TsAnalysisData.performances.tripping_time},{'category' : 'Connection Time', 'value':TsAnalysisData.performances.connection_time}];
 
     reportData['overview'] = [{"Attribute":"Rig Name", 'Value':TsAnalysisData.rig}, {"Attribute":"Well Name", 'Value':TsAnalysisData.well}, 
