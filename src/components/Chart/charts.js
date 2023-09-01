@@ -361,10 +361,16 @@ export class ClusteredBarChart extends Chart
         xAxis.renderer.grid.template.location = 0;
         xAxis.renderer.labels.template.fill= options['label-color'];
 
+        xAxis.renderer.labels.template.horizontalCenter = "right";
+        xAxis.renderer.labels.template.verticalCenter = "right";
+        xAxis.renderer.labels.template.rotation = -45;
+        xAxis.renderer.minGridDistance = 10;
+
         var yAxis = chart.yAxes.push(new am4charts.ValueAxis());
         yAxis.min = 0;
         yAxis.renderer.line.stroke = options['stroke-color'];
         yAxis.renderer.grid.template.stroke = options['stroke-color'];
+
 
 
         function createSeries(value, name) {
@@ -380,6 +386,8 @@ export class ClusteredBarChart extends Chart
             bullet.interactionsEnabled = false
             bullet.label.dy = -10;
             bullet.label.text = '[bold]{valueY}'
+            bullet.label.fontSize= 9;
+            
             bullet.label.fill = am4core.color(options['value-color'])
             return series;
         }

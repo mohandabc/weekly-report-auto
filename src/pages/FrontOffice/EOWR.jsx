@@ -26,6 +26,15 @@ export const EOWR = () => {
         })
     }
 
+    const readyData = (data) => {
+        let resultData = []
+        data.forEach(item =>{
+            if ('value1' in item) {resultData.push({type : item.category, name : 'PT', count: item.value1})}
+            if ('value2' in item) {resultData.push({type : item.category, name : 'NPT', count: item.value2})}
+            });
+        return resultData;
+    }
+
     const getEowrData = (params) => {
         // API call to get data
         setIsHidden(false);
@@ -33,6 +42,10 @@ export const EOWR = () => {
         getData(API_URL, url, params)
         .then(res=> {
             let data = res.result;
+
+            //@TODO this should be done in the controller, this is temporary
+            data['npt_sections'] = readyData(data['npt_sections']);
+
             setEOWRData({...data} || {});
             setParagraphes({
                 'p-1': cleanHTML(data['eowr_snags']['high_value_interventions']),
@@ -174,7 +187,7 @@ export const EOWR = () => {
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
                     <Chart title = "PT vs NPT" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['pt_vs_npt']} chartType="Pie"/>
                     {/* TODO : below instruction is skipped and needs to be implemented */}
-                    <Chart title = "NPT vs Section" id = {getDivId('chart')} chartData = {EOWRData['npt_sections']} chartType="Stacked"/> 
+                    <Chart title = "NPT vs Section" id = {getDivId('chart')} chartData = {EOWRData['npt_sections']} chartType="ClusterBar"/> 
                     <Chart title = "NPT vs Category" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_categories']} chartType="Pie"/>
                     <Chart title = "NPT vs Sub-Category" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_subcategories']} chartType="Pie"/>
                 </section>
