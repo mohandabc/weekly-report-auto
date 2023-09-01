@@ -166,6 +166,7 @@ export const TrippingSpeed = () => {
   const [loadingValue, setLoadingValue] = React.useState(false);
   const [shake, setShake] = React.useState(false);
 
+  const { allowedMaxDays, afterToday, combine } = DateRangePicker;
   const [dateRangeValue, setDateRangeValue] = React.useState([
     new Date(),
     new Date(),
@@ -581,6 +582,7 @@ export const TrippingSpeed = () => {
                     marginLeft: 10,
                     marginRight: 10,
                   }}
+                  disabledDate={combine(allowedMaxDays(4),afterToday())}
                 />
               </Form.Group>
             </div>
