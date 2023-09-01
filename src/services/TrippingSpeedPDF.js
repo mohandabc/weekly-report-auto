@@ -32,7 +32,7 @@ export const generateTrippingSpeed = (chartsToPrint, TrippingSpeedData) => {
         let doc = createDoc('A4', 'portrait', [15,20,0,10]);
         doc['footer'] = function(currentPage, pageCount){ return currentPage.toString() + ' of ' + pageCount;};
 
-        let WELL = TrippingSpeedData.well || 'Well-Test';
+        let WELL = TrippingSpeedData.overview[1]['Value'] || 'Well-Test';
         let TS_date = new Date()
         let displayedDate = TS_date.toLocaleDateString('en-us', {year:"numeric", month:"long"});
 
@@ -44,6 +44,20 @@ export const generateTrippingSpeed = (chartsToPrint, TrippingSpeedData) => {
 
                 const table_layout = {
                     fillColor: function (i, node, j) {
+                        return (j%2===0) ? '#b8b8b8' : "#eeeeee"
+                    },
+                    hLineColor: function (i, node) {
+                        return '#405CF0';
+                    },
+                    vLineColor: function (i, node) {
+                        return '#405CF0';
+                    },
+                };
+                const kpi_table_layout = {
+                    fillColor: function (i, node, j) {
+                        if (i===0) return '#989898';
+                        if (i===7 && parseInt(node.table.body[i][1].text)<0) return '#C99898';
+                        if (i===7 && parseInt(node.table.body[i][1].text)>0) return '#98c998';
                         return (j%2===0) ? '#b8b8b8' : "#eeeeee"
                     },
                     hLineColor: function (i, node) {
@@ -133,26 +147,26 @@ export const generateTrippingSpeed = (chartsToPrint, TrippingSpeedData) => {
                 
                 pageContent.push(buildTitle(1, "Connection Time per Stand", false, title_margin));
                 pageContent.push(buildChart(exportedCharts[chart_index+=1], 560, 1.2));
+                pageContent.push(buildTitle(1, "Tripping Speed per Stand", false, title_margin));
+                pageContent.push(buildChart(exportedCharts[chart_index+=1], 560, 1.2));
                 createPage(doc, pageContent);
                 
                 // ------------------ tripping speed per stand with DEPTH ----------------
                 pageNumber += 1;
                 pageContent = [];
                 
-                pageContent.push(buildTitle(1, "Tripping Speed per Stand", false, title_margin));
-                pageContent.push(buildChart(exportedCharts[chart_index+=1], 560, 1.2));
                 pageContent.push(buildTitle(1, "Abnormal Stands", false, title_margin));
-                pageContent.push(buildTable(TrippingSpeedData['abnormal_stands']));
+                pageContent.push(buildTable(TrippingSpeedData['abnormal_stands'], 'simple', table_layout));
+                pageContent.push(buildTitle(1, "Connection Time / Tripping Speed per Stand", false, title_margin));
+                pageContent.push(buildChart(exportedCharts[chart_index+=1], 560, 1.2));
+                
                 createPage(doc, pageContent);
                 
                 pageNumber += 1;
                 pageContent = [];
                 
-                pageContent.push(buildTitle(1, "Connection Time / Tripping Speed per Stand", false, title_margin));
-                pageContent.push(buildChart(exportedCharts[chart_index+=1], 560, 1.2));
-                
                 pageContent.push(buildTitle(1, "KPI's", false, title_margin));
-                pageContent.push(buildTable(TrippingSpeedData['kpi']));
+                pageContent.push(buildTable(TrippingSpeedData['kpi'], 'simple', kpi_table_layout));
                 createPage(doc, pageContent);
 
                 // replaceTotalPages(doc.content, pageNumber)
