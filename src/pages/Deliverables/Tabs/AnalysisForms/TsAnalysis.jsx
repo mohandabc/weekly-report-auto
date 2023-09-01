@@ -1,10 +1,9 @@
 import React from "react";
-import { Table, Button, Checkbox, Pagination } from "rsuite";
+import { Table, Button, Checkbox } from "rsuite";
 import { DatePicker } from "rsuite";
-import { BackLog, TrippingSpeed } from "../..";
 import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../../../constants/constants";
 import { BACK_URL } from "../../../../constants/URI";
-import { deleteDoc } from "../../../../api/api";
+import { deleteDoc, getData } from "../../../../api/api";
 import "./styles.css";
 import { ActionButton } from "../../../../components";
 import { useRecoilState } from "recoil";
@@ -54,9 +53,11 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
         dataKey === "date_to" || dataKey === "date_from" ? (
           <DatePicker
             format="yyyy-MM-dd HH:mm:ss"
+            defaultValue={new Date(rowData[dataKey])}
             onChange={(date) =>
               onChange(rowData.standNum, dataKey, date.toISOString())
             }
+            disabled
           />
         ) : dataKey === "connection_time" ? (
           <DatePicker
@@ -69,6 +70,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
                 date.getMinutes() + date.getSeconds() / 60
               )
             }
+            disabled
           />
         ) : dataKey === "abnormal" ? (
           <Checkbox
@@ -77,7 +79,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
               onChange(rowData.standNum, dataKey, !rowData[dataKey])
             }
           />
-        ) : dataKey === "depth_from" || dataKey === "depth_to" ? (
+        ) : (["depth_from", "depth_to", "delta_depth", "gross_speed", "net_speed", "standNum"].includes(dataKey)) ? (
           <input
             type="number"
             className="rs-input"
@@ -85,6 +87,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
             onChange={(event) =>
               onChange(rowData.standNum, dataKey, event.target.value)
             }
+            disabled
           />
         ) : (
           <input
@@ -178,21 +181,32 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
     });
   };
 
+  const [msg, setMsg] = React.useState({ msg:'', color:"text-green-300" });
   const handleSaveClick = () => {
     const updatedData = defData.map((object) => {
       const { status, ...otherFields } = object;
       return otherFields;
     });
-    TsAnalysisData["standline"] = updatedData;
-    console.log(
-      "The document that is going to be updated with its new data : ",
-      { document_id: TsAnalysisData.doc_id, params: TsAnalysisData }
-    );
-    alert(
-      "Save button function isn't implemented yet !, an update function should be implemented in the back side first !"
-    );
+
+    const requestData = {
+      _id: doc_id,
+      standline: updatedData,
+    };
+
+    getData(BACK_URL, "TrippingSpeed/updateDoc", requestData).then((res) => {
+      if ("msg" in res && res.status === 200) {
+        showMessage("Tripping speed analysis updated successfully", "text-green-600");
+      }
+    });
   };
   
+  const showMessage = (text, color) => {
+    setMsg({ msg:text, color:color });
+    setTimeout(() => {
+      setMsg({ msg:'', color:"text-green-300" });
+    }, 1500);
+  };
+
   const handleDisplayReportClick = () => {
     // console.log('****',TsAnalysisData);
     let reportData = {};
@@ -429,7 +443,17 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
         </div>
       </div>
       <div>
-        <div className={`flex justify-center mt-4`}>
+        <div className="flex-col items-center">
+          {msg.msg?
+            <div className={`text-center text-sm font-extrabold ${msg.color} animate-fade-in-out duration-[1500ms] my-1`}>
+              {msg.msg}
+            </div>:
+            <div className={`text-center text-sm font-bold ${msg.color} my-1`}>
+              &nbsp;
+            </div>
+          }
+        </div>
+        <div className={`flex justify-center mt-1`}>
           <Button
             appearance="default"
             className="mx-4"
@@ -440,13 +464,13 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
           <Button color="red" appearance="primary" onClick={handleDeleteClick}>
             Delete Analysis
           </Button>
-          <ActionButton 
-            text="DisplayReport"  
-            className="bg-green-500 ml-4 hover:bg-green-600 text-white text-base md:text-sm py-2 px-4 rounded" 
-            action={handleDisplayReportClick} 
-            args={[]}>
+          <Button 
+            appearance="primary"
+            color="green"
+            className="ml-4"
+            onClick={handleDisplayReportClick}>
             Display Report
-          </ActionButton>
+          </Button>
           <Button color="blue" appearance="primary" className="mx-4" onClick={handleSaveClick}>
             Save
           </Button>
