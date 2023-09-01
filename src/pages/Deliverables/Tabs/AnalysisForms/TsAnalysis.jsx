@@ -464,13 +464,13 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
           <Button color="red" appearance="primary" onClick={handleDeleteClick}>
             Delete Analysis
           </Button>
-          <ActionButton 
-            text="DisplayReport"  
-            className="bg-green-500 ml-4 hover:bg-green-600 text-white text-base md:text-sm py-2 px-4 rounded" 
-            action={handleDisplayReportClick} 
-            args={[]}>
+          <Button 
+            appearance="primary"
+            color="green"
+            className="ml-4"
+            onClick={handleDisplayReportClick}>
             Display Report
-          </ActionButton>
+          </Button>
           <Button color="blue" appearance="primary" className="mx-4" onClick={handleSaveClick}>
             Save
           </Button>
