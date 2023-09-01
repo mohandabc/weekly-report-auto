@@ -54,9 +54,11 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
         dataKey === "date_to" || dataKey === "date_from" ? (
           <DatePicker
             format="yyyy-MM-dd HH:mm:ss"
+            defaultValue={new Date(rowData[dataKey])}
             onChange={(date) =>
               onChange(rowData.standNum, dataKey, date.toISOString())
             }
+            disabled
           />
         ) : dataKey === "connection_time" ? (
           <DatePicker
@@ -69,6 +71,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
                 date.getMinutes() + date.getSeconds() / 60
               )
             }
+            disabled
           />
         ) : dataKey === "abnormal" ? (
           <Checkbox
@@ -77,7 +80,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
               onChange(rowData.standNum, dataKey, !rowData[dataKey])
             }
           />
-        ) : dataKey === "depth_from" || dataKey === "depth_to" ? (
+        ) : (["depth_from", "depth_to", "delta_depth", "gross_speed", "net_speed", "standNum"].includes(dataKey)) ? (
           <input
             type="number"
             className="rs-input"
@@ -85,6 +88,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
             onChange={(event) =>
               onChange(rowData.standNum, dataKey, event.target.value)
             }
+            disabled
           />
         ) : (
           <input
