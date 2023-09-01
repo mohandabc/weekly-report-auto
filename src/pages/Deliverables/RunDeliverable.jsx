@@ -19,11 +19,6 @@ const processInput =  (params) =>{
 export const RunDeliverable = () => {
   const [TS_REPORT_DATA, setReportData] = useRecoilState(TSReportDataState);
   const [chartsToPrint, setChartsToPrint] = useState([]);
-
-  const handleDisplayReportClick = () => {
-    const dummyData = {};
-    setReportData(dummyData);
-  };
     
   let chartsIds = [];
   
@@ -53,7 +48,7 @@ export const RunDeliverable = () => {
 
 {
         Object.keys(TS_REPORT_DATA).length === 0?
-        <><ActionButton className="bg-green-500 ml-4 hover:bg-green-600 text-white text-base md:text-sm py-2 px-4 rounded"  text={'Report'} action={handleDisplayReportClick}></ActionButton></>
+        <></>
         :
         <div id="ts-report-section" className={`w-full mt-50 bg-slate-300 dark:bg-zinc-900`}>
                 <div className='flex flex-row-reverse sticky top-14 px-10 py-4  z-40'>
@@ -74,14 +69,19 @@ export const RunDeliverable = () => {
 
                     <Chart title = "Connection Time vs Tripping Time" id = {getDivId('chart')} chartData = {TS_REPORT_DATA['tripping_connection']} chartType="Pie"/>
 
-                    <Chart title = "Connection Time (min) per stand" id = {getDivId('chart')} chartData = {TS_REPORT_DATA['connection_per_stand']} chartType="PartitionedBar"/>
+                    <Chart title = "Connection Time (min) per Stand" id = {getDivId('chart')} 
+                            chartData = {TS_REPORT_DATA['connection_per_stand']} 
+                            chartType="PartitionedBar"
+                            c_options={{leftYaxisTitle : "Connection Time (min)"}}/>
+
+                    <Chart title = "Tripping Speed (m/h) per Stand" id = {getDivId('chart')} 
+                            chartData = {TS_REPORT_DATA['connection_per_stand'].map(item =>{const {c_time, ...rest} = item; return rest;})} 
+                            chartType="Combined"
+                            c_options={{leftYaxisTitle : "Tripping speed (m/h)", rightYaxisTitle:"Depth (m)"}}/>
+                    <Table title = "Abnormal Stands" id = {getDivId('table')} tableData = {TS_REPORT_DATA['abnormal_stands']}/>
                     <Chart title = "Connection Time (min), Tripping Speed (m/h) per Stand" id = {getDivId('chart')} chartData = {TS_REPORT_DATA['connection_t_tripping_s']} chartType="Scatter"/>
 
-                     <Table title = "Abnormal Stands" id = {getDivId('table')} tableData = {TS_REPORT_DATA['abnormal_stands']}/>
-
-                     <Chart title = "Time Distribution per phase" id = {getDivId('chart')} 
-                            chartData = {TS_REPORT_DATA['connection_per_stand'].map(item =>{const {c_time, ...rest} = item; return rest;})} 
-                            chartType="Combined"/>
+                     
 
                     <Table title = "KPI's" id = {getDivId('table')} tableData = {TS_REPORT_DATA['kpi']}/> 
                 </section>
