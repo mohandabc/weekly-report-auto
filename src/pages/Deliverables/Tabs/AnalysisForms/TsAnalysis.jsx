@@ -6,6 +6,9 @@ import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../../../constants/constants"
 import { BACK_URL } from "../../../../constants/URI";
 import { deleteDoc } from "../../../../api/api";
 import "./styles.css";
+import { ActionButton } from "../../../../components";
+import { useRecoilState } from "recoil";
+import { TSReportDataState } from "../../../../shared/globalState";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -130,13 +133,10 @@ const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
   );
 };
 
-export const TsAnalysis = ({
-  TsAnalysisData,
-  resetStates,
-  doc_id,
-  ParentComponent,
-  parentStr,
-}) => {
+
+export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent, parentStr}) => {
+  const [TS_REPORT_DATA, setReportData] = useRecoilState(TSReportDataState);
+
   // const [limit, setLimit] = React.useState(10);
   // const [page, setPage] = React.useState(1);
   const [defData, setdefData] = React.useState(TsAnalysisData.standline);
@@ -192,10 +192,46 @@ export const TsAnalysis = ({
       "Save button function isn't implemented yet !, an update function should be implemented in the back side first !"
     );
   };
-
+  
   const handleDisplayReportClick = () => {
-    alert("Reports aren't implemented yet !");
-  };
+    // console.log('****',TsAnalysisData);
+    let reportData = {};
+    reportData['TS_benchmark'] = TsAnalysisData.benchmarkTS;
+    
+    reportData['tripping_connection'] = [{'category' : 'Tripping Time', 'value':TsAnalysisData.performances.tripping_time},{'category' : 'Connection Time', 'value':TsAnalysisData.performances.connection_time}];
+
+    reportData['overview'] = [{"Attribute":"Rig Name", 'Value':TsAnalysisData.rig}, {"Attribute":"Well Name", 'Value':TsAnalysisData.well}, 
+                              {"Attribute":"Phase", 'Value':TsAnalysisData.phase}, {"Attribute":"BHA Name", 'Value':TsAnalysisData.bha}, 
+                              {"Attribute":"Drill Pipe Size", 'Value':TsAnalysisData.drill_pipe_size}, {"Attribute":"Rotary System", 'Value':TsAnalysisData.trip_information.rotary_system},
+                              {"Attribute": 'Casing Size', 'Value':TsAnalysisData.csg_size}, {"Attribute":"Tripping Type", 'Value':TsAnalysisData.trip_information.trip_type},
+                              {"Attribute":"Trip reason", 'Value':TsAnalysisData.trip_information.trip_reason}, {"Attribute":"Trip Number", 'Value':TsAnalysisData.trip_number},
+                              {"Attribute":"Cased Open", 'Value':TsAnalysisData.trip_information.hole_type}, {"Attribute":"Speed Benchmark", 'Value':TsAnalysisData.benchmarkTS},
+                              {"Attribute":"Connection Benchmark", 'Value':TsAnalysisData.benchmarkCT}, {"Attribute":"Threshold", 'Value':TsAnalysisData.threshold||'no data'},
+                              {"Attribute":"Start Time", 'Value':TsAnalysisData.result_analysis.start_date},{"Attribute" : "End Time", "Value" : TsAnalysisData.result_analysis.end_date},
+                              {"Attribute" : "Generated On" ,"Value" : TsAnalysisData.create_date}, {"Attribute" : "Data Source", "Value" : "OilPort"}];
+
+    reportData['connection_t_tripping_s'] = TsAnalysisData.standline.map(item=>{return {'connection_time' : item.connection_time, 'tripping_speed' :item.net_speed}});
+
+    reportData['abnormal_stands'] = TsAnalysisData.standline.filter(item=>item.abnormal).map(item=>({'Stand Number' : item.standNum, 'Description' :item.description, 
+                                                                                "Connection Time" : item.connection_time, "Tripping Speed" : item.net_speed}));
+
+    // [{"stand number":"10", 'Description':'Fill TT', 'Connection time':11.2, 'Tripping speed':101.2}, {"stand number":"10", 'Description':'Fill TT', 'Connection time':11.2, 'Tripping speed':101.2}];
+    reportData['kpi'] = [{"kpi":"Tripping distance", 'Value':TsAnalysisData.performances.tripping_distance, 'unit':'m'},
+                         {"kpi":"Connection Time AVG", 'Value':TsAnalysisData.performances.average_connection_time, 'unit':'Min'}, 
+                         {"kpi":"Tripping Speed", 'Value':TsAnalysisData.performances.average_speed, 'unit':'m/h'}, 
+                         {"kpi":"Connection Time", 'Value':TsAnalysisData.performances.connection_time, 'unit':'Hours'}, 
+                         {"kpi":"Tripping Time", 'Value':TsAnalysisData.performances.tripping_time, 'unit':'Hours'}, 
+                         {"kpi":"Number of connection", 'Value':TsAnalysisData.performances.total_connections, 'unit':'nbr'},
+                         {"kpi":"Connection Time VS Connection Time benchmark", 'Value':TsAnalysisData.performances.total_connections * (TsAnalysisData.benchmarkCT - TsAnalysisData.performances.average_connection_time), 'unit':'min'}];
+
+    reportData['connection_per_stand'] = TsAnalysisData.standline.map((item, index)=>({shift: index>10?"Day":'Night', 
+                                                                              stand: "stand "+ item.standNum, 
+                                                                              c_time : item.connection_time, 
+                                                                              t_speed: item.net_speed, 
+                                                                              bit_depth:item.depth_from}));
+                     
+      setReportData(reportData);
+    };
 
   const handleCancelClick = () => {
     console.log(parentStr);
@@ -404,20 +440,14 @@ export const TsAnalysis = ({
           <Button color="red" appearance="primary" onClick={handleDeleteClick}>
             Delete Analysis
           </Button>
-          <Button
-            color="green"
-            appearance="primary"
-            className="ml-4"
-            onClick={handleDisplayReportClick}
-          >
+          <ActionButton 
+            text="DisplayReport"  
+            className="bg-green-500 ml-4 hover:bg-green-600 text-white text-base md:text-sm py-2 px-4 rounded" 
+            action={handleDisplayReportClick} 
+            args={[]}>
             Display Report
-          </Button>
-          <Button
-            color="blue"
-            appearance="primary"
-            className="mx-4"
-            onClick={handleSaveClick}
-          >
+          </ActionButton>
+          <Button color="blue" appearance="primary" className="mx-4" onClick={handleSaveClick}>
             Save
           </Button>
         </div>
