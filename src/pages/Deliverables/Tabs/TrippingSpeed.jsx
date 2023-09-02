@@ -582,7 +582,6 @@ export const TrippingSpeed = () => {
                     marginRight: 10,
                     marginBottom: 2
                   }}
-                  disabledDate={combine(allowedMaxDays(4),afterToday())}
                 />
               </Form.Group>
             </div>
