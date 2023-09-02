@@ -546,8 +546,7 @@ export const TrippingSpeed = () => {
                   placement="top"
                   speaker={
                     <Tooltip>
-                      The Threshold is automatically calculated for the main
-                      time.
+                      Threshold auto-calculated when value is 0.
                     </Tooltip>
                   }
                 >
