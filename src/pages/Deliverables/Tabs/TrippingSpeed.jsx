@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { PaginationComp } from "../../../components";
-import { DateRangePicker } from "rsuite";
+import { DateRangePicker, InputNumber } from "rsuite";
 import { Form, Schema } from "rsuite";
 import { useAuth } from "../../../api/useAuth";
 
@@ -159,7 +159,7 @@ export const TrippingSpeed = () => {
     BHAname: schemStringType,
     // benchmarkTS: schemStringType,
     // benchmarkCT: schemStringType,
-    // threshold: schemStringType,
+    threshold: schemNumberType,
     // dateRangeValue: Schema.Types.ArrayType().isRequired("This field is required."),
   });
 
@@ -219,6 +219,7 @@ export const TrippingSpeed = () => {
     formValue["created_by"] = user.name
     formValue["benchmarkTS"] = benchmarkTS
     formValue["benchmarkCT"] = benchmarkCT
+    formValue['well_id'] = formValue["well"]
     console.log("Params from TrippingSpeed : ", formValue);
     setLoadingValue(true);
     formValue["well"] = wellsplaceholder.find(
@@ -331,7 +332,7 @@ export const TrippingSpeed = () => {
                 BHAname: formValue["BHAname"],
                 benchmarkTS: formValue["benchmarkTS"],
                 benchmarkCT: formValue["benchmarkCT"],
-                // threshold: formValue["threshold"],
+                threshold: formValue["threshold"],
                 // dateRangeValue: formValue["dateRangeValue"],
               })
             }
@@ -545,21 +546,19 @@ export const TrippingSpeed = () => {
                   placement="top"
                   speaker={
                     <Tooltip>
-                      The Threshold is automatically calculated for the main
-                      time.
+                      Threshold auto-calculated when value is 0.
                     </Tooltip>
                   }
                 >
                   <span>
-                    <InputGroup disabled style={styles.wide}>
-                      <Input
+                    <InputGroup style={{marginLeft:10, marginRight:10, width:250}}>
+                      <Form.Control
+                        style={{width:196}}
+                        accepter={InputNumber}
                         name="threshold"
-                        // onChange={setThreshold}
                         placeholder="Threshold"
-                        data={data_placeHolder}
-                        disabled
                       />
-                      <InputGroup.Addon>T</InputGroup.Addon>
+                      <InputGroup.Addon>Tons</InputGroup.Addon>
                     </InputGroup>
                   </span>
                 </Whisper>
@@ -581,8 +580,8 @@ export const TrippingSpeed = () => {
                     width: 520,
                     marginLeft: 10,
                     marginRight: 10,
+                    marginBottom: 2
                   }}
-                  disabledDate={combine(allowedMaxDays(4),afterToday())}
                 />
               </Form.Group>
             </div>
