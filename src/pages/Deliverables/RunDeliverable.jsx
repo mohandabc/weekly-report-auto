@@ -33,9 +33,13 @@ export const RunDeliverable = () => {
   }
 
   useEffect(()=>{
-    // console.log({images})
     setChartsToPrint(chartsIds);
-}, [TS_REPORT_DATA])
+  }, [TS_REPORT_DATA])
+
+  useEffect(()=>{
+    const TS_report_section = document.getElementById('ts-report-section');
+    TS_report_section?.scrollIntoView({behavior: "smooth"});
+  });
 
   return (
     <div className="App">
@@ -60,7 +64,6 @@ export const RunDeliverable = () => {
                     </PDFButton>
                 </div>
 
-                <span className='text-xl px-4'>II. Time Activity Breakdown</span>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4 align-bottom`} >
                     {/* <Table title = "Overview" id = {getDivId('table')} tableData = {TS_REPORT_DATA['overview']}/> */}
                     <Tabular title="Overview" id={getDivId('table')} tableData={TS_REPORT_DATA['overview'].map(item => ({
@@ -80,8 +83,6 @@ export const RunDeliverable = () => {
                             c_options={{leftYaxisTitle : "Tripping speed (m/h)", rightYaxisTitle:"Depth (m)", threshold: TS_REPORT_DATA['TS_benchmark']}}/>
                     <Table title = "Abnormal Stands" id = {getDivId('table')} tableData = {TS_REPORT_DATA['abnormal_stands']}/>
                     <Chart title = "Connection Time (min), Tripping Speed (m/h) per Stand" id = {getDivId('chart')} chartData = {TS_REPORT_DATA['connection_t_tripping_s']} chartType="Scatter"/>
-
-                     
 
                     <Table title = "KPI's" id = {getDivId('table')} tableData = {TS_REPORT_DATA['kpi']}/> 
                 </section>

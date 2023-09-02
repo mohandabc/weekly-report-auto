@@ -2,8 +2,8 @@ import React from "react";
 import { Table, Button, Checkbox } from "rsuite";
 import { DatePicker } from "rsuite";
 import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../../../constants/constants";
-import { BACK_URL } from "../../../../constants/URI";
-import { deleteDoc, getData } from "../../../../api/api";
+import { BACK_URL, API_URL} from "../../../../constants/URI";
+import { deleteDoc, getData} from "../../../../api/api";
 import "./styles.css";
 import { ActionButton } from "../../../../components";
 import { useRecoilState } from "recoil";
@@ -17,6 +17,10 @@ function minutesToTime(seconds) {
   date.setSeconds(seconds % 60);
   return date;
 }
+
+const seconds2minutes = (seconds) => (seconds/60).toFixed(2);
+const minutes2hours = (minutes) => (minutes/60).toFixed(2);
+
 
 function formatDateString(dateString) {
   let date = new Date(dateString);
@@ -200,55 +204,80 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
     });
   };
   
+
+  const dateTimeInRange = (datetimeStr, range) => {
+    const datetime = new Date(datetimeStr);
+
+    const hours = datetime.getHours();
+    const minutes = datetime.getMinutes();
+
+    const startTime = range.shift_start * 60; 
+    const endTime = range.shift_end * 60;  
+
+
+    const currentTime = hours * 60 + minutes;
+    if (currentTime >= startTime && currentTime <= endTime)
+      return true;
+    return false;
+  }
+
+  
   const showMessage = (text, color) => {
     setMsg({ msg:text, color:color });
     setTimeout(() => {
       setMsg({ msg:'', color:"text-green-300" });
     }, 1500);
   };
-
-  const handleDisplayReportClick = () => {
-    // console.log('****',TsAnalysisData);
+  
+  const handleDisplayReportClick = async () => {
     let reportData = {};
+
+    const res = await getData(API_URL, 'shift-changes/', {'well_id' : TsAnalysisData.well_id});
+    const shifts = res.result.shifts[0]
+        
     reportData['TS_benchmark'] = TsAnalysisData.benchmarkTS;
     
-    reportData['tripping_connection'] = [{'category' : 'Tripping Time', 'value':TsAnalysisData.performances.tripping_time},{'category' : 'Connection Time', 'value':TsAnalysisData.performances.connection_time}];
+    reportData['tripping_connection'] = [{'category' : 'Tripping Time', 'value':seconds2minutes(TsAnalysisData.performances.tripping_time)},
+                                         {'category' : 'Connection Time', 'value':seconds2minutes(TsAnalysisData.performances.connection_time)}];
 
     reportData['overview'] = [{"Attribute":"Rig Name", 'Value':TsAnalysisData.rig}, {"Attribute":"Well Name", 'Value':TsAnalysisData.well}, 
                               {"Attribute":"Phase", 'Value':TsAnalysisData.phase}, {"Attribute":"BHA Name", 'Value':TsAnalysisData.bha}, 
                               {"Attribute":"Drill Pipe Size", 'Value':TsAnalysisData.drill_pipe_size}, {"Attribute":"Rotary System", 'Value':TsAnalysisData.trip_information.rotary_system},
                               {"Attribute": 'Casing Size', 'Value':TsAnalysisData.csg_size}, {"Attribute":"Tripping Type", 'Value':TsAnalysisData.trip_information.trip_type},
                               {"Attribute":"Trip reason", 'Value':TsAnalysisData.trip_information.trip_reason}, {"Attribute":"Trip Number", 'Value':TsAnalysisData.trip_number},
-                              {"Attribute":"Cased Open", 'Value':TsAnalysisData.trip_information.hole_type}, {"Attribute":"Speed Benchmark", 'Value':TsAnalysisData.benchmarkTS},
-                              {"Attribute":"Connection Benchmark", 'Value':TsAnalysisData.benchmarkCT}, {"Attribute":"Threshold", 'Value':TsAnalysisData.threshold||'no data'},
+                              {"Attribute":"Cased Open", 'Value':TsAnalysisData.trip_information.hole_type}, {"Attribute":"Speed Benchmark", 'Value':TsAnalysisData.benchmarkTS+' (m/h)'},
+                              {"Attribute":"Connection Benchmark", 'Value':TsAnalysisData.benchmarkCT+' (min)'}, {"Attribute":"Threshold", 'Value':TsAnalysisData.threshold + ' (ton)'},
                               {"Attribute":"Start Time", 'Value':TsAnalysisData.result_analysis.start_date},{"Attribute" : "End Time", "Value" : TsAnalysisData.result_analysis.end_date},
                               {"Attribute" : "Generated On" ,"Value" : TsAnalysisData.create_date}, {"Attribute" : "Data Source", "Value" : "OilPort"}];
 
-    reportData['connection_t_tripping_s'] = TsAnalysisData.standline.map(item=>{return {'connection_time' : item.connection_time, 'tripping_speed' :item.net_speed}});
+    reportData['connection_t_tripping_s'] = TsAnalysisData.standline.map(item=>{return {'connection_time' : seconds2minutes(item.connection_time), 
+                                                                                        'tripping_speed' :item.net_speed}});
 
-    reportData['abnormal_stands'] = TsAnalysisData.standline.filter(item=>item.abnormal).map(item=>({'Stand Number' : item.standNum, 'Description' :item.description, 
-                                                                                "Connection Time" : item.connection_time, "Tripping Speed" : item.net_speed}));
+    reportData['abnormal_stands'] = TsAnalysisData.standline.filter(item=>item.abnormal)
+                                                            .map(item=>({'Stand Number' : item.standNum, 'Description' :item.description, 
+                                                                         "Connection Time" : seconds2minutes(item.connection_time), 
+                                                                         "Tripping Speed" : item.net_speed}));
 
     // [{"stand number":"10", 'Description':'Fill TT', 'Connection time':11.2, 'Tripping speed':101.2}, {"stand number":"10", 'Description':'Fill TT', 'Connection time':11.2, 'Tripping speed':101.2}];
     reportData['kpi'] = [{"kpi":"Tripping distance", 'Value':TsAnalysisData.performances.tripping_distance, 'unit':'m'},
                          {"kpi":"Connection Time AVG", 'Value':TsAnalysisData.performances.average_connection_time, 'unit':'Min'}, 
                          {"kpi":"Tripping Speed", 'Value':TsAnalysisData.performances.average_speed, 'unit':'m/h'}, 
-                         {"kpi":"Connection Time", 'Value':TsAnalysisData.performances.connection_time, 'unit':'Hours'}, 
-                         {"kpi":"Tripping Time", 'Value':TsAnalysisData.performances.tripping_time, 'unit':'Hours'}, 
+                         {"kpi":"Connection Time", 'Value':minutes2hours(TsAnalysisData.performances.connection_time), 'unit':'Hours'}, 
+                         {"kpi":"Tripping Time", 'Value':minutes2hours(TsAnalysisData.performances.tripping_time), 'unit':'Hours'}, 
                          {"kpi":"Number of connection", 'Value':TsAnalysisData.performances.total_connections, 'unit':'nbr'},
                          {"kpi":"Connection Time VS Connection Time benchmark", 'Value':TsAnalysisData.performances.total_connections * (TsAnalysisData.benchmarkCT - TsAnalysisData.performances.average_connection_time), 'unit':'min'}];
 
-    reportData['connection_per_stand'] = TsAnalysisData.standline.map((item, index)=>({shift: index>10?"Day":'Night', 
+    reportData['connection_per_stand'] = TsAnalysisData.standline.map((item, index)=>({shift: dateTimeInRange(item.date_from, shifts)?"Day":'Night', 
                                                                               stand: "stand "+ item.standNum, 
-                                                                              c_time : item.connection_time, 
+                                                                              c_time : seconds2minutes(item.connection_time), 
                                                                               t_speed: item.net_speed, 
                                                                               bit_depth:item.depth_from}));
-                     
-      setReportData(reportData);
+
+    setReportData(reportData);
     };
 
   const handleCancelClick = () => {
-    console.log(parentStr);
+    setReportData({});
     resetStates({});
     setShowParent(true);
   };
