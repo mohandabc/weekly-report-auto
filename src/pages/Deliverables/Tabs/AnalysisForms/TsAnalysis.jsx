@@ -230,11 +230,9 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
   };
   
   const handleDisplayReportClick = async () => {
-    console.log('****',TsAnalysisData);
-
     let reportData = {};
 
-    const res = await getData(API_URL, 'shift-changes/', {'well_id' : TsAnalysisData.well_id || 9030});
+    const res = await getData(API_URL, 'shift-changes/', {'well_id' : TsAnalysisData.well_id});
     const shifts = res.result.shifts[0]
         
     reportData['TS_benchmark'] = TsAnalysisData.benchmarkTS;
@@ -279,7 +277,6 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
     };
 
   const handleCancelClick = () => {
-    console.log(parentStr);
     setReportData({});
     resetStates({});
     setShowParent(true);
