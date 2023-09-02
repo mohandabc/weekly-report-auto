@@ -35,7 +35,12 @@ export const RunDeliverable = () => {
   useEffect(()=>{
     // console.log({images})
     setChartsToPrint(chartsIds);
-}, [TS_REPORT_DATA])
+  }, [TS_REPORT_DATA])
+
+  useEffect(()=>{
+    const TS_report_section = document.getElementById('ts-report-section');
+    TS_report_section?.scrollIntoView({behavior: "smooth"});
+  });
 
   return (
     <div className="App">
