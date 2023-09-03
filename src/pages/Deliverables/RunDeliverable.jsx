@@ -65,12 +65,11 @@ export const RunDeliverable = () => {
                 </div>
 
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4 align-bottom`} >
-                    {/* <Table title = "Overview" id = {getDivId('table')} tableData = {TS_REPORT_DATA['overview']}/> */}
                     <Tabular title="Overview" id={getDivId('table')} tableData={TS_REPORT_DATA['overview'].map(item => ({
                                 [item.Attribute]: item.Value}))} 
                                 columns={3} />
 
-                    <Chart title = "Connection Time vs Tripping Time" id = {getDivId('chart')} chartData = {TS_REPORT_DATA['tripping_connection']} chartType="Pie"/>
+                    <Chart title = "Connection Time vs Tripping Time (hours)" id = {getDivId('chart')} chartData = {TS_REPORT_DATA['tripping_connection']} chartType="Pie"/>
 
                     <Chart title = "Connection Time (min) per Stand" id = {getDivId('chart')} 
                             chartData = {TS_REPORT_DATA['connection_per_stand']} 
