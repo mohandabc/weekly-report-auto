@@ -378,15 +378,22 @@ export class ClusteredBarChart extends Chart
             series.dataFields.valueY = value
             series.dataFields.categoryX = params.category
             series.name = name
-        
+
+            series.columns.template.tooltipText = '{categoryX}: [bold]{valueY}[/]';
+            series.columns.template.fillOpacity = 0.8;
+
             series.events.on("hidden", arrangeColumns);
             series.events.on("shown", arrangeColumns);
             
             var bullet = series.bullets.push(new am4charts.LabelBullet())
             bullet.interactionsEnabled = false
-            bullet.label.dy = -10;
+            bullet.label.dy = -15;
             bullet.label.text = '[bold]{valueY}'
-            bullet.label.fontSize= 9;
+            bullet.label.fontSize= 11;
+            if (data.length > 14) {
+                bullet.label.fontSize= 9;
+                bullet.label.rotation= -60;
+            }
             
             bullet.label.fill = am4core.color(options['value-color'])
             return series;
@@ -597,6 +604,7 @@ export class PartionedBarChart extends Chart
 
         var xAxis = chart.xAxes.push(new am4charts.CategoryAxis());
         xAxis.dataFields.category = params.category;
+        xAxis.renderer.grid.template.opacity=0.5;
         xAxis.renderer.grid.template.location = 0;
         xAxis.renderer.labels.template.fontSize = 10;
         xAxis.renderer.labels.template.horizontalCenter = "right";
@@ -607,6 +615,7 @@ export class PartionedBarChart extends Chart
 
         var yAxis = chart.yAxes.push(new am4charts.ValueAxis());
         yAxis.title.text = options.leftYaxisTitle;
+        yAxis.renderer.grid.template.opacity=0.5;
 
 
         // Create series
@@ -781,16 +790,18 @@ export class ScatterChart extends Chart
         var line1 = arrow.createChild(am4core.Rectangle);
         line1.width = 3; // Adjust the dimensions as needed
         line1.height = 12;
-        line1.fill = chart.colors.getIndex(12);
+        line1.stroke = "#449ddd";
+        line1.fill = chart.colors.getIndex(16);
         line1.rotation = 45;
         line1.horizontalCenter = "middle";
         line1.verticalCenter = "middle";
-
+        
         // Second line of the cross
         var line2 = arrow.createChild(am4core.Rectangle);
         line2.width = 3; // Adjust the dimensions as needed
         line2.height = 12;
-        line2.fill = chart.colors.getIndex(12);
+        line2.stroke = "#449ddd";
+        line2.fill = chart.colors.getIndex(16);
         line2.rotation = -45;
         line2.horizontalCenter = "middle";
         line2.verticalCenter = "middle";
@@ -834,13 +845,14 @@ export class CombinedChart extends Chart{
         var valueAxisY = chart.yAxes.push(new am4charts.ValueAxis());
         valueAxisY.renderer.opposite = true;
         valueAxisY.title.text = options.rightYaxisTitle;
+        valueAxisY.renderer.grid.template.disabled = true;
 
         var lineSeries = chart.series.push(new am4charts.LineSeries());
         lineSeries.name = "Bit Depth (m)";
         lineSeries.dataFields.valueY = params.value2;
         lineSeries.dataFields.categoryX = params.category;
         
-        lineSeries.stroke = am4core.color("#44fd00");
+        lineSeries.stroke = am4core.color("#449ddd");
         lineSeries.strokeWidth = 3;
         lineSeries.propertyFields.strokeDasharray = "lineDash";
         lineSeries.tooltip.label.textAlign = "middle";
@@ -852,6 +864,7 @@ export class CombinedChart extends Chart{
         thresholdGuideline.grid.strokeOpacity = 0.7; // Line opacity
         thresholdGuideline.grid.strokeWidth = 3;
         thresholdGuideline.grid.strokeDasharray = "lineDash"; // Dashed line style
+      
         
         var bullet = lineSeries.bullets.push(new am4charts.Bullet());
         bullet.fill = am4core.color("#fdd400"); // tooltips grab fill from parent by default
@@ -861,7 +874,8 @@ export class CombinedChart extends Chart{
         circle.fill = am4core.color("#fff");
         circle.strokeWidth = 3;
 
-       
+        chart.seriesContainer.zIndex = -1;
+
         return chart;
     }
 }
