@@ -378,15 +378,22 @@ export class ClusteredBarChart extends Chart
             series.dataFields.valueY = value
             series.dataFields.categoryX = params.category
             series.name = name
-        
+
+            series.columns.template.tooltipText = '{categoryX}: [bold]{valueY}[/]';
+            series.columns.template.fillOpacity = 0.8;
+
             series.events.on("hidden", arrangeColumns);
             series.events.on("shown", arrangeColumns);
             
             var bullet = series.bullets.push(new am4charts.LabelBullet())
             bullet.interactionsEnabled = false
-            bullet.label.dy = -10;
+            bullet.label.dy = -15;
             bullet.label.text = '[bold]{valueY}'
-            bullet.label.fontSize= 9;
+            bullet.label.fontSize= 11;
+            if (data.length > 14) {
+                bullet.label.fontSize= 9;
+                bullet.label.rotation= -60;
+            }
             
             bullet.label.fill = am4core.color(options['value-color'])
             return series;
