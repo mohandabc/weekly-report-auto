@@ -185,7 +185,7 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
     });
   };
 
-  const [msg, setMsg] = React.useState({ msg:'', color:"text-green-300" });
+  const [msg, setMsg] = React.useState({ msg:'', color:"text-gray-500" });
   const handleSaveClick = () => {
     const updatedData = defData.map((object) => {
       const { status, ...otherFields } = object;
@@ -199,7 +199,7 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
 
     getData(BACK_URL, "TrippingSpeed/updateDoc", requestData).then((res) => {
       if ("msg" in res && res.status === 200) {
-        showMessage("Tripping speed analysis updated successfully", "text-green-600");
+        showMessage("Tripping speed analysis updated successfully", "text-green-600", 2000);
       }
     });
   };
@@ -222,18 +222,24 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
   }
 
   
-  const showMessage = (text, color) => {
+  const showMessage = (text, color, duration=3000) => {
     setMsg({ msg:text, color:color });
     setTimeout(() => {
-      setMsg({ msg:'', color:"text-green-300" });
-    }, 1500);
+      setMsg({ msg:'', color:'' });
+    }, duration);
   };
   
   const handleDisplayReportClick = async () => {
     let reportData = {};
 
     const res = await getData(API_URL, 'shift-changes/', {'well_id' : TsAnalysisData.well_id});
-    const shifts = res.result ? res.result?.shifts[0] : {"shift_start":7, 'shift_end':19}
+    let shifts = {}
+    if(res.result && res.result.shifts.length>0){
+      shifts = res.result?.shifts[0] 
+    }else{
+      showMessage("Could not get crew change time, please set it in rigs in teamspace", "text-red-500", 3500);
+      return;
+    }
         
     reportData['TS_benchmark'] = TsAnalysisData.benchmarkTS;
     
@@ -251,12 +257,12 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
                               {"Attribute" : "Generated On" ,"Value" : TsAnalysisData.create_date}, {"Attribute" : "Data Source", "Value" : "OilPort"}];
 
     reportData['connection_t_tripping_s'] = TsAnalysisData.standline.map(item=>{return {'connection_time' : seconds2minutes(item.connection_time), 
-                                                                                        'tripping_speed' :item.net_speed}});
+                                                                                        'tripping_speed' :item.gross_speed}});
 
     reportData['abnormal_stands'] = TsAnalysisData.standline.filter(item=>item.abnormal)
                                                             .map(item=>({'Stand Number' : item.standNum, 'Description' :item.description, 
                                                                          "Connection Time" : seconds2minutes(item.connection_time), 
-                                                                         "Tripping Speed" : item.net_speed}));
+                                                                         "Tripping Speed" : item.gross_speed}));
 
     // [{"stand number":"10", 'Description':'Fill TT', 'Connection time':11.2, 'Tripping speed':101.2}, {"stand number":"10", 'Description':'Fill TT', 'Connection time':11.2, 'Tripping speed':101.2}];
     reportData['kpi'] = [{"kpi":"Tripping distance", 'Value':TsAnalysisData.performances.tripping_distance.toFixed(2), 'unit':'m'},
@@ -272,7 +278,7 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
     reportData['connection_per_stand'] = TsAnalysisData.standline.map((item, index)=>({shift: dateTimeInRange(item.date_from, shifts)?"Day":'Night', 
                                                                               stand: "stand "+ item.standNum, 
                                                                               c_time : seconds2minutes(item.connection_time), 
-                                                                              t_speed: item.net_speed, 
+                                                                              t_speed: item.gross_speed, 
                                                                               bit_depth:item.depth_from}));
 
     setReportData(reportData);
@@ -476,7 +482,7 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
       <div>
         <div className="flex-col items-center">
           {msg.msg?
-            <div className={`text-center text-sm font-extrabold ${msg.color} animate-fade-in-out duration-[1500ms] my-1`}>
+            <div className={`text-center text-sm font-extrabold ${msg.color}  my-1`}>
               {msg.msg}
             </div>:
             <div className={`text-center text-sm font-bold ${msg.color} my-1`}>
