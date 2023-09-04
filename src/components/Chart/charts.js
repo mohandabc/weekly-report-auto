@@ -858,6 +858,14 @@ export class CombinedChart extends Chart{
         lineSeries.tooltip.label.textAlign = "middle";
         lineSeries.yAxis = valueAxisY;
 
+        let dataMaxValue = data.reduce(function (prev, current) {
+            return prev[params.value] > current[params.value] ? prev : current;
+        });
+        
+        if (THRESHOLD > dataMaxValue[params.value]){
+            chart.yAxes.getIndex(0).max = THRESHOLD;
+        }
+        
         var thresholdGuideline = chart.yAxes.getIndex(0).axisRanges.create();
         thresholdGuideline.value = THRESHOLD; // Adjust the threshold value
         thresholdGuideline.grid.stroke = am4core.color("#FF0000"); // Line color
