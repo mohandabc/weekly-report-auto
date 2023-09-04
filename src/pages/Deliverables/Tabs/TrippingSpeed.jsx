@@ -220,7 +220,7 @@ export const TrippingSpeed = () => {
     formValue["benchmarkTS"] = benchmarkTS
     formValue["benchmarkCT"] = benchmarkCT
     formValue['well_id'] = formValue["well"]
-    
+    console.log('Tripping speed params : ', formValue);
     setLoadingValue(true);
     formValue["well"] = wellsplaceholder.find(
       (well) => well.value === formValue["well"]
@@ -232,6 +232,7 @@ export const TrippingSpeed = () => {
     getData(BACK_URL, "TrippingSpeed/", formValue).then((res) => {
       if (!("error" in res)) {
         setData(res);
+        console.log('Returned data : ' , res);
       } else {
         setMsg({ msg: res["error"], color: "text-red-500" });
       }
