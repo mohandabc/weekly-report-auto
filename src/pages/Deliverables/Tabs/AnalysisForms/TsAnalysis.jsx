@@ -110,14 +110,12 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
             placeholder="Description ..."
             data={abnormal_description}
             onChange={(value) => {
-              console.log(value);
               setDescriptions(value);
               onChange(rowData.standNum, dataKey, value);
             }}
             value={descriptions}/>
         )
       ) : dataKey === "abnormal" ? (
-        // <Checkbox defaultChecked={rowData[dataKey]} disabled></Checkbox>
         <Checkbox checked={rowData[dataKey]} disabled />
       ) : dataKey === "connection_time" ? (
         <span className="table-content-edit-span">
