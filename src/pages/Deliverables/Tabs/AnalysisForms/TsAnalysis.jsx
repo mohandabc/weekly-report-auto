@@ -57,101 +57,47 @@ function formatDateString(dateString) {
 }
 
 const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
-  const editing = rowData.status === "EDIT";
   const [descriptions, setDescriptions] = React.useState('');
   return (
     <Cell
       {...props}
-      className={editing ? "table-content-editing" : ""}
       style={{ padding: "0px", color: "black", fontSize: "11px" }}
     >
-      {editing ? (
-        dataKey === "date_to" || dataKey === "date_from" ? (
-          <DatePicker
-            format="yyyy-MM-dd HH:mm:ss"
-            defaultValue={new Date(rowData[dataKey])}
-            onChange={(date) =>
-              onChange(rowData.standNum, dataKey, date.toISOString())
-            }
-            disabled
-          />
-        ) : dataKey === "connection_time" ? (
-          <DatePicker
-            format="mm:ss"
-            defaultValue={minutesToTime(rowData[dataKey])}
-            onChange={(date) =>
-              onChange(
-                rowData.standNum,
-                dataKey,
-                date.getMinutes() + date.getSeconds() / 60
-              )
-            }
-            disabled
-          />
-        ) : dataKey === "abnormal" ? (
-          <Checkbox
-            checked={rowData[dataKey]}
-            onClick={(event) =>
-              onChange(rowData.standNum, dataKey, !rowData[dataKey])
-            }
-          />
-        ) : (["depth_from", "depth_to", "delta_depth", "gross_speed", "net_speed", "standNum"].includes(dataKey)) ? (
-          <input
-            type="number"
-            className="rs-input"
-            defaultValue={rowData[dataKey]}
-            onChange={(event) =>
-              onChange(rowData.standNum, dataKey, event.target.value)
-            }
-            disabled
-          />
-        ) : (
-          <SelectPicker
-            placeholder="Description ..."
-            data={abnormal_description}
-            onChange={(value) => {
-              setDescriptions(value);
-              onChange(rowData.standNum, dataKey, value);
-            }}
-            value={descriptions}/>
-        )
-      ) : dataKey === "abnormal" ? (
-        <Checkbox checked={rowData[dataKey]} disabled />
+      {dataKey === "abnormal" ? (
+        <Checkbox checked={rowData[dataKey]} onClick={(value) =>
+          {
+            const newValue = !rowData[dataKey];
+            onChange(rowData.standNum, dataKey, newValue);
+          }
+        }/>
+      ) : dataKey === "description" ? (
+        <SelectPicker
+        placeholder="Description ..."
+        data={abnormal_description}
+        onChange={(value) => {
+          setDescriptions(value);
+          onChange(rowData.standNum, dataKey, value);
+        }}
+        value={rowData[dataKey]}
+        disabled={!rowData.abnormal}
+        style={{width:200}}/>
       ) : dataKey === "connection_time" ? (
-        <span className="table-content-edit-span">
+        
+        <span className={`table-content-edit-span ${rowData[dataKey] > 540 ? "text-red-500" : ""}`}>
           {minutesToTime(rowData[dataKey]).getMinutes() +
             ":" +
             minutesToTime(rowData[dataKey]).getSeconds()}
         </span>
       ) : dataKey === "date_to" || dataKey === "date_from" ? (
-        <span className="table-content-edit-span">
+        <span className={`table-content-edit-span ${rowData['connection_time'] > 540 ? "text-red-500" : ""}`}>
           {formatDateString(rowData[dataKey])}
         </span>
       ) : (
-        <span className="table-content-edit-span">{rowData[dataKey]}</span>
+        <span className={`table-content-edit-span ${rowData['connection_time'] > 540 ? "text-red-500" : ""}`}>{rowData[dataKey]}</span>
       )}
     </Cell>
   );
 };
-
-const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
-  return (
-    <Cell
-      {...props}
-      style={{ padding: "0px", color: "black", fontSize: "11px" }}
-    >
-      <Button
-        appearance="link"
-        onClick={() => {
-          onClick(rowData.standNum);
-        }}
-      >
-        {rowData.status === "EDIT" ? "Save" : "Edit"}
-      </Button>
-    </Cell>
-  );
-};
-
 
 export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent, parentStr}) => {
   const [TS_REPORT_DATA, setReportData] = useRecoilState(TSReportDataState);
@@ -405,14 +351,9 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
             <EditableCell dataKey="abnormal" onChange={handleChange} />
           </Column>
 
-          <Column width={150}>
+          <Column width={223}>
             <HeaderCell>Description</HeaderCell>
             <EditableCell dataKey="description" onChange={handleChange} />
-          </Column>
-
-          <Column flexGrow={1}>
-            <HeaderCell>-</HeaderCell>
-            <ActionCell dataKey="standNum" onClick={handleEditState} />
           </Column>
         </Table>
         {/* <div className="px-5">
