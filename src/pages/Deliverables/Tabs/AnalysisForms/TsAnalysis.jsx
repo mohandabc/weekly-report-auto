@@ -217,8 +217,8 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
 
     reportData['abnormal_stands'] = TsAnalysisData.standline.filter(item=>item.abnormal)
                                                             .map(item=>({'Stand Number' : item.standNum, 'Description' :item.description, 
-                                                                         "Connection Time" : seconds2minutes(item.connection_time), 
-                                                                         "Tripping Speed" : item.gross_speed}));
+                                                                         "Connection Time (Min)" : seconds2minutes(item.connection_time), 
+                                                                         "Tripping Speed (m/h)" : item.gross_speed}));
 
     reportData['abnormal_overview'] = [TsAnalysisData.standline.filter(item=>item.abnormal)
                                                               .reduce(function (accumulator, currentValue) {
