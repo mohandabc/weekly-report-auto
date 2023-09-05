@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { PaginationComp } from "../../../components";
-import { DateRangePicker } from "rsuite";
+import { DateRangePicker, InputNumber } from "rsuite";
 import { Form, Schema } from "rsuite";
 import { useAuth } from "../../../api/useAuth";
 
@@ -159,13 +159,14 @@ export const TrippingSpeed = () => {
     BHAname: schemStringType,
     // benchmarkTS: schemStringType,
     // benchmarkCT: schemStringType,
-    // threshold: schemStringType,
+    threshold: schemNumberType,
     // dateRangeValue: Schema.Types.ArrayType().isRequired("This field is required."),
   });
 
   const [loadingValue, setLoadingValue] = React.useState(false);
   const [shake, setShake] = React.useState(false);
 
+  const { allowedMaxDays, afterToday, combine } = DateRangePicker;
   const [dateRangeValue, setDateRangeValue] = React.useState([
     new Date(),
     new Date(),
@@ -218,7 +219,8 @@ export const TrippingSpeed = () => {
     formValue["created_by"] = user.name
     formValue["benchmarkTS"] = benchmarkTS
     formValue["benchmarkCT"] = benchmarkCT
-    console.log("Params from TrippingSpeed : ", formValue);
+    formValue['well_id'] = formValue["well"]
+    console.log('Tripping speed params : ', formValue);
     setLoadingValue(true);
     formValue["well"] = wellsplaceholder.find(
       (well) => well.value === formValue["well"]
@@ -230,11 +232,11 @@ export const TrippingSpeed = () => {
     getData(BACK_URL, "TrippingSpeed/", formValue).then((res) => {
       if (!("error" in res)) {
         setData(res);
+        console.log('Returned data : ' , res);
       } else {
         setMsg({ msg: res["error"], color: "text-red-500" });
       }
       setLoadingValue(false);
-      console.log("Returned Results : ", res);
     });
   };
 
@@ -330,7 +332,7 @@ export const TrippingSpeed = () => {
                 BHAname: formValue["BHAname"],
                 benchmarkTS: formValue["benchmarkTS"],
                 benchmarkCT: formValue["benchmarkCT"],
-                // threshold: formValue["threshold"],
+                threshold: formValue["threshold"],
                 // dateRangeValue: formValue["dateRangeValue"],
               })
             }
@@ -544,21 +546,19 @@ export const TrippingSpeed = () => {
                   placement="top"
                   speaker={
                     <Tooltip>
-                      The Threshold is automatically calculated for the main
-                      time.
+                      Threshold auto-calculated when value is 0.
                     </Tooltip>
                   }
                 >
                   <span>
-                    <InputGroup disabled style={styles.wide}>
-                      <Input
+                    <InputGroup style={{marginLeft:10, marginRight:10, width:250}}>
+                      <Form.Control
+                        style={{width:196}}
+                        accepter={InputNumber}
                         name="threshold"
-                        // onChange={setThreshold}
                         placeholder="Threshold"
-                        data={data_placeHolder}
-                        disabled
                       />
-                      <InputGroup.Addon>T</InputGroup.Addon>
+                      <InputGroup.Addon>Tons</InputGroup.Addon>
                     </InputGroup>
                   </span>
                 </Whisper>
@@ -580,7 +580,9 @@ export const TrippingSpeed = () => {
                     width: 520,
                     marginLeft: 10,
                     marginRight: 10,
+                    marginBottom: 2
                   }}
+                  disabledDate={combine(allowedMaxDays(3),afterToday())}
                 />
               </Form.Group>
             </div>

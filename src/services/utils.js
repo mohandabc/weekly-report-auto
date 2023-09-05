@@ -179,6 +179,7 @@ const computeTableColRowRatio = (length) =>{
     if (length/i < i) return PGCD;
     PGCD = i;
   }
+  return PGCD;
 }
 /**
  * When we have an object of key values and we want to display them in a table
@@ -283,9 +284,14 @@ export const addElementToDoc = (doc, element, pageBreak = null, orientation) => 
   doc.content.push({...element, pageBreak:pageBreak===null ? 'None':pageBreak, pageOrientation:orientation});
 }
 
-export const createPage = (doc, content, report, pageNumber, totalPageNumber, orientation='portrait') =>{
+export const createPage = (doc, content, report='', pageNumber=null, totalPageNumber=null, orientation='portrait') =>{
   let header = buildPageHeader(orientation)
-  let footer = buildPageFooter(`${report}`, `Page ${pageNumber} / ${totalPageNumber}`, orientation)
+  let footer = {};
+  if(pageNumber===null || totalPageNumber===null){
+    footer = buildPageFooter(`${report}`, '');
+  }else{
+    footer = buildPageFooter(`${report}`, `Page ${pageNumber} / ${totalPageNumber}`, orientation);
+  }
 
   addElementToDoc(doc, header, pageNumber===1?null:'before', orientation)
 

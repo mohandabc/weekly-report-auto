@@ -1,11 +1,12 @@
 import React from "react";
-import { Table, Button, Checkbox, Pagination } from "rsuite";
+import { Table, Button, Checkbox, SelectPicker } from "rsuite";
 import { DatePicker } from "rsuite";
-import { BackLog, TrippingSpeed } from "../..";
 import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../../../constants/constants";
-import { BACK_URL } from "../../../../constants/URI";
-import { deleteDoc } from "../../../../api/api";
+import { BACK_URL, API_URL} from "../../../../constants/URI";
+import { deleteDoc, getData} from "../../../../api/api";
 import "./styles.css";
+import { useRecoilState } from "recoil";
+import { TSReportDataState } from "../../../../shared/globalState";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -15,6 +16,22 @@ function minutesToTime(seconds) {
   date.setSeconds(seconds % 60);
   return date;
 }
+
+const seconds2minutes = (seconds) => (seconds/60).toFixed(2);
+const minutes2hours = (minutes) => (minutes/60).toFixed(2);
+const abnormal_description =  [
+  {'value':'Circulation', 'label':'Circulation'},
+  {'value':'Fill up', 'label':'Fill up'},
+  {'value':'Rig Repair', 'label':'Rig Repair'},
+  {'value':'Waiting', 'label':'Waiting'},
+  {'value':'Flow Check', 'label':'Flow Check'},
+  {'value':'Data Quality', 'label':'Data Quality'},
+  {'value':'Slip & Cut', 'label':'Slip & Cut'},
+  {'value':'Kick Drill', 'label':'Kick Drill'},
+  {'value':'Safety Exercise', 'label':'Safety Exercise'},
+  {'value':'Change Elevator 5" to 3.5DP', 'label':'Change Elevator 5" to 3.5DP'},
+  {'value':'Empty Trip Tank', 'label':'Empty Trip Tank'},
+]
 
 function formatDateString(dateString) {
   let date = new Date(dateString);
@@ -41,6 +58,7 @@ function formatDateString(dateString) {
 
 const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
   const editing = rowData.status === "EDIT";
+  const [descriptions, setDescriptions] = React.useState('');
   return (
     <Cell
       {...props}
@@ -51,9 +69,11 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
         dataKey === "date_to" || dataKey === "date_from" ? (
           <DatePicker
             format="yyyy-MM-dd HH:mm:ss"
+            defaultValue={new Date(rowData[dataKey])}
             onChange={(date) =>
               onChange(rowData.standNum, dataKey, date.toISOString())
             }
+            disabled
           />
         ) : dataKey === "connection_time" ? (
           <DatePicker
@@ -66,6 +86,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
                 date.getMinutes() + date.getSeconds() / 60
               )
             }
+            disabled
           />
         ) : dataKey === "abnormal" ? (
           <Checkbox
@@ -74,7 +95,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
               onChange(rowData.standNum, dataKey, !rowData[dataKey])
             }
           />
-        ) : dataKey === "depth_from" || dataKey === "depth_to" ? (
+        ) : (["depth_from", "depth_to", "delta_depth", "gross_speed", "net_speed", "standNum"].includes(dataKey)) ? (
           <input
             type="number"
             className="rs-input"
@@ -82,18 +103,19 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
             onChange={(event) =>
               onChange(rowData.standNum, dataKey, event.target.value)
             }
+            disabled
           />
         ) : (
-          <input
-            className="rs-input"
-            defaultValue={rowData[dataKey]}
-            onChange={(event) =>
-              onChange(rowData.standNum, dataKey, event.target.value)
-            }
-          />
+          <SelectPicker
+            placeholder="Description ..."
+            data={abnormal_description}
+            onChange={(value) => {
+              setDescriptions(value);
+              onChange(rowData.standNum, dataKey, value);
+            }}
+            value={descriptions}/>
         )
       ) : dataKey === "abnormal" ? (
-        // <Checkbox defaultChecked={rowData[dataKey]} disabled></Checkbox>
         <Checkbox checked={rowData[dataKey]} disabled />
       ) : dataKey === "connection_time" ? (
         <span className="table-content-edit-span">
@@ -130,13 +152,10 @@ const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
   );
 };
 
-export const TsAnalysis = ({
-  TsAnalysisData,
-  resetStates,
-  doc_id,
-  ParentComponent,
-  parentStr,
-}) => {
+
+export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent, parentStr}) => {
+  const [TS_REPORT_DATA, setReportData] = useRecoilState(TSReportDataState);
+
   // const [limit, setLimit] = React.useState(10);
   // const [page, setPage] = React.useState(1);
   const [defData, setdefData] = React.useState(TsAnalysisData.standline);
@@ -178,27 +197,111 @@ export const TsAnalysis = ({
     });
   };
 
+  const [msg, setMsg] = React.useState({ msg:'', color:"text-gray-500" });
   const handleSaveClick = () => {
     const updatedData = defData.map((object) => {
       const { status, ...otherFields } = object;
       return otherFields;
     });
-    TsAnalysisData["standline"] = updatedData;
-    console.log(
-      "The document that is going to be updated with its new data : ",
-      { document_id: TsAnalysisData.doc_id, params: TsAnalysisData }
-    );
-    alert(
-      "Save button function isn't implemented yet !, an update function should be implemented in the back side first !"
-    );
-  };
 
-  const handleDisplayReportClick = () => {
-    alert("Reports aren't implemented yet !");
+    const requestData = {
+      _id: doc_id,
+      standline: updatedData,
+    };
+
+    getData(BACK_URL, "TrippingSpeed/updateDoc", requestData).then((res) => {
+      if ("msg" in res && res.status === 200) {
+        showMessage("Tripping speed analysis updated successfully", "text-green-600", 2000);
+        
+      }
+      TsAnalysisData = res.ts_analysis;
+      handleDisplayReportClick();
+    });
   };
+  
+
+  const dateTimeInRange = (datetimeStr, range) => {
+    const datetime = new Date(datetimeStr);
+
+    const hours = datetime.getHours();
+    const minutes = datetime.getMinutes();
+
+    const startTime = range.shift_start * 60; 
+    const endTime = range.shift_end * 60;  
+
+
+    const currentTime = hours * 60 + minutes;
+    if (currentTime >= startTime && currentTime <= endTime)
+      return true;
+    return false;
+  }
+
+  
+  const showMessage = (text, color, duration=3000) => {
+    setMsg({ msg:text, color:color });
+    setTimeout(() => {
+      setMsg({ msg:'', color:'' });
+    }, duration);
+  };
+  
+  const handleDisplayReportClick = async () => {
+    let reportData = {};
+
+    const res = await getData(API_URL, 'shift-changes/', {'well_id' : TsAnalysisData.well_id});
+    let shifts = {}
+    if(res.result && res.result.shifts.length>0){
+      shifts = res.result?.shifts[0];
+    }else{
+      showMessage("Could not get crew change time, please set it in rigs in teamspace", "text-red-500", 3500);
+      return;
+    }
+        
+    reportData['TS_benchmark'] = TsAnalysisData.benchmarkTS;
+    
+    reportData['tripping_connection'] = [{'category' : 'Tripping Time', 'value':minutes2hours(seconds2minutes(TsAnalysisData.performances.post_connection_time))},
+                                         {'category' : 'Connection Time', 'value':minutes2hours(seconds2minutes(TsAnalysisData.performances.connection_time))}];
+
+    reportData['overview'] = [{"Attribute":"Rig Name", 'Value':TsAnalysisData.rig}, {"Attribute":"Well Name", 'Value':TsAnalysisData.well}, 
+                              {"Attribute":"Phase", 'Value':TsAnalysisData.phase}, {"Attribute":"BHA Name", 'Value':TsAnalysisData.bha}, 
+                              {"Attribute":"Drill Pipe Size", 'Value':TsAnalysisData.drill_pipe_size}, {"Attribute":"Rotary System", 'Value':TsAnalysisData.trip_information.rotary_system},
+                              {"Attribute": 'Casing Size', 'Value':TsAnalysisData.csg_size}, {"Attribute":"Tripping Type", 'Value':TsAnalysisData.trip_information.trip_type},
+                              {"Attribute":"Trip reason", 'Value':TsAnalysisData.trip_information.trip_reason}, {"Attribute":"Trip Number", 'Value':TsAnalysisData.trip_number},
+                              {"Attribute":"Cased Open", 'Value':TsAnalysisData.trip_information.hole_type}, {"Attribute":"Speed Benchmark", 'Value':TsAnalysisData.benchmarkTS+' (m/h)'},
+                              {"Attribute":"Connection Benchmark", 'Value':TsAnalysisData.benchmarkCT+' (min)'}, {"Attribute":"Threshold", 'Value':TsAnalysisData.threshold + ' (ton)'},
+                              {"Attribute":"Start Time", 'Value':TsAnalysisData.result_analysis.start_date},{"Attribute" : "End Time", "Value" : TsAnalysisData.result_analysis.end_date},
+                              {"Attribute" : "Generated On" ,"Value" : TsAnalysisData.create_date}, {"Attribute" : "Data Source", "Value" : "OilPort"}];
+
+    reportData['connection_t_tripping_s'] = TsAnalysisData.standline.map(item=>{return {'connection_time' : seconds2minutes(item.connection_time), 
+                                                                                        'tripping_speed' :item.gross_speed}});
+
+    reportData['abnormal_stands'] = TsAnalysisData.standline.filter(item=>item.abnormal)
+                                                            .map(item=>({'Stand Number' : item.standNum, 'Description' :item.description, 
+                                                                         "Connection Time" : seconds2minutes(item.connection_time), 
+                                                                         "Tripping Speed" : item.gross_speed}));
+
+    // [{"stand number":"10", 'Description':'Fill TT', 'Connection time':11.2, 'Tripping speed':101.2}, {"stand number":"10", 'Description':'Fill TT', 'Connection time':11.2, 'Tripping speed':101.2}];
+    reportData['kpi'] = [{"kpi":"Tripping distance", 'Value':TsAnalysisData.performances.tripping_distance.toFixed(2), 'unit':'m'},
+                         {"kpi":"Connection Time AVG", 'Value':seconds2minutes(TsAnalysisData.performances.average_connection_time), 'unit':'Min'}, 
+                         {"kpi":"Tripping Speed", 'Value':TsAnalysisData.performances.average_speed.toFixed(2), 'unit':'m/h'}, 
+                         {"kpi":"Connection Time", 'Value':minutes2hours(seconds2minutes(TsAnalysisData.performances.connection_time)), 'unit':'Hours'}, 
+                         {"kpi":"Tripping Time", 'Value':minutes2hours(seconds2minutes(TsAnalysisData.performances.post_connection_time)), 'unit':'Hours'}, 
+                         {"kpi":"Number of connection", 'Value':TsAnalysisData.performances.total_connections, 'unit':'nbr'},
+                         {"kpi":"Abnormal time", 'Value':minutes2hours(seconds2minutes(TsAnalysisData.performances.abnormal_time)), 'unit':'Hours'},
+                         {"kpi":"Operation Time VS Benchmark Time", 
+                                  'Value':(TsAnalysisData.performances.total_connections * (TsAnalysisData.benchmarkCT - seconds2minutes(TsAnalysisData.performances.average_connection_time))).toFixed(2), 
+                                  'unit':'min'}];
+
+    reportData['connection_per_stand'] = TsAnalysisData.standline.map((item, index)=>({shift: dateTimeInRange(item.date_from, shifts)?"Day":'Night', 
+                                                                              stand: "stand "+ item.standNum, 
+                                                                              c_time : seconds2minutes(item.connection_time), 
+                                                                              t_speed: item.gross_speed, 
+                                                                              bit_depth:item.depth_from}));
+
+    setReportData(reportData);
+    };
 
   const handleCancelClick = () => {
-    console.log(parentStr);
+    setReportData({});
     resetStates({});
     setShowParent(true);
   };
@@ -393,7 +496,17 @@ export const TsAnalysis = ({
         </div>
       </div>
       <div>
-        <div className={`flex justify-center mt-4`}>
+        <div className="flex-col items-center">
+          {msg.msg?
+            <div className={`text-center text-sm font-extrabold ${msg.color}  my-1`}>
+              {msg.msg}
+            </div>:
+            <div className={`text-center text-sm font-bold ${msg.color} my-1`}>
+              &nbsp;
+            </div>
+          }
+        </div>
+        <div className={`flex justify-center mt-1`}>
           <Button
             appearance="default"
             className="mx-4"
@@ -404,20 +517,14 @@ export const TsAnalysis = ({
           <Button color="red" appearance="primary" onClick={handleDeleteClick}>
             Delete Analysis
           </Button>
-          <Button
-            color="green"
+          <Button 
             appearance="primary"
+            color="green"
             className="ml-4"
-            onClick={handleDisplayReportClick}
-          >
+            onClick={handleDisplayReportClick}>
             Display Report
           </Button>
-          <Button
-            color="blue"
-            appearance="primary"
-            className="mx-4"
-            onClick={handleSaveClick}
-          >
+          <Button color="blue" appearance="primary" className="mx-4" onClick={handleSaveClick}>
             Save
           </Button>
         </div>

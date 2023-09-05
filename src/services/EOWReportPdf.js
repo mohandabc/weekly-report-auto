@@ -289,10 +289,11 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         const trip_out_len = EOWRData['connection_details']['tripping_time']['pooh'].length;
         const trip_in_part_1_len = max_lines - drill_time_len;
 
+
         if(drill_time_len > 3){
             pageContent.push(buildTitle(1, "IV. Drilling & Tripping Connection Time KPI's"));
             pageContent.push(buildTitle(2, "1. Drilling Connection Time KPI's"));
-            pageContent.push(buildTable(EOWRData['connection_details']['drill_time'], 'grouped', event_custom_layout));
+            pageContent.push(buildTable(EOWRData['connection_details']['drill_time'].map(({['On Bottom']:on_bottom, ...rest})=>rest), 'grouped', event_custom_layout));
         }
         if(trip_in_len > 3){
             pageContent.push(buildTitle(2, "2. Trip In and Connection Time KPI's"));
