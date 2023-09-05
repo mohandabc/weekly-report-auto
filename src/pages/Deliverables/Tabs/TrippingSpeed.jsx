@@ -566,6 +566,7 @@ export const TrippingSpeed = () => {
 
               <Form.Group controlId="dateRangeValue">
                 <DateRangePicker
+                  editable={false}
                   name="dateRangeValue"
                   value={dateRangeValue}
                   onChange={(event) => {
