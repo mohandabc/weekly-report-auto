@@ -33,8 +33,12 @@ export const generateTrippingSpeed = (chartsToPrint, TrippingSpeedData) => {
         doc['footer'] = function(currentPage, pageCount){ return currentPage.toString() + ' of ' + pageCount;};
 
         let WELL = TrippingSpeedData.overview[1]['Value'] || 'Well-Test';
-        let TS_date = new Date()
-        let displayedDate = TS_date.toLocaleDateString('en-us', {year:"numeric", month:"long"});
+        let RIG = TrippingSpeedData.overview[0]['Value'] || 'Rig-Test';
+        let TRIP_TYPE = TrippingSpeedData.overview[7]['Value'] ;
+        let SECTION = TrippingSpeedData.overview[2]['Value'] ;
+
+        let TS_date = new Date().toLocaleDateString('en-us', {year:"numeric", month:"long"});
+        let displayedDate = TrippingSpeedData.create_date.split('T')[0];
 
         exportCharts(charts)
             .then(response => {
@@ -56,8 +60,8 @@ export const generateTrippingSpeed = (chartsToPrint, TrippingSpeedData) => {
                 const kpi_table_layout = {
                     fillColor: function (i, node, j) {
                         if (i===0) return '#989898';
-                        if (i===7 && parseInt(node.table.body[i][1].text)<0) return '#C99898';
-                        if (i===7 && parseInt(node.table.body[i][1].text)>0) return '#98c998';
+                        if (i===8 && parseInt(node.table.body[i][1].text)<0) return '#C99898';
+                        if (i===8 && parseInt(node.table.body[i][1].text)>0) return '#98c998';
                         return (j%2===0) ? '#b8b8b8' : "#eeeeee"
                     },
                     hLineColor: function (i, node) {
@@ -76,10 +80,18 @@ export const generateTrippingSpeed = (chartsToPrint, TrippingSpeedData) => {
                 pageContent =[{
                     columns: [
                         {
-                            text : WELL,
+                            text : `Rig : ${RIG} / Well : ${WELL}`,
                             font:'Arial',
-                            fontSize : 32,
+                            fontSize : 28,
                             absolutePosition: {y : 200},
+                            alignment:'center',
+                            color:"#000000",
+                        },
+                        {
+                            text : `Section : ${SECTION} / Trip Type : ${TRIP_TYPE}`,
+                            font:'Arial',
+                            fontSize : 22,
+                            absolutePosition: {y : 250},
                             alignment:'center',
                             color:"#000000",
                         },
@@ -87,16 +99,16 @@ export const generateTrippingSpeed = (chartsToPrint, TrippingSpeedData) => {
                             text : "RTOM Tripping Speed Report",
                             font:'Arial',
                             fontSize : 32,
-                            absolutePosition: {y : 250},
+                            absolutePosition: {y : 300},
                             alignment:'center',
                             color:'#000000',
                             bold: true,
                         },
                         {
-                            text : displayedDate,
+                            text : `Date : ${displayedDate}`,
                             font:'Arial',
-                            fontSize : 28,
-                            absolutePosition: {y:300},
+                            fontSize : 16,
+                            absolutePosition: {x:450,y:800},
                             alignment:'center',
                             color:'#00000',
                             bold: true,
@@ -105,7 +117,7 @@ export const generateTrippingSpeed = (chartsToPrint, TrippingSpeedData) => {
                             text:"This text is here to create a red box ",
                             fontSize : 36,
                             background:"#c00000",
-                            absolutePosition: {y:395},
+                            absolutePosition: {y:400},
                             alignment:'center',
                             color:'#c00000',
                         },
@@ -114,7 +126,7 @@ export const generateTrippingSpeed = (chartsToPrint, TrippingSpeedData) => {
                             font:'Arial',
                             fontSize : 24,
                             background:"#c00000",
-                            absolutePosition: {y:400},
+                            absolutePosition: {y:405},
                             alignment:'center',
                             color:'#ffffff',
                         },
@@ -147,6 +159,7 @@ export const generateTrippingSpeed = (chartsToPrint, TrippingSpeedData) => {
                 
                 pageContent.push(buildTitle(1, "Connection Time per Stand", false, title_margin));
                 pageContent.push(buildChart(exportedCharts[chart_index+=1], 560, 1.2));
+
                 pageContent.push(buildTitle(1, "Tripping Speed per Stand", false, title_margin));
                 pageContent.push(buildChart(exportedCharts[chart_index+=1], 560, 1.2));
                 createPage(doc, pageContent);
@@ -155,18 +168,22 @@ export const generateTrippingSpeed = (chartsToPrint, TrippingSpeedData) => {
                 pageNumber += 1;
                 pageContent = [];
                 
-                pageContent.push(buildTitle(1, "Abnormal Stands", false, title_margin));
-                pageContent.push(buildTable(TrippingSpeedData['abnormal_stands'], 'simple', table_layout));
+                
                 pageContent.push(buildTitle(1, "Connection Time / Tripping Speed per Stand", false, title_margin));
                 pageContent.push(buildChart(exportedCharts[chart_index+=1], 560, 1.2));
                 
+                pageContent.push(buildTitle(1, "KPI's", false, title_margin));
+                pageContent.push(buildTable(TrippingSpeedData['kpi'], 'simple', kpi_table_layout));
                 createPage(doc, pageContent);
                 
                 pageNumber += 1;
                 pageContent = [];
                 
-                pageContent.push(buildTitle(1, "KPI's", false, title_margin));
-                pageContent.push(buildTable(TrippingSpeedData['kpi'], 'simple', kpi_table_layout));
+                pageContent.push(buildTitle(1, "Stands with justified excess time", false, title_margin));
+                pageContent.push(buildTable(TrippingSpeedData['abnormal_stands'], 'simple', table_layout));
+
+                pageContent.push(buildTitle(1, "Abnormal Stands Overview", false, title_margin));
+                pageContent.push(buildTable(TrippingSpeedData['abnormal_overview'], 'simple', table_layout));
                 createPage(doc, pageContent);
 
                 // replaceTotalPages(doc.content, pageNumber)
