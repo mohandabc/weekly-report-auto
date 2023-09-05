@@ -1,11 +1,10 @@
 import React from "react";
-import { Table, Button, Checkbox } from "rsuite";
+import { Table, Button, Checkbox, SelectPicker } from "rsuite";
 import { DatePicker } from "rsuite";
 import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../../../constants/constants";
 import { BACK_URL, API_URL} from "../../../../constants/URI";
 import { deleteDoc, getData} from "../../../../api/api";
 import "./styles.css";
-import { ActionButton } from "../../../../components";
 import { useRecoilState } from "recoil";
 import { TSReportDataState } from "../../../../shared/globalState";
 
@@ -20,7 +19,19 @@ function minutesToTime(seconds) {
 
 const seconds2minutes = (seconds) => (seconds/60).toFixed(2);
 const minutes2hours = (minutes) => (minutes/60).toFixed(2);
-
+const abnormal_description =  [
+  {'value':'Circulation', 'label':'Circulation'},
+  {'value':'Fill up', 'label':'Fill up'},
+  {'value':'Rig Repair', 'label':'Rig Repair'},
+  {'value':'Waiting', 'label':'Waiting'},
+  {'value':'Flow Check', 'label':'Flow Check'},
+  {'value':'Data Quality', 'label':'Data Quality'},
+  {'value':'Slip & Cut', 'label':'Slip & Cut'},
+  {'value':'Kick Drill', 'label':'Kick Drill'},
+  {'value':'Safety Exercise', 'label':'Safety Exercise'},
+  {'value':'Change Elevator 5" to 3.5DP', 'label':'Change Elevator 5" to 3.5DP'},
+  {'value':'Empty Trip Tank', 'label':'Empty Trip Tank'},
+]
 
 function formatDateString(dateString) {
   let date = new Date(dateString);
@@ -47,6 +58,7 @@ function formatDateString(dateString) {
 
 const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
   const editing = rowData.status === "EDIT";
+  const [descriptions, setDescriptions] = React.useState('');
   return (
     <Cell
       {...props}
@@ -94,16 +106,16 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
             disabled
           />
         ) : (
-          <input
-            className="rs-input"
-            defaultValue={rowData[dataKey]}
-            onChange={(event) =>
-              onChange(rowData.standNum, dataKey, event.target.value)
-            }
-          />
+          <SelectPicker
+            placeholder="Description ..."
+            data={abnormal_description}
+            onChange={(value) => {
+              setDescriptions(value);
+              onChange(rowData.standNum, dataKey, value);
+            }}
+            value={descriptions}/>
         )
       ) : dataKey === "abnormal" ? (
-        // <Checkbox defaultChecked={rowData[dataKey]} disabled></Checkbox>
         <Checkbox checked={rowData[dataKey]} disabled />
       ) : dataKey === "connection_time" ? (
         <span className="table-content-edit-span">
