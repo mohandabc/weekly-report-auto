@@ -84,6 +84,7 @@ export const RunDeliverable = () => {
                     <Chart title = "Connection Time (min), Tripping Speed (m/h) per Stand" id = {getDivId('chart')} chartData = {TS_REPORT_DATA['connection_t_tripping_s']} chartType="Scatter"/>
 
                     <Table title = "KPI's" id = {getDivId('table')} tableData = {TS_REPORT_DATA['kpi']}/> 
+                    <Table title = "Abnormal Overview" id = {getDivId('table')} tableData = {TS_REPORT_DATA['abnormal_overview']} size={'big'}/> 
                 </section>
         </div>
        

@@ -245,6 +245,7 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
     }
         
     reportData['TS_benchmark'] = TsAnalysisData.benchmarkTS;
+    reportData['create_date'] = TsAnalysisData.create_date;
     
     reportData['tripping_connection'] = [{'category' : 'Tripping Time', 'value':minutes2hours(seconds2minutes(TsAnalysisData.performances.post_connection_time))},
                                          {'category' : 'Connection Time', 'value':minutes2hours(seconds2minutes(TsAnalysisData.performances.connection_time))}];
@@ -267,14 +268,24 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
                                                                          "Connection Time" : seconds2minutes(item.connection_time), 
                                                                          "Tripping Speed" : item.gross_speed}));
 
+    reportData['abnormal_overview'] = [TsAnalysisData.standline.filter(item=>item.abnormal)
+                                                              .reduce(function (accumulator, currentValue) {
+                                                                accumulator["Abnormal Stands"]++;
+                                                                accumulator["Abnormal Time"] += currentValue.connection_time;
+                                                                accumulator["Abnormal depth"] += currentValue.delta_depth;
+                                                                return accumulator;
+                                                              }, { "Abnormal Stands": 0, "Abnormal Time": 0 , "Abnormal depth":0})];
+    reportData['abnormal_overview'][0]["Abnormal Time"] =  seconds2minutes(reportData['abnormal_overview'][0]['Abnormal Time']) + " Min";
+    reportData['abnormal_overview'][0]['Abnormal depth'] =  reportData['abnormal_overview'][0]['Abnormal depth'].toFixed(2) +" m";
+    
     // [{"stand number":"10", 'Description':'Fill TT', 'Connection time':11.2, 'Tripping speed':101.2}, {"stand number":"10", 'Description':'Fill TT', 'Connection time':11.2, 'Tripping speed':101.2}];
     reportData['kpi'] = [{"kpi":"Tripping distance", 'Value':TsAnalysisData.performances.tripping_distance.toFixed(2), 'unit':'m'},
                          {"kpi":"Connection Time AVG", 'Value':seconds2minutes(TsAnalysisData.performances.average_connection_time), 'unit':'Min'}, 
                          {"kpi":"Tripping Speed", 'Value':TsAnalysisData.performances.average_speed.toFixed(2), 'unit':'m/h'}, 
                          {"kpi":"Connection Time", 'Value':minutes2hours(seconds2minutes(TsAnalysisData.performances.connection_time)), 'unit':'Hours'}, 
                          {"kpi":"Tripping Time", 'Value':minutes2hours(seconds2minutes(TsAnalysisData.performances.post_connection_time)), 'unit':'Hours'}, 
-                         {"kpi":"Number of connection", 'Value':TsAnalysisData.performances.total_connections, 'unit':'nbr'},
                          {"kpi":"Abnormal time", 'Value':minutes2hours(seconds2minutes(TsAnalysisData.performances.abnormal_time)), 'unit':'Hours'},
+                         {"kpi":"Number of connection", 'Value':TsAnalysisData.performances.total_connections, 'unit':'nbr'},
                          {"kpi":"Operation Time VS Benchmark Time", 
                                   'Value':(TsAnalysisData.performances.total_connections * (TsAnalysisData.benchmarkCT - seconds2minutes(TsAnalysisData.performances.average_connection_time))).toFixed(2), 
                                   'unit':'min'}];
