@@ -80,7 +80,7 @@ export const RunDeliverable = () => {
                             chartData = {TS_REPORT_DATA['connection_per_stand'].map(item =>{const {c_time, ...rest} = item; return rest;})} 
                             chartType="Combined"
                             c_options={{leftYaxisTitle : "Tripping speed (m/h)", rightYaxisTitle:"Depth (m)", threshold: TS_REPORT_DATA['TS_benchmark']}}/>
-                    <Table title = "Abnormal Stands" id = {getDivId('table')} tableData = {TS_REPORT_DATA['abnormal_stands']}/>
+                    <Table title = "Stands with justified excess time" id = {getDivId('table')} tableData = {TS_REPORT_DATA['abnormal_stands']}/>
                     <Chart title = "Connection Time (min), Tripping Speed (m/h) per Stand" id = {getDivId('chart')} chartData = {TS_REPORT_DATA['connection_t_tripping_s']} chartType="Scatter"/>
 
                     <Table title = "KPI's" id = {getDivId('table')} tableData = {TS_REPORT_DATA['kpi']}/> 

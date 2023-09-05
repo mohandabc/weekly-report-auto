@@ -200,7 +200,10 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
     getData(BACK_URL, "TrippingSpeed/updateDoc", requestData).then((res) => {
       if ("msg" in res && res.status === 200) {
         showMessage("Tripping speed analysis updated successfully", "text-green-600", 2000);
+        
       }
+      TsAnalysisData = res.ts_analysis;
+      handleDisplayReportClick();
     });
   };
   
@@ -235,7 +238,7 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
     const res = await getData(API_URL, 'shift-changes/', {'well_id' : TsAnalysisData.well_id});
     let shifts = {}
     if(res.result && res.result.shifts.length>0){
-      shifts = res.result?.shifts[0] 
+      shifts = res.result?.shifts[0];
     }else{
       showMessage("Could not get crew change time, please set it in rigs in teamspace", "text-red-500", 3500);
       return;
@@ -243,7 +246,7 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
         
     reportData['TS_benchmark'] = TsAnalysisData.benchmarkTS;
     
-    reportData['tripping_connection'] = [{'category' : 'Tripping Time', 'value':minutes2hours(seconds2minutes(TsAnalysisData.performances.tripping_time))},
+    reportData['tripping_connection'] = [{'category' : 'Tripping Time', 'value':minutes2hours(seconds2minutes(TsAnalysisData.performances.post_connection_time))},
                                          {'category' : 'Connection Time', 'value':minutes2hours(seconds2minutes(TsAnalysisData.performances.connection_time))}];
 
     reportData['overview'] = [{"Attribute":"Rig Name", 'Value':TsAnalysisData.rig}, {"Attribute":"Well Name", 'Value':TsAnalysisData.well}, 
@@ -269,9 +272,10 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
                          {"kpi":"Connection Time AVG", 'Value':seconds2minutes(TsAnalysisData.performances.average_connection_time), 'unit':'Min'}, 
                          {"kpi":"Tripping Speed", 'Value':TsAnalysisData.performances.average_speed.toFixed(2), 'unit':'m/h'}, 
                          {"kpi":"Connection Time", 'Value':minutes2hours(seconds2minutes(TsAnalysisData.performances.connection_time)), 'unit':'Hours'}, 
-                         {"kpi":"Tripping Time", 'Value':minutes2hours(seconds2minutes(TsAnalysisData.performances.tripping_time)), 'unit':'Hours'}, 
+                         {"kpi":"Tripping Time", 'Value':minutes2hours(seconds2minutes(TsAnalysisData.performances.post_connection_time)), 'unit':'Hours'}, 
                          {"kpi":"Number of connection", 'Value':TsAnalysisData.performances.total_connections, 'unit':'nbr'},
-                         {"kpi":"Connection Time VS Connection Time benchmark", 
+                         {"kpi":"Abnormal time", 'Value':minutes2hours(seconds2minutes(TsAnalysisData.performances.abnormal_time)), 'unit':'Hours'},
+                         {"kpi":"Operation Time VS Benchmark Time", 
                                   'Value':(TsAnalysisData.performances.total_connections * (TsAnalysisData.benchmarkCT - seconds2minutes(TsAnalysisData.performances.average_connection_time))).toFixed(2), 
                                   'unit':'min'}];
 
