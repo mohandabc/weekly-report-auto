@@ -80,20 +80,19 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
         }}
         value={rowData[dataKey]}
         disabled={!rowData.abnormal}
-        style={{width:200}}/>
+        style={{width:226}}/>
       ) : dataKey === "connection_time" ? (
-        
-        <span className={`table-content-edit-span ${rowData[dataKey] > 540 ? "text-red-500" : ""}`}>
+        <span className={`table-content-edit-span ${rowData[dataKey] > 540 ? "text-red-500" : rowData['gross_speed'] <= 150 ? "text-red-500" : ""}`}>
           {minutesToTime(rowData[dataKey]).getMinutes() +
             ":" +
             minutesToTime(rowData[dataKey]).getSeconds()}
         </span>
       ) : dataKey === "date_to" || dataKey === "date_from" ? (
-        <span className={`table-content-edit-span ${rowData['connection_time'] > 540 ? "text-red-500" : ""}`}>
+        <span className={`table-content-edit-span ${rowData['connection_time'] > 540 ? "text-red-500" : rowData['gross_speed'] <= 150 ?"text-red-500":""}`}>
           {formatDateString(rowData[dataKey])}
         </span>
       ) : (
-        <span className={`table-content-edit-span ${rowData['connection_time'] > 540 ? "text-red-500" : ""}`}>{rowData[dataKey]}</span>
+        <span className={`table-content-edit-span ${rowData['connection_time'] > 540 ? "text-red-500" : rowData['gross_speed'] <= 150 ?"text-red-500":""}`}>{rowData[dataKey]}</span>
       )}
     </Cell>
   );
@@ -311,42 +310,42 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
             <HeaderCell>N</HeaderCell>
             <EditableCell dataKey="standNum" onChange={handleChange} />
           </Column>
-          <Column width={130}>
+          <Column width={145}>
             <HeaderCell>Connection Start</HeaderCell>
             <EditableCell dataKey="date_from" onChange={handleChange} />
           </Column>
 
-          <Column width={130}>
+          <Column width={145}>
             <HeaderCell>Connection End</HeaderCell>
             <EditableCell dataKey="date_to" onChange={handleChange} />
           </Column>
 
-          <Column width={80}>
+          <Column width={85}>
             <HeaderCell>Depth from</HeaderCell>
             <EditableCell dataKey="depth_from" onChange={handleChange} />
           </Column>
 
-          <Column width={70}>
+          <Column width={85}>
             <HeaderCell>Depth to</HeaderCell>
             <EditableCell dataKey="depth_to" onChange={handleChange} />
           </Column>
 
-          <Column width={70}>
+          {/* <Column width={70}>
             <HeaderCell>Delta Depth</HeaderCell>
             <EditableCell dataKey="delta_depth" onChange={handleChange} />
-          </Column>
+          </Column> */}
 
           <Column width={105}>
             <HeaderCell>Connection Time</HeaderCell>
             <EditableCell dataKey="connection_time" onChange={handleChange} />
           </Column>
 
-          <Column width={70}>
+          <Column width={80}>
             <HeaderCell>Gross Speed</HeaderCell>
             <EditableCell dataKey="gross_speed" onChange={handleChange} />
           </Column>
 
-          <Column width={70}>
+          <Column width={80}>
             <HeaderCell>Net Speed</HeaderCell>
             <EditableCell dataKey="net_speed" onChange={handleChange} />
           </Column>
