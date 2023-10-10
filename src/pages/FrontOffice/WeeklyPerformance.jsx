@@ -1,7 +1,10 @@
-export const WeeklyPerformance = () => {
-    return (
-        <div className="WeeklyPerformance">
+import { WeeklyPerformanceInputScreen } from "../../components";
 
-        </div>
-    );
-}
+export const WeeklyPerformance = () => {
+
+  return (
+    <div className="App">
+      <WeeklyPerformanceInputScreen/>
+    </div>
+  );
+};
