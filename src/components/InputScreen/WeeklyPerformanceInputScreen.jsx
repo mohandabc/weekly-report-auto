@@ -3,11 +3,6 @@ import { Button, SelectPicker, Form, Input, DateRangePicker } from "rsuite";
 import { getData } from "../../api/api";
 import { API_URL } from "../../constants/URI";
 
-const dummyData = [
-  { label: "Item 1", value: 1 },
-  { label: "Item 2", value: 2 },
-];
-
 const styles = {
   wide: {
     height: 38,
@@ -61,6 +56,14 @@ const section_placeHolder = [
 ].map((item) => ({ label: item, value: item }));
 
 const drillString_placeHolder = ['5"', '5" 1/2', '3"', '3" 1/2'].map(
+  (item) => ({ label: item, value: item })
+);
+
+const pole_placeHolder = ['Centre', 'Sud', 'Nord'].map(
+  (item) => ({ label: item, value: item })
+);
+
+const contractor_placeHolder = ['ENAFOR', 'ENTP'].map(
   (item) => ({ label: item, value: item })
 );
 
@@ -216,7 +219,7 @@ export const WeeklyPerformanceInputScreen = () => {
               <SelectPicker
                 name="pole"
                 placeholder="Pole"
-                data={dummyData}
+                data={pole_placeHolder}
                 defaultValue={formValues.pole}
                 onChange={(value) => handleChange(value, "pole")}
                 style={{
@@ -239,7 +242,7 @@ export const WeeklyPerformanceInputScreen = () => {
               <SelectPicker
                 name="contractor"
                 placeholder="Contractor"
-                data={dummyData}
+                data={contractor_placeHolder}
                 defaultValue={formValues.contractor}
                 onChange={(value) => handleChange(value, "contractor")}
                 style={styles.wide}
