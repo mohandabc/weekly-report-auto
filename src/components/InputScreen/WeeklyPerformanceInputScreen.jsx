@@ -9,8 +9,14 @@ const dummyData = [
 ];
 
 const styles = {
-    wide: { height: 38, width: 250, marginLeft: 10, marginRight: 10 },
-  };
+  wide: {
+    height: 38,
+    width: 250,
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 20,
+  },
+};
 
 const section_placeHolder = [
   '12"1/4',
@@ -150,7 +156,7 @@ export const WeeklyPerformanceInputScreen = () => {
         className={`flex flex-col bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed text-white text-3xl justify-center items-center`}
       >
         <div
-          className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 w-full max-w-md duration-1000 transform transition-all ease-out ${
+          className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 duration-1000 transform transition-all ease-out ${
             animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}
         >
@@ -169,16 +175,16 @@ export const WeeklyPerformanceInputScreen = () => {
               </h1>
             </div>
           </div>
-          <div
-            className={`flex flex-wrap items-center justify-center duration-1000 relative transform transition-all ease-out
+          <Form onSubmit={handleSubmit}>
+            <div
+              className={`flex duration-1000 relative transform transition-all ease-out
             ${
               // hiding components when they first appear and then applying a translate effect gradually
               animation
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-12"
             }`}
-          >
-            <Form onSubmit={handleSubmit}>
+            >
               <SelectPicker
                 name="rig"
                 placeholder="Rig"
@@ -186,7 +192,12 @@ export const WeeklyPerformanceInputScreen = () => {
                 value={formValues.rig}
                 onChange={WellRigConnection}
                 loading={rigsplaceholder ? false : true}
-                style={styles.wide}
+                style={{
+                  height: 38,
+                  width: 250,
+                  marginLeft: 10,
+                  marginRight: 10,
+                }}
               />
               <SelectPicker
                 name="well"
@@ -195,7 +206,12 @@ export const WeeklyPerformanceInputScreen = () => {
                 value={formValues.well}
                 onChange={WellRigConnection}
                 loading={wellsplaceholder ? false : true}
-                style={styles.wide}
+                style={{
+                  height: 38,
+                  width: 250,
+                  marginLeft: 10,
+                  marginRight: 10,
+                }}
               />
               <SelectPicker
                 name="pole"
@@ -203,8 +219,23 @@ export const WeeklyPerformanceInputScreen = () => {
                 data={dummyData}
                 defaultValue={formValues.pole}
                 onChange={(value) => handleChange(value, "pole")}
-                style={styles.wide}
+                style={{
+                  height: 38,
+                  width: 250,
+                  marginLeft: 10,
+                  marginRight: 10,
+                }}
               />
+            </div>
+            <div
+              className={`flex duration-1000 relative transform transition-all ease-out
+            ${
+              // hiding components when they first appear and then applying a translate effect gradually
+              animation
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-12"
+            }`}
+            >
               <SelectPicker
                 name="contractor"
                 placeholder="Contractor"
@@ -229,12 +260,28 @@ export const WeeklyPerformanceInputScreen = () => {
                 onChange={(value) => handleChange(value, "pipeSize")}
                 style={styles.wide}
               />
+            </div>
+            <div
+              className={`flex duration-1000 relative transform transition-all ease-out
+            ${
+              // hiding components when they first appear and then applying a translate effect gradually
+              animation
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-12"
+            }`}
+            >
               <Input
                 type="number"
                 name="benchmarkTS"
                 placeholder="Benchmark TS"
                 value={formValues.benchmarkTS}
-                style={{ height: 35, width: 250, marginLeft: 10, marginRight: 10, marginTop: 8 }}
+                style={{
+                  height: 35,
+                  width: 250,
+                  marginLeft: 10,
+                  marginRight: 10,
+                  marginTop: 25,
+                }}
                 disabled
               />
               <Input
@@ -242,7 +289,13 @@ export const WeeklyPerformanceInputScreen = () => {
                 name="benchmarkCT"
                 placeholder="Benchmark CT"
                 value={formValues.benchmarkCT}
-                style={{ height: 35, width: 250, marginLeft: 10, marginRight: 10, marginTop: 5 }}
+                style={{
+                  height: 35,
+                  width: 250,
+                  marginLeft: 10,
+                  marginRight: 10,
+                  marginTop: 25,
+                }}
                 disabled
               />
               <DateRangePicker
@@ -252,6 +305,16 @@ export const WeeklyPerformanceInputScreen = () => {
                 onChange={(value) => handleChange(value, "daterange")}
                 style={styles.wide}
               />
+            </div>
+            <div
+              className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
+            ${
+              // hiding components when they first appear and then applying a translate effect gradually
+              animation
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-12"
+            }`}
+            >
               <Button
                 appearance="primary"
                 type="submit"
@@ -263,23 +326,25 @@ export const WeeklyPerformanceInputScreen = () => {
                   paddingBottom: 10,
                   paddingRight: 20,
                   paddingLeft: 20,
+                  marginTop: 20,
+                  marginBottom: 20,
                 }}
                 loading={loadingValue}
               >
                 Submit
               </Button>
-            </Form>
-          </div>
-          <div
-            className={`flex items-center justify-center mt-6 md:mt-10 duration-1000 relative transform transition-all ease-out md:pb-8
+            </div>
+          </Form>
+        </div>
+        <div
+          className={`flex items-center justify-center mt-6 md:mt-10 duration-1000 relative transform transition-all ease-out md:pb-8
             ${
               // hiding components when they first appear and then applying a translate effect gradually
               animation
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-12"
             }`}
-          ></div>
-        </div>
+        ></div>
       </header>
     </div>
   );
