@@ -183,7 +183,7 @@ export const WeeklyPerformanceInputScreen = () => {
   }
 
   const getWeeklyData =  (params) =>{
-    const path = 'api/reports/weekly_performance';
+    const path = 'api/reports/weekly_performance_oilport';
     getData(API_URL, path, params)
     .then(res=> {
       let data = res.result;
