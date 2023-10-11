@@ -3,6 +3,8 @@ import { Button, SelectPicker, Form, Input, DateRangePicker } from "rsuite";
 import { getData } from "../../api/api";
 import { API_URL } from "../../constants/URI";
 import { predefinedRanges } from "../../constants/constants";
+import { weeklyPerformanceDataState } from "../../shared/globalState";
+import {useRecoilState} from 'recoil';
 
 const styles = {
   wide: {
@@ -75,6 +77,7 @@ export const WeeklyPerformanceInputScreen = () => {
   const [loadingValue, setLoadingValue] = useState(false);
   const [wellsplaceholder, setWellsplaceholder] = useState([]);
   const [rigsplaceholder, setRigsplaceholder] = useState([]);
+  const [weeklyPerformanceData, setWeeklyPerformanceData] = useRecoilState(weeklyPerformanceDataState);
 
   const [formValues, setFormValues] = useState({
     well: undefined,
@@ -142,6 +145,7 @@ export const WeeklyPerformanceInputScreen = () => {
   const handleSubmit = () => {
     // const values = Object.values(formValues);
     console.log(formValues);
+    getWeeklyData(formValues);
   };
 
   function populateWellRigPickers() {
@@ -176,6 +180,16 @@ export const WeeklyPerformanceInputScreen = () => {
         rig: rig.value,
       }));
     }
+  }
+
+  const getWeeklyData =  (params) =>{
+    const path = 'api/reports/weekly_performance';
+    getData(API_URL, path, params)
+    .then(res=> {
+      let data = res.result;
+      console.log(data)
+      setWeeklyPerformanceData(data || {});
+    });
   }
 
   return (
