@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button, SelectPicker, Form, Input, DateRangePicker } from "rsuite";
 import { getData } from "../../api/api";
 import { API_URL } from "../../constants/URI";
+import { predefinedRanges } from "../../constants/constants";
 
 const styles = {
   wide: {
@@ -59,13 +60,15 @@ const drillString_placeHolder = ['5"', '5" 1/2', '3"', '3" 1/2'].map(
   (item) => ({ label: item, value: item })
 );
 
-const pole_placeHolder = ['Centre', 'Sud', 'Nord'].map(
-  (item) => ({ label: item, value: item })
-);
+const pole_placeHolder = ["Centre", "Sud", "Nord"].map((item) => ({
+  label: item,
+  value: item,
+}));
 
-const contractor_placeHolder = ['ENAFOR', 'ENTP'].map(
-  (item) => ({ label: item, value: item })
-);
+const contractor_placeHolder = ["ENAFOR", "ENTP"].map((item) => ({
+  label: item,
+  value: item,
+}));
 
 export const WeeklyPerformanceInputScreen = () => {
   const [animation, setAnimation] = useState(false);
@@ -109,12 +112,36 @@ export const WeeklyPerformanceInputScreen = () => {
         benchmarkCT: 2,
         pipeSize: value,
       });
+    } else if (Array.isArray(value) && value.length === 2) {
+      setFormValues({
+        ...formValues,
+        startDate: formatDate(value[0], true, "-"),
+        endDate: formatDate(value[1], true, "-")
+      });
     }
   };
 
+  function formatDate(date, dayFirst = false, separater = "/") {
+    if (date) {
+      let formattedDate = [
+        padTo2Digits(date.getMonth() + 1),
+        padTo2Digits(date.getDate()),
+        date.getFullYear(),
+      ];
+      if (dayFirst === true) {
+        formattedDate.unshift(formattedDate.pop());
+      }
+      return formattedDate.join(separater);
+    }
+  }
+
+  function padTo2Digits(num) {
+    return num.toString().padStart(2, "0");
+  }
+
   const handleSubmit = () => {
-    const values = Object.values(formValues);
-    console.log(values);
+    // const values = Object.values(formValues);
+    console.log(formValues);
   };
 
   function populateWellRigPickers() {
@@ -190,7 +217,7 @@ export const WeeklyPerformanceInputScreen = () => {
             >
               <SelectPicker
                 name="rig"
-                placeholder="Rig"
+                placeholder="Rig (ALL)"
                 data={rigsplaceholder}
                 value={formValues.rig}
                 onChange={WellRigConnection}
@@ -204,7 +231,7 @@ export const WeeklyPerformanceInputScreen = () => {
               />
               <SelectPicker
                 name="well"
-                placeholder="Well"
+                placeholder="Well (ALL)"
                 data={wellsplaceholder}
                 value={formValues.well}
                 onChange={WellRigConnection}
@@ -218,7 +245,7 @@ export const WeeklyPerformanceInputScreen = () => {
               />
               <SelectPicker
                 name="pole"
-                placeholder="Pole"
+                placeholder="Pole (ALL)"
                 data={pole_placeHolder}
                 defaultValue={formValues.pole}
                 onChange={(value) => handleChange(value, "pole")}
@@ -241,7 +268,7 @@ export const WeeklyPerformanceInputScreen = () => {
             >
               <SelectPicker
                 name="contractor"
-                placeholder="Contractor"
+                placeholder="Contractor (ALL)"
                 data={contractor_placeHolder}
                 defaultValue={formValues.contractor}
                 onChange={(value) => handleChange(value, "contractor")}
@@ -249,7 +276,7 @@ export const WeeklyPerformanceInputScreen = () => {
               />
               <SelectPicker
                 name="section"
-                placeholder="Section"
+                placeholder="Section (ALL)"
                 data={section_placeHolder}
                 defaultValue={formValues.section}
                 onChange={(value) => handleChange(value, "section")}
@@ -257,7 +284,7 @@ export const WeeklyPerformanceInputScreen = () => {
               />
               <SelectPicker
                 name="pipeSize"
-                placeholder="Pipe Size"
+                placeholder="Pipe Size (ALL)"
                 data={drillString_placeHolder}
                 defaultValue={formValues.pipeSize}
                 onChange={(value) => handleChange(value, "pipeSize")}
@@ -302,8 +329,9 @@ export const WeeklyPerformanceInputScreen = () => {
                 disabled
               />
               <DateRangePicker
+                ranges={predefinedRanges}
                 name="daterange"
-                format="dd/MM/yyyy HH:mm:ss"
+                format="dd/MM/yyyy"
                 defaultValue={formValues.daterange}
                 onChange={(value) => handleChange(value, "daterange")}
                 style={styles.wide}
