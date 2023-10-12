@@ -15,7 +15,6 @@ import { useRecoilState } from "recoil";
 
 const styles = {
   wide: {
-    height: 38,
     width: 250,
     marginLeft: 10,
     marginRight: 10,
@@ -241,11 +240,11 @@ export const WeeklyPerformanceInputScreen = () => {
                 onChange={(value) => handleChange(value, "rig")}
                 loading={rigsplaceholder ? false : true}
                 style={{
-                  height: 38,
                   width: 250,
                   marginLeft: 10,
                   marginRight: 10,
                 }}
+                preventOverflow={true}
               />
               <TagPicker
                 name="well"
@@ -255,7 +254,6 @@ export const WeeklyPerformanceInputScreen = () => {
                 onChange={(value) => handleChange(value, "well")}
                 loading={wellsplaceholder ? false : true}
                 style={{
-                  height: 38,
                   width: 250,
                   marginLeft: 10,
                   marginRight: 10,
@@ -268,7 +266,6 @@ export const WeeklyPerformanceInputScreen = () => {
                 defaultValue={formValues.pole}
                 onChange={(value) => handleChange(value, "pole")}
                 style={{
-                  height: 38,
                   width: 250,
                   marginLeft: 10,
                   marginRight: 10,
