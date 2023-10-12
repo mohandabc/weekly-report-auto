@@ -88,8 +88,8 @@ export const WeeklyPerformanceInputScreen = () => {
   );
 
   const [formValues, setFormValues] = useState({
-    well: undefined,
-    rig: undefined,
+    well: [],
+    rig: [],
     pole: undefined,
     contractor: undefined,
     section: undefined,
@@ -164,22 +164,30 @@ export const WeeklyPerformanceInputScreen = () => {
         ];
       })
     );
+
     dataFrame.benchmarkTS = formValues.benchmarkTS.split(',');
     dataFrame.benchmarkCT = dataFrame.benchmarkCT.split(',');
-    console.log("submit", dataFrame);
+    let values = dataFrame.well;
+    let valueToWid = Object.fromEntries(wellsplaceholder.map(item => [item.value, item.wid]));
+    dataFrame.well = values.map(value => valueToWid[value]).map(String);
+    let valueToRid = Object.fromEntries(rigsplaceholder.map(item => [item.value, item.rid]));
+    dataFrame.rig = values.map(value => valueToRid[value]).map(String);
+    console.log(dataFrame);
     getWeeklyData(dataFrame);
   };
 
   function populateWellRigPickers() {
     const path = "api/reports/getwells";
     getData(API_URL, path, formValues).then((res) => {
-      let wells = res.result["wells"].map((item) => ({
+      let wells = res.result["wells"].map((item, index) => ({
         label: item["well"],
-        value: item["wid"],
+        wid: item["wid"],
+        value: index,
       }));
-      let rigs = res.result["wells"].map((item) => ({
+      let rigs = res.result["wells"].map((item, index) => ({
         label: item["rig"],
-        value: item["wid"],
+        rid: item["rid"],
+        value: index,
       }));
       setWellsplaceholder(wells || []);
       setRigsplaceholder(rigs || []);
@@ -195,6 +203,26 @@ export const WeeklyPerformanceInputScreen = () => {
     });
   };
 
+  function WellRigConnection(values) {
+    for (let value of values) {
+      const well = wellsplaceholder.find((well) => well.value === value);
+      if (well) {
+        setFormValues((prevState) => ({
+          ...prevState,
+          well: values,
+        }));
+      }
+      
+      const rig = rigsplaceholder.find((rig) => rig.value === value);
+      if (rig) {
+        setFormValues((prevState) => ({
+          ...prevState,
+          rig: values,
+        }));
+      }
+    }
+  }
+  
   return (
     <div
       className={`flex flex-col bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
@@ -237,21 +265,20 @@ export const WeeklyPerformanceInputScreen = () => {
                 placeholder="Rig (ALL)"
                 data={rigsplaceholder}
                 value={formValues.rig}
-                onChange={(value) => handleChange(value, "rig")}
+                onChange={(value) => {handleChange(value, "rig"); WellRigConnection(value);}}
                 loading={rigsplaceholder ? false : true}
                 style={{
                   width: 250,
                   marginLeft: 10,
                   marginRight: 10,
                 }}
-                preventOverflow={true}
               />
               <TagPicker
                 name="well"
                 placeholder="Well (ALL)"
                 data={wellsplaceholder}
                 value={formValues.well}
-                onChange={(value) => handleChange(value, "well")}
+                onChange={(value) => {handleChange(value, "well"); WellRigConnection(value);}}
                 loading={wellsplaceholder ? false : true}
                 style={{
                   width: 250,
