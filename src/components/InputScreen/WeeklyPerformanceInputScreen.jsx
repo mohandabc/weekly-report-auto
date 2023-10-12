@@ -1,10 +1,17 @@
 import { useState, useEffect } from "react";
-import { Button, SelectPicker, Form, Input, DateRangePicker } from "rsuite";
+import {
+  Button,
+  SelectPicker,
+  Form,
+  Input,
+  DateRangePicker,
+  TagPicker,
+} from "rsuite";
 import { getData } from "../../api/api";
 import { API_URL } from "../../constants/URI";
 import { predefinedRanges } from "../../constants/constants";
 import { weeklyPerformanceDataState } from "../../shared/globalState";
-import {useRecoilState} from 'recoil';
+import { useRecoilState } from "recoil";
 
 const styles = {
   wide: {
@@ -77,7 +84,9 @@ export const WeeklyPerformanceInputScreen = () => {
   const [loadingValue, setLoadingValue] = useState(false);
   const [wellsplaceholder, setWellsplaceholder] = useState([]);
   const [rigsplaceholder, setRigsplaceholder] = useState([]);
-  const [weeklyPerformanceData, setWeeklyPerformanceData] = useRecoilState(weeklyPerformanceDataState);
+  const [weeklyPerformanceData, setWeeklyPerformanceData] = useRecoilState(
+    weeklyPerformanceDataState
+  );
 
   const [formValues, setFormValues] = useState({
     well: undefined,
@@ -85,9 +94,9 @@ export const WeeklyPerformanceInputScreen = () => {
     pole: undefined,
     contractor: undefined,
     section: undefined,
-    pipeSize: undefined,
-    benchmarkTS: undefined,
-    benchmarkCT: undefined,
+    pipeSize: [],
+    benchmarkTS: "",
+    benchmarkCT: "",
     daterange: undefined,
   });
 
@@ -95,31 +104,27 @@ export const WeeklyPerformanceInputScreen = () => {
     setAnimation(true);
     populateWellRigPickers();
   }, []);
+
   useEffect(() => {
-    console.log(formValues);
-  }, [formValues]);
+    const pipeSize = formValues.pipeSize;
+    const isFive = pipeSize.includes('5"') || pipeSize.includes('5" 1/2');
+    const isThree = pipeSize.includes('3"') || pipeSize.includes('3" 1/2');
+    const benchmarkTS = isFive && isThree ? "500,600" : isFive ? "500" : isThree ? "600" : '';
+    const benchmarkCT = isFive && isThree ? "2,3" : isFive ? "3" : isThree ? "2" : '';
+    setFormValues({ ...formValues, benchmarkTS, benchmarkCT });
+  }, [formValues.pipeSize]);
 
   const handleChange = (value, name) => {
     setFormValues({ ...formValues, [name]: value });
-    if (value === '5"' || value === '5" 1/2') {
-      setFormValues({
-        ...formValues,
-        benchmarkTS: 500,
-        benchmarkCT: 3,
-        pipeSize: value,
-      });
-    } else if (value === '3"' || value === '3" 1/2') {
-      setFormValues({
-        ...formValues,
-        benchmarkTS: 600,
-        benchmarkCT: 2,
-        pipeSize: value,
-      });
-    } else if (Array.isArray(value) && value.length === 2) {
+    if (
+      Array.isArray(value) &&
+      value[0] instanceof Date &&
+      value[1] instanceof Date
+    ) {
       setFormValues({
         ...formValues,
         startDate: formatDate(value[0], true, "-"),
-        endDate: formatDate(value[1], true, "-")
+        endDate: formatDate(value[1], true, "-"),
       });
     }
   };
@@ -142,10 +147,28 @@ export const WeeklyPerformanceInputScreen = () => {
     return num.toString().padStart(2, "0");
   }
 
+  function intToString(list) {
+    return list.map(String);
+  }
+
+  function undefToEmpty(value) {
+    return value ?? [];
+  }
+
   const handleSubmit = () => {
-    // const values = Object.values(formValues);
     console.log(formValues);
-    getWeeklyData(formValues);
+    var dataFrame = Object.fromEntries(
+      Object.entries(formValues).map(([key, value]) => {
+        return [
+          key,
+          Array.isArray(value) ? intToString(value) : undefToEmpty(value),
+        ];
+      })
+    );
+    dataFrame.benchmarkTS = formValues.benchmarkTS.split(',');
+    dataFrame.benchmarkCT = dataFrame.benchmarkCT.split(',');
+    console.log("submit", dataFrame);
+    getWeeklyData(dataFrame);
   };
 
   function populateWellRigPickers() {
@@ -164,33 +187,14 @@ export const WeeklyPerformanceInputScreen = () => {
     });
   }
 
-  function WellRigConnection(event) {
-    const well = wellsplaceholder.find((well) => well.value === event);
-    if (well) {
-      setFormValues((prevState) => ({
-        ...prevState,
-        well: well.value,
-      }));
-    }
-
-    const rig = rigsplaceholder.find((rig) => rig.value === event);
-    if (rig) {
-      setFormValues((prevState) => ({
-        ...prevState,
-        rig: rig.value,
-      }));
-    }
-  }
-
-  const getWeeklyData =  (params) =>{
-    const path = 'api/reports/weekly_performance_oilport';
-    getData(API_URL, path, params)
-    .then(res=> {
+  const getWeeklyData = (params) => {
+    const path = "api/reports/weekly_performance_oilport";
+    getData(API_URL, path, params).then((res) => {
       let data = res.result;
-      console.log(data)
+      console.log(data);
       setWeeklyPerformanceData(data || {});
     });
-  }
+  };
 
   return (
     <div
@@ -229,12 +233,12 @@ export const WeeklyPerformanceInputScreen = () => {
                 : "opacity-0 translate-y-12"
             }`}
             >
-              <SelectPicker
+              <TagPicker
                 name="rig"
                 placeholder="Rig (ALL)"
                 data={rigsplaceholder}
                 value={formValues.rig}
-                onChange={WellRigConnection}
+                onChange={(value) => handleChange(value, "rig")}
                 loading={rigsplaceholder ? false : true}
                 style={{
                   height: 38,
@@ -243,12 +247,12 @@ export const WeeklyPerformanceInputScreen = () => {
                   marginRight: 10,
                 }}
               />
-              <SelectPicker
+              <TagPicker
                 name="well"
                 placeholder="Well (ALL)"
                 data={wellsplaceholder}
                 value={formValues.well}
-                onChange={WellRigConnection}
+                onChange={(value) => handleChange(value, "well")}
                 loading={wellsplaceholder ? false : true}
                 style={{
                   height: 38,
@@ -257,7 +261,7 @@ export const WeeklyPerformanceInputScreen = () => {
                   marginRight: 10,
                 }}
               />
-              <SelectPicker
+              <TagPicker
                 name="pole"
                 placeholder="Pole (ALL)"
                 data={pole_placeHolder}
@@ -280,7 +284,7 @@ export const WeeklyPerformanceInputScreen = () => {
                 : "opacity-0 translate-y-12"
             }`}
             >
-              <SelectPicker
+              <TagPicker
                 name="contractor"
                 placeholder="Contractor (ALL)"
                 data={contractor_placeHolder}
@@ -288,7 +292,7 @@ export const WeeklyPerformanceInputScreen = () => {
                 onChange={(value) => handleChange(value, "contractor")}
                 style={styles.wide}
               />
-              <SelectPicker
+              <TagPicker
                 name="section"
                 placeholder="Section (ALL)"
                 data={section_placeHolder}
@@ -296,7 +300,7 @@ export const WeeklyPerformanceInputScreen = () => {
                 onChange={(value) => handleChange(value, "section")}
                 style={styles.wide}
               />
-              <SelectPicker
+              <TagPicker
                 name="pipeSize"
                 placeholder="Pipe Size (ALL)"
                 data={drillString_placeHolder}
@@ -315,7 +319,6 @@ export const WeeklyPerformanceInputScreen = () => {
             }`}
             >
               <Input
-                type="number"
                 name="benchmarkTS"
                 placeholder="Benchmark TS"
                 value={formValues.benchmarkTS}
@@ -329,7 +332,6 @@ export const WeeklyPerformanceInputScreen = () => {
                 disabled
               />
               <Input
-                type="number"
                 name="benchmarkCT"
                 placeholder="Benchmark CT"
                 value={formValues.benchmarkCT}
