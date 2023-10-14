@@ -181,7 +181,6 @@ export const EventsKPIs = (eventsKPI) => {
           }}
           muiTableBodyRowProps={({ row }) => ({
             sx: {
-              cursor: "pointer",
               backgroundColor: (theme) =>
                 row.index % 2 !== 0
                   ? darkMode
@@ -208,6 +207,20 @@ export const EventsKPIs = (eventsKPI) => {
               color: darkMode ? "rgba(28, 28, 26, 1)" : "rgba(55, 90, 112, 1)",
             },
           }}
+          muiTableBodyCellProps={({ cell }) => ({
+            sx: {
+              backgroundColor:
+                cell.column.columnDef.accessorKey === "Severity"
+                  ? cell.getValue() === "Major"
+                    ? "rgba(255, 153, 153, 0.7)"
+                    : cell.getValue() === "Medium"
+                    ? "rgba(255, 191, 191, 0.7)"
+                    : cell.getValue() === "Low"
+                    ? "rgba(255, 214, 214, 0.7)"
+                    : "inherit"
+                  : "inherit",
+            },
+          })}
         />
       </div>
 
@@ -228,7 +241,6 @@ export const EventsKPIs = (eventsKPI) => {
         }}
         muiTableBodyRowProps={({ row }) => ({
           sx: {
-            cursor: "pointer",
             backgroundColor: (theme) =>
               row.index % 2 !== 0
                 ? darkMode
@@ -255,6 +267,20 @@ export const EventsKPIs = (eventsKPI) => {
             color: darkMode ? "rgba(28, 28, 26, 1)" : "rgba(55, 90, 112, 1)",
           },
         }}
+        muiTableBodyCellProps={({ cell }) => ({
+          sx: {
+            backgroundColor:
+              cell.column.columnDef.accessorKey === "Severity"
+                ? cell.getValue() === "Major"
+                  ? "rgba(255, 153, 153, 0.7)"
+                  : cell.getValue() === "Medium"
+                  ? "rgba(255, 191, 191, 0.7)"
+                  : cell.getValue() === "Low"
+                  ? "rgba(255, 214, 214, 0.7)"
+                  : "inherit"
+                : "inherit",
+          },
+        })}
       />
     </div>
   );
