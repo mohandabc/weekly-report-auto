@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import {
   Button,
-  SelectPicker,
   Form,
   Input,
   DateRangePicker,
@@ -10,8 +9,6 @@ import {
 import { getData } from "../../api/api";
 import { API_URL } from "../../constants/URI";
 import { predefinedRanges } from "../../constants/constants";
-import { weeklyPerformanceDataState } from "../../shared/globalState";
-import { useRecoilState } from "recoil";
 
 const styles = {
   wide: {
@@ -78,14 +75,11 @@ const contractor_placeHolder = ["ENAFOR", "ENTP"].map((item) => ({
   value: item,
 }));
 
-export const WeeklyPerformanceInputScreen = () => {
+export const WeeklyPerformanceInputScreen = ({setWeeklyPerformanceData}) => {
   const [animation, setAnimation] = useState(false);
   const [loadingValue, setLoadingValue] = useState(false);
   const [wellsplaceholder, setWellsplaceholder] = useState([]);
   const [rigsplaceholder, setRigsplaceholder] = useState([]);
-  const [weeklyPerformanceData, setWeeklyPerformanceData] = useRecoilState(
-    weeklyPerformanceDataState
-  );
 
   const [formValues, setFormValues] = useState({
     well: [],
@@ -199,6 +193,7 @@ export const WeeklyPerformanceInputScreen = () => {
     getData(API_URL, path, params).then((res) => {
       let data = res.result;
       console.log(data);
+      console.log(setWeeklyPerformanceData)
       setWeeklyPerformanceData(data || {});
     });
   };
