@@ -1,15 +1,15 @@
-import "./react-tabs.css";
-import { MultiTable, WeeklyPerformanceInputScreen } from "../../components";
+import { WeeklyPerformanceInputScreen } from "../../components";
 import { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { darkModeState } from "../../shared/globalState";
 import { useRecoilValue } from "recoil";
+import { EventsKPIs } from "./WeeklyPerformancePages";
 
 export const WeeklyPerformance = () => {
   const darkMode = useRecoilValue(darkModeState);
   const [weeklyPerformanceData, setWeeklyPerformanceData] = useState(undefined);
-  const [animation, setAnimation] = useState(false);
-
+  const [eventsKPI, setEventsKPI] = useState(undefined);
+  
   useEffect(() => {
     console.log(weeklyPerformanceData);
   }, [weeklyPerformanceData]);
@@ -18,6 +18,7 @@ export const WeeklyPerformance = () => {
     <div className="App">
       <WeeklyPerformanceInputScreen
         setWeeklyPerformanceData={setWeeklyPerformanceData}
+        setEventsKPI={setEventsKPI}
       />
       {weeklyPerformanceData ? (
         <div id="result-section" className={`bg-slate-300 dark:bg-zinc-900`}>
@@ -39,40 +40,7 @@ export const WeeklyPerformance = () => {
               </TabList>
 
               <TabPanel>
-                <div
-                  className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto}`}
-                >
-                  <div className="flex justify-center items-center">
-                    <div className="py-9">
-                      <h1
-                        className={`text-zinc-500 dark:text-black text-base text-center`}
-                      >
-                        <section
-                          className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`}
-                        >
-                          <MultiTable
-                            title="Drilling Events Captured"
-                            id="table-1"
-                            tableData={
-                              weeklyPerformanceData['events_data']["event_kpi_res"]
-                            }
-                          />
-                        </section>
-                        <section
-                          className={`align-middle grid grid-col-1 xl:grid-cols-1 gap-4 place-items-top px-2 pb-4`}
-                        >
-                          <MultiTable
-                            title="Drilling Events Caused NPT"
-                            id="table-2"
-                            tableData={
-                              weeklyPerformanceData['events_data']["event_caused_npt_res"]
-                            }
-                          />
-                        </section>
-                      </h1>
-                    </div>
-                  </div>
-                </div>
+                <EventsKPIs eventsKPI={eventsKPI}/>
               </TabPanel>
 
               <TabPanel></TabPanel>
