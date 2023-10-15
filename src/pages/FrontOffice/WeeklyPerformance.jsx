@@ -3,35 +3,37 @@ import { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { darkModeState } from "../../shared/globalState";
 import { useRecoilValue } from "recoil";
-import { EventsKPIs } from "./WeeklyPerformancePages";
+import { DrillState, EventsKPIs } from "./WeeklyPerformancePages";
 
 export const WeeklyPerformance = () => {
   const darkMode = useRecoilValue(darkModeState);
   const [weeklyPerformanceData, setWeeklyPerformanceData] = useState(undefined);
   const [eventsKPI, setEventsKPI] = useState(undefined);
-  
+  const [drillState, setDrillState] = useState(undefined);
+
   useEffect(() => {
-    console.log("Results : ",weeklyPerformanceData);
+    console.log("Results : ", weeklyPerformanceData);
   }, [weeklyPerformanceData]);
 
-  useEffect(()=>{
-    const mainSection = document.getElementById('result-section');
-    if (mainSection){
+  useEffect(() => {
+    const mainSection = document.getElementById("result-section");
+    if (mainSection) {
       const headerOffset = 30; // Set your desired offset in pixels
       const elementPosition = mainSection.getBoundingClientRect().top;
       const offsetPosition = elementPosition - headerOffset;
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     }
-});
+  });
 
   return (
     <div className="App">
       <WeeklyPerformanceInputScreen
         setWeeklyPerformanceData={setWeeklyPerformanceData}
         setEventsKPI={setEventsKPI}
+        setDrillState={setDrillState}
       />
       {weeklyPerformanceData ? (
         <div id="result-section" className={`bg-slate-300 dark:bg-zinc-900`}>
@@ -53,12 +55,15 @@ export const WeeklyPerformance = () => {
               </TabList>
 
               <TabPanel>
-                <EventsKPIs eventsKPI={eventsKPI}/>
+                <EventsKPIs eventsKPI={eventsKPI} />
               </TabPanel>
 
               <TabPanel></TabPanel>
+              
+              <TabPanel>
+                <DrillState drillState={drillState} />
+              </TabPanel>
 
-              <TabPanel></TabPanel>
               <TabPanel></TabPanel>
               <TabPanel></TabPanel>
             </Tabs>

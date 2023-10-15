@@ -75,7 +75,7 @@ const contractor_placeHolder = ["ENAFOR", "ENTP"].map((item) => ({
   value: item,
 }));
 
-export const WeeklyPerformanceInputScreen = ({setWeeklyPerformanceData, setEventsKPI}) => {
+export const WeeklyPerformanceInputScreen = ({setWeeklyPerformanceData, setEventsKPI, setDrillState}) => {
   const [animation, setAnimation] = useState(false);
   const [loadingValue, setLoadingValue] = useState(false);
   const [wellsplaceholder, setWellsplaceholder] = useState([]);
@@ -196,6 +196,7 @@ export const WeeklyPerformanceInputScreen = ({setWeeklyPerformanceData, setEvent
       console.log(setWeeklyPerformanceData)
       setWeeklyPerformanceData(data || {});
       setEventsKPI(data['events_data'] || {})
+      setDrillState(data['events_data'] || {})
     });
   };
 
