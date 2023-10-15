@@ -11,8 +11,21 @@ export const WeeklyPerformance = () => {
   const [eventsKPI, setEventsKPI] = useState(undefined);
   
   useEffect(() => {
-    console.log(weeklyPerformanceData);
+    console.log("Results : ",weeklyPerformanceData);
   }, [weeklyPerformanceData]);
+
+  useEffect(()=>{
+    const mainSection = document.getElementById('result-section');
+    if (mainSection){
+      const headerOffset = 30; // Set your desired offset in pixels
+      const elementPosition = mainSection.getBoundingClientRect().top;
+      const offsetPosition = elementPosition - headerOffset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+});
 
   return (
     <div className="App">
@@ -52,7 +65,7 @@ export const WeeklyPerformance = () => {
           </div>
         </div>
       ) : (
-        "There is no data !!"
+        <></>
       )}
     </div>
   );

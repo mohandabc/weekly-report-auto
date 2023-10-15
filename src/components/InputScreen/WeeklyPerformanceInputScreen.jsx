@@ -166,7 +166,7 @@ export const WeeklyPerformanceInputScreen = ({setWeeklyPerformanceData, setEvent
     dataFrame.well = values.map(value => valueToWid[value]).map(String);
     let valueToRid = Object.fromEntries(rigsplaceholder.map(item => [item.value, item.rid]));
     dataFrame.rig = values.map(value => valueToRid[value]).map(String);
-    console.log(dataFrame);
+    console.log("Params : ",dataFrame);
     getWeeklyData(dataFrame);
   };
 
