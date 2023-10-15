@@ -1,9 +1,9 @@
 import { darkModeState } from "../../../shared/globalState";
 import { useRecoilValue } from "recoil";
 
-export const MonitoringKPI = (monitoringKPI) => {
+export const NPTAnalysis = (NPTAnalysis) => {
   const darkMode = useRecoilValue(darkModeState);
-  console.log(monitoringKPI);
+  console.log(NPTAnalysis);
 
   return (
     <div
@@ -11,7 +11,7 @@ export const MonitoringKPI = (monitoringKPI) => {
       style={{ height: 1260, width: "100%" }}
     >
       <div className="flex justify-center items-center">
-        <span className="text-xl py-4">Monitoring KPI</span>
+        <span className="text-xl py-4">NPT Analysis</span>
       </div>
 
 

@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Button,
-  Form,
-  Input,
-  DateRangePicker,
-  TagPicker,
-} from "rsuite";
+import { Button, Form, Input, DateRangePicker, TagPicker } from "rsuite";
 import { getData } from "../../api/api";
 import { API_URL } from "../../constants/URI";
 import { predefinedRanges } from "../../constants/constants";
@@ -75,7 +69,14 @@ const contractor_placeHolder = ["ENAFOR", "ENTP"].map((item) => ({
   value: item,
 }));
 
-export const WeeklyPerformanceInputScreen = ({setWeeklyPerformanceData, setEventsKPI, setDrillState, setTrippingSpeed, setMonitoringKPI}) => {
+export const WeeklyPerformanceInputScreen = ({
+  setWeeklyPerformanceData,
+  setEventsKPI,
+  setDrillState,
+  setTrippingSpeed,
+  setMonitoringKPI,
+  setNPTAnalysis,
+}) => {
   const [animation, setAnimation] = useState(false);
   const [loadingValue, setLoadingValue] = useState(false);
   const [wellsplaceholder, setWellsplaceholder] = useState([]);
@@ -102,8 +103,10 @@ export const WeeklyPerformanceInputScreen = ({setWeeklyPerformanceData, setEvent
     const pipeSize = formValues.pipeSize;
     const isFive = pipeSize.includes('5"') || pipeSize.includes('5" 1/2');
     const isThree = pipeSize.includes('3"') || pipeSize.includes('3" 1/2');
-    const benchmarkTS = isFive && isThree ? "500,600" : isFive ? "500" : isThree ? "600" : '';
-    const benchmarkCT = isFive && isThree ? "2,3" : isFive ? "3" : isThree ? "2" : '';
+    const benchmarkTS =
+      isFive && isThree ? "500,600" : isFive ? "500" : isThree ? "600" : "";
+    const benchmarkCT =
+      isFive && isThree ? "2,3" : isFive ? "3" : isThree ? "2" : "";
     setFormValues({ ...formValues, benchmarkTS, benchmarkCT });
   }, [formValues.pipeSize]);
 
@@ -159,14 +162,18 @@ export const WeeklyPerformanceInputScreen = ({setWeeklyPerformanceData, setEvent
       })
     );
 
-    dataFrame.benchmarkTS = formValues.benchmarkTS.split(',');
-    dataFrame.benchmarkCT = dataFrame.benchmarkCT.split(',');
+    dataFrame.benchmarkTS = formValues.benchmarkTS.split(",");
+    dataFrame.benchmarkCT = dataFrame.benchmarkCT.split(",");
     let values = dataFrame.well;
-    let valueToWid = Object.fromEntries(wellsplaceholder.map(item => [item.value, item.wid]));
-    dataFrame.well = values.map(value => valueToWid[value]).map(String);
-    let valueToRid = Object.fromEntries(rigsplaceholder.map(item => [item.value, item.rid]));
-    dataFrame.rig = values.map(value => valueToRid[value]).map(String);
-    console.log("Params : ",dataFrame);
+    let valueToWid = Object.fromEntries(
+      wellsplaceholder.map((item) => [item.value, item.wid])
+    );
+    dataFrame.well = values.map((value) => valueToWid[value]).map(String);
+    let valueToRid = Object.fromEntries(
+      rigsplaceholder.map((item) => [item.value, item.rid])
+    );
+    dataFrame.rig = values.map((value) => valueToRid[value]).map(String);
+    console.log("Params : ", dataFrame);
     getWeeklyData(dataFrame);
   };
 
@@ -193,12 +200,13 @@ export const WeeklyPerformanceInputScreen = ({setWeeklyPerformanceData, setEvent
     getData(API_URL, path, params).then((res) => {
       let data = res.result;
       console.log(data);
-      console.log(setWeeklyPerformanceData)
+      console.log(setWeeklyPerformanceData);
       setWeeklyPerformanceData(data || {});
-      setEventsKPI(data['events_data'] || {})
-      setDrillState(data['events_data'] || {})
-      setTrippingSpeed(data['events_data'] || {})
-      setMonitoringKPI(data['events_data'] || {})
+      setEventsKPI(data["events_data"] || {});
+      setDrillState(data["events_data"] || {});
+      setTrippingSpeed(data["events_data"] || {});
+      setMonitoringKPI(data["events_data"] || {});
+      setNPTAnalysis(data["events_data"] || {});
     });
   };
 
@@ -211,7 +219,7 @@ export const WeeklyPerformanceInputScreen = ({setWeeklyPerformanceData, setEvent
           well: values,
         }));
       }
-      
+
       const rig = rigsplaceholder.find((rig) => rig.value === value);
       if (rig) {
         setFormValues((prevState) => ({
@@ -221,7 +229,7 @@ export const WeeklyPerformanceInputScreen = ({setWeeklyPerformanceData, setEvent
       }
     }
   }
-  
+
   return (
     <div
       className={`flex flex-col bg-light-mode dark:bg-dark-mode min-h-screen bg-no-repeat bg-cover bg-center bg-fixed`}
@@ -264,7 +272,10 @@ export const WeeklyPerformanceInputScreen = ({setWeeklyPerformanceData, setEvent
                 placeholder="Rig (ALL)"
                 data={rigsplaceholder}
                 value={formValues.rig}
-                onChange={(value) => {handleChange(value, "rig"); WellRigConnection(value);}}
+                onChange={(value) => {
+                  handleChange(value, "rig");
+                  WellRigConnection(value);
+                }}
                 loading={rigsplaceholder ? false : true}
                 style={{
                   width: 250,
@@ -277,7 +288,10 @@ export const WeeklyPerformanceInputScreen = ({setWeeklyPerformanceData, setEvent
                 placeholder="Well (ALL)"
                 data={wellsplaceholder}
                 value={formValues.well}
-                onChange={(value) => {handleChange(value, "well"); WellRigConnection(value);}}
+                onChange={(value) => {
+                  handleChange(value, "well");
+                  WellRigConnection(value);
+                }}
                 loading={wellsplaceholder ? false : true}
                 style={{
                   width: 250,

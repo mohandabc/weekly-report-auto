@@ -14,7 +14,6 @@ export const TrippingSpeed = (trippingSpeed) => {
         <span className="text-xl py-4">Tripping Speed</span>
       </div>
 
-        <div>hellooooo</div>
 
     </div>
   );

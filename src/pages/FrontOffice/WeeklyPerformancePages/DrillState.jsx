@@ -14,7 +14,6 @@ export const DrillState = (drillState) => {
         <span className="text-xl py-4">Drill State</span>
       </div>
 
-        <div>hellooooo</div>
 
     </div>
   );
