@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { darkModeState } from "../../shared/globalState";
 import { useRecoilValue } from "recoil";
-import { DrillState, EventsKPIs } from "./WeeklyPerformancePages";
+import { DrillState, EventsKPIs, TrippingSpeed } from "./WeeklyPerformancePages";
 
 export const WeeklyPerformance = () => {
   const darkMode = useRecoilValue(darkModeState);
   const [weeklyPerformanceData, setWeeklyPerformanceData] = useState(undefined);
   const [eventsKPI, setEventsKPI] = useState(undefined);
   const [drillState, setDrillState] = useState(undefined);
+  const [trippingSpeed, setTrippingSpeed] = useState(undefined);
 
   useEffect(() => {
     console.log("Results : ", weeklyPerformanceData);
@@ -34,6 +35,7 @@ export const WeeklyPerformance = () => {
         setWeeklyPerformanceData={setWeeklyPerformanceData}
         setEventsKPI={setEventsKPI}
         setDrillState={setDrillState}
+        setTrippingSpeed={setTrippingSpeed}
       />
       {weeklyPerformanceData ? (
         <div id="result-section" className={`bg-slate-300 dark:bg-zinc-900`}>
@@ -58,8 +60,10 @@ export const WeeklyPerformance = () => {
                 <EventsKPIs eventsKPI={eventsKPI} />
               </TabPanel>
 
-              <TabPanel></TabPanel>
-              
+              <TabPanel>
+                <TrippingSpeed trippingSpeed={trippingSpeed}/>
+              </TabPanel>
+
               <TabPanel>
                 <DrillState drillState={drillState} />
               </TabPanel>
