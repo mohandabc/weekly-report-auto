@@ -53,7 +53,7 @@ export const DrillState = (drillState) => {
     >
       <div className="flex justify-end">
         <div className="mt-5 mr-1">
-          <Dropdown renderToggle={renderIconButton} title="Select Chart">
+          <Dropdown renderToggle={renderIconButton} placement="leftStart">
             <Dropdown.Item eventKey="1" onSelect={handleItemClick}>
               Per Rig
             </Dropdown.Item>
