@@ -1,8 +1,9 @@
 import { darkModeState } from "../../../shared/globalState";
 import { useRecoilValue } from "recoil";
 import { Chart } from "../../../components";
-import { Dropdown } from "rsuite";
+import { ButtonToolbar, Dropdown, IconButton, Whisper } from "rsuite";
 import { useState } from "react";
+import BarChartIcon from '@rsuite/icons/BarChart';
 
 export const DrillState = (drillState) => {
   const darkMode = useRecoilValue(darkModeState);
@@ -10,7 +11,6 @@ export const DrillState = (drillState) => {
 
   function createNestedDict(originalData, type) {
     const nestedDict = {};
-
     originalData.forEach((entry) => {
       const rigPhaseKey = `${entry[type]}|${entry.phase}`;
       const drillPipeSize = entry.drill_pipe_size;
@@ -29,12 +29,21 @@ export const DrillState = (drillState) => {
         nestedDict[rigPhaseKey][drillPipeSize].night = entry.connection_time;
       }
     });
-
     return nestedDict;
   }
 
+  function filterByValue(array, value) {
+    return array.filter(obj => obj.rotary_system !== value);
+}
+
   const handleItemClick = (itemKey) => {
     setSelectedItem(itemKey);
+  };
+
+  const renderIconButton = (props, ref) => {
+    return (
+      <IconButton {...props} ref={ref} icon={<BarChartIcon />} color="green" appearance="primary" />
+    );
   };
 
   return (
@@ -43,8 +52,8 @@ export const DrillState = (drillState) => {
       style={{ height: 900, width: "100%" }}
     >
       <div className="flex justify-end">
-        <div className="mt-5">
-          <Dropdown title="Select Chart">
+        <div className="mt-5 mr-1">
+          <Dropdown renderToggle={renderIconButton} title="Select Chart">
             <Dropdown.Item eventKey="1" onSelect={handleItemClick}>
               Per Rig
             </Dropdown.Item>
@@ -53,6 +62,12 @@ export const DrillState = (drillState) => {
             </Dropdown.Item>
             <Dropdown.Item eventKey="3" onSelect={handleItemClick}>
               Per Contractor
+            </Dropdown.Item>
+            <Dropdown.Item eventKey="4" onSelect={handleItemClick}>
+              Top-Drive
+            </Dropdown.Item>
+            <Dropdown.Item eventKey="5" onSelect={handleItemClick}>
+              Kelly
             </Dropdown.Item>
           </Dropdown>
         </div>
@@ -101,6 +116,42 @@ export const DrillState = (drillState) => {
             "contractor"
           )}
           title="Drilling Connection Time Average Per Contractor"
+          c_options={{
+            unit: "Minute",
+            Benchmark_3_passed: "2",
+            Benchmark_5_passed: "3",
+            show_benchmark: "No",
+          }}
+          chartType="GroupedBarChart"
+          className="h-160"
+        />
+      )}
+      {selectedItem === "4" && (
+        <Chart
+          id="chart2"
+          chartData={createNestedDict(
+            filterByValue(drillState["drillState"]["per_rig"],'kelly'),
+            "rig"
+          )}
+          title="Drilling Connection Time Average Per Rig (Top Drive)"
+          c_options={{
+            unit: "Minute",
+            Benchmark_3_passed: "2",
+            Benchmark_5_passed: "3",
+            show_benchmark: "No",
+          }}
+          chartType="GroupedBarChart"
+          className="h-160"
+        />
+      )}
+      {selectedItem === "5" && (
+        <Chart
+          id="chart2"
+          chartData={createNestedDict(
+            filterByValue(drillState["drillState"]["per_rig"],'top_drive'),
+            "rig"
+          )}
+          title="Drilling Connection Time Average Per Rig (Kelly)"
           c_options={{
             unit: "Minute",
             Benchmark_3_passed: "2",
