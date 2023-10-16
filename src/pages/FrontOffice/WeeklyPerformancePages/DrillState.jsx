@@ -1,9 +1,12 @@
 import { darkModeState } from "../../../shared/globalState";
 import { useRecoilValue } from "recoil";
 import { Chart } from "../../../components";
+import { Dropdown } from "rsuite";
+import { useState } from "react";
 
 export const DrillState = (drillState) => {
   const darkMode = useRecoilValue(darkModeState);
+  const [selectedItem, setSelectedItem] = useState("1");
 
   function createNestedDict(originalData, type) {
     const nestedDict = {};
@@ -30,15 +33,31 @@ export const DrillState = (drillState) => {
     return nestedDict;
   }
 
+  const handleItemClick = (itemKey) => {
+    setSelectedItem(itemKey);
+  };
+
   return (
     <div
-      className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto px-10"
-      style={{ height: 1260, width: "100%" }}
+      className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 px-10"
+      style={{ height: 900, width: "100%" }}
     >
-      <div className="flex justify-center items-center">
-        <span className="text-xl py-4">Drill State</span>
+      <div className="flex justify-end">
+        <div className="mt-5">
+          <Dropdown title="Select Chart">
+            <Dropdown.Item eventKey="1" onSelect={handleItemClick}>
+              Per Rig
+            </Dropdown.Item>
+            <Dropdown.Item eventKey="2" onSelect={handleItemClick}>
+              Per Well
+            </Dropdown.Item>
+            <Dropdown.Item eventKey="3" onSelect={handleItemClick}>
+              Per Contractor
+            </Dropdown.Item>
+          </Dropdown>
+        </div>
       </div>
-      <div className="grid grid-cols-1 grid-rows-2 gap-4">
+      {selectedItem === "1" && (
         <Chart
           id="chart"
           chartData={createNestedDict(
@@ -55,6 +74,8 @@ export const DrillState = (drillState) => {
           chartType="GroupedBarChart"
           className="h-160"
         />
+      )}
+      {selectedItem === "2" && (
         <Chart
           id="chart1"
           chartData={createNestedDict(
@@ -69,7 +90,10 @@ export const DrillState = (drillState) => {
             show_benchmark: "No",
           }}
           chartType="GroupedBarChart"
+          className="h-160"
         />
+      )}
+      {selectedItem === "3" && (
         <Chart
           id="chart2"
           chartData={createNestedDict(
@@ -84,8 +108,10 @@ export const DrillState = (drillState) => {
             show_benchmark: "No",
           }}
           chartType="GroupedBarChart"
+          className="h-160"
         />
-      </div>
+      )}
+      <div className="grid grid-cols-1 grid-rows-2 gap-4"></div>
     </div>
   );
 };
