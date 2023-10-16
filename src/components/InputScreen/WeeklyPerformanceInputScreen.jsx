@@ -203,7 +203,7 @@ export const WeeklyPerformanceInputScreen = ({
       console.log(setWeeklyPerformanceData);
       setWeeklyPerformanceData(data || {});
       setEventsKPI(data["events_data"] || {});
-      setDrillState(data["events_data"] || {});
+      setDrillState(data['drill_state_CT'] || {});
       setTrippingSpeed(data["events_data"] || {});
       setMonitoringKPI(data["events_data"] || {});
       setNPTAnalysis(data["events_data"] || {});
