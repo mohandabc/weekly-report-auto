@@ -1281,3 +1281,72 @@ export class GroupedBarChart extends Chart
             return chart;
         
 }}
+export class WTW_shift extends Chart
+{
+    buildChart(data, container, title, options){
+        console.log("heyyyy", container)
+        var category_axis = options.category_axis
+        var chart = am4core.create(container, am4charts.XYChart);
+        chart.hiddenState.properties.opacity = 0;
+
+        chart.data = data;
+
+        chart.colors.step = 2;
+        chart.padding(30, 30, 10, 30);
+        chart.legend = new am4charts.Legend();
+
+        var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+        categoryAxis.dataFields.category = category_axis;
+        categoryAxis.renderer.grid.template.location = 0;
+        categoryAxis.renderer.minGridDistance = 20;
+        categoryAxis.renderer.labels.template.fontWeight = "bold";
+
+        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.min = 0;
+        valueAxis.strictMinMax = true;
+        valueAxis.calculateTotals = true;
+        valueAxis.renderer.minWidth = 50;
+        valueAxis.extraMax = 0.1;
+        valueAxis.title.text = "Minute";
+
+        function createSeries(name, valuey, category_axis, stacked, color) {
+            var series = chart.series.push(new am4charts.ColumnSeries());
+            series.columns.template.width = am4core.percent(80);
+            series.name = name;
+            series.dataFields.categoryX = category_axis;
+            series.dataFields.valueY = valuey;
+            series.fill = am4core.color(color);
+            series.dataItems.template.locations.categoryX = 0.5;
+            series.stacked = stacked;
+            series.tooltip.pointerOrientation = "vertical";
+            series.columns.template.fillOpacity = 0.7;
+            series.columns.template.tooltipText = name.substring(0,15) +": [bold]{valueY.formatNumber('#.00')}";
+
+            var labelBullet = series.bullets.push(new am4charts.LabelBullet());
+            labelBullet.interactionsEnabled = false;
+            labelBullet.label.fill = am4core.color("#000000");
+            labelBullet.label.fontWeight = "bold";
+            labelBullet.locationY = 0.5;
+            labelBullet.label.text = "{valueY.formatNumber('#.00')}";
+            return series;
+            }
+
+        createSeries("Weight To Slips - Night", "night_pre_conn", category_axis, false, "#2D4B6B");
+        createSeries("Connection Time - Night", "night_connection_time", category_axis, true, "#61A3E8");
+        createSeries("Slips To Weight - Night", "night_post_conn", category_axis, true, "#AACAEC");
+        createSeries("Weight To Slips - Day", "day_pre_conn", category_axis, false, "#FFAE0D");
+        createSeries("Connection Time - Day", "day_connection_time", category_axis, true, "#FFDC00");
+        createSeries("Slips To Weight - Day", "day_post_conn", category_axis, true, "#F0FF33");
+
+
+        chart.scrollbarX = new am4core.Scrollbar();
+        chart.scrollbarY = new am4core.Scrollbar();
+        chart.exporting.menu = new am4core.ExportMenu();
+
+        let titletext = chart.titles.create();
+        titletext.text = title;
+        titletext.fontSize = 25;
+        titletext.marginBottom = 60;
+    return chart;
+        
+}}

@@ -3,7 +3,7 @@ import { useRecoilValue } from "recoil";
 import { Chart } from "../../../components";
 import { ButtonToolbar, Dropdown, IconButton, Whisper } from "rsuite";
 import { useState } from "react";
-import BarChartIcon from '@rsuite/icons/BarChart';
+import BarChartIcon from "@rsuite/icons/BarChart";
 
 export const DrillState = (drillState) => {
   const darkMode = useRecoilValue(darkModeState);
@@ -32,9 +32,30 @@ export const DrillState = (drillState) => {
     return nestedDict;
   }
 
+  function WTWmapDATA(data) {
+    let new_data = {};
+  
+    (data).forEach(function (element) {
+      let obj={};
+      if (element.shift==='Day Shift') {
+        obj['rig']=element['rig'] + ' | ' + element['phase']
+        obj['day_pre_conn']=element['pre_conn']
+        obj['day_connection_time']=element['connection_time']
+        obj['day_post_conn']=element['post_conn']
+      } else {
+        obj['rig']=element['rig'] + ' | ' + element['phase']
+        obj['night_pre_conn']=element['pre_conn']
+        obj['night_connection_time']=element['connection_time']
+        obj['night_post_conn']=element['post_conn']
+      }
+      new_data[element['rig'] + ' | ' + element['phase']]=Object.assign({}, new_data[element['rig'] + ' | ' + element['phase']], obj);;
+  });
+  return Object.values(new_data);
+  }
+
   function filterByValue(array, value) {
-    return array.filter(obj => obj.rotary_system !== value);
-}
+    return array.filter((obj) => obj.rotary_system !== value);
+  }
 
   const handleItemClick = (itemKey) => {
     setSelectedItem(itemKey);
@@ -42,14 +63,19 @@ export const DrillState = (drillState) => {
 
   const renderIconButton = (props, ref) => {
     return (
-      <IconButton {...props} ref={ref} icon={<BarChartIcon />} color="green" appearance="primary" />
+      <IconButton
+        {...props}
+        ref={ref}
+        icon={<BarChartIcon />}
+        color="green"
+        appearance="primary"
+      />
     );
   };
 
   return (
     <div
-      className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 px-10"
-      style={{ height: 900, width: "100%" }}
+      className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 px-10 h-full"
     >
       <div className="flex justify-end">
         <div className="mt-5 mr-1">
@@ -92,7 +118,7 @@ export const DrillState = (drillState) => {
       )}
       {selectedItem === "2" && (
         <Chart
-          id="chart1"
+          id="chart"
           chartData={createNestedDict(
             drillState["drillState"]["per_well"],
             "well"
@@ -110,7 +136,7 @@ export const DrillState = (drillState) => {
       )}
       {selectedItem === "3" && (
         <Chart
-          id="chart2"
+          id="chart"
           chartData={createNestedDict(
             drillState["drillState"]["per_contractor"],
             "contractor"
@@ -128,9 +154,9 @@ export const DrillState = (drillState) => {
       )}
       {selectedItem === "4" && (
         <Chart
-          id="chart2"
+          id="chart"
           chartData={createNestedDict(
-            filterByValue(drillState["drillState"]["per_rig"],'kelly'),
+            filterByValue(drillState["drillState"]["per_rig"], "kelly"),
             "rig"
           )}
           title="Drilling Connection Time Average Per Rig (Top Drive)"
@@ -146,9 +172,9 @@ export const DrillState = (drillState) => {
       )}
       {selectedItem === "5" && (
         <Chart
-          id="chart2"
+          id="chart"
           chartData={createNestedDict(
-            filterByValue(drillState["drillState"]["per_rig"],'top_drive'),
+            filterByValue(drillState["drillState"]["per_rig"], "top_drive"),
             "rig"
           )}
           title="Drilling Connection Time Average Per Rig (Kelly)"
@@ -162,6 +188,18 @@ export const DrillState = (drillState) => {
           className="h-160"
         />
       )}
+      <div className="my-3">
+        <Chart
+          id="chart1"
+          chartData={WTWmapDATA(drillState["drillState"]["WTW_shift"])}
+          title="Drilling Connection Time Average Per Rig (Kelly)"
+          c_options={{
+            category_axis: 'rig',
+          }}
+          chartType="WTW_shift"
+          className="h-160"
+        />
+      </div>
       <div className="grid grid-cols-1 grid-rows-2 gap-4"></div>
     </div>
   );
