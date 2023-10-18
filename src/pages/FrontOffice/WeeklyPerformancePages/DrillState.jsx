@@ -242,7 +242,7 @@ export const DrillState = (drillState) => {
           <Chart
             id="chart1"
             chartData={WTWmapDATA(drillState["drillState"]["WTW_shift"])}
-            title="Drilling Connection Time Average Per Rig (Kelly)"
+            title="Weight To Weight Time per Shift"
             c_options={{
               category_axis: "rig",
             }}
@@ -257,7 +257,7 @@ export const DrillState = (drillState) => {
               drillState["drillState"]["WTW_rig"],
               "rig"
             )}
-            title="Drilling Connection Time Average Per Rig (Kelly)"
+            title="Weight To Weight Time per Rig"
             c_options={{
               category_axis: "rig",
             }}
@@ -272,7 +272,7 @@ export const DrillState = (drillState) => {
               drillState["drillState"]["WTW_trip"],
               "stand"
             )}
-            title="Drilling Connection Time Average Per Rig (Kelly)"
+            title="Weight To Weight Time per Trip"
             c_options={{
               category_axis: "stand",
             }}
