@@ -8,6 +8,7 @@ import BarChartIcon from "@rsuite/icons/BarChart";
 export const DrillState = (drillState) => {
   const darkMode = useRecoilValue(darkModeState);
   const [selectedItem, setSelectedItem] = useState("1");
+  const [selectedItem2, setSelectedItem2] = useState("1");
 
   function createNestedDict(originalData, type) {
     const nestedDict = {};
@@ -34,23 +35,55 @@ export const DrillState = (drillState) => {
 
   function WTWmapDATA(data) {
     let new_data = {};
-  
-    (data).forEach(function (element) {
-      let obj={};
-      if (element.shift==='Day Shift') {
-        obj['rig']=element['rig'] + ' | ' + element['phase']
-        obj['day_pre_conn']=element['pre_conn']
-        obj['day_connection_time']=element['connection_time']
-        obj['day_post_conn']=element['post_conn']
+
+    data.forEach(function (element) {
+      let obj = {};
+      if (element.shift === "Day Shift") {
+        obj["rig"] = element["rig"] + " | " + element["phase"];
+        obj["day_pre_conn"] = element["pre_conn"];
+        obj["day_connection_time"] = element["connection_time"];
+        obj["day_post_conn"] = element["post_conn"];
       } else {
-        obj['rig']=element['rig'] + ' | ' + element['phase']
-        obj['night_pre_conn']=element['pre_conn']
-        obj['night_connection_time']=element['connection_time']
-        obj['night_post_conn']=element['post_conn']
+        obj["rig"] = element["rig"] + " | " + element["phase"];
+        obj["night_pre_conn"] = element["pre_conn"];
+        obj["night_connection_time"] = element["connection_time"];
+        obj["night_post_conn"] = element["post_conn"];
       }
-      new_data[element['rig'] + ' | ' + element['phase']]=Object.assign({}, new_data[element['rig'] + ' | ' + element['phase']], obj);;
-  });
-  return Object.values(new_data);
+      new_data[element["rig"] + " | " + element["phase"]] = Object.assign(
+        {},
+        new_data[element["rig"] + " | " + element["phase"]],
+        obj
+      );
+    });
+    return Object.values(new_data);
+  }
+
+  function WTWtripANDrig(data, category_axis) {
+    if (category_axis == "rig") {
+      var data = data.map(function (d) {
+        return {
+          rig: d.rig + " | " + d.phase,
+          connection_time: d.connection_time,
+          post_conn: d.post_conn,
+          pre_conn: d.pre_conn,
+        };
+      });
+    }
+    if (category_axis == "stand") {
+      var dict = {};
+      var new_data = [];
+      data.forEach((value) => {
+        dict = {};
+        dict["stand"] = "Std#" + value["stand"];
+        dict["connection_time"] = value["connection_time"];
+        dict["post_conn"] = value["post_conn"];
+        dict["pre_conn"] = value["pre_conn"];
+        new_data.push(dict);
+      });
+      data = new_data;
+    }
+    console.log(Object.values(data));
+    return Object.values(data);
   }
 
   function filterByValue(array, value) {
@@ -59,6 +92,9 @@ export const DrillState = (drillState) => {
 
   const handleItemClick = (itemKey) => {
     setSelectedItem(itemKey);
+  };
+  const handleItemClick2 = (itemKey) => {
+    setSelectedItem2(itemKey);
   };
 
   const renderIconButton = (props, ref) => {
@@ -74,9 +110,7 @@ export const DrillState = (drillState) => {
   };
 
   return (
-    <div
-      className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 px-10 h-full"
-    >
+    <div className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 px-10 h-full">
       <div className="flex justify-end">
         <div className="mt-5 mr-1">
           <Dropdown renderToggle={renderIconButton} placement="leftStart">
@@ -189,16 +223,63 @@ export const DrillState = (drillState) => {
         />
       )}
       <div className="my-3">
-        <Chart
-          id="chart1"
-          chartData={WTWmapDATA(drillState["drillState"]["WTW_shift"])}
-          title="Drilling Connection Time Average Per Rig (Kelly)"
-          c_options={{
-            category_axis: 'rig',
-          }}
-          chartType="WTW_shift"
-          className="h-160"
-        />
+        <div className="flex justify-end">
+          <div className="mt-5 mr-1">
+            <Dropdown renderToggle={renderIconButton} placement="leftStart">
+              <Dropdown.Item eventKey="1" onSelect={handleItemClick2}>
+                Per Shift
+              </Dropdown.Item>
+              <Dropdown.Item eventKey="2" onSelect={handleItemClick2}>
+                Per Rig
+              </Dropdown.Item>
+              <Dropdown.Item eventKey="3" onSelect={handleItemClick2}>
+                Per Trip
+              </Dropdown.Item>
+            </Dropdown>
+          </div>
+        </div>
+        {selectedItem2 === "1" && (
+          <Chart
+            id="chart1"
+            chartData={WTWmapDATA(drillState["drillState"]["WTW_shift"])}
+            title="Drilling Connection Time Average Per Rig (Kelly)"
+            c_options={{
+              category_axis: "rig",
+            }}
+            chartType="WTW_shift"
+            className="h-160"
+          />
+        )}
+        {selectedItem2 === "2" && (
+          <Chart
+            id="chart1"
+            chartData={WTWtripANDrig(
+              drillState["drillState"]["WTW_rig"],
+              "rig"
+            )}
+            title="Drilling Connection Time Average Per Rig (Kelly)"
+            c_options={{
+              category_axis: "rig",
+            }}
+            chartType="WTW_trip_rig"
+            className="h-160"
+          />
+        )}
+        {selectedItem2 === "3" && (
+          <Chart
+            id="chart1"
+            chartData={WTWtripANDrig(
+              drillState["drillState"]["WTW_trip"],
+              "stand"
+            )}
+            title="Drilling Connection Time Average Per Rig (Kelly)"
+            c_options={{
+              category_axis: "stand",
+            }}
+            chartType="WTW_trip_rig"
+            className="h-160"
+          />
+        )}
       </div>
       <div className="grid grid-cols-1 grid-rows-2 gap-4"></div>
     </div>

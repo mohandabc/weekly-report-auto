@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState} from 'react';
 import { useRecoilValue } from "recoil";
-import { BarChart, PieChart, ClusteredBarChart, StackedBarChart, DateAxes, PartionedBarChart, ScatterChart, CombinedChart, GroupedBarChart, WTW_shift } from './charts';
+import { BarChart, PieChart, ClusteredBarChart, StackedBarChart, DateAxes, PartionedBarChart, ScatterChart, CombinedChart, GroupedBarChart, WTW_shift, WTW_trip_rig } from './charts';
 import { darkModeState } from "../../shared/globalState";
 import gear from '../../assets/gear.svg';
 
@@ -58,6 +58,9 @@ export const Chart = ({title, id, chartData, chartType, className="h-120", c_opt
     }
     if(type === "WTW_shift"){
       chart = new WTW_shift(chartData, divID, title, options).chart; 
+    }
+    if(type === "WTW_trip_rig"){
+      chart = new WTW_trip_rig(chartData, divID, title, options).chart; 
     }
   });
 

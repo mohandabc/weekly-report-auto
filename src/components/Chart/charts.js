@@ -1350,3 +1350,91 @@ export class WTW_shift extends Chart
     return chart;
         
 }}
+
+export class WTW_trip_rig extends Chart
+{
+    buildChart(data, container, title, options){
+        var chart = am4core.create(container, am4charts.XYChart);
+        chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+        chart.data = data;
+
+        chart.colors.step = 2;
+        chart.padding(30, 30, 10, 30);
+        chart.legend = new am4charts.Legend();
+
+        var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+        categoryAxis.dataFields.category = options.category_axis;
+        categoryAxis.renderer.grid.template.location = 0;
+        categoryAxis.renderer.minGridDistance = 20;
+        categoryAxis.renderer.labels.template.fontWeight = "bold";
+
+        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.min = 0;
+        valueAxis.strictMinMax = true;
+        valueAxis.calculateTotals = true;
+        valueAxis.renderer.minWidth = 50;
+        valueAxis.extraMax = 0.1;
+        valueAxis.title.text = "Minute";
+
+        var series1 = chart.series.push(new am4charts.ColumnSeries());
+        series1.columns.template.width = am4core.percent(80);
+        series1.name = "Weight To Slips";
+        series1.dataFields.categoryX = options.category_axis;
+        series1.dataFields.valueY = "pre_conn";
+        series1.fill = am4core.color("#38425B");
+        series1.dataItems.template.locations.categoryX = 0.5;
+        series1.stacked = true;
+        series1.tooltip.pointerOrientation = "vertical";
+
+        var bullet1 = series1.bullets.push(new am4charts.LabelBullet());
+        bullet1.interactionsEnabled = false;
+        bullet1.label.fill = am4core.color("#fff");
+        bullet1.locationY = 0.5;
+        bullet1.label.text = "{valueY.formatNumber('#.00')}";
+        bullet1.label.fontWeight = "bold";
+
+        var series2 = chart.series.push(new am4charts.ColumnSeries());
+        series2.columns.template.width = am4core.percent(80);
+        series2.name = "Connection Time";
+        series2.dataFields.categoryX = options.category_axis;
+        series2.dataFields.valueY = "connection_time";
+        series2.dataItems.template.locations.categoryX = 0.5;
+        series2.stacked = true;
+        series2.fill = am4core.color("#E08771");
+        series2.tooltip.pointerOrientation = "vertical";
+
+        var bullet2 = series2.bullets.push(new am4charts.LabelBullet());
+        bullet2.interactionsEnabled = false;
+        bullet2.locationY = 0.5;
+        bullet2.label.fill = am4core.color("#fff");
+        bullet2.label.text = "{valueY.formatNumber('#.00')}";
+        bullet2.label.fontWeight = "bold";
+
+        var series3 = chart.series.push(new am4charts.ColumnSeries());
+        series3.columns.template.width = am4core.percent(80);
+        series3.name = "Slips To Weight";
+        series3.dataFields.categoryX = options.category_axis;
+        series3.dataFields.valueY = "post_conn";
+        series3.dataItems.template.locations.categoryX = 0.5;
+        series3.stacked = true;
+        series3.tooltip.pointerOrientation = "vertical";
+        series3.fill = am4core.color("#869880");
+
+        var bullet3 = series3.bullets.push(new am4charts.LabelBullet());
+        bullet3.interactionsEnabled = false;
+        bullet3.label.text = "{valueY.formatNumber('#.00')}";
+        bullet3.locationY = 0.5;
+        bullet3.label.fill = am4core.color("#fff");
+        bullet3.label.fontWeight = "bold";
+
+        chart.scrollbarX = new am4core.Scrollbar();
+        chart.scrollbarY = new am4core.Scrollbar();
+        chart.exporting.menu = new am4core.ExportMenu();
+
+        let titles = chart.titles.create();
+        titles.text = title;
+        titles.fontSize = 25;
+        titles.marginBottom = 60;
+    }
+}
