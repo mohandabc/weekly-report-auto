@@ -1438,3 +1438,67 @@ export class WTW_trip_rig extends Chart
         titles.marginBottom = 60;
     }
 }
+export class Monitored_vs_Drilled extends Chart
+{
+    buildChart(data, container, title){
+
+        var chart = am4core.create(container, am4charts.XYChart);
+        chart.exporting.menu = new am4core.ExportMenu();
+        // Add percent sign to all numbers
+        chart.numberFormatter.numberFormat = "#.#";
+        
+        // Add data
+        let sorted_data = data.sort((a, b) => (a.meters_drilled < b.meters_drilled) ? 1 : ((b.meters_drilled < a.meters_drilled) ? -1 : 0))
+        console.log(sorted_data)
+        chart.data = sorted_data
+
+        // Create axes
+        var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+        categoryAxis.dataFields.category = "name";
+        categoryAxis.renderer.grid.template.location = 0;
+        categoryAxis.renderer.minGridDistance = 30;
+
+        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.title.text = "Meters";
+        valueAxis.title.fontWeight = 800;
+        valueAxis.min = 0
+        valueAxis.extraMax = 0.1;
+
+        // Create series
+        var series = chart.series.push(new am4charts.ColumnSeries());
+        series.dataFields.valueY = "meters_drilled";
+        series.dataFields.categoryX = "name";
+        series.name = "Meters Drilled ";
+        series.fill = "#004C99"
+
+        var series2 = chart.series.push(new am4charts.ColumnSeries());
+        series2.dataFields.valueY = "meters_monitored";
+        series2.dataFields.categoryX = "name";
+        series2.name = "Meters Monitored";
+        series2.fill = "#CC6600"
+
+        let valueLabel = series.bullets.push(new am4charts.LabelBullet());
+        valueLabel.label.text = "[bold]{meters_drilled} [normal](100%)";
+        valueLabel.label.fill = "#FFF"
+        valueLabel.locationY = 0.5;
+
+        let valueLabe2 = series2.bullets.push(new am4charts.LabelBullet());
+        valueLabe2.label.text = "{meters_monitored}";
+        valueLabe2.label.fill = "#FFF"
+        valueLabe2.locationY = 0.5;
+        valueLabe2.label.adapter.add("text", function(text) {
+            return '[bold]' + chart.data[0]['meters_monitored'] + "[normal] (" + Math.floor(chart.data[0]['meters_monitored']/chart.data[0]['meters_drilled'] * 100) + "%)"
+        });
+
+
+        let titles = chart.titles.create();
+        titles.text = title;
+        titles.fontSize = 25;
+        titles.marginBottom = 60;
+
+        chart.legend = new am4charts.Legend()
+        chart.legend.position = 'bottom'
+        chart.legend.paddingBottom = 20
+        chart.legend.labels.template.maxWidth = 95
+    }
+}
