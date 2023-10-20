@@ -1508,7 +1508,8 @@ export class Monitored_vs_Drilled extends Chart
 export class Monitored_vs_Drilled_Rig extends Chart
 {
     buildChart(data, container, title, options){
-        var _NPT_details_grouped = [];
+        // # I should write the query that receives this data and inject it in options
+        var _NPT_details_grouped = []; 
 
         var chart = am4core.create(container, am4charts.XYChart);
         chart.responsive.enabled = true;
@@ -1543,7 +1544,6 @@ export class Monitored_vs_Drilled_Rig extends Chart
                 rangeLabel.fontSize = 16;
 
                 label.rotation = -35;
-                // label.dy = 1;
                 label.fontSize = 14;
                 label.horizontalCenter = "right";
                 label.verticalCenter = "left";
@@ -1553,7 +1553,6 @@ export class Monitored_vs_Drilled_Rig extends Chart
                 rangeLabel.fontSize = 16;
 
                 label.rotation = 0;
-                // label.dy = 1;
                 label.fontSize = 16;
                 label.horizontalCenter = "middle";
                 label.verticalCenter = "top";
@@ -1591,7 +1590,7 @@ export class Monitored_vs_Drilled_Rig extends Chart
         if (title=="NPT Vs PT Per Well") columnSeries_2.columns.template.adapter.add('tooltipHTML', function(html, target) {
             var data = target.tooltipDataItem.dataContext;
             Object.keys(_NPT_details_grouped).forEach(function (well) {
-            if (data.realName == well ) {
+                if (data.realName == well ) {
                 var templateHTML = 
                 '<table style="border-collapse: collapse; width: 280px;" border="1">\n'+
                 '<tr>\n'+
@@ -1623,7 +1622,6 @@ export class Monitored_vs_Drilled_Rig extends Chart
         chart.legend.position = 'top'
         chart.legend.paddingBottom = 20
         chart.legend.labels.template.maxWidth = 95
-        // columnSeries_2.stacked = true;
         var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
         valueAxis2.renderer.opposite = true;
         valueAxis2.syncWithAxis = valueAxis;
