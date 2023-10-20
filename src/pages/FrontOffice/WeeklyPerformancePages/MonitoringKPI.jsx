@@ -92,8 +92,22 @@ export const MonitoringKPI = (monitoringKPI) => {
             </Dropdown>
           </div>
         </div>
+        {selectedItem === "1" && (
+        <Chart
+          id="chart"
+          chartData={monitoringKPI["monitoringKPI"]["drilled_vs_monitored"]}
+          title="Total Drilled Meters Vs Total Monitored Meters"
+          c_options={{
+            unit: "Minute",
+            Benchmark_3_passed: "2",
+            Benchmark_5_passed: "3",
+            show_benchmark: "No",
+          }}
+          chartType="Monitored_vs_Drilled_Rig"
+          className="h-160"
+        />
+      )}
         {selectedItem === "2" && (
-          
         <MaterialReactTable
         columns={monitoredVSdrilledColumns}
         data={monitoringKPI["monitoringKPI"]["drilled_vs_monitored_perRig"]}
