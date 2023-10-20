@@ -206,7 +206,7 @@ export const WeeklyPerformanceInputScreen = ({
       setDrillState(data['drill_state_CT'] || {});
       setTrippingSpeed(data["events_data"] || {});
       setMonitoringKPI(data["monitoring_kpi"] || {});
-      setNPTAnalysis(data["events_data"] || {});
+      setNPTAnalysis(data["NPT_analysis"] || {});
     });
   };
 

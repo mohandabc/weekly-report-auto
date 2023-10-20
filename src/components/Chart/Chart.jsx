@@ -14,6 +14,7 @@ import {
   WTW_trip_rig,
   Monitored_vs_Drilled,
   Monitored_vs_Drilled_Rig,
+  NPT,
 } from "./charts";
 import { darkModeState } from "../../shared/globalState";
 import gear from "../../assets/gear.svg";
@@ -87,6 +88,10 @@ export const Chart = ({
     }
     if (type === "Monitored_vs_Drilled_Rig") {
       chart = new Monitored_vs_Drilled_Rig(chartData, divID, title, options)
+        .chart;
+    }
+    if (type === "NPT") {
+      chart = new NPT(chartData, divID, title, options)
         .chart;
     }
   });

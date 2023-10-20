@@ -1748,3 +1748,118 @@ export class Monitored_vs_Drilled_Rig extends Chart
         });
     }
 }
+export class NPT extends Chart
+{
+    buildChart(data, container, title, options){
+        var chart = am4core.create(container, am4charts.XYChart);
+            chart.exporting.menu = new am4core.ExportMenu();
+            chart.data = data;
+            chart.numberFormatter.numberFormat = "#.##";
+            var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+            categoryAxis.dataFields.category = options.cat;
+            categoryAxis.renderer.grid.template.location = 0;
+            categoryAxis.renderer.minGridDistance = 30;
+            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            valueAxis.min = 0;
+            valueAxis.extraMax = 0.1;
+            valueAxis.title.text = "Days"
+            let label = categoryAxis.renderer.labels.template;
+            label.maxWidth = 300;
+            label.fontSize = 14;
+            categoryAxis.events.on("sizechanged", function (ev) {
+                let axis = ev.target;
+                var cellWidth = axis.pixelWidth / (axis.endIndex - axis.startIndex);
+                label = axis.renderer.labels.template;
+                var rangeTemplate = axis.axisRanges.template;
+                var rangeLabel = rangeTemplate.label;
+                if (cellWidth < label.maxWidth) {
+                    rangeLabel.rotation = -45
+                    rangeLabel.dy = 50;
+                    rangeLabel.fontSize = 17;
+
+                    label.dy = 1;
+                    label.fontSize = 14;
+                    label.rotation = -45;
+                    label.horizontalCenter = "right";
+                    label.verticalCenter = "left";
+                } else {
+                    label.fontSize = 14;
+                    rangeLabel.rotation = 0
+                    rangeLabel.dy = 40;
+                    label.dy = 25;
+
+                    label.rotation = 0;
+                    label.horizontalCenter = "middle";
+                    label.verticalCenter = "top";
+                }
+            });
+
+            function createSeries(field, name, cat) {
+                var series = chart.series.push(new am4charts.ColumnSeries());
+                series.name = name;
+                series.dataFields.valueY = field;
+                series.dataFields.categoryX = cat;
+                series.sequencedInterpolation = true;
+
+                series.stacked = true;
+                series.columns.template.width = am4core.percent(80);
+                series.columns.template.tooltipText = "[bold]{name}[/]\n[font-size:16px]{categoryX}: [bold][font-size:16px]{valueY}\n[bold][font-size:16px]";
+                var labelBullet = series.bullets.push(new am4charts.LabelBullet());
+                labelBullet.label.text = "{valueY} ";
+                labelBullet.locationY = 0.5;
+                if (title=="NPT Vs PT Per Weeks"){
+                    labelBullet.label.adapter.add("text", function(text, target) {
+                        var dataItem = target.dataItem;
+                        chart.data.forEach(function (obj) {
+                            if (obj.week==dataItem.categoryX&&obj.pt==dataItem.valueY) {
+                                text = "[bold]" + parseFloat(obj.pt).toFixed(1) + " [normal](" + parseFloat((obj.pt/(obj.pt+obj.npt)) * 100).toFixed(1) + "%)"
+                            } else if (obj.week==dataItem.categoryX&&obj.npt==dataItem.valueY){
+                                text = "[bold]" + parseFloat(obj.npt).toFixed(1) + " [normal](" + parseFloat((obj.npt/(obj.pt+obj.npt)) * 100).toFixed(1) + "%)"
+                            }
+                        });   
+                        return text
+                    });
+                }
+                if (title=="NPT Per SONATRACH Departement"){
+                    var tot = 0;
+                    chart.data.forEach(function (obj) {
+                        tot += obj.npt;
+                    });  
+                    labelBullet.label.adapter.add("text", function(text, target) {
+                        var dataItem = target.dataItem;
+                        chart.data.forEach(function (obj) {
+                            if (obj.npt_comapny==dataItem.categoryX&&obj.npt==dataItem.valueY)
+                                text = "[bold]" + parseFloat(obj.npt).toFixed(1) + " [normal](" + parseFloat((obj.npt/tot) * 100).toFixed(1) + "%)";
+                        });   
+                        return text
+                    });
+                }
+
+                if (name == 'PT') {
+                    series.stroke = am4core.color('#FFEAC9');
+                    series.fill = am4core.color('#66DE93');
+                } else {
+                    series.stroke = am4core.color('#FFEAC9');
+                    series.fill = am4core.color('#FF616D');
+                }
+                return series;
+            }
+            
+            if (options.npt_only === false){
+                var pt_serie = createSeries("pt", "PT", options.cat);
+            }
+            var npt_serie = createSeries("npt", "NPT", options.cat);
+
+            let titles = chart.titles.create();
+            titles.text = title;
+            titles.fontSize = 25;
+            titles.marginBottom = 60;
+
+            chart.exporting.events.on("exportstarted", function (ev) {
+                titles.disabled = false;
+                titles.parent.invalidate();
+            });
+            chart.legend = new am4charts.Legend();
+            categoryAxis.renderer.labels.template.paddingBottom = 40
+    }
+}
