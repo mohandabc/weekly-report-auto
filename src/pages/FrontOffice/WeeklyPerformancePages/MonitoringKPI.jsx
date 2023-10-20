@@ -8,7 +8,7 @@ import MaterialReactTable from "material-react-table";
 
 export const MonitoringKPI = (monitoringKPI) => {
   const darkMode = useRecoilValue(darkModeState);
-  const [selectedItem, setSelectedItem] = useState("3");
+  const [selectedItem, setSelectedItem] = useState("1");
   console.log(monitoringKPI);
 
   const handleItemClick = (itemKey) => {
@@ -71,6 +71,18 @@ export const MonitoringKPI = (monitoringKPI) => {
       muiTableBodyCellProps: { align: "center" },
     },
   ];
+
+function createNestedDict(array) {
+  let result = {};
+  for (let element of array) {
+    let rig = element.rig;
+    let well = element.well;
+    result[rig] = result[rig] || {};
+    result[rig][well] = { meters_drilled: element.meters_drilled, meters_monitored: element.meters_monitored };
+  }
+  return result;
+}
+
   return (
     <div
       className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto px-10"
@@ -95,13 +107,16 @@ export const MonitoringKPI = (monitoringKPI) => {
         {selectedItem === "1" && (
         <Chart
           id="chart"
-          chartData={monitoringKPI["monitoringKPI"]["drilled_vs_monitored"]}
-          title="Total Drilled Meters Vs Total Monitored Meters"
+          chartData={createNestedDict(monitoringKPI["monitoringKPI"]["drilled_vs_monitored_perRig"])}
+          title="Meters Drilled Vs Monitored Per Rig"
           c_options={{
-            unit: "Minute",
-            Benchmark_3_passed: "2",
-            Benchmark_5_passed: "3",
-            show_benchmark: "No",
+            unit: "Meters",
+            serie1_name: "Meters Monitored",
+            serie2_name: "Meters Drilled",
+            provide_data1: "meters_drilled",
+            provide_data2: "meters_monitored",
+            serie1_color: "#004C99",
+            serie2_color: "#CC6600",
           }}
           chartType="Monitored_vs_Drilled_Rig"
           className="h-160"
