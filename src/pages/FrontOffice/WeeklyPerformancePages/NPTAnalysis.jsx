@@ -11,7 +11,7 @@ export const NPTAnalysis = (NPTAnalysis) => {
   const handleItemClick = (itemKey) => {
     setSelectedItem(itemKey);
   };
-
+  console.log(NPT_details_grouped(NPTAnalysis["nptAnalysis"]["npt_total"]))
   const renderIconButton = (props, ref) => {
     return (
       <IconButton
@@ -76,6 +76,14 @@ function well_npt(data) {
   return result;
 }
 
+function NPT_details_grouped(data) {
+  return data.reduce(function (r, a) {
+    r[a.well] = r[a.well] || [];
+    r[a.well].push(a);
+    return r;
+  }, Object.create(null));
+};
+
   return (
     <div
       className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto px-10"
@@ -120,6 +128,7 @@ function well_npt(data) {
               provide_data2: "npt",
               serie1_color: "#66DE93",
               serie2_color: "#FF616D",
+              _NPT_details_grouped: NPT_details_grouped(NPTAnalysis["nptAnalysis"]["npt_details"])
             }}
             chartType="Monitored_vs_Drilled_Rig"
             className="h-160"

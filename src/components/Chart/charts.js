@@ -1509,7 +1509,7 @@ export class Monitored_vs_Drilled_Rig extends Chart
 {
     buildChart(data, container, title, options){
         // # I should write the query that receives this data and inject it in options
-        var _NPT_details_grouped = []; 
+        var _NPT_details_grouped = options._NPT_details_grouped; 
 
         var chart = am4core.create(container, am4charts.XYChart);
         chart.responsive.enabled = true;
@@ -1592,7 +1592,7 @@ export class Monitored_vs_Drilled_Rig extends Chart
             Object.keys(_NPT_details_grouped).forEach(function (well) {
                 if (data.realName == well ) {
                 var templateHTML = 
-                '<table style="border-collapse: collapse; width: 280px;" border="1">\n'+
+                '<table style="border-collapse: collapse; width: 280px;" border="30" bordercolor="white">\n'+
                 '<tr>\n'+
                 '<td style="width: 100%; text-align: center;" colspan="2"><span style="color: #000000;">{provider} -{realName}: <b>{valueY}</b></span></td>\n'+
                 '</tr>\n'+
