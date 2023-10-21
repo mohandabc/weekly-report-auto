@@ -1,7 +1,7 @@
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import { nest } from 'd3-collection';
-
+import "./table.css";
 class Chart 
 {
     /**
@@ -1597,7 +1597,7 @@ export class Monitored_vs_Drilled_Rig extends Chart
                 '<td style="width: 100%; text-align: center;" colspan="2"><span style="color: #000000;">{provider} -{realName}: <b>{valueY}</b></span></td>\n'+
                 '</tr>\n'+
                 '<tr>\n'+
-                '<td style="width: 80%; text-align: left; font-weight: bold;"><span style="color: #000000;">NPT Detail</td>\n'+
+                '<td style="width: 80%; text-align: center; font-weight: bold;"><span style="color: #000000;">NPT Detail</td>\n'+
                 '<td style="width: 20%; text-align: center; font-weight: bold;"><span style="color: #000000;">NPT</td>\n'+
                 '</tr>\n'+
                 '<tbody>\n';
@@ -1605,7 +1605,7 @@ export class Monitored_vs_Drilled_Rig extends Chart
                 if (el.name!==null&&el.npt!==null)
                 templateHTML += 
                 '<tr>\n'+
-                '<td style="width: 80%; text-align: left;"><span style="color: #ffffff;">\n'+el.name+'</span></td>\n'+
+                '<td style="width: 80%; text-align: center;"><span style="color: #ffffff;">\n'+el.name+'</span></td>\n'+
                 '<td style="width: 20%; text-align: center;"><span style="color: #ffffff;">\n'+el.npt+'</span></td>\n'+
                 '</tr>\n';
                 });
