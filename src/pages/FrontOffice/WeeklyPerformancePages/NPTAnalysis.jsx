@@ -11,7 +11,6 @@ export const NPTAnalysis = (NPTAnalysis) => {
   const handleItemClick = (itemKey) => {
     setSelectedItem(itemKey);
   };
-  console.log(NPT_details_grouped(NPTAnalysis["nptAnalysis"]["npt_total"]))
   const renderIconButton = (props, ref) => {
     return (
       <IconButton
@@ -48,7 +47,6 @@ export const NPTAnalysis = (NPTAnalysis) => {
       };
       output.push(row);
     }
-    console.log(output);
     return output;
   }
 
