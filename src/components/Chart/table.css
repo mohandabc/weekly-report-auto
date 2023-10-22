@@ -1,4 +1,3 @@
-td, th {
-    border: 1px solid #000;
-    /* border-width border-style border-color */
+#npt-details td, #npt-details th {
+    border: 1px solid #ff0000;
 }
