@@ -82,6 +82,26 @@ function NPT_details_grouped(data) {
   }, Object.create(null));
 };
 
+function groupByField(data) {
+  var grouped = {};
+  for (var i = 0; i < data.length; i++) {
+    var d = data[i];
+    var field = d.field;
+    if (!grouped.hasOwnProperty(field)) {
+      grouped[field] = {npt: 0, pt: 0};
+    }
+    grouped[field].npt += d.npt;
+    grouped[field].pt += d.pt;
+  }
+  var result = [];
+  for (var key in grouped) {
+    var row = {rig: key, npt: grouped[key].npt, pt: grouped[key].pt};
+    result.push(row);
+  }
+  return result;
+}
+
+
   return (
     <div
       className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto px-10"
@@ -97,13 +117,16 @@ function NPT_details_grouped(data) {
               <Dropdown.Item eventKey="2" onSelect={handleItemClick}>
                 Per Well
               </Dropdown.Item>
+              <Dropdown.Item eventKey="3" onSelect={handleItemClick}>
+                Per Field
+              </Dropdown.Item>
             </Dropdown>
           </div>
         </div>
         {selectedItem === "1" && (
           <Chart
             id="chart"
-            chartData={rig_npt(NPTAnalysis["nptAnalysis"]["npt_total"])}
+            chartData={rig_npt(NPTAnalysis["nptAnalysis"]["npt_total"] || 'loading')}
             title="NPT Vs PT Per Rig"
             c_options={{
               cat: "rig",
@@ -129,6 +152,19 @@ function NPT_details_grouped(data) {
               _NPT_details_grouped: NPT_details_grouped(NPTAnalysis["nptAnalysis"]["npt_details"])
             }}
             chartType="Monitored_vs_Drilled_Rig"
+            className="h-160"
+          />
+        )}
+        {selectedItem === "3" && (
+          <Chart
+            id="chart"
+            chartData={groupByField(NPTAnalysis["nptAnalysis"]["npt_total"])}
+            title="NPT Vs PT Per Field"
+            c_options={{
+              cat: "rig",
+              npt_only: false,
+            }}
+            chartType="NPT"
             className="h-160"
           />
         )}
