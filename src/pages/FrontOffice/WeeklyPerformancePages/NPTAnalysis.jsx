@@ -120,6 +120,9 @@ function groupByField(data) {
               <Dropdown.Item eventKey="3" onSelect={handleItemClick}>
                 Per Field
               </Dropdown.Item>
+              <Dropdown.Item eventKey="4" onSelect={handleItemClick}>
+                Per Category
+              </Dropdown.Item>
             </Dropdown>
           </div>
         </div>
@@ -165,6 +168,18 @@ function groupByField(data) {
               npt_only: false,
             }}
             chartType="NPT"
+            className="h-160"
+          />
+        )}
+        {selectedItem === "4" && (
+          <Chart
+            id="chart"
+            chartData={NPTAnalysis["nptAnalysis"]["npt_per_category_result"]}
+            title="NPT Vs PT Per Category"
+            c_options={{
+              startAngle:0
+            }}
+            chartType="SemiCircle"
             className="h-160"
           />
         )}

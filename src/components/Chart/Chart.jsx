@@ -15,6 +15,7 @@ import {
   Monitored_vs_Drilled,
   Monitored_vs_Drilled_Rig,
   NPT,
+  SemiCircle,
 } from "./charts";
 import { darkModeState } from "../../shared/globalState";
 import gear from "../../assets/gear.svg";
@@ -88,6 +89,10 @@ export const Chart = ({
     }
     if (type === "Monitored_vs_Drilled_Rig") {
       chart = new Monitored_vs_Drilled_Rig(chartData, divID, title, options)
+        .chart;
+    }
+    if (type === "SemiCircle") {
+      chart = new SemiCircle(chartData, divID, title, options)
         .chart;
     }
     if (type === "NPT") {

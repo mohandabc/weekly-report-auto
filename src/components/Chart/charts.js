@@ -1746,6 +1746,7 @@ export class Monitored_vs_Drilled_Rig extends Chart
         });
     }
 }
+
 export class NPT extends Chart
 {
     buildChart(data, container, title, options){
@@ -1859,5 +1860,71 @@ export class NPT extends Chart
             });
             chart.legend = new am4charts.Legend();
             categoryAxis.renderer.labels.template.paddingBottom = 40
+    }
+}
+
+export class SemiCircle extends Chart
+{
+    buildChart(data, container, title, options){
+            var chart = am4core.create(container, am4charts.PieChart);
+            chart.hiddenState.properties.opacity = 0;
+            chart.radius = am4core.percent(60);
+            chart.innerRadius = am4core.percent(30);
+            chart.startAngle = options.startAngle;
+            chart.endAngle = 360;
+            chart.responsive.enabled = true;
+            chart.data = data;
+            var series = chart.series.push(new am4charts.PieSeries());
+            series.dataFields.value = 'value';
+            series.dataFields.category = 'name';
+            series.slices.template.cornerRadius = 10;
+            series.slices.template.innerCornerRadius = 7;
+            series.slices.template.draggable = true;
+            series.slices.template.inert = true;
+
+            series.slices.template.adapter.add('fill', function (fill, target) {
+                var name = target.dataItem.properties.category;
+                switch (name) {
+
+                    case 'PT':
+                        return am4core.color('#1BBD4E');
+                        break;
+                    case 'NPT':
+                        return am4core.color('#AC3515');
+                        break;
+                    case 'NPT Contractor':
+                        return am4core.color('#68FECA');
+                        break;
+                    case 'NPT Sonatrach':
+                        return am4core.color('#EC9D6A');
+                        break;
+                    case 'NPT Service Companies':
+                        return am4core.color('#8DABDD');
+                        break;
+                    default:
+                        return am4core.color('#8DABDD');
+
+                }
+            });
+
+            series.ticks.template.disabled = true;
+            series.alignLabels = false;
+            series.labels.template.text = '[bold]{value} days';
+            series.labels.template.radius = am4core.percent(-25);
+            series.labels.template.padding(0, 0, 0, 0);
+            series.labels.template.fill = am4core.color('white');
+            series.labels.template.disabled = false; // false: visible
+            series.hiddenState.properties.startAngle = 90;
+            series.hiddenState.properties.endAngle = 90;
+            chart.legend = new am4charts.Legend();
+            let titles = chart.titles.create();
+            titles.text = title;
+            titles.fontSize = 25;
+            titles.marginBottom = 60;
+            chart.exporting.menu = new am4core.ExportMenu();
+            chart.exporting.events.on("exportstarted", function (ev) {
+                titles.disabled = false;
+                titles.parent.invalidate();
+            });
     }
 }
