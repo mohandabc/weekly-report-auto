@@ -11,7 +11,7 @@ export const NPTAnalysis = (NPTAnalysis) => {
   const handleItemClick = (itemKey) => {
     setSelectedItem(itemKey);
   };
-  console.log(NPTAnalysis["nptAnalysis"]["npt_per_department"])
+  console.log(NPTAnalysis["nptAnalysis"]["npt_per_weeks_result"])
   const renderIconButton = (props, ref) => {
     return (
       <IconButton
@@ -102,6 +102,22 @@ function groupByField(data) {
   return result;
 }
 
+function formatWeeks(data) {
+  var new_data = [];
+  for (var i = 0; i < data.length; i++) {
+    var value = data[i];
+    var dict = {};
+    if (value.week == 4) {
+      dict.week = "Current Week";
+    } else {
+      dict.week = "Prev Week#" + (4 - value.week);
+    }
+    dict.npt = value.npt;
+    dict.pt = value.pt;
+    new_data.push(dict);
+  }
+  return new_data;
+}
 
   return (
     <div
@@ -126,6 +142,15 @@ function groupByField(data) {
               </Dropdown.Item>
               <Dropdown.Item eventKey="5" onSelect={handleItemClick}>
                 Per Department
+              </Dropdown.Item>
+              <Dropdown.Item eventKey="6" onSelect={handleItemClick}>
+                xxxx
+              </Dropdown.Item>
+              <Dropdown.Item eventKey="7" onSelect={handleItemClick}>
+                xxxx
+              </Dropdown.Item>
+              <Dropdown.Item eventKey="8" onSelect={handleItemClick}>
+                Per Weeks
               </Dropdown.Item>
             </Dropdown>
           </div>
@@ -195,6 +220,19 @@ function groupByField(data) {
             c_options={{
               npt_only:true,
               cat:'npt_comapny'
+            }}
+            chartType="NPT"
+            className="h-160"
+          />
+        )}
+        {selectedItem === "8" && (
+          <Chart
+            id="chart"
+            chartData={formatWeeks(NPTAnalysis["nptAnalysis"]["npt_per_weeks_result"])}
+            title="NPT Vs PT Per Weeks"
+            c_options={{
+              npt_only:false,
+              cat:'week'
             }}
             chartType="NPT"
             className="h-160"
