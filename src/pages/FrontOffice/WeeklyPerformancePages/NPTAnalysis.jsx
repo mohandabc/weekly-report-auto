@@ -11,6 +11,7 @@ export const NPTAnalysis = (NPTAnalysis) => {
   const handleItemClick = (itemKey) => {
     setSelectedItem(itemKey);
   };
+  console.log(NPTAnalysis["nptAnalysis"]["npt_per_department"])
   const renderIconButton = (props, ref) => {
     return (
       <IconButton
@@ -123,6 +124,9 @@ function groupByField(data) {
               <Dropdown.Item eventKey="4" onSelect={handleItemClick}>
                 Per Category
               </Dropdown.Item>
+              <Dropdown.Item eventKey="5" onSelect={handleItemClick}>
+                Per Department
+              </Dropdown.Item>
             </Dropdown>
           </div>
         </div>
@@ -180,6 +184,19 @@ function groupByField(data) {
               startAngle:0
             }}
             chartType="SemiCircle"
+            className="h-160"
+          />
+        )}
+        {selectedItem === "5" && (
+          <Chart
+            id="chart"
+            chartData={NPTAnalysis["nptAnalysis"]["npt_per_department"]}
+            title="NPT Per SONATRACH Departement"
+            c_options={{
+              npt_only:true,
+              cat:'npt_comapny'
+            }}
+            chartType="NPT"
             className="h-160"
           />
         )}

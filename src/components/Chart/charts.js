@@ -1750,6 +1750,7 @@ export class Monitored_vs_Drilled_Rig extends Chart
 export class NPT extends Chart
 {
     buildChart(data, container, title, options){
+        console.log(data)
         var chart = am4core.create(container, am4charts.XYChart);
             chart.exporting.menu = new am4core.ExportMenu();
             chart.data = data;
