@@ -105,7 +105,7 @@ function groupByField(data) {
   return (
     <div
       className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto px-10"
-      style={{ height: 1260, width: "100%" }}
+      style={{ height: 900, width: "100%" }}
     >
       <div className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 px-10 h-full">
         <div className="flex justify-end">
