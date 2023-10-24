@@ -170,22 +170,25 @@ export const EventsKPIs = (eventsKPI) => {
   const renderIconButton = (props, ref) => {
     return (
       <IconButton
-        {...props}
-        ref={ref}
-        icon={<TableIcon />}
-        color="green"
-        appearance="primary"
-      />
+      {...props}
+      ref={ref}
+      icon={<TableIcon/>}
+      color="cyan"
+      appearance="primary"
+      size="sm"
+    />
     );
   };
 
   return (
     <div
-      className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto px-10"
-      style={{ height: 900, width: "100%" }}
+      className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto p-10"
+      style={{ height: 915, width: "100%" }}
     >
-      <div className="flex justify-end">
-        <div className="mt-5 mr-1">
+      <div className="sticky rounded-xl bg-stone-100 dark:bg-stone-400"
+      style={{ height: 840, width: "100%" }}>
+        <div className="flex justify-end">
+          <div className="mr-1.5 mt-1.5">
           <Dropdown renderToggle={renderIconButton} placement="leftStart">
             <Dropdown.Item eventKey="1" onSelect={handleItemClick}>
               Drilling Events
@@ -198,8 +201,8 @@ export const EventsKPIs = (eventsKPI) => {
       </div>
       {selectedItem === "1" && (
         <div>
-          <div className="flex justify-center items-center">
-            <span className="text-xl py-4">Drilling Events</span>
+          <div className="flex justify-center items-center mb-5">
+            <span className="text-xl">Drilling Events</span>
           </div>
           <div>
             <MaterialReactTable
@@ -272,8 +275,8 @@ export const EventsKPIs = (eventsKPI) => {
 
       {selectedItem === "2" && (
         <div>
-          <div className="flex justify-center items-center">
-            <span className="text-xl py-4">
+          <div className="flex justify-center items-center mb-5">
+            <span className="text-xl">
               Drilling Events That Caused NPT
             </span>
           </div>
@@ -343,6 +346,6 @@ export const EventsKPIs = (eventsKPI) => {
           />
         </div>
       )}
-    </div>
+    </div></div>
   );
 };

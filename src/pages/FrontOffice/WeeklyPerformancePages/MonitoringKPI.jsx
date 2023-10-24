@@ -18,12 +18,13 @@ export const MonitoringKPI = (monitoringKPI) => {
   const renderIconButton = (props, ref) => {
     return (
       <IconButton
-        {...props}
-        ref={ref}
-        icon={<BarChartIcon />}
-        color="green"
-        appearance="primary"
-      />
+      {...props}
+      ref={ref}
+      icon={<BarChartIcon />}
+      color="cyan"
+      appearance="primary"
+      size="sm"
+    />
     );
   };
 
@@ -85,12 +86,12 @@ function createNestedDict(array) {
 
   return (
     <div
-      className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto px-10"
-      style={{ height: 900, width: "100%" }}
+      className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto p-10"
+      style={{ height: 915, width: "100%" }}
     >
-      <div className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 px-10 h-full">
+      <div className="flex flex-row-reverse rounded-xl bg-stone-100 dark:bg-stone-400">
         <div className="flex justify-end">
-          <div className="mt-5 mr-1">
+          <div className="mr-1.5 mt-1.5">
             <Dropdown renderToggle={renderIconButton} placement="leftStart">
               <Dropdown.Item eventKey="1" onSelect={handleItemClick}>
                 Graph | Per Rig
@@ -120,6 +121,7 @@ function createNestedDict(array) {
           }}
           chartType="Monitored_vs_Drilled_Rig"
           className="h-160"
+          shadow={false}
         />
       )}
         {selectedItem === "2" && (
@@ -201,6 +203,7 @@ function createNestedDict(array) {
           }}
           chartType="Monitored_vs_Drilled"
           className="h-160"
+          shadow={false}
         />
       )}
       </div>

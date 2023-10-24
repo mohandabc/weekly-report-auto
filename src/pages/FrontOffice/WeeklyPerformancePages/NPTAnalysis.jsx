@@ -11,16 +11,16 @@ export const NPTAnalysis = (NPTAnalysis) => {
   const handleItemClick = (itemKey) => {
     setSelectedItem(itemKey);
   };
-  console.log(NPTAnalysis["nptAnalysis"]["npt_per_weeks_result"])
   const renderIconButton = (props, ref) => {
     return (
       <IconButton
-        {...props}
-        ref={ref}
-        icon={<BarChartIcon />}
-        color="green"
-        appearance="primary"
-      />
+      {...props}
+      ref={ref}
+      icon={<BarChartIcon />}
+      color="cyan"
+      appearance="primary"
+      size="sm"
+    />
     );
   };
 
@@ -101,7 +101,6 @@ function groupByField(data) {
 function total_npt_pt(npt_data) {
   let total_npt = npt_data.reduce((acc, item) => acc + item.npt, 0);
   let total_pt = npt_data.reduce((acc, item) => acc + item.pt, 0);
-  console.log([{name: 'NPT', value: total_npt}, {name: 'PT', value: total_pt}])
   return [{name: 'NPT', value: total_npt}, {name: 'PT', value: total_pt}];
 }
 
@@ -122,14 +121,50 @@ function formatWeeks(data) {
   return new_data;
 }
 
+function formatWeeks(data) {
+  var new_data = [];
+  for (var i = 0; i < data.length; i++) {
+    var value = data[i];
+    var dict = {};
+    if (value.week == 4) {
+      dict.week = "Current Week";
+    } else {
+      dict.week = "Prev Week#" + (4 - value.week);
+    }
+    dict.npt = value.npt;
+    dict.pt = value.pt;
+    new_data.push(dict);
+  }
+  return new_data;
+}
+
+function nestForage_devision(data) {
+ let nested = {};
+ for (let element of data) {
+   let category = element.npt_category;
+   let details = element.npt_details;
+   let npt = element.npt;
+   if (nested.hasOwnProperty(category)) {
+     if (nested[category].hasOwnProperty(details)) {
+     } else {
+       nested[category][details] = npt;
+     }
+   } else {
+     nested[category] = {};
+     nested[category][details] = npt;
+   }
+ }
+ return nested;
+}
+
   return (
     <div
-      className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto px-10"
-      style={{ height: 900, width: "100%" }}
+      className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto p-10"
+      style={{ height: 915, width: "100%" }}
     >
-      <div className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 px-10 h-full">
+      <div className="flex flex-row-reverse rounded-xl bg-stone-100 dark:bg-stone-400">
         <div className="flex justify-end">
-          <div className="mt-5 mr-1">
+          <div className="mr-1.5 mt-1.5">
             <Dropdown renderToggle={renderIconButton} placement="leftStart">
               <Dropdown.Item eventKey="1" onSelect={handleItemClick}>
                 Per Rig
@@ -147,7 +182,7 @@ function formatWeeks(data) {
                 Per Department
               </Dropdown.Item>
               <Dropdown.Item eventKey="6" onSelect={handleItemClick}>
-                xxxx
+                per Forage Division
               </Dropdown.Item>
               <Dropdown.Item eventKey="7" onSelect={handleItemClick}>
                 Total PT NPT
@@ -169,6 +204,7 @@ function formatWeeks(data) {
             }}
             chartType="NPT"
             className="h-160"
+            shadow={false}
           />
         )}
         {selectedItem === "2" && (
@@ -188,6 +224,7 @@ function formatWeeks(data) {
             }}
             chartType="Monitored_vs_Drilled_Rig"
             className="h-160"
+            shadow={false}
           />
         )}
         {selectedItem === "3" && (
@@ -201,6 +238,7 @@ function formatWeeks(data) {
             }}
             chartType="NPT"
             className="h-160"
+            shadow={false}
           />
         )}
         {selectedItem === "4" && (
@@ -213,6 +251,7 @@ function formatWeeks(data) {
             }}
             chartType="SemiCircle"
             className="h-160"
+            shadow={false}
           />
         )}
         {selectedItem === "5" && (
@@ -226,6 +265,21 @@ function formatWeeks(data) {
             }}
             chartType="NPT"
             className="h-160"
+            shadow={false}
+          />
+        )}
+        {selectedItem === "6" && (
+          <Chart
+            id="chart"
+            chartData={nestForage_devision(NPTAnalysis["nptAnalysis"]["npt_details_per_sh_department"])}
+            title="NPT Details of Forage Division"
+            c_options={{
+              npt_only:true,
+              cat:'npt_comapny'
+            }}
+            chartType="NPT_SH_GroupedBarChart"
+            className="h-160"
+            shadow={false}
           />
         )}
         {selectedItem === "7" && (
@@ -238,6 +292,7 @@ function formatWeeks(data) {
             }}
             chartType="SemiCircle"
             className="h-160"
+            shadow={false}
           />
         )}
         {selectedItem === "8" && (
@@ -251,6 +306,7 @@ function formatWeeks(data) {
             }}
             chartType="NPT"
             className="h-160"
+            shadow={false}
           />
         )}
       </div>

@@ -16,6 +16,7 @@ import {
   Monitored_vs_Drilled_Rig,
   NPT,
   SemiCircle,
+  NPT_SH_GroupedBarChart,
 } from "./charts";
 import { darkModeState } from "../../shared/globalState";
 import gear from "../../assets/gear.svg";
@@ -27,11 +28,11 @@ export const Chart = ({
   chartType,
   className = "h-120",
   c_options,
+  shadow = true
 }) => {
   const divID = id.toString();
   const [type, setType] = useState(chartType);
   const darkMode = useRecoilValue(darkModeState);
-
   const changeType = () => {
     const newType = type === "Pie" ? "Bar" : "Pie";
     setType(newType);
@@ -99,11 +100,15 @@ export const Chart = ({
       chart = new NPT(chartData, divID, title, options)
         .chart;
     }
+    if (type === "NPT_SH_GroupedBarChart") {
+      chart = new NPT_SH_GroupedBarChart(chartData, divID, title, options)
+        .chart;
+    }
   });
 
   return (
     <div
-      className={`${className} pb-5 bg-stone-100 dark:bg-stone-400 rounded-lg shadow w-full`}
+      className={`${className} pb-5 bg-stone-100 dark:bg-stone-400 rounded-lg ${shadow?'shadow':''} w-full`}
     >
       {type === "Pie" || type === "Bar" ? (
         <div>

@@ -1285,7 +1285,6 @@ export class GroupedBarChart extends Chart
 export class WTW_shift extends Chart
 {
     buildChart(data, container, title, options){
-        console.log("heyyyy", container)
         var category_axis = options.category_axis
         var chart = am4core.create(container, am4charts.XYChart);
         chart.hiddenState.properties.opacity = 0;
@@ -1451,7 +1450,6 @@ export class Monitored_vs_Drilled extends Chart
         
         // Add data
         let sorted_data = data.sort((a, b) => (a.meters_drilled < b.meters_drilled) ? 1 : ((b.meters_drilled < a.meters_drilled) ? -1 : 0))
-        console.log(sorted_data)
         chart.data = sorted_data
 
         // Create axes
@@ -1748,7 +1746,6 @@ export class Monitored_vs_Drilled_Rig extends Chart
 export class NPT extends Chart
 {
     buildChart(data, container, title, options){
-        console.log(data)
         var chart = am4core.create(container, am4charts.XYChart);
             chart.exporting.menu = new am4core.ExportMenu();
             chart.data = data;
@@ -1865,7 +1862,6 @@ export class NPT extends Chart
 export class SemiCircle extends Chart
 {
     buildChart(data, container, title, options){
-            console.log(data)
             var chart = am4core.create(container, am4charts.PieChart);
             chart.hiddenState.properties.opacity = 0;
             chart.radius = am4core.percent(60);
@@ -1926,5 +1922,183 @@ export class SemiCircle extends Chart
                 titles.disabled = false;
                 titles.parent.invalidate();
             });
+    }
+}
+
+export class NPT_SH_GroupedBarChart extends Chart
+{
+    buildChart(data, container, title, options){
+            var chart = am4core.create(container, am4charts.XYChart);
+            chart.responsive.enabled = true;
+            chart.exporting.menu = new am4core.ExportMenu();
+    
+            chart.paddingBottom = 60;
+            chart.numberFormatter.numberFormat = "#.##";
+    
+            chart.cursor = new am4charts.XYCursor();
+            chart.scrollbarX = new am4core.Scrollbar();
+    
+            var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+            categoryAxis.dataFields.category = "category";
+            categoryAxis.renderer.grid.template.location = 0;
+            categoryAxis.dataItems.template.text = "{realName}";
+            categoryAxis.renderer.minGridDistance = 30;
+    
+            categoryAxis.adapter.add("tooltipText", function(tooltipText, target) {
+                return categoryAxis.tooltipDataItem.dataContext.realName;
+            })
+    
+            let label = categoryAxis.renderer.labels.template;
+            label.wrap = false;
+            label.truncate = false;
+            label.dy = 1;
+            label.maxWidth = 200;
+            label.fontSize = 14;
+    
+            categoryAxis.events.on("sizechanged", function(ev) {
+                let axis = ev.target;
+                var cellWidth = axis.pixelWidth / (axis.endIndex - axis.startIndex);
+                var label = axis.renderer.labels.template;
+                var rangeTemplate = axis.axisRanges.template;
+                var rangeLabel = rangeTemplate.label;
+                if (cellWidth < label.maxWidth) {
+                    rangeLabel.rotation = -45
+                    rangeLabel.dy = 50;
+                    rangeLabel.fontSize = 17;
+    
+                    label.dy = 1;
+                    label.fontSize = 14;
+                    label.rotation = -45;
+                    label.horizontalCenter = "right";
+                    label.verticalCenter = "left";
+                } else {
+                    label.fontSize = 14;
+                    rangeLabel.rotation = 0
+                    rangeLabel.dy = 40;
+                    label.dy = 25;
+    
+                    label.rotation = 0;
+                    label.horizontalCenter = "middle";
+                    label.verticalCenter = "top";
+                }
+            });
+    
+            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            valueAxis.tooltip.disabled = true;
+            valueAxis.min = 0;
+            valueAxis.title.text = "Days"
+            var colors = {};
+    
+            var colorPalette = ["#174A64", "#008AB8", "#47D1FF", "#85E0EE",
+                "#0288D1", "#388E3C", "#FBC02D", "#F44336", "#84DCC6",
+                "#8E24AA", "#C7DBE6", "#731963", "#59AED9", "#29C8FF",
+                '#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6',
+                '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
+                '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A',
+                '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+                '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC',
+                '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+                '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680',
+                '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+                '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
+                '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'
+            ];
+            chart.colors.list = colorPalette.map(function(color) {
+                return new am4core.color(color);
+            });
+    
+            var columnSeries = chart.series.push(new am4charts.ColumnSeries());
+            columnSeries.columns.template.width = am4core.percent(80);
+            columnSeries.columns.template.fillOpacity = 0.6;
+            columnSeries.tooltipText = "{provider} -{realName}: [bold]{valueY}";
+            columnSeries.dataFields.categoryX = "category";
+            columnSeries.dataFields.valueY = "value";
+    
+            columnSeries.stacked = true;
+            var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
+            valueAxis2.renderer.opposite = true;
+            valueAxis2.syncWithAxis = valueAxis;
+            valueAxis2.tooltip.disabled = true;
+    
+            columnSeries.columns.template.adapter.add("fill", function(fill, target) {
+                var name = target.dataItem.dataContext.realName;
+                if (!colors[name]) {
+                    colors[name] = chart.colors.next();
+                }
+                target.stroke = colors[name];
+                return colors[name];
+            })
+            var labelBullet = columnSeries.bullets.push(new am4charts.LabelBullet());
+            labelBullet.label.text = "{valueY} ";
+            labelBullet.locationY = 0.5;
+    
+            var rangeTemplate = categoryAxis.axisRanges.template;
+            rangeTemplate.tick.disabled = false;
+            rangeTemplate.tick.location = 0;
+            rangeTemplate.tick.strokeOpacity = 0.6;
+            rangeTemplate.tick.length = 60;
+            rangeTemplate.grid.strokeOpacity = 0.5;
+            var rangeLabel = rangeTemplate.label;
+    
+            rangeLabel.tooltip = new am4core.Tooltip();
+            rangeLabel.tooltip.dy = -10;
+            rangeLabel.cloneTooltip = false;
+            rangeLabel.color = am4core.color("red");
+    
+            var chartData = [];
+            var lineSeriesData = [];
+    
+            var data = data;
+    
+            for (var providerName in data) {
+                var providerData = data[providerName];
+    
+                var tempArray = [];
+                var count = 0;
+                for (var itemName in providerData) {
+                    if (itemName != "quantity") {
+                        count++;
+                        tempArray.push({ category: providerName + "_" + itemName, realName: itemName, value: providerData[itemName], provider: providerName })
+                    }
+                }
+                tempArray.sort(function(a, b) {
+                    if (a.value > b.value) {
+                        return 1;
+                    } else if (a.value < b.value) {
+                        return -1
+                    } else {
+                        return 0;
+                    }
+                })
+    
+                var lineSeriesDataIndex = Math.floor(count / 2);
+                tempArray[lineSeriesDataIndex].quantity = providerData.quantity;
+                tempArray[lineSeriesDataIndex].count = count;
+                am4core.array.each(tempArray, function(item) {
+                    chartData.push(item);
+                })
+    
+                var range = categoryAxis.axisRanges.create();
+                range.category = tempArray[0].category;
+                range.endCategory = tempArray[tempArray.length - 1].category;
+                range.label.text = tempArray[0].provider;
+                range.label.dy = 30;
+                range.label.truncate = true;
+                range.label.fontWeight = "bold";
+                range.label.tooltipText = tempArray[0].provider;
+    
+            }
+            chart.data = chartData;
+            
+            var range = categoryAxis.axisRanges.create();
+            range.category = chart.data[chart.data.length - 1].category;
+            range.label.disabled = true;
+            range.tick.location = 1;
+            range.grid.location = 1;
+    
+            let titles = chart.titles.create();
+            titles.text = title;
+            titles.fontSize = 25;
+            titles.marginBottom = 60;
     }
 }

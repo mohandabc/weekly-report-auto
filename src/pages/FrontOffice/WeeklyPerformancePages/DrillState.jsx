@@ -103,16 +103,18 @@ export const DrillState = (drillState) => {
         {...props}
         ref={ref}
         icon={<BarChartIcon />}
-        color="green"
+        color="cyan"
         appearance="primary"
+        size="sm"
       />
     );
   };
 
   return (
-    <div className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 px-10 h-full">
-      <div className="flex justify-end">
-        <div className="mt-5 mr-1">
+    <div className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto p-10">
+      <div className="flex flex-row-reverse rounded-xl bg-stone-100 dark:bg-stone-400">
+        <div className="flex justify-end">
+          <div className="mr-1.5 mt-1.5">
           <Dropdown renderToggle={renderIconButton} placement="leftStart">
             <Dropdown.Item eventKey="1" onSelect={handleItemClick}>
               Per Rig
@@ -148,6 +150,7 @@ export const DrillState = (drillState) => {
           }}
           chartType="GroupedBarChart"
           className="h-160"
+          shadow={false}
         />
       )}
       {selectedItem === "2" && (
@@ -166,6 +169,7 @@ export const DrillState = (drillState) => {
           }}
           chartType="GroupedBarChart"
           className="h-160"
+          shadow={false}
         />
       )}
       {selectedItem === "3" && (
@@ -184,6 +188,7 @@ export const DrillState = (drillState) => {
           }}
           chartType="GroupedBarChart"
           className="h-160"
+          shadow={false}
         />
       )}
       {selectedItem === "4" && (
@@ -202,6 +207,7 @@ export const DrillState = (drillState) => {
           }}
           chartType="GroupedBarChart"
           className="h-160"
+          shadow={false}
         />
       )}
       {selectedItem === "5" && (
@@ -220,11 +226,13 @@ export const DrillState = (drillState) => {
           }}
           chartType="GroupedBarChart"
           className="h-160"
+          shadow={false}
         />
       )}
-      <div className="my-3">
+      </div>
+      <div className="flex flex-row-reverse rounded-xl bg-stone-100 dark:bg-stone-400 mt-10">
         <div className="flex justify-end">
-          <div className="mt-5 mr-1">
+          <div className="mr-1.5 mt-1.5">
             <Dropdown renderToggle={renderIconButton} placement="leftStart">
               <Dropdown.Item eventKey="1" onSelect={handleItemClick2}>
                 Per Shift
@@ -248,6 +256,7 @@ export const DrillState = (drillState) => {
             }}
             chartType="WTW_shift"
             className="h-160"
+            shadow={false}
           />
         )}
         {selectedItem2 === "2" && (
@@ -263,6 +272,7 @@ export const DrillState = (drillState) => {
             }}
             chartType="WTW_trip_rig"
             className="h-160"
+            shadow={false}
           />
         )}
         {selectedItem2 === "3" && (
@@ -278,10 +288,11 @@ export const DrillState = (drillState) => {
             }}
             chartType="WTW_trip_rig"
             className="h-160"
+            shadow={false}
           />
         )}
       </div>
-      <div className="grid grid-cols-1 grid-rows-2 gap-4"></div>
+
     </div>
   );
 };
