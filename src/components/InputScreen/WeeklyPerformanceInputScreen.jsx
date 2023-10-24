@@ -211,7 +211,7 @@ export const WeeklyPerformanceInputScreen = ({
   };
 
   function WellRigConnection(values) {
-    for (let value of values) {
+    if (values) {for (let value of values) {
       const well = wellsplaceholder.find((well) => well.value === value);
       if (well) {
         setFormValues((prevState) => ({
@@ -227,8 +227,24 @@ export const WeeklyPerformanceInputScreen = ({
           rig: values,
         }));
       }
-    }
-  }
+    }}
+  };
+
+  const handleRigClean = () => {
+    setFormValues((prevState) => ({
+      ...prevState,
+      rig: [],
+      well: []
+    })); // clear the value of rig
+  };
+  
+  const handleWellClean = () => {
+    setFormValues((prevState) => ({
+      ...prevState,
+      rig: [],
+      well: []
+    })); // clear the value of well
+  };
 
   return (
     <div
@@ -281,7 +297,9 @@ export const WeeklyPerformanceInputScreen = ({
                   width: 250,
                   marginLeft: 10,
                   marginRight: 10,
+                  color: "#000",
                 }}
+                onClean={handleRigClean} // use the custom function for onClean
               />
               <TagPicker
                 name="well"
@@ -297,7 +315,9 @@ export const WeeklyPerformanceInputScreen = ({
                   width: 250,
                   marginLeft: 10,
                   marginRight: 10,
+                  color: "#000",
                 }}
+                onClean={handleWellClean} // use the custom function for onClean
               />
               <TagPicker
                 name="pole"
