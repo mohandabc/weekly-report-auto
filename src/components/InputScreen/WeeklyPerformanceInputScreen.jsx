@@ -10,6 +10,8 @@ const styles = {
     marginLeft: 10,
     marginRight: 10,
     marginTop: 20,
+    color: "#000",
+    fontSize : "12px"
   },
 };
 
@@ -298,6 +300,7 @@ export const WeeklyPerformanceInputScreen = ({
                   marginLeft: 10,
                   marginRight: 10,
                   color: "#000",
+                  fontSize : "12px"
                 }}
                 onClean={handleRigClean} // use the custom function for onClean
               />
@@ -316,6 +319,7 @@ export const WeeklyPerformanceInputScreen = ({
                   marginLeft: 10,
                   marginRight: 10,
                   color: "#000",
+                  fontSize : "12px"
                 }}
                 onClean={handleWellClean} // use the custom function for onClean
               />
@@ -329,6 +333,8 @@ export const WeeklyPerformanceInputScreen = ({
                   width: 250,
                   marginLeft: 10,
                   marginRight: 10,
+                  color: "#000",
+                  fontSize : "12px"
                 }}
               />
             </div>
@@ -407,7 +413,11 @@ export const WeeklyPerformanceInputScreen = ({
                 format="dd/MM/yyyy"
                 defaultValue={formValues.daterange}
                 onChange={(value) => handleChange(value, "daterange")}
-                style={styles.wide}
+                style={
+                  {width: 250,
+                  marginLeft: 10,
+                  marginRight: 10,
+                  marginTop: 20}}
               />
             </div>
             <div
