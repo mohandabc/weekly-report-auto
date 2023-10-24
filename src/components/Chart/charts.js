@@ -1867,6 +1867,7 @@ export class NPT extends Chart
 export class SemiCircle extends Chart
 {
     buildChart(data, container, title, options){
+            console.log(data)
             var chart = am4core.create(container, am4charts.PieChart);
             chart.hiddenState.properties.opacity = 0;
             chart.radius = am4core.percent(60);
@@ -1888,10 +1889,10 @@ export class SemiCircle extends Chart
                 switch (name) {
 
                     case 'PT':
-                        return am4core.color('#1BBD4E');
+                        return am4core.color('#66DE93');
                         break;
                     case 'NPT':
-                        return am4core.color('#AC3515');
+                        return am4core.color('#FF616D');
                         break;
                     case 'NPT Contractor':
                         return am4core.color('#68FECA');

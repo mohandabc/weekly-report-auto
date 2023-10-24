@@ -26,8 +26,6 @@ export const NPTAnalysis = (NPTAnalysis) => {
 
   function rig_npt(npt_data) {
     let output = [];
-    let total_npt = 0;
-    let total_pt = 0;
     let grouped_rig = {};
     for (let item of npt_data) {
       let rig = item.rig;
@@ -37,8 +35,6 @@ export const NPTAnalysis = (NPTAnalysis) => {
         grouped_rig[rig].npt += item.npt;
         grouped_rig[rig].pt += item.pt;
       }
-      total_npt += item.npt;
-      total_pt += item.pt;
     }
     for (let rig in grouped_rig) {
       let row = {
@@ -102,6 +98,13 @@ function groupByField(data) {
   return result;
 }
 
+function total_npt_pt(npt_data) {
+  let total_npt = npt_data.reduce((acc, item) => acc + item.npt, 0);
+  let total_pt = npt_data.reduce((acc, item) => acc + item.pt, 0);
+  console.log([{name: 'NPT', value: total_npt}, {name: 'PT', value: total_pt}])
+  return [{name: 'NPT', value: total_npt}, {name: 'PT', value: total_pt}];
+}
+
 function formatWeeks(data) {
   var new_data = [];
   for (var i = 0; i < data.length; i++) {
@@ -144,7 +147,7 @@ function formatWeeks(data) {
                 Per Department
               </Dropdown.Item>
               <Dropdown.Item eventKey="6" onSelect={handleItemClick}>
-                xxxx
+                Total PT NPT
               </Dropdown.Item>
               <Dropdown.Item eventKey="7" onSelect={handleItemClick}>
                 xxxx
@@ -222,6 +225,18 @@ function formatWeeks(data) {
               cat:'npt_comapny'
             }}
             chartType="NPT"
+            className="h-160"
+          />
+        )}
+        {selectedItem === "6" && (
+          <Chart
+            id="chart"
+            chartData={total_npt_pt(NPTAnalysis["nptAnalysis"]["npt_total"])}
+            title="Cummul NPT Vs PT"
+            c_options={{
+              startAngle:0
+            }}
+            chartType="SemiCircle"
             className="h-160"
           />
         )}
