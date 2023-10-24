@@ -1568,7 +1568,6 @@ export class Monitored_vs_Drilled_Rig extends Chart
 
         var columnSeries_1 = chart.series.push(new am4charts.ColumnSeries());
         columnSeries_1.columns.template.width = am4core.percent(80);
-        columnSeries_1.columns.template.fillOpacity = 0.6;
         columnSeries_1.tooltipText = "{provider} -{realName}: [bold]{valueY}";
         columnSeries_1.dataFields.categoryX = "category";
         columnSeries_1.dataFields.valueY = "value1";
@@ -1579,7 +1578,6 @@ export class Monitored_vs_Drilled_Rig extends Chart
 
         var columnSeries_2 = chart.series.push(new am4charts.ColumnSeries());
         columnSeries_2.columns.template.width = am4core.percent(80);
-        columnSeries_2.columns.template.fillOpacity = 0.6;
         columnSeries_2.tooltipText = "{provider} -{realName}: [bold]{valueY}";
         columnSeries_2.dataFields.categoryX = "category";
         columnSeries_2.dataFields.valueY = "value2";
