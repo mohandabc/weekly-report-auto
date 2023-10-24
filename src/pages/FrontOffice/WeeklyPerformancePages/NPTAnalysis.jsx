@@ -147,10 +147,10 @@ function formatWeeks(data) {
                 Per Department
               </Dropdown.Item>
               <Dropdown.Item eventKey="6" onSelect={handleItemClick}>
-                Total PT NPT
+                xxxx
               </Dropdown.Item>
               <Dropdown.Item eventKey="7" onSelect={handleItemClick}>
-                xxxx
+                Total PT NPT
               </Dropdown.Item>
               <Dropdown.Item eventKey="8" onSelect={handleItemClick}>
                 Per Weeks
@@ -228,7 +228,7 @@ function formatWeeks(data) {
             className="h-160"
           />
         )}
-        {selectedItem === "6" && (
+        {selectedItem === "7" && (
           <Chart
             id="chart"
             chartData={total_npt_pt(NPTAnalysis["nptAnalysis"]["npt_total"])}
