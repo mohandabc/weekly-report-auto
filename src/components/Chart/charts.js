@@ -1931,6 +1931,7 @@ export class NPT_SH_GroupedBarChart extends Chart
             var chart = am4core.create(container, am4charts.XYChart);
             chart.responsive.enabled = true;
             chart.exporting.menu = new am4core.ExportMenu();
+            chart.exporting.menu.backgroundColor = "#F44336";
     
             chart.paddingBottom = 60;
             chart.numberFormatter.numberFormat = "#.##";

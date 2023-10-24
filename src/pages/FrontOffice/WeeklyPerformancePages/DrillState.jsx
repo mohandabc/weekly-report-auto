@@ -112,7 +112,7 @@ export const DrillState = (drillState) => {
 
   return (
     <div className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto p-10">
-      <div className="flex flex-row-reverse rounded-xl bg-stone-100 dark:bg-stone-400">
+      <div className="sticky rounded-xl bg-stone-100 dark:bg-stone-400">
         <div className="flex justify-end">
           <div className="mr-1.5 mt-1.5">
           <Dropdown renderToggle={renderIconButton} placement="leftStart">
@@ -230,7 +230,7 @@ export const DrillState = (drillState) => {
         />
       )}
       </div>
-      <div className="flex flex-row-reverse rounded-xl bg-stone-100 dark:bg-stone-400 mt-10">
+      <div className="sticky rounded-xl bg-stone-100 dark:bg-stone-400 mt-10">
         <div className="flex justify-end">
           <div className="mr-1.5 mt-1.5">
             <Dropdown renderToggle={renderIconButton} placement="leftStart">

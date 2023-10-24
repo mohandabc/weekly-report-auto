@@ -1,3 +1,7 @@
 #npt-details td, #npt-details th {
     border: 1px solid #ff0000;
 }
+
+.amcharts-amexport-item {
+    background-color: rgb(142, 149, 153);
+  }
