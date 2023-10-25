@@ -1,4 +1,4 @@
-export const API_URL = 'http://10.171.59.66:8069/';
+export const API_URL = 'http://10.171.59.80:8069/';
 export const AUTH_URL = 'http://10.171.59.80:8069/api/reports/authenticate';
 // TODO : change BACK_URI after deployment
 export const BACK_URL = 'http://10.171.59.167:8000/'; 

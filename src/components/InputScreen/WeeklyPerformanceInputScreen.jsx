@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Form, Input, DateRangePicker, TagPicker } from "rsuite";
+import { Button, Form, Input, DateRangePicker, TagPicker, Checkbox } from "rsuite";
 import { getData } from "../../api/api";
 import { API_URL } from "../../constants/URI";
 import { predefinedRanges } from "../../constants/constants";
@@ -94,6 +94,7 @@ export const WeeklyPerformanceInputScreen = ({
     benchmarkTS: "",
     benchmarkCT: "",
     daterange: undefined,
+    isSpudDate: false
   });
 
   useEffect(() => {
@@ -123,6 +124,16 @@ export const WeeklyPerformanceInputScreen = ({
         ...formValues,
         startDate: formatDate(value[0], true, "-"),
         endDate: formatDate(value[1], true, "-"),
+      });
+    }
+  };
+
+  const handleCheckBoxChange = (value, name) => {
+    setFormValues({ ...formValues, [name]: value });
+    if (name=='isSpudDate') {
+      setFormValues({
+        ...formValues,
+        isSpudDate: value
       });
     }
   };
@@ -214,22 +225,22 @@ export const WeeklyPerformanceInputScreen = ({
 
   function WellRigConnection(values) {
     if (values) {for (let value of values) {
-      const well = wellsplaceholder.find((well) => well.value === value);
-      if (well) {
-        setFormValues((prevState) => ({
-          ...prevState,
-          well: values,
-        }));
-      }
+        const well = wellsplaceholder.find((well) => well.value === value);
+        if (well) {
+          setFormValues((prevState) => ({
+            ...prevState,
+            well: values,
+          }));
+        }
 
-      const rig = rigsplaceholder.find((rig) => rig.value === value);
-      if (rig) {
-        setFormValues((prevState) => ({
-          ...prevState,
-          rig: values,
-        }));
-      }
-    }}
+        const rig = rigsplaceholder.find((rig) => rig.value === value);
+        if (rig) {
+          setFormValues((prevState) => ({
+            ...prevState,
+            rig: values,
+          }));
+        }
+      }}
   };
 
   const handleRigClean = () => {
@@ -239,7 +250,7 @@ export const WeeklyPerformanceInputScreen = ({
       well: []
     })); // clear the value of rig
   };
-  
+
   const handleWellClean = () => {
     setFormValues((prevState) => ({
       ...prevState,
@@ -421,6 +432,18 @@ export const WeeklyPerformanceInputScreen = ({
               />
             </div>
             <div
+              className={`flex duration-1000 relative transform transition-all ease-out justify-center items-center mt-4
+            ${
+              // hiding components when they first appear and then applying a translate effect gradually
+              animation
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-12"
+            }`}
+            >
+            <Checkbox onChange={(value, checked) => {handleCheckBoxChange(checked, 'isSpudDate')}}>
+                <h5 className="text-xs black-text" style={{color: 'gray'}}>From spud date</h5>
+            </Checkbox></div>
+            <div
               className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
             ${
               // hiding components when they first appear and then applying a translate effect gradually
@@ -440,7 +463,7 @@ export const WeeklyPerformanceInputScreen = ({
                   paddingBottom: 10,
                   paddingRight: 20,
                   paddingLeft: 20,
-                  marginTop: 20,
+                  marginTop: 15,
                   marginBottom: 20,
                 }}
                 loading={loadingValue}
