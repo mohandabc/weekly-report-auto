@@ -223,7 +223,7 @@ export const WeeklyPerformanceInputScreen = ({
   const getTrippingSpeedData = (params) => {
     const path = "TrippingSpeed/getWeeklyPerformanceData/";
     getData(BACK_URL, path, params).then((res) => {
-      console.log(res, "from getTrippingSpeedData");
+      console.log(res, "from Fastapi Backend getTrippingSpeedData");
     });
   };
 
