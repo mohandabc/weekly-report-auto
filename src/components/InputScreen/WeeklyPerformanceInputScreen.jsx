@@ -84,6 +84,7 @@ export const WeeklyPerformanceInputScreen = ({
   const [wellsplaceholder, setWellsplaceholder] = useState([]);
   const [rigsplaceholder, setRigsplaceholder] = useState([]);
 
+  const [formData, setFormData] = useState({});
   const [formValues, setFormValues] = useState({
     well: [],
     rig: [],
@@ -166,39 +167,33 @@ export const WeeklyPerformanceInputScreen = ({
 
   const handleSubmit = () => {
     console.log(formValues);
-    var dataFrame = Object.fromEntries(
-      Object.entries(formValues).map(([key, value]) => {
-        return [
-          key,
-          Array.isArray(value) ? intToString(value) : undefToEmpty(value),
-        ];
-      })
-    );
-
-    dataFrame.benchmarkTS = formValues.benchmarkTS.split(",");
-    dataFrame.benchmarkCT = dataFrame.benchmarkCT.split(",");
-    let values = dataFrame.well;
     let valueToWid = Object.fromEntries(
       wellsplaceholder.map((item) => [item.value, item.wid])
     );
-    dataFrame.well = values.map((value) => valueToWid[value]).map(String);
     let valueToRid = Object.fromEntries(
       rigsplaceholder.map((item) => [item.value, item.rid])
     );
-    dataFrame.rig = values.map((value) => valueToRid[value]).map(String);
     let valueToWidName = Object.fromEntries(
       wellsplaceholder.map((item) => [item.value, item.label])
     );
-    dataFrame.well_name = values.map((value) => valueToWidName[value]).map(String);
     let valueToRidName = Object.fromEntries(
       rigsplaceholder.map((item) => [item.value, item.label])
-      );
-      dataFrame.rig_name = values.map((value) => valueToRidName[value]).map(String);
-
-    console.log("Params : ", dataFrame);
-    getWeeklyData(dataFrame);
-    getTrippingSpeedData(dataFrame)
+    );
+    var updatedFormValues = {
+      ...formValues,
+      well: formValues.well.map((value) => valueToWid[value]).map(String),
+      rig: formValues.rig.map((value) => valueToRid[value]).map(String),
+      well_name: formValues.well.map((value) => valueToWidName[value]).map(String),
+      rig_name: formValues.rig.map((value) => valueToRidName[value]).map(String),
+      benchmarkTS: formValues.benchmarkTS.split(","),
+      benchmarkCT: formValues.benchmarkCT.split(","),
+    };
+    setFormData(updatedFormValues);
+    console.log("Params : ", updatedFormValues);
+    getWeeklyData(updatedFormValues);
+    getTrippingSpeedData(updatedFormValues);
   };
+  
 
   function populateWellRigPickers() {
     const path = "api/reports/getwells";
