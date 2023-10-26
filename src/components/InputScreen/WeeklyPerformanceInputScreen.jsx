@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, Form, Input, DateRangePicker, TagPicker, Checkbox } from "rsuite";
 import { getData } from "../../api/api";
-import { API_URL } from "../../constants/URI";
+import { API_URL, BACK_URL } from "../../constants/URI";
 import { predefinedRanges } from "../../constants/constants";
 
 const styles = {
@@ -186,8 +186,18 @@ export const WeeklyPerformanceInputScreen = ({
       rigsplaceholder.map((item) => [item.value, item.rid])
     );
     dataFrame.rig = values.map((value) => valueToRid[value]).map(String);
+    let valueToWidName = Object.fromEntries(
+      wellsplaceholder.map((item) => [item.value, item.label])
+    );
+    dataFrame.well_name = values.map((value) => valueToWidName[value]).map(String);
+    let valueToRidName = Object.fromEntries(
+      rigsplaceholder.map((item) => [item.value, item.label])
+      );
+      dataFrame.rig_name = values.map((value) => valueToRidName[value]).map(String);
+
     console.log("Params : ", dataFrame);
     getWeeklyData(dataFrame);
+    getTrippingSpeedData(dataFrame)
   };
 
   function populateWellRigPickers() {
@@ -220,6 +230,13 @@ export const WeeklyPerformanceInputScreen = ({
       setTrippingSpeed(data["events_data"] || {});
       setMonitoringKPI(data["monitoring_kpi"] || {});
       setNPTAnalysis(data["NPT_analysis"] || {});
+    });
+  };
+
+  const getTrippingSpeedData = (params) => {
+    const path = "TrippingSpeed/getWeeklyPerformanceData/";
+    getData(BACK_URL, path, params).then((res) => {
+      console.log(res, "from getTrippingSpeedData");
     });
   };
 
