@@ -157,14 +157,6 @@ export const WeeklyPerformanceInputScreen = ({
     return num.toString().padStart(2, "0");
   }
 
-  function intToString(list) {
-    return list.map(String);
-  }
-
-  function undefToEmpty(value) {
-    return value ?? [];
-  }
-
   const handleSubmit = () => {
     console.log(formValues);
     let valueToWid = Object.fromEntries(
