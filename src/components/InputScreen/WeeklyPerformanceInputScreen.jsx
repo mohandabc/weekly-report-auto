@@ -214,7 +214,6 @@ export const WeeklyPerformanceInputScreen = ({
       setWeeklyPerformanceData(data || {});
       setEventsKPI(data["events_data"] || {});
       setDrillState(data['drill_state_CT'] || {});
-      setTrippingSpeed(data["events_data"] || {});
       setMonitoringKPI(data["monitoring_kpi"] || {});
       setNPTAnalysis(data["NPT_analysis"] || {});
     });
@@ -224,6 +223,7 @@ export const WeeklyPerformanceInputScreen = ({
     const path = "TrippingSpeed/getWeeklyPerformanceData/";
     getData(BACK_URL, path, params).then((res) => {
       console.log(res, "From Fastapi Backend getTrippingSpeedData");
+      setTrippingSpeed(res || {});
     });
   };
 
