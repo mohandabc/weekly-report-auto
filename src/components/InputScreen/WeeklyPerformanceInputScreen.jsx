@@ -1,5 +1,13 @@
-import { useState, useEffect } from "react";
-import { Button, Form, Input, DateRangePicker, TagPicker, Checkbox } from "rsuite";
+import { useState, useEffect, useRef } from "react";
+import {
+  Button,
+  Form,
+  Schema,
+  Input,
+  DateRangePicker,
+  TagPicker,
+  Checkbox,
+} from "rsuite";
 import { getData } from "../../api/api";
 import { API_URL, BACK_URL } from "../../constants/URI";
 import { predefinedRanges } from "../../constants/constants";
@@ -11,7 +19,7 @@ const styles = {
     marginRight: 10,
     marginTop: 20,
     color: "#000",
-    fontSize : "12px"
+    fontSize: "12px",
   },
 };
 
@@ -84,19 +92,29 @@ export const WeeklyPerformanceInputScreen = ({
   const [wellsplaceholder, setWellsplaceholder] = useState([]);
   const [rigsplaceholder, setRigsplaceholder] = useState([]);
 
+  const [shake, setShake] = useState(false);
+  const [msg, setMsg] = useState(0);
   const [formData, setFormData] = useState({});
   const [formValues, setFormValues] = useState({
     well: [],
     rig: [],
-    pole: undefined,
-    contractor: undefined,
-    section: undefined,
+    pole: [],
+    contractor: [],
+    section: [],
     pipeSize: [],
     benchmarkTS: "",
     benchmarkCT: "",
-    daterange: undefined,
-    isSpudDate: false
+    daterange: [],
+    isSpudDate: false,
   });
+
+  const schemArrayType = Schema.Types.ArrayType().isRequired(
+    "This field is required."
+  );
+  const model = Schema.Model({
+    daterange: schemArrayType,
+  });
+  const formRef = useRef();
 
   useEffect(() => {
     setAnimation(true);
@@ -131,10 +149,10 @@ export const WeeklyPerformanceInputScreen = ({
 
   const handleCheckBoxChange = (value, name) => {
     setFormValues({ ...formValues, [name]: value });
-    if (name=='isSpudDate') {
+    if (name == "isSpudDate") {
       setFormValues({
         ...formValues,
-        isSpudDate: value
+        isSpudDate: value,
       });
     }
   };
@@ -158,6 +176,19 @@ export const WeeklyPerformanceInputScreen = ({
   }
 
   const handleSubmit = () => {
+    if (!formRef.current.check()) {
+      setShake(true);
+      setMsg({
+        msg: `Please select a date range to proceed.`,
+        color: "text-red-500",
+      });
+      setTimeout(() => {
+        setShake(false);
+      }, 820);
+      return;
+    }
+    setMsg('');
+
     console.log(formValues);
     let valueToWid = Object.fromEntries(
       wellsplaceholder.map((item) => [item.value, item.wid])
@@ -175,8 +206,12 @@ export const WeeklyPerformanceInputScreen = ({
       ...formValues,
       well: formValues.well.map((value) => valueToWid[value]).map(String),
       rig: formValues.rig.map((value) => valueToRid[value]).map(String),
-      well_name: formValues.well.map((value) => valueToWidName[value]).map(String),
-      rig_name: formValues.rig.map((value) => valueToRidName[value]).map(String),
+      well_name: formValues.well
+        .map((value) => valueToWidName[value])
+        .map(String),
+      rig_name: formValues.rig
+        .map((value) => valueToRidName[value])
+        .map(String),
       benchmarkTS: formValues.benchmarkTS.split(","),
       benchmarkCT: formValues.benchmarkCT.split(","),
     };
@@ -185,7 +220,6 @@ export const WeeklyPerformanceInputScreen = ({
     getWeeklyData(updatedFormValues);
     getTrippingSpeedData(updatedFormValues);
   };
-  
 
   function populateWellRigPickers() {
     const path = "api/reports/getwells";
@@ -213,7 +247,7 @@ export const WeeklyPerformanceInputScreen = ({
       console.log(setWeeklyPerformanceData);
       setWeeklyPerformanceData(data || {});
       setEventsKPI(data["events_data"] || {});
-      setDrillState(data['drill_state_CT'] || {});
+      setDrillState(data["drill_state_CT"] || {});
       setMonitoringKPI(data["monitoring_kpi"] || {});
       setNPTAnalysis(data["NPT_analysis"] || {});
     });
@@ -228,7 +262,8 @@ export const WeeklyPerformanceInputScreen = ({
   };
 
   function WellRigConnection(values) {
-    if (values) {for (let value of values) {
+    if (values) {
+      for (let value of values) {
         const well = wellsplaceholder.find((well) => well.value === value);
         if (well) {
           setFormValues((prevState) => ({
@@ -244,14 +279,15 @@ export const WeeklyPerformanceInputScreen = ({
             rig: values,
           }));
         }
-      }}
-  };
+      }
+    }
+  }
 
   const handleRigClean = () => {
     setFormValues((prevState) => ({
       ...prevState,
       rig: [],
-      well: []
+      well: [],
     })); // clear the value of rig
   };
 
@@ -259,7 +295,7 @@ export const WeeklyPerformanceInputScreen = ({
     setFormValues((prevState) => ({
       ...prevState,
       rig: [],
-      well: []
+      well: [],
     })); // clear the value of well
   };
 
@@ -273,7 +309,7 @@ export const WeeklyPerformanceInputScreen = ({
         <div
           className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 duration-1000 transform transition-all ease-out ${
             animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-          }`}
+          } ${shake ? "animate-shake" : ""}`}
         >
           <div className="flex justify-center items-center">
             <div className="py-2 md:py-9">
@@ -290,7 +326,11 @@ export const WeeklyPerformanceInputScreen = ({
               </h1>
             </div>
           </div>
-          <Form onSubmit={handleSubmit}>
+          <Form
+            onSubmit={handleSubmit}
+            ref={formRef}
+            model={model}
+          >
             <div
               className={`flex duration-1000 relative transform transition-all ease-out
             ${
@@ -315,7 +355,7 @@ export const WeeklyPerformanceInputScreen = ({
                   marginLeft: 10,
                   marginRight: 10,
                   color: "#000",
-                  fontSize : "12px"
+                  fontSize: "12px",
                 }}
                 onClean={handleRigClean} // use the custom function for onClean
               />
@@ -334,7 +374,7 @@ export const WeeklyPerformanceInputScreen = ({
                   marginLeft: 10,
                   marginRight: 10,
                   color: "#000",
-                  fontSize : "12px"
+                  fontSize: "12px",
                 }}
                 onClean={handleWellClean} // use the custom function for onClean
               />
@@ -349,7 +389,7 @@ export const WeeklyPerformanceInputScreen = ({
                   marginLeft: 10,
                   marginRight: 10,
                   color: "#000",
-                  fontSize : "12px"
+                  fontSize: "12px",
                 }}
               />
             </div>
@@ -422,18 +462,23 @@ export const WeeklyPerformanceInputScreen = ({
                 }}
                 disabled
               />
-              <DateRangePicker
-                ranges={predefinedRanges}
-                name="daterange"
-                format="dd/MM/yyyy"
-                defaultValue={formValues.daterange}
-                onChange={(value) => handleChange(value, "daterange")}
-                style={
-                  {width: 250,
-                  marginLeft: 10,
-                  marginRight: 10,
-                  marginTop: 20}}
-              />
+              <Form.Group controlId="daterange">
+                <Form.Control
+                  accepter={DateRangePicker}
+                  editable={false}
+                  ranges={predefinedRanges}
+                  name="daterange"
+                  format="dd/MM/yyyy"
+                  defaultValue={formValues.daterange}
+                  onChange={(value) => handleChange(value, "daterange")}
+                  style={{
+                    width: 250,
+                    marginLeft: 10,
+                    marginRight: 10,
+                    marginTop: 20,
+                  }}
+                />
+              </Form.Group>
             </div>
             <div
               className={`flex duration-1000 relative transform transition-all ease-out justify-center items-center mt-4
@@ -444,9 +489,16 @@ export const WeeklyPerformanceInputScreen = ({
                 : "opacity-0 translate-y-12"
             }`}
             >
-            <Checkbox onChange={(value, checked) => {handleCheckBoxChange(checked, 'isSpudDate')}}>
-                <h5 className="text-xs black-text" style={{color: 'gray'}}>From spud date</h5>
-            </Checkbox></div>
+              <Checkbox
+                onChange={(value, checked) => {
+                  handleCheckBoxChange(checked, "isSpudDate");
+                }}
+              >
+                <h5 className="text-xs black-text" style={{ color: "gray" }}>
+                  From spud date
+                </h5>
+              </Checkbox>
+            </div>
             <div
               className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
             ${
@@ -468,17 +520,24 @@ export const WeeklyPerformanceInputScreen = ({
                   paddingRight: 20,
                   paddingLeft: 20,
                   marginTop: 15,
-                  marginBottom: 20,
+                  marginBottom: 9,
                 }}
                 loading={loadingValue}
               >
                 Submit
               </Button>
             </div>
+            <div className="flex justify-center items-center">
+        <div className="flex-col items-center mb-2">
+          <div className={`text-center text-sm ${msg["color"]}`}>
+            {msg["msg"]}
+          </div>
+        </div>
+      </div>
           </Form>
         </div>
         <div
-          className={`flex items-center justify-center mt-6 md:mt-10 duration-1000 relative transform transition-all ease-out md:pb-8
+          className={`flex items-center justify-center mt-6 md:mt-10 duration-1000 relative transform transition-all ease-out
             ${
               // hiding components when they first appear and then applying a translate effect gradually
               animation
