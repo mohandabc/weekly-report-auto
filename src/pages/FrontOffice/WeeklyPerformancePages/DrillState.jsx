@@ -12,6 +12,9 @@ export const DrillState = (drillState) => {
 
   function createNestedDict(originalData, type) {
     const nestedDict = {};
+    if (Object.keys(originalData).length == 0) {
+      return nestedDict;
+    }
     originalData.forEach((entry) => {
       const rigPhaseKey = `${entry[type]}|${entry.phase}`;
       const drillPipeSize = entry.drill_pipe_size;
