@@ -11,37 +11,50 @@ export const TrippingSpeed = (trippingSpeed) => {
   const [selectedItem2, setSelectedItem2] = useState("2");
 
   var TS_Data = trippingSpeed.trippingSpeed["TS_Data"];
-
-  function groupAndAverage(data, keys, type) {
-    function average(arr) {
-      return arr.reduce((a, b) => a + b, 0) / arr.length;
-    }
-    let result = {};
-
-    for (let obj of data) {
-      let key = keys.slice(0, 2).map((k) => obj[k]).join("|");
-
-      let subkey = obj["drill_pipe_size"];
-
-      if (!result[key]) {
-        result[key] = {};
-      }
-      if (!result[key][subkey]) {
-        result[key][subkey] = {};
-      }
-
-      if (type === "speed") {
-        result[key][subkey]["day"] = average([obj["avg_spd_day"]]);
-        result[key][subkey]["night"] = average([obj["avg_spd_night"]]);
-      } else if (type === "connectionTime") {
-        result[key][subkey]["day"] = average([obj["avg_ct_day"]]);
-        result[key][subkey]["night"] = average([obj["avg_ct_night"]]);
-      } else {
-        return "Invalid type parameter. Please use either 'speed' or 'connectionTime'.";
-      }
-    }
-    return result;
+  console.log(groupAndAverage(TS_Data, ["well", "phase", "drill_pipe_size"], "speed"), "by well")
+  console.log(groupAndAverage(TS_Data, ["rig", "phase", "drill_pipe_size"], "speed"), "by rig")
+  
+function groupAndAverage(data, keys, type) {
+  function average(arr) {
+    return arr.reduce((a, b) => a + b, 0) / arr.length;
   }
+  let result = {};
+  for (let obj of data) {
+    let key = keys.map(k => obj[k]).join("|");
+
+    let subkey = obj["drill_pipe_size"];
+
+    if (!result[key]) {
+      result[key] = {};
+    }
+    if (!result[key][subkey]) {
+      result[key][subkey] = {};
+    }
+    if (!result[key][subkey]["day"]) {
+      result[key][subkey]["day"] = [];
+    }
+    if (!result[key][subkey]["night"]) {
+      result[key][subkey]["night"] = [];
+    }
+    if (type === "speed") {
+      result[key][subkey]["day"].push(obj["avg_spd_day"]);
+      result[key][subkey]["night"].push(obj["avg_spd_night"]);
+    } else if (type === "connectionTime") {
+      result[key][subkey]["day"].push(obj["avg_ct_day"]);
+      result[key][subkey]["night"].push(obj["avg_ct_night"]);
+    } else {
+      return "Invalid type parameter. Please use either 'speed' or 'connectionTime'.";
+    }
+  }
+  for (let key in result) {
+    for (let subkey in result[key]) {
+      result[key][subkey]["day"] = average(result[key][subkey]["day"]);
+      result[key][subkey]["night"] = average(result[key][subkey]["night"]);
+    }
+  }
+  return result;
+}
+
 
   const handleItemClick = (itemKey) => {
     setSelectedItem(itemKey);
