@@ -86,6 +86,7 @@ export const WeeklyPerformanceInputScreen = ({
   setTrippingSpeed,
   setMonitoringKPI,
   setNPTAnalysis,
+  setIsDataEmpty
 }) => {
   const [animation, setAnimation] = useState(false);
   const [loadingValue, setLoadingValue] = useState(false);
@@ -188,8 +189,6 @@ export const WeeklyPerformanceInputScreen = ({
       return;
     }
     setMsg('');
-
-    console.log(formValues);
     let valueToWid = Object.fromEntries(
       wellsplaceholder.map((item) => [item.value, item.wid])
     );
@@ -217,8 +216,9 @@ export const WeeklyPerformanceInputScreen = ({
     };
     setFormData(updatedFormValues);
     console.log("Params : ", updatedFormValues);
-    getWeeklyData(updatedFormValues);
+    setLoadingValue(true);
     getTrippingSpeedData(updatedFormValues);
+    getWeeklyData(updatedFormValues);
   };
 
   function populateWellRigPickers() {
@@ -243,20 +243,27 @@ export const WeeklyPerformanceInputScreen = ({
     const path = "api/reports/weekly_performance_oilport";
     getData(API_URL, path, params).then((res) => {
       let data = res.result;
-      console.log(data);
-      console.log(setWeeklyPerformanceData);
       setWeeklyPerformanceData(data || {});
+      var isEmptydata = isEmptyObjectExcept(data, 'monitoring_kpi_phases');
+      if (isEmptydata) {
+        setMsg({
+          msg: `No results were found for your query. Please check your input parameters and try again.`,
+          color: "text-red-500",
+        });
+      }
+      setIsDataEmpty(isEmptydata);
       setEventsKPI(data["events_data"] || {});
       setDrillState(data["drill_state_CT"] || {});
       setMonitoringKPI(data["monitoring_kpi"] || {});
       setNPTAnalysis(data["NPT_analysis"] || {});
+      setLoadingValue(false);
     });
   };
 
   const getTrippingSpeedData = (params) => {
     const path = "TrippingSpeed/getWeeklyPerformanceData/";
     getData(BACK_URL, path, params).then((res) => {
-      console.log(res, "From Fastapi Backend getTrippingSpeedData");
+      console.log("From Fastapi Backend getTrippingSpeedData :", res);
       setTrippingSpeed(res || {});
     });
   };
@@ -298,6 +305,28 @@ export const WeeklyPerformanceInputScreen = ({
       well: [],
     })); // clear the value of well
   };
+
+  function isEmptyObjectExcept(obj, attr) {
+    if (obj == null || obj == "" || Array.isArray(obj) && obj.length == 0) {
+      return true;
+    }
+    if (typeof obj == "object") {
+      let keys = Object.keys(obj);
+      if (keys.length == 0) {
+        return true;
+      }
+      for (let key of keys) {
+        if (key == attr) {
+          continue;
+        }
+        if (!isEmptyObjectExcept(obj[key], attr)) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
+  }
 
   return (
     <div

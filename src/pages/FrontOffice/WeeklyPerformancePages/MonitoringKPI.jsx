@@ -9,7 +9,6 @@ import MaterialReactTable from "material-react-table";
 export const MonitoringKPI = (monitoringKPI) => {
   const darkMode = useRecoilValue(darkModeState);
   const [selectedItem, setSelectedItem] = useState("1");
-  console.log(monitoringKPI);
 
   const handleItemClick = (itemKey) => {
     setSelectedItem(itemKey);

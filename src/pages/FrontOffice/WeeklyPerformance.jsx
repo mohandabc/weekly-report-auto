@@ -8,6 +8,7 @@ import { DrillState, EventsKPIs, MonitoringKPI, NPTAnalysis, TrippingSpeed } fro
 export const WeeklyPerformance = () => {
   const darkMode = useRecoilValue(darkModeState);
   const [weeklyPerformanceData, setWeeklyPerformanceData] = useState(undefined);
+  const [isDataEmpty, setIsDataEmpty] = useState(true);
   const [eventsKPI, setEventsKPI] = useState(undefined);
   const [drillState, setDrillState] = useState(undefined);
   const [trippingSpeed, setTrippingSpeed] = useState(undefined);
@@ -21,7 +22,7 @@ export const WeeklyPerformance = () => {
   useEffect(() => {
     const mainSection = document.getElementById("result-section");
     if (mainSection) {
-      const headerOffset = 30; // Set your desired offset in pixels
+      const headerOffset = 30;
       const elementPosition = mainSection.getBoundingClientRect().top;
       const offsetPosition = elementPosition - headerOffset;
       window.scrollTo({
@@ -40,8 +41,9 @@ export const WeeklyPerformance = () => {
         setTrippingSpeed={setTrippingSpeed}
         setMonitoringKPI={setMonitoringKPI}
         setNPTAnalysis={setNPTAnalysis}
+        setIsDataEmpty={setIsDataEmpty}
       />
-      {weeklyPerformanceData ? (
+      {!isDataEmpty ? (
         <div id="result-section" className={`bg-slate-300 dark:bg-zinc-900`}>
           <div className="p-10">
             <Tabs
