@@ -7,20 +7,18 @@ import { Chart } from "../../../components";
 
 export const TrippingSpeed = (trippingSpeed) => {
   const darkMode = useRecoilValue(darkModeState);
-  const [selectedItem, setSelectedItem] = useState("2");
-  const [selectedItem2, setSelectedItem2] = useState("2");
+  const [selectedItem, setSelectedItem] = useState("1");
+  const [selectedItem2, setSelectedItem2] = useState("1");
 
   var TS_Data = trippingSpeed.trippingSpeed["TS_Data"];
-  console.log(groupAndAverage(TS_Data, ["well", "phase", "drill_pipe_size"], "speed"), "by well")
-  console.log(groupAndAverage(TS_Data, ["rig", "phase", "drill_pipe_size"], "speed"), "by rig")
-  
+
 function groupAndAverage(data, keys, type) {
   function average(arr) {
     return arr.reduce((a, b) => a + b, 0) / arr.length;
   }
   let result = {};
   for (let obj of data) {
-    let key = keys.map(k => obj[k]).join("|");
+    let key = keys.slice(0, 2).map((k) => obj[k]).join("|");
 
     let subkey = obj["drill_pipe_size"];
 
@@ -83,10 +81,10 @@ function groupAndAverage(data, keys, type) {
           <div className="mr-1.5 mt-1.5">
             <Dropdown renderToggle={renderIconButton} placement="leftStart">
               <Dropdown.Item eventKey="1" onSelect={handleItemClick}>
-                Per Rig
+                Per Well
               </Dropdown.Item>
               <Dropdown.Item eventKey="2" onSelect={handleItemClick}>
-                Per Well
+                Per Rig
               </Dropdown.Item>
               <Dropdown.Item eventKey="3" onSelect={handleItemClick}>
                 Per Hoisting System
@@ -103,7 +101,7 @@ function groupAndAverage(data, keys, type) {
               unit: "m/h",
               Benchmark_3_passed: "2",
               Benchmark_5_passed: "3",
-              show_benchmark: "Yes",
+              show_benchmark: "No",
             }}
             chartType="GroupedBarChart"
             className="h-160"
@@ -119,7 +117,7 @@ function groupAndAverage(data, keys, type) {
               unit: "m/h",
               Benchmark_3_passed: "2",
               Benchmark_5_passed: "3",
-              show_benchmark: "Yes",
+              show_benchmark: "No",
             }}
             chartType="GroupedBarChart"
             className="h-160"
@@ -132,10 +130,10 @@ function groupAndAverage(data, keys, type) {
           <div className="mr-1.5 mt-1.5">
             <Dropdown renderToggle={renderIconButton} placement="leftStart">
               <Dropdown.Item eventKey="1" onSelect={handleItemClick2}>
-                Per Rig
+                Per Well
               </Dropdown.Item>
               <Dropdown.Item eventKey="2" onSelect={handleItemClick2}>
-                Per Well
+                Per Rig
               </Dropdown.Item>
             </Dropdown>
           </div>
@@ -149,7 +147,7 @@ function groupAndAverage(data, keys, type) {
               unit: "Minute",
               Benchmark_3_passed: "2",
               Benchmark_5_passed: "3",
-              show_benchmark: "Yes",
+              show_benchmark: "No",
             }}
             chartType="GroupedBarChart"
             className="h-160"
@@ -165,7 +163,7 @@ function groupAndAverage(data, keys, type) {
               unit: "Minute",
               Benchmark_3_passed: "2",
               Benchmark_5_passed: "3",
-              show_benchmark: "Yes",
+              show_benchmark: "No",
             }}
             chartType="GroupedBarChart"
             className="h-160"
