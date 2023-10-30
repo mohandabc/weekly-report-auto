@@ -33,12 +33,13 @@ export const BackLog = () => {
   const [animation, setAnimation] = useState(false);
 
   useEffect(() => {
+    setAnimation(true);
     const fetchData = async () => {
-      if (!data.length) {
+      // if (!data.length) {
         setIsLoading(true);
-      } else {
+      // } else {
         setIsRefetching(true);
-      }
+      // }
 
       const url = new URL("fetchDeliverables/", BACK_URL);
       url.searchParams.set("page", `${pagination.pageIndex}`);
@@ -67,7 +68,6 @@ export const BackLog = () => {
         const response = await fetch(url.href);
         const json = await response.json();
         setData(json.items);
-        setAnimation(true);
         setRowCount(json.total);
       } catch (error) {
         setIsError(true);
@@ -176,7 +176,7 @@ export const BackLog = () => {
             <Loader></Loader>
           </div>
           <div
-            className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto}`}
+            className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto`}
           >
             <div className="flex justify-center items-center">
               <div className="py-9">
