@@ -99,13 +99,13 @@ export const MonitoringKPI = (monitoringKPI) => {
           <div className="mr-1.5 mt-1.5">
             <Dropdown renderToggle={renderIconButton} placement="leftStart">
               <Dropdown.Item eventKey="1" onSelect={handleItemClick}>
-                Graph | Per Rig
+                Rig
               </Dropdown.Item>
               <Dropdown.Item eventKey="2" onSelect={handleItemClick}>
-                Table | View
+                Tablular View
               </Dropdown.Item>
               <Dropdown.Item eventKey="3" onSelect={handleItemClick}>
-                Graph | Total
+                Total
               </Dropdown.Item>
             </Dropdown>
           </div>
