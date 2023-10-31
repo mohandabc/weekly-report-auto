@@ -87,7 +87,10 @@ function groupAndAverage(data, keys, type) {
                 Per Rig
               </Dropdown.Item>
               <Dropdown.Item eventKey="3" onSelect={handleItemClick}>
-                Per Hoisting System
+                Top Drive
+              </Dropdown.Item>
+              <Dropdown.Item eventKey="4" onSelect={handleItemClick}>
+                Kelly
               </Dropdown.Item>
             </Dropdown>
           </div>
@@ -124,6 +127,38 @@ function groupAndAverage(data, keys, type) {
             shadow={false}
           />
         )}
+        {selectedItem === "3" && (
+          <Chart
+            id="chart"
+            chartData={groupAndAverage(TS_Data.filter(item => item.rotary_system === "Top Drive"), ["rig", "phase", "drill_pipe_size"], "speed")}
+            title="Tripping Speed Average Per Rig (Top Drive)"
+            c_options={{
+              unit: "m/h",
+              Benchmark_3_passed: "2",
+              Benchmark_5_passed: "3",
+              show_benchmark: "No",
+            }}
+            chartType="GroupedBarChart"
+            className="h-160"
+            shadow={false}
+          />
+        )}
+        {selectedItem === "4" && (
+          <Chart
+            id="chart"
+            chartData={groupAndAverage(TS_Data.filter(item => item.rotary_system === "Kelly"), ["rig", "phase", "drill_pipe_size"], "speed")}
+            title="Tripping Speed Average Per Rig"
+            c_options={{
+              unit: "m/h",
+              Benchmark_3_passed: "2",
+              Benchmark_5_passed: "3",
+              show_benchmark: "No",
+            }}
+            chartType="GroupedBarChart"
+            className="h-160"
+            shadow={false}
+          />
+        )}
       </div>
       <div className="sticky rounded-xl bg-stone-100 dark:bg-stone-400 mt-10">
         <div className="flex justify-end">
@@ -134,6 +169,12 @@ function groupAndAverage(data, keys, type) {
               </Dropdown.Item>
               <Dropdown.Item eventKey="2" onSelect={handleItemClick2}>
                 Per Rig
+              </Dropdown.Item>
+              <Dropdown.Item eventKey="3" onSelect={handleItemClick2}>
+                Top Drive
+              </Dropdown.Item>
+              <Dropdown.Item eventKey="4" onSelect={handleItemClick2}>
+                Kelly
               </Dropdown.Item>
             </Dropdown>
           </div>
@@ -159,6 +200,38 @@ function groupAndAverage(data, keys, type) {
             id="chart1"
             chartData={groupAndAverage(TS_Data, ["rig", "phase", "drill_pipe_size"], "connectionTime")}
             title="Tripping Connection Time Average Per Rig"
+            c_options={{
+              unit: "Minute",
+              Benchmark_3_passed: "2",
+              Benchmark_5_passed: "3",
+              show_benchmark: "No",
+            }}
+            chartType="GroupedBarChart"
+            className="h-160"
+            shadow={false}
+          />
+        )}
+        {selectedItem2 === "3" && (
+          <Chart
+            id="chart1"
+            chartData={groupAndAverage(TS_Data.filter(item => item.rotary_system === "Top Drive"), ["rig", "phase", "drill_pipe_size"], "connectionTime")}
+            title="Top Drive"
+            c_options={{
+              unit: "Minute",
+              Benchmark_3_passed: "2",
+              Benchmark_5_passed: "3",
+              show_benchmark: "No",
+            }}
+            chartType="GroupedBarChart"
+            className="h-160"
+            shadow={false}
+          />
+        )}
+        {selectedItem2 === "4" && (
+          <Chart
+            id="chart1"
+            chartData={groupAndAverage(TS_Data.filter(item => item.rotary_system === "Kelly"), ["rig", "phase", "drill_pipe_size"], "connectionTime")}
+            title="Kelly"
             c_options={{
               unit: "Minute",
               Benchmark_3_passed: "2",
