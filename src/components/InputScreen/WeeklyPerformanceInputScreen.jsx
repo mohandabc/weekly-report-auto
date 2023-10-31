@@ -263,7 +263,6 @@ export const WeeklyPerformanceInputScreen = ({
       setDrillState(data["drill_state_CT"] || {});
       setMonitoringKPI(data["monitoring_kpi"] || {});
       setNPTAnalysis(data["NPT_analysis"] || {});
-      setLoadingValue(false);
     });
   };
 
@@ -273,12 +272,11 @@ export const WeeklyPerformanceInputScreen = ({
       console.log("From Fastapi Backend getTrippingSpeedData :", res);
       setTrippingSpeed(res || {});
       if (typeof(res)=='string'){
-        setLoadingValue(false);
         setMsg({
           msg: res,
           color: "text-red-500",
         });}
-        
+      setLoadingValue(false);
     });
   };
 

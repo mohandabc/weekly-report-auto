@@ -43,7 +43,7 @@ export const WeeklyPerformance = () => {
         setNPTAnalysis={setNPTAnalysis}
         setIsDataEmpty={setIsDataEmpty}
       />
-      {!isDataEmpty ? (
+      {!isDataEmpty&&trippingSpeed ? (
         <div id="result-section" className={`bg-slate-300 dark:bg-zinc-900`}>
           <div className="p-10">
             <Tabs
