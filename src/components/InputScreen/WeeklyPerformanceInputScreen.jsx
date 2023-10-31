@@ -8,7 +8,7 @@ import {
   TagPicker,
   Checkbox,
 } from "rsuite";
-import { getData } from "../../api/api";
+import { getData, getDataWithErrors } from "../../api/api";
 import { API_URL, BACK_URL } from "../../constants/URI";
 import { predefinedRanges } from "../../constants/constants";
 
@@ -241,7 +241,7 @@ export const WeeklyPerformanceInputScreen = ({
 
   const getWeeklyData = (params) => {
     const path = "api/reports/weekly_performance_oilport";
-    getData(API_URL, path, params).then((res) => {
+    getDataWithErrors(API_URL, path, params).then((res) => {
       let data = res.result;
       setWeeklyPerformanceData(data || {});
       var isEmptydata = isEmptyObjectExcept(data, 'monitoring_kpi_phases');
@@ -251,6 +251,13 @@ export const WeeklyPerformanceInputScreen = ({
           color: "text-red-500",
         });
       }
+      if (typeof(res)=='string'){
+        setLoadingValue(false);
+        setMsg({
+          msg: res,
+          color: "text-red-500",
+        });}
+
       setIsDataEmpty(isEmptydata);
       setEventsKPI(data["events_data"] || {});
       setDrillState(data["drill_state_CT"] || {});
@@ -262,9 +269,16 @@ export const WeeklyPerformanceInputScreen = ({
 
   const getTrippingSpeedData = (params) => {
     const path = "TrippingSpeed/getWeeklyPerformanceData/";
-    getData(BACK_URL, path, params).then((res) => {
+    getDataWithErrors(BACK_URL, path, params).then((res) => {
       console.log("From Fastapi Backend getTrippingSpeedData :", res);
       setTrippingSpeed(res || {});
+      if (typeof(res)=='string'){
+        setLoadingValue(false);
+        setMsg({
+          msg: res,
+          color: "text-red-500",
+        });}
+        
     });
   };
 
