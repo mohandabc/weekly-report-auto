@@ -35,11 +35,11 @@ function groupAndAverage(data, keys, type) {
       result[key][subkey]["night"] = [];
     }
     if (type === "speed") {
-      result[key][subkey]["day"].push(obj["avg_spd_day"]);
-      result[key][subkey]["night"].push(obj["avg_spd_night"]);
+      result[key][subkey]["day"].push(obj.gross_speed.day);
+      result[key][subkey]["night"].push(obj.gross_speed.night);
     } else if (type === "connectionTime") {
-      result[key][subkey]["day"].push(obj["avg_ct_day"]);
-      result[key][subkey]["night"].push(obj["avg_ct_night"]);
+      result[key][subkey]["day"].push(obj.connection_time.day);
+      result[key][subkey]["night"].push(obj.connection_time.night);
     } else {
       return "Invalid type parameter. Please use either 'speed' or 'connectionTime'.";
     }
@@ -51,7 +51,7 @@ function groupAndAverage(data, keys, type) {
     }
   }
   return result;
-}
+}  
 
 
   const handleItemClick = (itemKey) => {
