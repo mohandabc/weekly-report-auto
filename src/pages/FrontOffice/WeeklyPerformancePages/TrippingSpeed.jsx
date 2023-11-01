@@ -40,8 +40,8 @@ function groupAndAverage(data, keys, type) {
       result[key][subkey]["day"].push(obj.gross_speed.day);
       result[key][subkey]["night"].push(obj.gross_speed.night);
     } else if (type === "connectionTime") {
-      result[key][subkey]["day"].push(obj.connection_time.day);
-      result[key][subkey]["night"].push(obj.connection_time.night);
+      result[key][subkey]["day"].push((obj.connection_time.day/60).toFixed(2));
+      result[key][subkey]["night"].push((obj.connection_time.night/60).toFixed(2));
     } else {
       return "Invalid type parameter. Please use either 'speed' or 'connectionTime'.";
     }
