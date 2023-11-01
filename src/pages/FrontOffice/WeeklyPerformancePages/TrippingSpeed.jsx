@@ -9,8 +9,10 @@ export const TrippingSpeed = (trippingSpeed) => {
   const darkMode = useRecoilValue(darkModeState);
   const [selectedItem, setSelectedItem] = useState("1");
   const [selectedItem2, setSelectedItem2] = useState("1");
+  const [selectedItem3, setSelectedItem3] = useState("1");
 
   var TS_Data = trippingSpeed.trippingSpeed["TS_Data"];
+  var ILT_Data = trippingSpeed.trippingSpeed["ilt"];
 
 function groupAndAverage(data, keys, type) {
   function average(arr) {
@@ -53,12 +55,39 @@ function groupAndAverage(data, keys, type) {
   return result;
 }  
 
+function group_ilt_data(data, option) {
+  let grouped_data = [];
+  let temp = {};
+  for (let element of data) {
+    let { rig, well, phase, saving, lost, data } = element;
+    let key = option === "well" ? `${well}|${phase}` : option === "rig" ? `${rig}|${phase}` : null;
+    if (key === null) {
+      return "Invalid option. Please choose either well or rig.";
+    }
+    if (temp.hasOwnProperty(key)) {
+      temp[key].saving += saving;
+      temp[key].lost += lost;
+      temp[key].data += data;
+    } else {
+      temp[key] = { saving, lost, data };
+    }
+  }
+  for (let key of Object.keys(temp)) {
+    let obj = option === "well" ? { well_section: key, ...temp[key] } : { rig_section: key, ...temp[key] };
+    grouped_data.push(obj);
+  }
+  return grouped_data;
+}
+
 
   const handleItemClick = (itemKey) => {
     setSelectedItem(itemKey);
   };
   const handleItemClick2 = (itemKey) => {
     setSelectedItem2(itemKey);
+  };
+  const handleItemClick3 = (itemKey) => {
+    setSelectedItem3(itemKey);
   };
 
   const renderIconButton = (props, ref) => {
@@ -239,6 +268,46 @@ function groupAndAverage(data, keys, type) {
               show_benchmark: "No",
             }}
             chartType="GroupedBarChart"
+            className="h-160"
+            shadow={false}
+          />
+        )}
+      </div>
+      <div className="sticky rounded-xl bg-stone-100 dark:bg-stone-400 mt-10">
+        <div className="flex justify-end">
+          <div className="mr-1.5 mt-1.5">
+            <Dropdown renderToggle={renderIconButton} placement="leftStart">
+              <Dropdown.Item eventKey="1" onSelect={handleItemClick3}>
+                Per Well
+              </Dropdown.Item>
+              <Dropdown.Item eventKey="2" onSelect={handleItemClick3}>
+                Per Rig
+              </Dropdown.Item>
+            </Dropdown>
+          </div>
+        </div>
+        {selectedItem3 === "1" && (
+          <Chart
+            id="chart2"
+            chartData={group_ilt_data(ILT_Data,'well')}
+            title="ILT Per Well"
+            c_options={{
+              option: "well",
+            }}
+            chartType="ILT"
+            className="h-160"
+            shadow={false}
+          />
+        )}
+        {selectedItem3 === "2" && (
+          <Chart
+            id="chart2"
+            chartData={group_ilt_data(ILT_Data,'rig')}
+            title="ILT Per Rig"
+            c_options={{
+              option: "rig",
+            }}
+            chartType="ILT"
             className="h-160"
             shadow={false}
           />

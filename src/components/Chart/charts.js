@@ -2103,3 +2103,128 @@ export class NPT_SH_GroupedBarChart extends Chart
             titles.marginBottom = 60;
     }
 }
+
+export class ILT extends Chart
+{
+    buildChart(data, container, title, options){
+        let option_section = options.option=='well'?'well_section':'rig_section';
+        var chart = am4core.create(container, am4charts.XYChart);
+        chart.hiddenState.properties.opacity = 0;
+
+        chart.data = data;
+
+        chart.colors.step = 2;
+        chart.padding(30, 30, 10, 30);
+        chart.legend = new am4charts.Legend();
+
+        var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+        categoryAxis.dataFields.category = option_section;
+        categoryAxis.renderer.grid.template.location = 0;
+        categoryAxis.renderer.minGridDistance = 20;
+
+        var label = categoryAxis.renderer.labels.template;
+        label.truncate = true;
+        label.maxWidth = 200;
+        label.tooltipText = options.option=='well'?'{well_section}':'{rig_section}';
+
+        categoryAxis.events.on("sizechanged", function(ev) {
+            var axis = ev.target;
+            var cellWidth = axis.pixelWidth / (axis.endIndex - axis.startIndex);
+            if (cellWidth < axis.renderer.labels.template.maxWidth) {
+              axis.renderer.labels.template.rotation = -45;
+              axis.renderer.labels.template.horizontalCenter = "right";
+              axis.renderer.labels.template.verticalCenter = "middle";
+            }
+            else {
+              axis.renderer.labels.template.rotation = 0;
+              axis.renderer.labels.template.horizontalCenter = "middle";
+              axis.renderer.labels.template.verticalCenter = "top";
+            }
+          });
+
+        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.min = 0;
+        valueAxis.strictMinMax = true;
+        valueAxis.calculateTotals = true;
+        valueAxis.renderer.minWidth = 50;
+        valueAxis.extraMax = 0.1;
+        valueAxis.title.text = "Hours";
+
+        var series1 = chart.series.push(new am4charts.ColumnSeries());
+        series1.columns.template.width = am4core.percent(80);
+        series1.name = "PT";
+        series1.dataFields.categoryX = option_section;
+        series1.dataFields.valueY = "data";
+        series1.fill = am4core.color("#50B5FA");
+        ;
+        series1.dataItems.template.locations.categoryX = 0.5;
+        series1.stacked = true;
+        series1.tooltip.pointerOrientation = "vertical";
+
+        var bullet1 = series1.bullets.push(new am4charts.LabelBullet());
+        bullet1.interactionsEnabled = false;
+        bullet1.label.fill = am4core.color("#ffffff");
+        bullet1.locationY = 0.5;
+        bullet1.label.text = "{valueY.formatNumber('#.00')}";
+        var series2 = chart.series.push(new am4charts.ColumnSeries());
+        series2.columns.template.width = am4core.percent(80);
+
+        series2.name = "Saving";
+        series2.dataFields.categoryX = option_section;
+        series2.dataFields.valueY = "saving";
+        series2.dataItems.template.locations.categoryX = 0.5;
+        series2.stacked = true;
+        series2.fill = am4core.color("#66DE93");
+        series2.tooltip.pointerOrientation = "vertical";
+
+        var bullet2 = series2.bullets.push(new am4charts.LabelBullet());
+        bullet2.interactionsEnabled = false;
+        bullet2.locationY = 0.5;
+        bullet2.label.fill = am4core.color("#ffffff");
+
+        series2.columns.template.events.on("sizechanged", function (ev) {
+            if (ev.target.dataItem && ev.target.dataItem.bullets) {
+                var height = ev.target.pixelHeight;
+                ev.target.dataItem.bullets.each(function (id, bullet2) {
+                    if (height > 0) {
+                        bullet2.label.text = "{valueY.formatNumber('#.00')}";
+                    } 
+                });
+            }
+        });
+        var series3 = chart.series.push(new am4charts.ColumnSeries());
+        series3.columns.template.width = am4core.percent(80);
+        series3.name = "Lost";
+        series3.dataFields.categoryX = option_section;
+        series3.dataFields.valueY = "lost";
+        series3.dataItems.template.locations.categoryX = 0.5;
+        series3.stacked = true;
+        series3.tooltip.pointerOrientation = "vertical";
+        series3.fill = am4core.color("#FF616D");
+        ;
+
+        var bullet3 = series3.bullets.push(new am4charts.LabelBullet());
+        bullet3.interactionsEnabled = false;
+        bullet3.locationY = 0.5;
+        bullet3.label.fill = am4core.color("#ffffff");
+
+        series3.columns.template.events.on("sizechanged", function (ev) {
+            if (ev.target.dataItem && ev.target.dataItem.bullets) {
+                var height = ev.target.pixelHeight;
+                ev.target.dataItem.bullets.each(function (id, bullet3) {
+                    if (height > 0) {
+                        bullet3.label.text = "{valueY.formatNumber('#.00')}";
+                    }
+                });
+            }
+        });
+        chart.scrollbarX = new am4core.Scrollbar();
+        chart.scrollbarY = new am4core.Scrollbar();
+        chart.exporting.menu = new am4core.ExportMenu();
+
+        let titles = chart.titles.create();
+        titles.text = options.option=='well'?"ILT Per Well":"ILT Per Rig";
+        titles.fontSize = 25;
+        titles.marginBottom = 60;
+    }
+}

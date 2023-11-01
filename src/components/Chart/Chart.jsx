@@ -17,6 +17,7 @@ import {
   NPT,
   SemiCircle,
   NPT_SH_GroupedBarChart,
+  ILT,
 } from "./charts";
 import { darkModeState } from "../../shared/globalState";
 import gear from "../../assets/gear.svg";
@@ -102,6 +103,10 @@ export const Chart = ({
     }
     if (type === "NPT_SH_GroupedBarChart") {
       chart = new NPT_SH_GroupedBarChart(chartData, divID, title, options)
+        .chart;
+    }
+    if (type === "ILT") {
+      chart = new ILT(chartData, divID, title, options)
         .chart;
     }
   });
