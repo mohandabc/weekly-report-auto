@@ -217,7 +217,6 @@ export const WeeklyPerformanceInputScreen = ({
     setFormData(updatedFormValues);
     console.log("Params : ", updatedFormValues);
     setLoadingValue(true);
-    getTrippingSpeedData(updatedFormValues);
     getWeeklyData(updatedFormValues);
   };
 
@@ -240,6 +239,7 @@ export const WeeklyPerformanceInputScreen = ({
   }
 
   const getWeeklyData = (params) => {
+    setIsDataEmpty(true);
     const path = "api/reports/weekly_performance_oilport";
     getDataWithErrors(API_URL, path, params).then((res) => {
       let data = res.result;
@@ -263,10 +263,12 @@ export const WeeklyPerformanceInputScreen = ({
       setDrillState(data["drill_state_CT"] || {});
       setMonitoringKPI(data["monitoring_kpi"] || {});
       setNPTAnalysis(data["NPT_analysis"] || {});
+      getTrippingSpeedData(params);
     });
   };
 
   const getTrippingSpeedData = (params) => {
+    setTrippingSpeed(undefined);
     const path = "TrippingSpeed/getWeeklyPerformanceData/";
     getDataWithErrors(BACK_URL, path, params).then((res) => {
       console.log("From Fastapi Backend getTrippingSpeedData :", res);
