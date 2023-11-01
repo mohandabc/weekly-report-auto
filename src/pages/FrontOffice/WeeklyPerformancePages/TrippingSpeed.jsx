@@ -131,9 +131,9 @@ function group_ilt_data(data, option) {
             title="Tripping Speed Average Per Well"
             c_options={{
               unit: "m/h",
-              Benchmark_3_passed: "2",
-              Benchmark_5_passed: "3",
-              show_benchmark: "No",
+              Benchmark_3_passed: "600",
+              Benchmark_5_passed: "500",
+              show_benchmark: "Yes",
             }}
             chartType="GroupedBarChart"
             className="h-160"
@@ -147,9 +147,9 @@ function group_ilt_data(data, option) {
             title="Tripping Speed Average Per Rig"
             c_options={{
               unit: "m/h",
-              Benchmark_3_passed: "2",
-              Benchmark_5_passed: "3",
-              show_benchmark: "No",
+              Benchmark_3_passed: "600",
+              Benchmark_5_passed: "500",
+              show_benchmark: "Yes",
             }}
             chartType="GroupedBarChart"
             className="h-160"
@@ -163,9 +163,9 @@ function group_ilt_data(data, option) {
             title="Tripping Speed Average Per Rig (Top Drive)"
             c_options={{
               unit: "m/h",
-              Benchmark_3_passed: "2",
-              Benchmark_5_passed: "3",
-              show_benchmark: "No",
+              Benchmark_3_passed: "600",
+              Benchmark_5_passed: "500",
+              show_benchmark: "Yes",
             }}
             chartType="GroupedBarChart"
             className="h-160"
@@ -176,12 +176,12 @@ function group_ilt_data(data, option) {
           <Chart
             id="chart"
             chartData={groupAndAverage(TS_Data.filter(item => item.rotary_system === "Kelly"), ["rig", "phase", "drill_pipe_size"], "speed")}
-            title="Tripping Speed Average Per Rig"
+            title="Tripping Speed Average Per Rig (Top Drive)"
             c_options={{
               unit: "m/h",
-              Benchmark_3_passed: "2",
-              Benchmark_5_passed: "3",
-              show_benchmark: "No",
+              Benchmark_3_passed: "600",
+              Benchmark_5_passed: "500",
+              show_benchmark: "Yes",
             }}
             chartType="GroupedBarChart"
             className="h-160"
@@ -217,7 +217,7 @@ function group_ilt_data(data, option) {
               unit: "Minute",
               Benchmark_3_passed: "2",
               Benchmark_5_passed: "3",
-              show_benchmark: "No",
+              show_benchmark: "Yes",
             }}
             chartType="GroupedBarChart"
             className="h-160"
@@ -233,7 +233,7 @@ function group_ilt_data(data, option) {
               unit: "Minute",
               Benchmark_3_passed: "2",
               Benchmark_5_passed: "3",
-              show_benchmark: "No",
+              show_benchmark: "Yes",
             }}
             chartType="GroupedBarChart"
             className="h-160"
@@ -244,12 +244,12 @@ function group_ilt_data(data, option) {
           <Chart
             id="chart1"
             chartData={groupAndAverage(TS_Data.filter(item => item.rotary_system === "Top Drive"), ["rig", "phase", "drill_pipe_size"], "connectionTime")}
-            title="Top Drive"
+            title="Tripping Connection Time Average Per Rig (Top Drive)"
             c_options={{
               unit: "Minute",
               Benchmark_3_passed: "2",
               Benchmark_5_passed: "3",
-              show_benchmark: "No",
+              show_benchmark: "Yes",
             }}
             chartType="GroupedBarChart"
             className="h-160"
@@ -260,12 +260,12 @@ function group_ilt_data(data, option) {
           <Chart
             id="chart1"
             chartData={groupAndAverage(TS_Data.filter(item => item.rotary_system === "Kelly"), ["rig", "phase", "drill_pipe_size"], "connectionTime")}
-            title="Kelly"
+            title="Tripping Connection Time Average Per Rig (Kelly)"
             c_options={{
               unit: "Minute",
               Benchmark_3_passed: "2",
               Benchmark_5_passed: "3",
-              show_benchmark: "No",
+              show_benchmark: "Yes",
             }}
             chartType="GroupedBarChart"
             className="h-160"
@@ -290,7 +290,7 @@ function group_ilt_data(data, option) {
           <Chart
             id="chart2"
             chartData={group_ilt_data(ILT_Data,'well')}
-            title="ILT Per Well"
+            title="Invisible Lost Time Per Well"
             c_options={{
               option: "well",
             }}
@@ -303,7 +303,7 @@ function group_ilt_data(data, option) {
           <Chart
             id="chart2"
             chartData={group_ilt_data(ILT_Data,'rig')}
-            title="ILT Per Rig"
+            title="Invisible Lost Time Per Well Per Rig"
             c_options={{
               option: "rig",
             }}

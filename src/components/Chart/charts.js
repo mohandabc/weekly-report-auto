@@ -2223,7 +2223,7 @@ export class ILT extends Chart
         chart.exporting.menu = new am4core.ExportMenu();
 
         let titles = chart.titles.create();
-        titles.text = options.option=='well'?"ILT Per Well":"ILT Per Rig";
+        titles.text = title
         titles.fontSize = 25;
         titles.marginBottom = 60;
     }
