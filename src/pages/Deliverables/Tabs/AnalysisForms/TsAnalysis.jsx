@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Table, Button, Checkbox, SelectPicker, Pagination } from "rsuite";
 import { DatePicker } from "rsuite";
 import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../../../constants/constants";
@@ -58,6 +58,7 @@ function formatDateString(dateString) {
 
 const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
   const [descriptions, setDescriptions] = React.useState('');
+
   return (
     <Cell
       {...props}
@@ -100,6 +101,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
 
 export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent, parentStr}) => {
   const [TS_REPORT_DATA, setReportData] = useRecoilState(TSReportDataState);
+  const [loadingValue, setLoadingValue] = useState(false);
 
   const [limit, setLimit] = React.useState(10);
   const [page, setPage] = React.useState(1);
@@ -147,9 +149,10 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
       _id: doc_id,
       standline: updatedData,
     };
-
+    setLoadingValue(true);
     getData(BACK_URL, "TrippingSpeed/updateDoc", requestData).then((res) => {
-      if ("msg" in res && res.status === 200) {
+      if (res) {
+        setLoadingValue(false);
         showMessage("Tripping speed analysis updated successfully", "text-green-600", 2000);
         
       }
@@ -469,7 +472,7 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
             onClick={handleDisplayReportClick}>
             Display Report
           </Button>
-          <Button color="blue" appearance="primary" className="mx-4" onClick={handleSaveClick}>
+          <Button color="blue" appearance="primary" className="mx-4" onClick={handleSaveClick} loading={loadingValue}>
             Save
           </Button>
         </div>
