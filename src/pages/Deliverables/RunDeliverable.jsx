@@ -33,6 +33,10 @@ export const RunDeliverable = () => {
   }
 
   useEffect(()=>{
+    setReportData({});
+  }, [])
+
+  useEffect(()=>{
     setChartsToPrint(chartsIds);
   }, [TS_REPORT_DATA])
 
