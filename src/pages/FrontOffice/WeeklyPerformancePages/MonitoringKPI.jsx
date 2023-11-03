@@ -9,7 +9,8 @@ import MaterialReactTable from "material-react-table";
 export const MonitoringKPI = (monitoringKPI) => {
   const darkMode = useRecoilValue(darkModeState);
   const [selectedItem, setSelectedItem] = useState("1");
-
+  var progress_charts = groupByWellName(monitoringKPI['monitoringKPI']['cost_and_depth_vs_time']);
+  console.log(progress_charts)
   const handleItemClick = (itemKey) => {
     setSelectedItem(itemKey);
   };
@@ -72,6 +73,18 @@ export const MonitoringKPI = (monitoringKPI) => {
     },
   ];
 
+  function groupByWellName(data) {
+    return data.reduce(function (acc, cur) {
+        var well_name = cur.well_name;
+        if (acc.hasOwnProperty(well_name)) {
+            acc[well_name].push(cur);
+        } else {
+            acc[well_name] = [cur];
+        }
+        return acc;
+    }, {});
+}
+
   function createNestedDict(array) {
     let result = {};
     for (let element of array) {
@@ -89,7 +102,7 @@ export const MonitoringKPI = (monitoringKPI) => {
   return (
     <div
       className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto p-10"
-      style={{ height: 915, width: "100%" }}
+      style={{width: "100%" }}
     >
       <div
         className="sticky rounded-xl bg-stone-100 dark:bg-stone-400"
@@ -226,6 +239,22 @@ export const MonitoringKPI = (monitoringKPI) => {
             shadow={false}
           />
         )}
+      </div>
+      <div
+        className="sticky rounded-xl bg-stone-100 dark:bg-stone-400 mt-10"
+        style={{ width: "100%" }}
+      >
+      <div className="grid grid-cols-2 gap-4">
+        {Object.keys(progress_charts).map(key => (
+          <Chart
+            key={key}
+            title={`Progress Chart - (${key})`}
+            id={`chart-${key}`}
+            chartData={progress_charts[key]}
+            chartType="DateAxes"
+          />
+        ))}
+      </div>
       </div>
     </div>
   );
