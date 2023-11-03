@@ -241,7 +241,7 @@ export const MonitoringKPI = (monitoringKPI) => {
         )}
       </div>
       <div
-        className="sticky rounded-xl bg-stone-100 dark:bg-stone-400 mt-10"
+        className="sticky rounded-xl bg-gray-200 dark:bg-stone-700 mt-10"
         style={{ width: "100%" }}
       >
       <div className="grid grid-cols-2 gap-4">
