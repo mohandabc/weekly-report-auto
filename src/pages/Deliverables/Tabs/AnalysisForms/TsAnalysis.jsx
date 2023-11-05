@@ -279,7 +279,7 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
           animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
         }`}
       >
-        <div className="grid grid-cols-3 gap-20 my-3 px-10 mx-auto bg-gray-100 rounded-lg text-sm justify-items-center">
+        <div className="grid grid-cols-3 gap-20 my-3 px-10 mx-auto bg-gray-100 rounded-lg text-sm">
           <div className="pt-2 text-gray-700 text-center">
             <b className="text-gray-900">Created By : </b>{" "}
             {TsAnalysisData.created_by}
@@ -384,12 +384,12 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
         </div>
       </div>
       <div
-        className={`text-zinc-500 dark:text-black flex justify-between delay-200 duration-1000 transition-all ease-out ${
+        className={`text-zinc-500 dark:text-black flex justify-center items-center delay-200 duration-1000 transition-all ease-out ${
           // hiding components when they first appear and then applying a translate effect gradually
           animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
         }`}
       >
-        <div className="grid grid-cols-4 gap-14 mt-3 mx-auto px-10 bg-gray-100 rounded-lg justify-items-center">
+        <div className="grid grid-cols-4 mt-3 px-10 bg-gray-100 rounded-lg justify-center items-center">
           <div className="text-sm">
             <div className="pt-2 text-gray-700">
               <b className="text-gray-900">Well :</b> {TsAnalysisData.well}
