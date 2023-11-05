@@ -14,46 +14,55 @@ export const TrippingSpeed = (trippingSpeed) => {
   var TS_Data = trippingSpeed.trippingSpeed["TS_Data"];
   var ILT_Data = trippingSpeed.trippingSpeed["ilt"];
 
-function groupAndAverage(data, keys, type) {
-  function average(arr) {
-    return arr.reduce((a, b) => a + b, 0) / arr.length;
-  }
-  let result = {};
-  for (let obj of data) {
-    let key = keys.slice(0, 2).map((k) => obj[k]).join("|");
-
-    let subkey = obj["drill_pipe_size"];
-
-    if (!result[key]) {
-      result[key] = {};
+  function groupAndAverage(data, keys, type) {
+    function average(arr) {
+      let result = arr.reduce((a, b) => a + b, 0) / arr.length;
+      return Number(result.toFixed(2));
     }
-    if (!result[key][subkey]) {
-      result[key][subkey] = {};
+    let result = {};
+    for (let obj of data) {
+      let key = keys.slice(0, 2).map((k) => obj[k]).join("|");
+  
+      let subkey = obj["drill_pipe_size"];
+  
+      if (!result[key]) {
+        result[key] = {};
+      }
+      if (!result[key][subkey]) {
+        result[key][subkey] = {};
+      }
+      if (!result[key][subkey]["day"]) {
+        result[key][subkey]["day"] = [];
+      }
+      if (!result[key][subkey]["night"]) {
+        result[key][subkey]["night"] = [];
+      }
+      if (type === "speed") {
+        if (typeof obj.gross_speed.day !== "undefined") {
+          result[key][subkey]["day"].push(obj.gross_speed.day);
+        }
+        if (typeof obj.gross_speed.night !== "undefined") {
+          result[key][subkey]["night"].push(obj.gross_speed.night);
+        }
+      } else if (type === "connectionTime") {
+        if (typeof obj.connection_time.day !== "undefined") {
+          result[key][subkey]["day"].push(obj.connection_time.day);
+        }
+        if (typeof obj.connection_time.night !== "undefined") {
+          result[key][subkey]["night"].push(obj.connection_time.night);
+        }
+      } else {
+        return "Invalid type parameter. Please use either 'speed' or 'connectionTime'.";
+      }
     }
-    if (!result[key][subkey]["day"]) {
-      result[key][subkey]["day"] = [];
+    for (let key in result) {
+      for (let subkey in result[key]) {
+        result[key][subkey]["day"] = average(result[key][subkey]["day"]);
+        result[key][subkey]["night"] = average(result[key][subkey]["night"]);
+      }
     }
-    if (!result[key][subkey]["night"]) {
-      result[key][subkey]["night"] = [];
-    }
-    if (type === "speed") {
-      result[key][subkey]["day"].push(obj.gross_speed.day);
-      result[key][subkey]["night"].push(obj.gross_speed.night);
-    } else if (type === "connectionTime") {
-      result[key][subkey]["day"].push((obj.connection_time.day/60).toFixed(2));
-      result[key][subkey]["night"].push((obj.connection_time.night/60).toFixed(2));
-    } else {
-      return "Invalid type parameter. Please use either 'speed' or 'connectionTime'.";
-    }
-  }
-  for (let key in result) {
-    for (let subkey in result[key]) {
-      result[key][subkey]["day"] = average(result[key][subkey]["day"]);
-      result[key][subkey]["night"] = average(result[key][subkey]["night"]);
-    }
-  }
-  return result;
-}  
+    return result;
+  }  
 
 function group_ilt_data(data, option) {
   let grouped_data = [];
