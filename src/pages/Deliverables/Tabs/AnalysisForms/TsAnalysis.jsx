@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Table, Button, Checkbox, SelectPicker, Pagination } from "rsuite";
 import { DatePicker } from "rsuite";
 import { DELIVERABLE_CONFIG_BAR_OPTIONS } from "../../../../constants/constants";
@@ -58,6 +58,7 @@ function formatDateString(dateString) {
 
 const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
   const [descriptions, setDescriptions] = React.useState('');
+
   return (
     <Cell
       {...props}
@@ -100,6 +101,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
 
 export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent, parentStr}) => {
   const [TS_REPORT_DATA, setReportData] = useRecoilState(TSReportDataState);
+  const [loadingValue, setLoadingValue] = useState(false);
 
   const [limit, setLimit] = React.useState(10);
   const [page, setPage] = React.useState(1);
@@ -147,9 +149,10 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
       _id: doc_id,
       standline: updatedData,
     };
-
+    setLoadingValue(true);
     getData(BACK_URL, "TrippingSpeed/updateDoc", requestData).then((res) => {
-      if ("msg" in res && res.status === 200) {
+      if (res) {
+        setLoadingValue(false);
         showMessage("Tripping speed analysis updated successfully", "text-green-600", 2000);
         
       }
@@ -276,7 +279,7 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
           animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
         }`}
       >
-        <div className="grid grid-cols-3 gap-20 my-3 px-10 mx-auto bg-gray-100 rounded-lg text-sm justify-items-center">
+        <div className="grid grid-cols-3 gap-20 my-3 px-10 mx-auto bg-gray-100 rounded-lg text-sm">
           <div className="pt-2 text-gray-700 text-center">
             <b className="text-gray-900">Created By : </b>{" "}
             {TsAnalysisData.created_by}
@@ -381,12 +384,12 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
         </div>
       </div>
       <div
-        className={`text-zinc-500 dark:text-black flex justify-between delay-200 duration-1000 transition-all ease-out ${
+        className={`text-zinc-500 dark:text-black flex justify-center items-center delay-200 duration-1000 transition-all ease-out ${
           // hiding components when they first appear and then applying a translate effect gradually
           animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
         }`}
       >
-        <div className="grid grid-cols-4 gap-14 mt-3 mx-auto px-10 bg-gray-100 rounded-lg justify-items-center">
+        <div className="grid grid-cols-4 mt-3 px-10 bg-gray-100 rounded-lg justify-center items-center">
           <div className="text-sm">
             <div className="pt-2 text-gray-700">
               <b className="text-gray-900">Well :</b> {TsAnalysisData.well}
@@ -469,7 +472,7 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
             onClick={handleDisplayReportClick}>
             Display Report
           </Button>
-          <Button color="blue" appearance="primary" className="mx-4" onClick={handleSaveClick}>
+          <Button color="blue" appearance="primary" className="mx-4" onClick={handleSaveClick} loading={loadingValue}>
             Save
           </Button>
         </div>

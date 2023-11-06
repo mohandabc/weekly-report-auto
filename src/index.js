@@ -13,7 +13,8 @@ import {
   RunDeliverable,
   DataUploader,
   LoginPage,
-  LogoutPage
+  LogoutPage,
+  WeeklyPerformance
 } from "./pages";
 import { BoDailyPage, BoWeeklyPage } from "./pages/BackOffice";
 import { ProtectedRoute } from "./components";
@@ -34,6 +35,7 @@ root.render(
             <Route path="/weeklyBo" element={<ProtectedRoute><TopMenu /><BoWeeklyPage /></ProtectedRoute>} />
             <Route path="/dailyBo" element={<ProtectedRoute><TopMenu /><BoDailyPage /></ProtectedRoute>} />
             <Route path="/eowr" element={<ProtectedRoute><TopMenu /><EOWR /></ProtectedRoute>} />
+            <Route path="/weekly-performance" element={<ProtectedRoute><TopMenu /><WeeklyPerformance /></ProtectedRoute>} />
             <Route path="/run" element={<ProtectedRoute><TopMenu /><RunDeliverable /></ProtectedRoute>} />
             <Route path="/data" element={<ProtectedRoute><TopMenu /><DataUploader /></ProtectedRoute>} />
             <Route path="/logout" element={<ProtectedRoute><TopMenu /><LogoutPage /></ProtectedRoute>} />

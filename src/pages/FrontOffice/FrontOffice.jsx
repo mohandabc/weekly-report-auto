@@ -29,6 +29,11 @@ export const FrontOffice = () => {
                 title="End Of Well Report (EOWR)" 
                 description="Automatically Generate End of Well Report"
               />
+            <ReportCard 
+                to="/weekly-performance"
+                title="Weekly Performance" 
+                description="Automatically Generate Weekly Performance"
+              />
             {/* <ReportCard 
                 to=""
                 title="FO Daily Report" 
