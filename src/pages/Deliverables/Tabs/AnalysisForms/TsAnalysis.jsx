@@ -189,14 +189,14 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
   const handleDisplayReportClick = async () => {
     let reportData = {};
 
-    const res = await getData(API_URL, 'shift-changes/', {'well_id' : TsAnalysisData.well_id});
-    let shifts = {}
-    if(res.result && res.result.shifts.length>0){
-      shifts = res.result?.shifts[0];
-    }else{
-      showMessage("Could not get crew change time, please set it in rigs in teamspace", "text-red-500", 3500);
-      return;
-    }
+    // const res = await getData(API_URL, 'shift-changes/', {'well_id' : TsAnalysisData.well_id});
+    let shifts = {shift_start:TsAnalysisData.crew_change_start, shift_end:TsAnalysisData.crew_change_end}
+    // if(res.result && res.result.shifts.length>0){
+    //   shifts = res.result?.shifts[0];
+    // }else{
+    //   showMessage("Could not get crew change time, please set it in rigs in teamspace", "text-red-500", 3500);
+    //   return;
+    // }
         
     reportData['TS_benchmark'] = TsAnalysisData.benchmarkTS;
     reportData['create_date'] = TsAnalysisData.create_date;
@@ -244,7 +244,9 @@ export const TsAnalysis = ({TsAnalysisData, resetStates, doc_id, ParentComponent
                                   'Value':(TsAnalysisData.performances.total_connections * (TsAnalysisData.benchmarkCT - seconds2minutes(TsAnalysisData.performances.average_connection_time))).toFixed(2), 
                                   'unit':'min'}];
 
-    reportData['connection_per_stand'] = TsAnalysisData.standline.map((item, index)=>({shift: dateTimeInRange(item.date_from, shifts)?"Day":'Night', 
+    reportData['connection_per_stand'] = TsAnalysisData.standline.map((item, index)=>({shift: dateTimeInRange(item.date_from, 
+                                                                                                      shifts)?
+                                                                                                      "Day":'Night', 
                                                                               stand: "stand "+ item.standNum, 
                                                                               c_time : seconds2minutes(item.connection_time), 
                                                                               t_speed: item.gross_speed, 
