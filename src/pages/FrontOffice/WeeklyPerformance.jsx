@@ -17,7 +17,8 @@ export const WeeklyPerformance = () => {
 
   useEffect(() => {
     console.log("Results : ", weeklyPerformanceData);
-  }, [weeklyPerformanceData]);
+    console.log("Results : ", eventsKPI);
+  }, [weeklyPerformanceData, eventsKPI]);
 
   useEffect(() => {
     const mainSection = document.getElementById("result-section");
@@ -75,7 +76,7 @@ export const WeeklyPerformance = () => {
               </TabPanel>
 
               <TabPanel>
-                <MonitoringKPI monitoringKPI={monitoringKPI}/>
+                <MonitoringKPI monitoringKPI={monitoringKPI} events={eventsKPI}/>
               </TabPanel>
 
               <TabPanel>

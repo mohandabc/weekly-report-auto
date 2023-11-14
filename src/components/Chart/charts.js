@@ -917,11 +917,39 @@ export class DateAxes extends Chart
                     ...
                     ]
         */
-        let chart = am4core.create(container, am4charts.XYChart);
-        chart.data = data.map(({ update_date, ...obj }) => ({
-            ...obj,
-            update_date: parseDate(update_date)
-            }));
+       let chart = am4core.create(container, am4charts.XYChart); 
+
+       
+
+        if (Array.isArray(data)){
+            let processedData = data.map(({ update_date, ...obj }) => ({
+                ...obj,
+                update_date: parseDate(update_date)
+           }));
+
+            chart.data = processedData;
+        }else{
+            let monitoringData = data['monitoring_kpi'];
+            let eventData = data['events'];
+            let processedData = monitoringData?.map(({ update_date, ...obj }) => {
+            
+                let data = {
+                    ...obj,
+                    update_date: parseDate(update_date),
+                }
+    
+                let event = eventData?.filter(event=>event.DateStart.split(" ")[0] === update_date);
+                if (event?.length>0) {                
+                    data["event_title"] = event[0].Title;
+                    data["event_depth"] = event[0].Depth;
+                    data["event_date"] =  parseDate(event[0].DateStart.split(' ')[0]);
+                }
+                return data;
+                
+            });
+            chart.data = processedData;
+        }
+        
         
         let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         dateAxis.renderer.minGridDistance = 50;
@@ -932,9 +960,7 @@ export class DateAxes extends Chart
             color2=am4core.color(color2).rgb;
             color2.a=0.6;
             let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-            if(chart.yAxes.indexOf(valueAxis) != 0){
-                valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
-            }
+            
             
             let series1 = chart.series.push(new am4charts.LineSeries());
             series1.dataFields.valueY = field1;
@@ -967,12 +993,42 @@ export class DateAxes extends Chart
             valueAxis.renderer.line.stroke = "#000";
             valueAxis.renderer.labels.template.fill = "#000";
             valueAxis.renderer.opposite = opposite;
+
+            
+            if(opposite) {
+                valueAxis.renderer.grid.template.disabled = true;
+            };
+            // valueAxis.min= 0;
             valueAxis.renderer.inversed = inversed;
             valueAxis.title.text = axisTitle;
         }
         
         createAxisAndSeries("cummul_depth","drilling_end", "Realised Depth (m)", "Planned Depth (m)", false, true, "#FF0000", "#0000FF", "Meters");
         createAxisAndSeries("cummul_cost", "planned_cost", "Cummul Cost (KDA)", "Planned Cost (KDA)", true, false, "#FFA500", "#00FF00", "KDA");
+        
+
+        // Add events
+        if(!Array.isArray(data) && data['events']){
+            var lineSeries = chart.series.push(new am4charts.LineSeries());
+            lineSeries.dataFields.valueY = 'event_depth';
+            lineSeries.dataFields.dateX = 'event_date';
+            lineSeries.strokeOpacity = 0;
+            lineSeries.yAxis = chart.yAxes.getIndex(0);
+            lineSeries.name = 'Events';
+    
+            // // Add a bullet
+            var bullet = lineSeries.bullets.push(new am4charts.Bullet());
+    
+            // // Add a triangle to act as am arrow
+            var arrow = bullet.createChild(am4core.Triangle);
+            arrow.width = 12;
+            arrow.height = 12;
+            arrow.rotation = 90
+            arrow.horizontalCenter = "middle";
+            arrow.verticalCenter = "middle";
+            arrow.tooltipText = "{event_title}: [bold]{valueY}[/]";
+        }
+        
 
         chart.legend = new am4charts.Legend();
         chart.cursor = new am4charts.XYCursor();

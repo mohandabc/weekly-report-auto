@@ -6,11 +6,15 @@ import BarChartIcon from "@rsuite/icons/BarChart";
 import { Chart } from "../../../components";
 import MaterialReactTable from "material-react-table";
 
-export const MonitoringKPI = (monitoringKPI) => {
+export const MonitoringKPI = (props) => {
   const darkMode = useRecoilValue(darkModeState);
   const [selectedItem, setSelectedItem] = useState("1");
-  var progress_charts = groupByWellName(monitoringKPI['monitoringKPI']['cost_and_depth_vs_time']);
-  console.log(progress_charts)
+
+  var monitoringKPI = props.monitoringKPI;
+  var events = groupByWellName(props.events?.event_kpi_res);
+  console.log(events);
+  var progress_charts = groupByWellName(monitoringKPI['cost_and_depth_vs_time']);
+  // console.log(progress_charts)
   const handleItemClick = (itemKey) => {
     setSelectedItem(itemKey);
   };
@@ -127,7 +131,7 @@ export const MonitoringKPI = (monitoringKPI) => {
           <Chart
             id="chart"
             chartData={createNestedDict(
-              monitoringKPI["monitoringKPI"]["drilled_vs_monitored_perRig"]
+              monitoringKPI["drilled_vs_monitored_perRig"]
             )}
             title="Meters Drilled Vs Monitored Per Rig"
             c_options={{
@@ -153,7 +157,7 @@ export const MonitoringKPI = (monitoringKPI) => {
               <MaterialReactTable
                 columns={monitoredVSdrilledColumns}
                 data={
-                  monitoringKPI["monitoringKPI"]["drilled_vs_monitored_perRig"]
+                  monitoringKPI["drilled_vs_monitored_perRig"]
                 }
                 initialState={{
                   density: "compact",
@@ -226,7 +230,7 @@ export const MonitoringKPI = (monitoringKPI) => {
         {selectedItem === "3" && (
           <Chart
             id="chart"
-            chartData={monitoringKPI["monitoringKPI"]["drilled_vs_monitored"]}
+            chartData={monitoringKPI["drilled_vs_monitored"]}
             title="Total Drilled Meters Vs Total Monitored Meters"
             c_options={{
               unit: "Minute",
@@ -250,7 +254,7 @@ export const MonitoringKPI = (monitoringKPI) => {
             key={key}
             title={`Progress Chart - (${key})`}
             id={`chart-${key}`}
-            chartData={progress_charts[key]}
+            chartData={{'monitoring_kpi' : progress_charts[key], 'events': events[key]}}
             chartType="DateAxes"
           />
         ))}

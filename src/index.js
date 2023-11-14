@@ -24,6 +24,7 @@ import { TopMenu } from "./components/TopMenu";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
+  <div>
     {/* TODO: Dont forget to remove the strict mode when doployin because the strict mode renders everything twice */}
     <RecoilRoot>
       <BrowserRouter>
@@ -46,6 +47,7 @@ root.render(
         </AuthProvider>
       </BrowserRouter>
     </RecoilRoot>
+  </div>
   </React.StrictMode>
 );
 

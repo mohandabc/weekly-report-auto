@@ -185,7 +185,7 @@ function group_ilt_data(data, option) {
           <Chart
             id="chart"
             chartData={groupAndAverage(TS_Data.filter(item => item.rotary_system === "Kelly"), ["rig", "phase", "drill_pipe_size"], "speed")}
-            title="Tripping Speed Average Per Rig (Top Drive)"
+            title="Tripping Speed Average Per Rig (Kelly)"
             c_options={{
               unit: "m/h",
               Benchmark_3_passed: "600",
