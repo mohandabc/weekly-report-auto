@@ -55,7 +55,7 @@ export const ReportInputScreen = ({ title, configBarAction, options }) => {
       const path = 'api/reports/getwells';
       getData(API_URL, path, {})
       .then(res=> {
-        let data = res.result['wells'].map((item) => ({ label: item['name'], value: item['wid'] }));
+        let data = res.result['wells'].map((item) => ({ label: item['well'], value: item['wid'] }));
         setWellsplaceholder(data || []) 
       });
     },[]);

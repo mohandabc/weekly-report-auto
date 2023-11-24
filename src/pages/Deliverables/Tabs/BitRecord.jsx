@@ -132,24 +132,28 @@ export const BitRecord = () => {
             placeholder="Well"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
           <SelectPicker
             onChange={setBitSize}
             placeholder="Bit Size"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
           <SelectPicker
             onChange={setBitType}
             placeholder="Bit Type"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
           <SelectPicker
             onChange={setBitManu}
             placeholder="Bit Manufactor"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
         </div>
         <div
@@ -166,24 +170,28 @@ export const BitRecord = () => {
             placeholder="TFA"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
           <SelectPicker
             onChange={setBitSerialNo}
             placeholder="Bit Serial Number"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
           <SelectPicker
             onChange={setBitIADCcode}
             placeholder="Bit IADC Code"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
           <SelectPicker
             onChange={setBitModel}
             placeholder="Bit Model"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
         </div>
         <div
@@ -200,12 +208,14 @@ export const BitRecord = () => {
             placeholder="Bit Jets"
             data={data_placeHolder}
             style={styles.ewide}
+            disabled
           />
           <SelectPicker
             onChange={setBitNumber}
             placeholder="Bit Number"
             data={data_placeHolder}
             style={styles.ewide}
+            disabled
           />
         </div>
         <div
@@ -222,36 +232,42 @@ export const BitRecord = () => {
             placeholder="Inner rows"
             data={data_placeHolder}
             style={styles.small}
+            disabled
           />
           <SelectPicker
             onChange={setOuterRows}
             placeholder="Outer rows"
             data={data_placeHolder}
             style={styles.small}
+            disabled
           />
           <SelectPicker
             onChange={setDull}
             placeholder="Dull"
             data={data_placeHolder}
             style={styles.small}
+            disabled
           />
           <SelectPicker
             onChange={setLocation}
             placeholder="Location"
             data={data_placeHolder}
             style={styles.small}
+            disabled
           />
           <SelectPicker
             onChange={setBearingSeals}
             placeholder="Bearing seals"
             data={data_placeHolder}
             style={styles.small}
+            disabled
           />
           <SelectPicker
             onChange={setGauge}
             placeholder="Gauge 1/16 in"
             data={data_placeHolder}
             style={styles.small}
+            disabled
           />
         </div>
         <div
@@ -268,12 +284,14 @@ export const BitRecord = () => {
             placeholder="Other"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
           <SelectPicker
             onChange={setReason}
             placeholder="Reason"
             data={data_placeHolder}
             style={styles.wide}
+            disabled
           />
           <DateRangePicker
             value={dateRangeValue}
@@ -283,6 +301,7 @@ export const BitRecord = () => {
               width: 520,
               margin: 10,
             }}
+            disabled
           />
         </div>
         <div
@@ -295,10 +314,11 @@ export const BitRecord = () => {
                     }`}
         >
           <ActionButton
-            className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base my-7 py-2 px-4 rounded "
+            className="bg-gray-400 hover:bg-gray-500 text-black font-bold text-base my-7 py-2 px-4 rounded"
             text="Submit"
             action={processInput}
             args={[params]}
+            disabled
           ></ActionButton>
         </div>
       </div>

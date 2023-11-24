@@ -219,7 +219,7 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
             const gainLoss = data['Gained'] || data['Loss']
             const npt  = data['NPT']
 
-            let last_sentence = gainLoss < 0 && Math.abs(gainLoss)-npt > 0 ? ` and ${Math.abs(gainLoss)-npt} days are considered as ILT (invisible lost time)`:''
+            let last_sentence = gainLoss < 0 && Math.abs(gainLoss)-npt > 0 ? ` and ${(Math.abs(gainLoss)-npt).toFixed(2)} days are considered as ILT (invisible lost time)`:''
             let text = `The drilling and well completion plan was estimated at ${plan} days, and the well was completed over ${actual} days. 
             The total number of days ${gainLoss>0 ? 'gained' : 'lost'} is calculated at ${Math.abs(gainLoss)} days, which represents (${(Math.abs(gainLoss)/plan*100).toFixed(2)}%) of the 
             planned well, where ${npt} days are confirmed as NPT${last_sentence}.`
@@ -289,15 +289,21 @@ export const generateEOWR = (chartsToPrint, images, EOWRData, paragraphes) => {
         const trip_out_len = EOWRData['connection_details']['tripping_time']['pooh'].length;
         const trip_in_part_1_len = max_lines - drill_time_len;
 
+
         if(drill_time_len > 3){
             pageContent.push(buildTitle(1, "IV. Drilling & Tripping Connection Time KPI's"));
             pageContent.push(buildTitle(2, "1. Drilling Connection Time KPI's"));
-            pageContent.push(buildTable(EOWRData['connection_details']['drill_time'], 'grouped', event_custom_layout));
+            pageContent.push(buildTable(EOWRData['connection_details']['drill_time'].map(({['On Bottom']:on_bottom, ...rest})=>rest), 'grouped', event_custom_layout));
         }
         if(trip_in_len > 3){
             pageContent.push(buildTitle(2, "2. Trip In and Connection Time KPI's"));
             if (drill_time_len + trip_in_len > max_lines){
                 pageContent.push(buildTable(EOWRData['connection_details']['tripping_time']['rih'].slice(0, trip_in_part_1_len), 'grouped', event_custom_layout));
+            }
+            else
+            {
+                pageContent.push(buildTable(EOWRData['connection_details']['tripping_time']['rih'].slice(0, trip_in_part_1_len), 'grouped', event_custom_layout));
+
             }
         }
         if(pageContent.length>0){ 

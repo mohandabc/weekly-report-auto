@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from "react";
 
-import { ActionButton } from "../../../components";
-import { DateRangePicker } from "rsuite";
-import { dateStartEndState} from "../../../shared/globalState";
-import { useRecoilValue} from "recoil";
-import { SelectPicker } from "rsuite";
-import { BACK_URL } from "../../../constants/URI";
+import { PaginationComp } from "../../../components";
+import { DateRangePicker, InputNumber } from "rsuite";
+import { Form, Schema } from "rsuite";
+import { useAuth } from "../../../api/useAuth";
+
+import {
+  SelectPicker,
+  Input,
+  InputGroup,
+  Tooltip,
+  Whisper,
+  Button,
+} from "rsuite";
+import { API_URL, BACK_URL } from "../../../constants/URI";
 import { getData } from "../../../api/api";
-import { TsAnalysis } from "./AnalysisForms/TsAnalysis";
 import "./styles.css";
 
 const styles = {
-  wide: { height: 38, width: 250, margin: 10 },
+  wide: { height: 38, width: 250, marginLeft: 10, marginRight: 10 },
 };
 
 const data_placeHolder = [
@@ -20,90 +27,273 @@ const data_placeHolder = [
   "TEST-2",
 ].map((item) => ({ label: item, value: item }));
 
+const rotarySys_placeHolder = ["Top Drive", "Kelly"].map((item) => ({
+  label: item,
+  value: item,
+}));
+
+const TrippingType_placeHolder = ["RIH", "POOH"].map((item) => ({
+  label: item,
+  value: item,
+}));
+
+const tripReason_placeHolder = [
+  "Pick Up",
+  "Run Back",
+  "Drilling",
+  "Wiper Trip",
+  "Scraping",
+  "Completion",
+  "Clean Out",
+  "Coring",
+  "TD",
+  "BHA",
+  "Slow ROP",
+  "Logging",
+  "DST",
+  "Fishing",
+  "DPRB",
+  "Cement Plug",
+  "Safety String",
+  "Milling",
+].map((item) => ({ label: item, value: item }));
+
+const lastCSG_placeHolder = [
+  '30"',
+  '18" 5/8',
+  '13" 3/8',
+  '9" 5/8',
+  '7"',
+  '4" 1/2',
+].map((item) => ({ label: item, value: item }));
+
+const drillString_placeHolder = ['5"', '5" 1/2', '3"', '3" 1/2'].map(
+  (item) => ({ label: item, value: item })
+);
+
+const casedHole_placeHolder = ["Cased", "Open"].map((item) => ({
+  label: item,
+  value: item,
+}));
+
+const phase_placeHolder = [
+  '12"1/4',
+  '16"',
+  '17"1/2',
+  '22"',
+  '26"',
+  '28"',
+  '30"',
+  '3"3/4',
+  '36"',
+  '4"1/2',
+  '4" 3/4',
+  '6"',
+  '8"1/2',
+  '8.375"',
+  "Completion",
+  "Decompletion",
+  "Drill Out CMT",
+  "Flat Time",
+  'Inter Phase 12"1/4 - 8"1/2',
+  'Inter Phase 16" - 12"1/4',
+  'Inter Phase 17"1/2 - 12"1/4',
+  'Inter Phase 22" - 16"',
+  'Inter Phase 22" - 17 1/2"',
+  'Inter Phase 24" - 16"',
+  'Inter Phase 26" - 16"',
+  'Inter Phase 26" - 17"1/2',
+  'Inter Phase 28" - 22"',
+  'Inter Phase 28" - 24"',
+  'Inter Phase 28" - 26"',
+  'Inter Phase 30" - 28"',
+  'Inter Phase 36" - 26"',
+  'Inter Phase 36" - 28"',
+  'Inter Phase 36" - 30"',
+  'Inter Phase 6"- 3"3/4',
+  'Inter Phase 6"- 4"3/4',
+  'Inter Phase 8"1/2 - 6"',
+  "Recertification",
+  "Rig Move",
+  "Workover",
+].map((item) => ({ label: item, value: item }));
+
 export const TrippingSpeed = () => {
-  const dateStartEnd = useRecoilValue(dateStartEndState);
+  const { user } = useAuth();
+  const formValueInit = React.useState({
+    well: undefined,
+    rig: undefined,
+    rotarySys: undefined,
+    phase: undefined,
+    lastCSG: undefined,
+    TrippingType: undefined,
+    tripReason: undefined,
+    tripNumber: undefined,
+    casedHole: undefined,
+    drillString: undefined,
+    BHAname: undefined,
+    benchmarkTS: undefined,
+    benchmarkCT: undefined,
+    threshold: undefined,
+    dateRangeValue: undefined,
+  });
+  const [formValue, setFormValue] = formValueInit
+  const formRef = React.useRef();
+  const schemStringType = Schema.Types.StringType().isRequired(
+    "This field is required."
+  );
+  const schemNumberType = Schema.Types.NumberType().isRequired(
+    "This field is required."
+  );
+  const model = Schema.Model({
+    well: schemNumberType,
+    rig: schemNumberType,
+    rotarySys: schemStringType,
+    phase: schemStringType,
+    lastCSG: schemStringType,
+    // TrippingType: schemStringType,
+    tripReason: schemStringType,
+    // tripNumber: schemNumberType,
+    casedHole: schemStringType,
+    drillString: schemStringType,
+    BHAname: schemStringType,
+    // benchmarkTS: schemStringType,
+    // benchmarkCT: schemStringType,
+    threshold: schemNumberType,
+    // dateRangeValue: Schema.Types.ArrayType().isRequired("This field is required."),
+  });
+
+  const [loadingValue, setLoadingValue] = React.useState(false);
+  const [shake, setShake] = React.useState(false);
+
+  const { allowedMaxDays, afterToday, combine } = DateRangePicker;
   const [dateRangeValue, setDateRangeValue] = React.useState([
-    new Date(dateStartEnd.split(" - ")[0]),
-    new Date(dateStartEnd.split(" - ")[1]),
+    new Date(),
+    new Date(),
   ]);
-  const [data, setData] = useState(0);
-  const [well, setWell] = useState(0);
-  const [rig, setRig] = useState(0);
-  const [rotarySys, setRotarySys] = useState(0);
-  const [phase, setPhase] = useState(0);
-  const [lastCSG, setLastCSG] = useState(0);
-  const [TrippingType, setTrippingType] = useState(0);
-  const [tripReason, setTripReason] = useState(0);
-  const [tripNumber, setTripNumber] = useState(0);
-  const [casedHole, setCasedHole] = useState(0);
-  const [drillString, setDrillString] = useState(0);
-  const [BHAname, setBHAname] = useState(0);
-  const [benchmarkTS, setBenchmarkTS] = useState(0);
-  const [benchmarkCT, setBenchmarkCT] = useState(0);
-  const [threshold, setThreshold] = useState(0);
+  const [data, setData] = useState([]);
 
-  const params = {
-    well: well,
-    rig: rig,
-    rotarySys: rotarySys,
-    phase: phase,
-    lastCSG: lastCSG,
-    TrippingType: TrippingType,
-    tripReason: tripReason,
-    tripNumber: tripNumber,
-    casedHole: casedHole,
-    drillString: drillString,
-    BHAname: BHAname,
-    benchmarkTS: benchmarkTS,
-    benchmarkCT: benchmarkCT,
-    threshold: threshold,
-    dateRangeValue:
-      formatDate(dateRangeValue[0]) + " - " + formatDate(dateRangeValue[1]),
-    // files: uploaderValue,
-  };
+  const [wellsplaceholder, setWellsplaceholder] = useState(0);
+  const [rigsplaceholder, setRigsplaceholder] = useState(0);
 
-  function formatDate(date) {
-    if (date)
-      return [
-        padTo2Digits(date.getMonth() + 1),
-        padTo2Digits(date.getDate()),
-        date.getFullYear(),
-      ].join("/");
-  }
+  const [BHAname, setBHAname] = useState('');
+  const [drillString, setDrillString] = useState();
+  const [benchmarkTS, setBenchmarkTS] = useState('');
+  const [benchmarkCT, setBenchmarkCT] = useState('');
 
-  function padTo2Digits(num) {
-    return num.toString().padStart(2, "0");
-  }
+  const [msg, setMsg] = useState(0);
 
   const [animation, setAnimation] = useState(false);
 
   useEffect(() => {
     setAnimation(true);
-  },[]);
+    populateWellRigPickers();
+  }, []);
 
-  const processInput = (params) => {
+  useEffect(() => {
+    if (formValue['drillString'] == '5"' || formValue['drillString'] == '5" 1/2') {
+      setBenchmarkTS(500);
+      setBenchmarkCT(3);
+    } else if (formValue['drillString'] == '3"' || formValue['drillString'] == '3" 1/2') {
+        setBenchmarkTS(600);
+        setBenchmarkCT(2);
+    }
+  }, [drillString]);
+
+  const processInput = () => {
     /***************************************************************************
      * TODO: FURTHER PROCESSING , SEND PARAMS TO WHATEVER THE OTHER SIDE IS ;) *
-     ***************************************************************************/
-    console.log("Params from TrippingSpeed : ", params);
-    const path = "TrippingSpeed/";
-    getData(BACK_URL, path, params).then((res) => {
-      setData(res);
-      console.log("Returned Results : ", res);
+    ***************************************************************************/
+   if (!formRef.current.check()) {
+     setShake(true);
+     setMsg({
+       msg: `Please complete all required fields before proceeding`,
+       color: "text-red-500",
+      });
+      setTimeout(() => {
+        setShake(false);
+      }, 820);
+      return;
+    }
+    
+    formValue["created_by"] = user.name
+    formValue["benchmarkTS"] = benchmarkTS
+    formValue["benchmarkCT"] = benchmarkCT
+    formValue['well_id'] = formValue["well"]
+    console.log('Tripping speed params : ', formValue);
+    setLoadingValue(true);
+    formValue["well"] = wellsplaceholder.find(
+      (well) => well.value === formValue["well"]
+    ).label;
+    formValue["rig"] = rigsplaceholder.find(
+      (rig) => rig.value === formValue["rig"]
+    ).label;
+    formValue["dateRangeValue"] = dateRangeValue;
+    getData(BACK_URL, "TrippingSpeed/", formValue).then((res) => {
+      if (!("error" in res)) {
+        setData(res);
+        console.log('Returned data : ' , res);
+      } else {
+        setMsg({ msg: res["error"], color: "text-red-500" });
+      }
+      setLoadingValue(false);
     });
+  };
+
+  function populateWellRigPickers() {
+    const path = "api/reports/getwells";
+    getData(API_URL, path, formValue).then((res) => {
+      let wells = res.result["wells"].map((item) => ({
+        label: item["well"],
+        value: item["wid"],
+      }));
+      let rigs = res.result["wells"].map((item) => ({
+        label: item["rig"],
+        value: item["wid"],
+      }));
+      setWellsplaceholder(wells || []);
+      setRigsplaceholder(rigs || []);
+    });
+  }
+
+  function WellRigConnection(event) {
+    const well = wellsplaceholder.find((well) => well.value === event);
+    if (well) {
+      setFormValue((prevState) => ({
+        ...prevState,
+        well: well.value,
+      }));
+    }
+
+    const rig = rigsplaceholder.find((rig) => rig.value === event);
+    if (rig) {
+      setFormValue((prevState) => ({
+        ...prevState,
+        rig: rig.value,
+      }));
+    }
+  }
+
+  const resetStates = (newMsg) => {
+    setDateRangeValue([new Date(), new Date()]);
+    setBHAname();
+    setDrillString();
+    setBenchmarkTS('');
+    setBenchmarkCT('');
+    setData([]);
+    setFormValue([formValueInit]);
+    setMsg(newMsg);
   };
 
   return (
     <>
-      {data ? (
-          <div
-            className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto`}
-          >
-                <TsAnalysis TsAnalysisData={data["ts_analysis"]} doc_id={data["_id"]}></TsAnalysis>
-          </div>
+      {data.length !== 0 ? (
+        <PaginationComp data={data} resetStates={resetStates} ParentComponent={TrippingSpeed} parentStr='TrippingSpeed'></PaginationComp>
       ) : (
         <div
-          className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto}`}
+          className={`sticky rounded-xl bg-gray-200 dark:bg-stone-700 h-auto ${
+            shake ? "animate-shake" : ""
+          }`}
         >
           <div className="flex justify-center items-center">
             <div className="py-9">
@@ -120,154 +310,318 @@ export const TrippingSpeed = () => {
               </h1>
             </div>
           </div>
-          <div
-            className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
+
+          <Form
+            onSubmit={processInput}
+            ref={formRef}
+            model={model}
+            formValue={formValue}
+            onChange={(formValue) => setFormValue(formValue)}
+            onCheck={() =>
+              setFormValue({
+                well: formValue["well"],
+                rig: formValue["rig"],
+                rotarySys: formValue["rotarySys"],
+                phase: formValue["phase"],
+                lastCSG: formValue["lastCSG"],
+                // TrippingType: formValue["TrippingType"],
+                tripReason: formValue["tripReason"],
+                // tripNumber: formValue["tripNumber"],
+                casedHole: formValue["casedHole"],
+                drillString: formValue["drillString"],
+                BHAname: formValue["BHAname"],
+                benchmarkTS: formValue["benchmarkTS"],
+                benchmarkCT: formValue["benchmarkCT"],
+                threshold: formValue["threshold"],
+                // dateRangeValue: formValue["dateRangeValue"],
+              })
+            }
+          >
+            <div
+              className={`flex duration-1000 relative transform transition-all ease-out
               ${
                 // hiding components when they first appear and then applying a translate effect gradually
                 animation
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-12"
               }`}
-          >
-            <SelectPicker
-              onChange={setWell}
-              placeholder="Well"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
-            <SelectPicker
-              onChange={setRig}
-              placeholder="Rig"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
-            <SelectPicker
-              onChange={setRotarySys}
-              placeholder="Rotary System"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
-            <SelectPicker
-              onChange={setPhase}
-              placeholder="Phase"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
-          </div>
-          <div
-            className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
-              ${
-                // hiding components when they first appear and then applying a translate effect gradually
-                animation
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-12"
-              }`}
-          >
-            <SelectPicker
-              onChange={setLastCSG}
-              placeholder="Last CSG Shoe [m]"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
-            <SelectPicker
-              onChange={setTrippingType}
-              placeholder="Tripping Type"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
-            <SelectPicker
-              onChange={setTripReason}
-              placeholder="Trip reason"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
-            <SelectPicker
-              onChange={setTripNumber}
-              placeholder="Trip number"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
-          </div>
-          <div
-            className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
-              ${
-                // hiding components when they first appear and then applying a translate effect gradually
-                animation
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-12"
-              }`}
-          >
-            <SelectPicker
-              onChange={setCasedHole}
-              placeholder="Cased Hole/Open Hole"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
-            <SelectPicker
-              onChange={setDrillString}
-              placeholder="Drill String Size"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
-            <SelectPicker
-              onChange={setBHAname}
-              placeholder="BHA Name"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
-            <SelectPicker
-              onChange={setBenchmarkTS}
-              placeholder="Benchmark (Tripping Speed [m/h])"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
-          </div>
-          <div
-            className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
-              ${
-                // hiding components when they first appear and then applying a translate effect gradually
-                animation
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-12"
-              }`}
-          >
-            <SelectPicker
-              onChange={setBenchmarkCT}
-              placeholder="Benchmark (Connection Time [min])"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
-            <SelectPicker
-              onChange={setThreshold}
-              placeholder="Threshold [T]"
-              data={data_placeHolder}
-              style={styles.wide}
-            />
-            <DateRangePicker
-              value={dateRangeValue}
-              onChange={setDateRangeValue}
-              format="dd-MM-yyyy"
-              style={{
-                width: 520,
-                margin: 10,
-              }}
-            />
-          </div>
-          <div
-            className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
-              ${
-                // hiding components when they first appear and then applying a translate effect gradually
-                animation
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-12"
-              }`}
-          >
-            <ActionButton
-              className="bg-blue-500 hover:bg-blue-700 text-black font-bold text-base my-7 py-2 px-4 rounded "
-              text="Submit"
-              action={processInput}
-              args={[params]}
-            ></ActionButton>
+            >
+              <Form.Group controlId="well" style={styles.wide}>
+                <Form.Control
+                  accepter={SelectPicker}
+                  name="well"
+                  onChange={WellRigConnection}
+                  placeholder="Well"
+                  loading={wellsplaceholder ? false : true}
+                  data={wellsplaceholder || []}
+                  style={styles.wide}
+                />
+              </Form.Group>
+              <Form.Group controlId="rig" style={styles.wide}>
+                <Form.Control
+                  accepter={SelectPicker}
+                  name="rig"
+                  onChange={WellRigConnection}
+                  placeholder="Rig"
+                  loading={rigsplaceholder ? false : true}
+                  data={rigsplaceholder || []}
+                  style={styles.wide}
+                />
+              </Form.Group>
+              <Form.Group controlId="rotarySys" style={styles.wide}>
+                <Form.Control
+                  accepter={SelectPicker}
+                  name="rotarySys"
+                  // onChange={setRotarySys}
+                  placeholder="Rotary System"
+                  data={rotarySys_placeHolder}
+                  style={styles.wide}
+                />
+              </Form.Group>
+              <Form.Group controlId="phase" style={styles.wide}>
+                <Form.Control
+                  accepter={SelectPicker}
+                  name="phase"
+                  // onChange={setPhase}
+                  placeholder="Phase"
+                  data={phase_placeHolder}
+                  style={styles.wide}
+                />
+              </Form.Group>
+            </div>
+            <div
+              className={`flex duration-1000 relative transform transition-all ease-out
+            ${
+              // hiding components when they first appear and then applying a translate effect gradually
+              animation
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-12"
+            }`}
+            >
+              <Form.Group controlId="lastCSG" style={styles.wide}>
+                <Form.Control
+                  accepter={SelectPicker}
+                  name="lastCSG"
+                  // onChange={setLastCSG}
+                  placeholder="Last CSG Shoe [m]"
+                  data={lastCSG_placeHolder}
+                  style={styles.wide}
+                />
+              </Form.Group>
+              <Form.Group controlId="TrippingType" style={styles.wide}>
+                <Whisper
+                  placement="top"
+                  speaker={
+                    <Tooltip>The Trip Type is automatically set !</Tooltip>
+                  }
+                >
+                  <span>
+                    <Form.Control
+                      accepter={SelectPicker}
+                      name="TrippingType"
+                      // onChange={setTrippingType}
+                      placeholder="Tripping Type"
+                      data={TrippingType_placeHolder}
+                      style={styles.wide}
+                      disabled
+                    />
+                  </span>
+                </Whisper>
+              </Form.Group>
+              <Form.Group controlId="tripReason" style={styles.wide}>
+                <Form.Control
+                  accepter={SelectPicker}
+                  name="tripReason"
+                  // onChange={setTripReason}
+                  placeholder="Trip reason"
+                  data={tripReason_placeHolder}
+                  style={styles.wide}
+                />
+              </Form.Group>
+              <Form.Group controlId="trip_number" style={styles.wide}>
+                <Whisper
+                  placement="top"
+                  speaker={
+                    <Tooltip>
+                      The Trip Number is automatically calculated. Do not skip
+                      trips !
+                    </Tooltip>
+                  }
+                >
+                  <span>
+                    <Form.Control
+                      accepter={SelectPicker}
+                      name="trip_number"
+                      // onChange={setTripNumber}
+                      placeholder="Trip number"
+                      data={data_placeHolder}
+                      style={styles.wide}
+                      disabled
+                    />
+                  </span>
+                </Whisper>
+              </Form.Group>
+            </div>
+            <div
+              className={`flex duration-1000 relative transform transition-all ease-out
+            ${
+              // hiding components when they first appear and then applying a translate effect gradually
+              animation
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-12"
+            }`}
+            >
+              <Form.Group controlId="casedHole" style={styles.wide}>
+                <Form.Control
+                  accepter={SelectPicker}
+                  name="casedHole"
+                  // onChange={setCasedHole}
+                  placeholder="Cased Hole/Open Hole"
+                  data={casedHole_placeHolder}
+                  style={styles.wide}
+                />
+              </Form.Group>
+              <Form.Group controlId="drillString" style={styles.wide}>
+                <Form.Control
+                  accepter={SelectPicker}
+                  name="drillString"
+                  onChange={setDrillString}
+                  placeholder="Drill String Size"
+                  data={drillString_placeHolder}
+                  style={styles.wide}
+                  value={drillString}
+                />
+              </Form.Group>
+              <Form.Group controlId="BHAname" style={styles.wide}>
+                <Form.Control
+                  accepter={Input}
+                  name="BHAname"
+                  onChange={setBHAname}
+                  placeholder="BHA Name"
+                  style={styles.wide}
+                  value={BHAname}
+                />
+              </Form.Group>
+              <Form.Group
+                controlId="benchmarkTS"
+                style={{ marginTop: 6, marginLeft: 10 }}
+              >
+                <InputGroup style={styles.wide}>
+                  <Input
+                    name="benchmarkTS"
+                    placeholder="Benchmark (Tripping Speed)"
+                    value={benchmarkTS}
+                    disabled
+                  />
+                  <InputGroup.Addon>m/h</InputGroup.Addon>
+                </InputGroup>
+              </Form.Group>
+            </div>
+            <div
+              className={`flex duration-1000 relative transform transition-all ease-out
+            ${
+              // hiding components when they first appear and then applying a translate effect gradually
+              animation
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-12"
+            }`}
+            >
+              <Form.Group 
+                controlId="benchmarkCT"
+                style={{ marginTop: 6, marginLeft: 10 }}
+              >
+                <InputGroup style={styles.wide}>
+                  <Input
+                    name="benchmarkCT"
+                    placeholder="Benchmark (Connection Time)"
+                    value={benchmarkCT}
+                    disabled
+                  />
+                  <InputGroup.Addon>min</InputGroup.Addon>
+                </InputGroup>
+              </Form.Group>
+
+              <Form.Group controlId="threshold" style={{ marginTop: 6 }}>
+                <Whisper
+                  placement="top"
+                  speaker={
+                    <Tooltip>
+                      Threshold auto-calculated when value is 0.
+                    </Tooltip>
+                  }
+                >
+                  <span>
+                    <InputGroup style={{marginLeft:10, marginRight:10, width:250}}>
+                      <Form.Control
+                        style={{width:196}}
+                        accepter={InputNumber}
+                        name="threshold"
+                        placeholder="Threshold"
+                      />
+                      <InputGroup.Addon>Tons</InputGroup.Addon>
+                    </InputGroup>
+                  </span>
+                </Whisper>
+              </Form.Group>
+
+              <Form.Group controlId="dateRangeValue">
+                <DateRangePicker
+                  editable={false}
+                  name="dateRangeValue"
+                  value={dateRangeValue}
+                  onChange={(event) => {
+                    setDateRangeValue(event);
+                    setFormValue((prevState) => ({
+                      ...prevState,
+                      dateRangeValue: dateRangeValue,
+                    }));
+                  }}
+                  format="dd/MM/yyyy HH:mm:ss"
+                  style={{
+                    width: 520,
+                    marginLeft: 10,
+                    marginRight: 10,
+                    marginBottom: 2
+                  }}
+                  disabledDate={combine(allowedMaxDays(3),afterToday())}
+                />
+              </Form.Group>
+            </div>
+            <div
+              className={`flex items-center justify-center duration-1000 relative transform transition-all ease-out
+            ${
+              // hiding components when they first appear and then applying a translate effect gradually
+              animation
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-12"
+            }`}
+            >
+              <Form.Group controlId="button">
+                <Button
+                  appearance="primary"
+                  type="submit"
+                  style={{
+                    color: "black",
+                    fontWeight: "bold",
+                    fontSize: 16,
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    paddingRight: 20,
+                    paddingLeft: 20,
+                  }}
+                  loading={loadingValue}
+                >
+                  Submit
+                </Button>
+              </Form.Group>
+            </div>
+          </Form>
+          <div className="flex justify-center items-center">
+            <div className="flex-col items-center mb-6">
+              <div className={`text-center text-sm ${msg["color"]} mt-4`}>
+                {msg["msg"]}
+              </div>
+            </div>
           </div>
         </div>
       )}

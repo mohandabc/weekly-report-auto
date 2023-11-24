@@ -8,11 +8,13 @@ import { ActionButton, ReportInputScreen, Chart, ImagePicker, Table, Paragraphe,
 
 import { getData } from '../../api/api';
 import { DEFAULT_CONFIG_BAR_OPTIONS, runCasingMap, rbrIMap, holeSectionMap, bitRecordData} from '../../constants/constants';
-import { API_URL } from '../../constants/URI';
+import { API_URL, BACK_URL } from '../../constants/URI';
 import { loaderIsHidden } from '../../shared/globalState';
 
 export const EOWR = () => {
     const [EOWRData, setEOWRData] = useState({});
+    const [TSTrippingKPI, setTSTrippingKPI] = useState({});
+
     const [chartsToPrint, setChartsToPrint] = useState([]);
     const [images, setImages] = useState({});
     const [paragraphes, setParagraphes] = useState({})
@@ -26,6 +28,15 @@ export const EOWR = () => {
         })
     }
 
+    const readyData = (data) => {
+        let resultData = []
+        data.forEach(item =>{
+            if ('value1' in item) {resultData.push({type : item.category, name : 'PT', count: item.value1})}
+            if ('value2' in item) {resultData.push({type : item.category, name : 'NPT', count: item.value2})}
+            });
+        return resultData;
+    }
+
     const getEowrData = (params) => {
         // API call to get data
         setIsHidden(false);
@@ -33,6 +44,11 @@ export const EOWR = () => {
         getData(API_URL, url, params)
         .then(res=> {
             let data = res.result;
+            console.log('teamspace data back', data);
+
+            //@TODO this should be done in the controller, this is temporary
+            data['npt_sections'] = readyData(data['npt_sections']);
+
             setEOWRData({...data} || {});
             setParagraphes({
                 'p-1': cleanHTML(data['eowr_snags']['high_value_interventions']),
@@ -40,14 +56,23 @@ export const EOWR = () => {
                 'p-3': cleanHTML(data['eowr_snags']['conclusion']),
                 'team-members': formatEmployees(data['eowr_snags']['team_members']) || "Not specified"
             });
-            setIsHidden(true);
+
         });
+
+        // Get Tripping speed data from fastAPI
+        const eowr_endpoint = 'TrippingSpeed/getEOWRData/';
+        getData(BACK_URL, eowr_endpoint, params)
+        .then(res=> {
+            console.log('oilport backend data back', res);
+            setTSTrippingKPI(res || {});
+        });
+        setIsHidden(true);
     }
-
+    
     useEffect(()=>{
-        console.log(EOWRData)
-
-    })
+        const mainSection = document.getElementById('result-section');
+        mainSection?.scrollIntoView({behavior: "smooth"});
+    });
 
     let chartsIds = [];
 
@@ -174,7 +199,7 @@ export const EOWR = () => {
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
                     <Chart title = "PT vs NPT" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['pt_vs_npt']} chartType="Pie"/>
                     {/* TODO : below instruction is skipped and needs to be implemented */}
-                    <Chart title = "NPT vs Section" id = {getDivId('chart')} chartData = {EOWRData['npt_sections']} chartType="Stacked"/> 
+                    <Chart title = "NPT vs Section" id = {getDivId('chart')} chartData = {EOWRData['npt_sections']} chartType="ClusterBar"/> 
                     <Chart title = "NPT vs Category" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_categories']} chartType="Pie"/>
                     <Chart title = "NPT vs Sub-Category" id = {getDivId('chart')} chartData = {EOWRData['npt_related']['npt_subcategories']} chartType="Pie"/>
                 </section>
@@ -189,8 +214,8 @@ export const EOWR = () => {
                     <MultiTable title = "Drilling connection Time KPI's" id = {getDivId('table')} tableData = {EOWRData['connection_details']['drill_time']}/>
                 </section>
                 <section className={`align-middle grid grid-col-1 xl:grid-cols-2 gap-4 place-items-top px-2 pb-4`} >
-                    <MultiTable title = "Tripping In and connection Time KPI’s " id = {getDivId('table')} tableData = {EOWRData['connection_details']['tripping_time']['rih']}/>
-                    <MultiTable title = "Tripping out and connection Time KPI’s" id = {getDivId('table')} tableData = {EOWRData['connection_details']['tripping_time']['pooh']}/>
+                    <MultiTable title = "Tripping In and connection Time KPI’s " id = {getDivId('table')} tableData = {TSTrippingKPI['rih']}/>
+                    <MultiTable title = "Tripping out and connection Time KPI’s" id = {getDivId('table')} tableData = {TSTrippingKPI['pooh']}/>
                 </section>
 
                 <span className='text-xl px-4'>V. Real Time Impact & Prevention</span>

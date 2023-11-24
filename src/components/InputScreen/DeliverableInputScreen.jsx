@@ -11,6 +11,7 @@ import {
     ReamBream,
     TrippingSpeed,
   } from "../../pages";
+import { BackLog } from "../../pages/Deliverables/Tabs/BackLog";
 
 
 export const DeliverableInputScreen  = ({ title, configBarAction, options }) => {
@@ -32,6 +33,7 @@ export const DeliverableInputScreen  = ({ title, configBarAction, options }) => 
             animation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}>
             <Tabs
+              defaultIndex={1}
               selectedTabClassName={`${
                 darkMode
                   ? "react-tabs__tab--selecteddark"
@@ -43,6 +45,7 @@ export const DeliverableInputScreen  = ({ title, configBarAction, options }) => 
                 <Tab>Tripping Speed</Tab>
                 <Tab>Drilling State</Tab>
                 <Tab>Ream-Back Ream</Tab>
+                <Tab>Backlog</Tab>
               </TabList>
 
               <TabPanel>
@@ -68,13 +71,19 @@ export const DeliverableInputScreen  = ({ title, configBarAction, options }) => 
                   options={options}
                 ></DrillingState>
               </TabPanel>
-
               <TabPanel>
                 <ReamBream
                   title={title}
                   configBarAction={configBarAction}
                   options={options}
                 ></ReamBream>
+              </TabPanel>
+              <TabPanel>
+                <BackLog
+                  title={title}
+                  configBarAction={configBarAction}
+                  options={options}
+                ></BackLog>
               </TabPanel>
             </Tabs>
           </div>

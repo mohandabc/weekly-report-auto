@@ -1,5 +1,5 @@
 # Bundle static assets with nginx
-FROM nginx:1.21.0-alpine
+FROM nginx:1.24-alpine
 # Copy built assets from `builder` image
 COPY build /usr/share/nginx/html
 # Add your nginx.conf

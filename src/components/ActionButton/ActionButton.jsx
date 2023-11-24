@@ -1,5 +1,4 @@
-
-export const ActionButton = ({className, text, action, args}) =>{
+export const ActionButton = ({className, text, action, args, disabled}) =>{
     const execAction = () =>{
         if (args && args.length){
             action(...args);
@@ -10,7 +9,8 @@ export const ActionButton = ({className, text, action, args}) =>{
     }
     return (
         <button className={className} 
-                onClick={execAction}>
+                onClick={execAction}
+                disabled={disabled}>
             {text}
         </button>
     );

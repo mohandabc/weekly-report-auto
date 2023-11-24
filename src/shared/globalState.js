@@ -43,3 +43,14 @@ export const files = atom({
   key: "files",
   default: {},
 });
+
+
+export const TSReportDataState = atom({
+  'key':"TSReportDataState",
+  default: {},
+});
+
+export const weeklyPerformanceDataState = atom({
+  key: "weeklyPerformanceData",
+  default: {},
+});
